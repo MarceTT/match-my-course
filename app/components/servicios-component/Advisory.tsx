@@ -3,7 +3,6 @@ import { GiPassport } from "react-icons/gi";
 import { GiBookmarklet } from "react-icons/gi";
 import { GiMoneyStack } from "react-icons/gi";
 import { GiBed } from "react-icons/gi";
-import { raleway, nunito } from "../../ui/fonts";
 
 const Advisory = () => {
   const items = [

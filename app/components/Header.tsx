@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image';
-import { FaRegUserCircle } from "react-icons/fa";
 import { PiUserCircleFill } from "react-icons/pi";
 import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";

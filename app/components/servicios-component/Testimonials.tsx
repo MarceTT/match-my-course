@@ -93,7 +93,7 @@ const Testimonials = () => {
               transition={{ duration: 0.5 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
-              {testimonials.slice(currentIndex, currentIndex + 3).map((testimonial, index) => (
+              {testimonials.slice(currentIndex, currentIndex + 3).map((testimonial) => (
                 <div key={testimonial.id} className="flex flex-col items-center text-center">
                   <div className="w-24 h-24 mb-4 relative rounded-full overflow-hidden">
                     <Image
