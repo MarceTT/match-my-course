@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import Picture from "../../public/images/placeholder_img.svg";
-import {raleway}from "../ui/fonts";
+import Picture from "../../../public/images/placeholder_img.svg";
+import {raleway}from "../../ui/fonts";
 
 const HeroVisa = () => {
 
@@ -26,16 +26,16 @@ const HeroVisa = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className={`${raleway.className} text-3xl lg:text-5xl font-black text-gray-800 mb-4`}>
+          <h2 className={`${raleway.className} text-4xl lg:text-5xl font-black text-gray-800 mb-4`}>
             Asesoría gratuita para
-            <div className={`${raleway.className} text-3xl lg:text-5xl font-black text-gray-800 mb-4`}>la visa de estudio y trabajo</div>
+            <div className={`${raleway.className} text-4xl lg:text-5xl font-black text-gray-800 mb-4`}>la visa de estudio y trabajo</div>
           </h2>
-          <p className={`${raleway.className} text-lg lg:text-xl text-gray-900 mb-8 font-light`}>
+          <p className={`${raleway.className} text-xl lg:text-xl text-gray-900 mb-8 font-light`}>
             Verifica si la visa de estudio de inglés y trabajo es para ti y si cumples o no con los requisitos y lo que se vendrá en destino
           </p>
           
           {/* Profile images */}
-          <div className="flex justify-center items-center space-x-4 overflow-hidden">
+          <div className="hidden md:flex justify-center items-center space-x-4 overflow-hidden">
             {profiles.map((profile, index) => (
               <div 
                 key={index} 

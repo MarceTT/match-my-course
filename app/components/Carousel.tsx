@@ -1,63 +1,36 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { motion, useAnimation, useInView } from 'framer-motion';
 
 const images = Array.from({ length: 26 }, (_, i) => `/schools/${i + 1}.png`);
 
 const Carousel = () => {
-  const [isClient, setIsClient] = useState(false);
-  const sliderRef = useRef<Slider>(null);
+    const controls = useAnimation();
+    const containerRef = useRef(null);
+    const isInView = useInView(containerRef);
+  
+    useEffect(() => {
+      if (isInView) {
+        controls.start({
+          x: [0, -200 * images.length],
+          transition: {
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 80,
+              ease: "linear",
+            },
+          },
+        });
+      } else {
+        controls.stop();
+      }
+    }, [controls, isInView]);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 15000,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 0,
-    cssEase: "linear",
-    pauseOnHover: true,
-    variableWidth: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-    ],
-  };
-
-  // Duplicar las imágenes para crear un efecto de bucle sin fin
-  const duplicatedImages = [...images, ...images];
-
-  if (!isClient) {
-    return null; // No renderizar nada en el servidor
-  }
   return (
-    <div className="bg-gray-100 py-12 overflow-hidden relative">
+    <div className="bg-gray-100 py-12 overflow-hidden relative" ref={containerRef}>
         <h2 className="text-xl md:text-xl text-center mb-12 text-gray-900">
           Trabajamos con más de 30 escuelas de inglés a nivel mundial y seguimos creciendo
         </h2>
@@ -65,19 +38,32 @@ const Carousel = () => {
         <div className="relative">
           <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
           <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
-          <Slider ref={sliderRef} {...settings}>
-            {duplicatedImages.map((src, index) => (
-              <div key={index} style={{ width: 200 }}>
-                <Image
-                  src={src || "/placeholder.svg"}
-                  alt={`Carousel image ${(index % images.length) + 1}`}
-                  width={160}
-                  height={100}
-                  className="rounded-lg shadow-md m-1"
-                />
-              </div>
-            ))}
-          </Slider>
+          <div className="overflow-hidden">
+            <motion.div 
+              className="flex"
+              animate={controls}
+              style={{ width: `${images.length * 200 * 2}px` }}
+            >
+              {[...images, ...images].map((src, index) => (
+                <motion.div 
+                  key={index} 
+                  className="flex-shrink-0 w-[200px] px-2"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Image
+                    src={src || "/placeholder.svg"}
+                    alt={`Escuela asociada ${index + 1}`}
+                    width={180}
+                    height={120}
+                    className="rounded-lg shadow-md object-cover"
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </div>
       <style jsx global>{`

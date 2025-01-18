@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import Header from "../components/Header";
-import HeroVisa from "../components/HeroVisa";
+import HeroVisa from "../components/servicios-component/HeroVisa";
 import Features from "../components/Features";
 import Destinations from "../components/servicios-component/Destinations";
 import Advisory from "../components/servicios-component/Advisory";
