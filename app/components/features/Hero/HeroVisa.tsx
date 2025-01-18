@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
-import Picture from "../../../public/images/placeholder_img.svg";
-import {raleway}from "../../ui/fonts";
+import Picture from "../../../../public/images/placeholder_img.svg";
+import {raleway}from "../../../ui/fonts";
 
 const HeroVisa = () => {
 

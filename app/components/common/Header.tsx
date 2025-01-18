@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { PiUserCircleFill } from "react-icons/pi";
 import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
-import Logo from "../../public/logos/logo2.png"
+import Logo from "../../../public/logos/logo2.png"
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +27,7 @@ const Header = () => {
     <header className="w-full py-8 px-6 bg-white sticky top-0 z-50 lg:bg-opacity-40 lg:backdrop-blur-md">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-6">
-          <Link href="/" className="flex items-center text-2xl font-bold ml-6">
+          <Link href="/" className="flex items-center text-2xl font-bold lg:ml-6">
           <Image src={Logo} alt="Logo de MatchMyCourse" className="h-12 w-auto mr-2" />
           </Link>
           <nav className="hidden md:flex items-center space-x-4 ml-12">

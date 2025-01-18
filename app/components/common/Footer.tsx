@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
-import Logo from "../../public/logos/logo2.png";
+import Logo from "../../../public/logos/logo2.png";
 import { motion, useAnimation } from "framer-motion";
 import { useState, useEffect } from "react";
 

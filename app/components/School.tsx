@@ -1,10 +1,11 @@
 import { LuHeart } from "react-icons/lu";
 import Image from 'next/image';
+import type { StaticImageData } from 'next/image';
 import { nunito } from "../ui/fonts";
 
 interface SchoolCardProps {
     name: string
-    image: string
+    image: string | StaticImageData; // Permitir ambos tipos
     location: string
     rating: number
     price: number
