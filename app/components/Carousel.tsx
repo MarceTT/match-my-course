@@ -19,7 +19,7 @@ const Carousel = () => {
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 80,
+              duration: 40,
               ease: "linear",
             },
           },
