@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Picture from "../../public/images/placeholder_img.svg";
+import {raleway, nunito }from "../ui/fonts";
 
 const Hero = () => {
 
@@ -18,9 +19,9 @@ const Hero = () => {
           {/* Left Content Section */}
           <div className="ww-full lg:w-3/5 xl:w-2/3 mx-auto max-w-2xl">
             <div className="bg-transparent backdrop-blur-sm rounded-3xl p-8 lg:p-12">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-800 leading-tight mb-6">
+              <h1 className={`${raleway.className} text-4xl lg:text-5xl font-black text-gray-800 leading-tight mb-6`}>
                 Encuentra la mejor
-                <div className="text-3xl lg:text-4xl mt-2">escuela de inglés para ti</div>
+                <div className="text-3xl lg:text-4xl mt-2 font-bold">escuela de inglés para ti</div>
               </h1>
               <p className="text-gray-700 text-lg lg:text-xl mb-8">
                 Sea para cursos de inglés de corta o larga duración,
