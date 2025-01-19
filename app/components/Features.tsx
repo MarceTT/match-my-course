@@ -1,6 +1,4 @@
 import React from 'react'
-import { FiUsers, FiBookOpen, FiTarget } from "react-icons/fi";
-import { LuGraduationCap } from "react-icons/lu";
 import Image from 'next/image'
 
 const Features = () => {
