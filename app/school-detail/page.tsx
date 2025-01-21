@@ -3,38 +3,75 @@ import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import SchoolStat from "../components/school-component/SchoolStat";
 import SchoolDetail from "../components/school-component/SchoolDetail";
+import SchoolHighlights from "../components/school-component/SchoolHighlights";
+import SchoolDescription from "../components/school-component/SchoolDescription";
+import BookingPannel from "../components/common/BookingPannel";
+import SchoolTab from "../components/school-component/SchoolTab";
+import Certifications from "../components/school-component/Certifications";
+import Facilities from "../components/school-component/Facilities";
+import OptionsCertification from "../components/school-component/OptionsCertification";
+import SchoolInclusion from "../components/school-component/SchoolInclusion";
+import Accommodation from "../components/school-component/Accommodation";
+import Location from "../components/school-component/Location";
 
 const schoolImages = [
-    "/images/3.png",
-    "/images/1.png",
-    "/images/10.png",
-    "/images/4.png",
-    "/images/2.png"
-  ]
+  "/images/3.png",
+  "/images/1.png",
+  "/images/10.png",
+  "/images/4.png",
+  "/images/2.png",
+];
 
 const SchoolHome = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="min-h-screen bg-white py-8">
-      <SchoolDetail
-        images={schoolImages}
-        name="Cork English Academy"
-        city="Cork"
-        address="10 Palmerston Park, Rathmines, Dublin 6, D06 H9X8, Irlanda"
-        founded="1980"
-        priceLevel={3}
-      />
-      <div className="mt-6">
-        <SchoolStat
-          nationalities={23}
-          spanishSpeakers={30}
-          averageAge={25}
-          testimonials={4.7}
+      <div className="max-w-7xl mx-auto px-4">
+        <SchoolDetail
+          images={schoolImages}
+          name="Cork English Academy"
+          city="Cork"
+          address="10 Palmerston Park, Rathmines, Dublin 6, D06 H9X8, Irlanda"
+          founded="1980"
+          priceLevel={3}
         />
+        <div className="mt-8">
+          <SchoolStat
+            nationalities={23}
+            spanishSpeakers={30}
+            averageAge={25}
+            testimonials={4.7}
+          />
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <SchoolTab />
+            <SchoolHighlights />
+            <SchoolDescription />
+            <Certifications />
+            <Facilities />
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-4">Curso elegido</h3>
+              <p className="text-gray-600">
+                El curso de inglés general de 25 semanas diseñado para mejorar
+                tus habilidades en Speaking, Listening, Reading y Writing,
+                enfocándose en la comunicación diaria y el desarrollo del
+                vocabulario y la gramática. El curso se divide en módulos de 3
+                meses en donde te evaluarán semanalmente. Según como te vaya,
+                pueden subirte de nivel antes de tiempo.
+              </p>
+            </div>
+            <OptionsCertification />
+            <SchoolInclusion />
+            <Accommodation />
+            <Location />
+          </div>
+          <div className="lg:col-span-1">
+            <BookingPannel />
+          </div>
+        </div>
       </div>
-      </div>
-      <h1>School Home</h1>
       <Footer />
     </div>
   );
