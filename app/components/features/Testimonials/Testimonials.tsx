@@ -131,7 +131,7 @@ const Testimonials = () => {
               ))}
             </div>
             <div className="text-gray-600 relative font-semibold">
-              "{testimonials[currentTestimonial].comment}"
+              {`"${testimonials[currentTestimonial].comment}"`}
             </div>
           </motion.div>
         </AnimatePresence>
