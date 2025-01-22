@@ -13,6 +13,7 @@ import OptionsCertification from "../components/school-component/OptionsCertific
 import SchoolInclusion from "../components/school-component/SchoolInclusion";
 import Accommodation from "../components/school-component/Accommodation";
 import Location from "../components/school-component/Location";
+import Testimonials from "../components/features/Testimonials/Testimonials";
 
 const schoolImages = [
   "/images/3.png",
@@ -66,6 +67,7 @@ const SchoolHome = () => {
             <SchoolInclusion />
             <Accommodation />
             <Location />
+            <Testimonials />
           </div>
           <div className="lg:col-span-1">
             <BookingPannel />

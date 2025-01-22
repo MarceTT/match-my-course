@@ -16,7 +16,7 @@ const BookingPannel = () => {
   const [startDate, setStartDate] = useState("");
   const [duration, setDuration] = useState("");
   return (
-    <div className="border rounded-lg p-6 sticky top-4 border border-gray-500 lg:top-32">
+    <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32">
       <div className="flex justify-between items-start mb-6">
         <div className="text-2xl font-bold">€2.900</div>
         <button className="text-gray-400 hover:text-gray-600 flex items-center">
