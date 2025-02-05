@@ -2,6 +2,7 @@ import Image from "next/image";
 import Picture from "../../../../public/images/placeholder_img.svg";
 import { raleway } from "../../../ui/fonts";
 import { FiSearch } from "react-icons/fi";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -67,14 +68,16 @@ const Hero = () => {
                     </svg>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="w-full sm:w-auto px-5 py-4 bg-[#FF385C] hover:bg-[#E51D58] text-white font-semibold rounded-md transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg lg:ml-4 lg:rounded-full md:rounded-full xl:rounded-full"
-                  aria-label="Buscar"
-                >
-                  <FiSearch className="w-5 h-5 text-white" />
-                  <span className="ml-2 lg:ml-0 lg:hidden md:hidden">Buscar</span>
-                </button>
+                <Link href="/school-search">
+                  <button
+                    type="button"
+                    className="w-full sm:w-auto px-5 py-4 bg-[#FF385C] hover:bg-[#E51D58] text-white font-semibold rounded-md transition-colors duration-200 flex items-center justify-center shadow-md hover:shadow-lg lg:ml-4 lg:rounded-full md:rounded-full xl:rounded-full"
+                    aria-label="Buscar"
+                  >
+                    <FiSearch className="w-5 h-5 text-white" />
+                    <span className="ml-2 lg:ml-0 lg:hidden md:hidden">Buscar</span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

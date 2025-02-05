@@ -31,9 +31,9 @@ const Header = () => {
           <Image src={Logo} alt="Logo de MatchMyCourse" className="h-12 w-auto mr-2" />
           </Link>
           <nav className="hidden md:flex items-center space-x-4 ml-12">
-            <Link href="/blog" className="text-gray-600 hover:text-gray-900">
+            {/* <Link href="/blog" className="text-gray-600 hover:text-gray-900">
               Blog
-            </Link>
+            </Link> */}
             <Link href="/servicios" className="text-gray-600 hover:text-gray-900">
               Servicios
             </Link>
@@ -71,9 +71,9 @@ const Header = () => {
           </button>
         </div>
         <nav className="flex flex-col items-center space-y-4">
-          <Link href="/blog" className="text-2xl text-gray-600 hover:text-gray-900" onClick={() => setIsMenuOpen(false)}>
+          {/* <Link href="/blog" className="text-2xl text-gray-600 hover:text-gray-900" onClick={() => setIsMenuOpen(false)}>
             Blog
-          </Link>
+          </Link> */}
           <Link href="/servicios" className="text-2xl text-gray-600 hover:text-gray-900" onClick={() => setIsMenuOpen(false)}>
             Servicios
           </Link>

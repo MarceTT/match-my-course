@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { IoStarSharp } from "react-icons/io5";
 import Picture from "../../../public/images/placeholder_img.svg";
+import { raleway } from "@/app/ui/fonts";
 
 interface Testimonial {
     id: number
@@ -58,7 +59,7 @@ interface Testimonial {
     }
   ]
 
-const Testimonials = () => {
+const Testimonials = ({ text }: { text: string }) => {
 
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -80,8 +81,8 @@ const Testimonials = () => {
   return (
     <div className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Lo que dicen nuestros estudiantes
+        <h2 className={`${raleway.className} text-3xl md:text-4xl lg:text-5xl font-black text-center mb-12`}>
+          {text}
         </h2>
         <div className="max-w-7xl mx-auto">
           <AnimatePresence mode="wait">

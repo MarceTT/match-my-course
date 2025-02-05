@@ -102,7 +102,7 @@ const Testimonials = () => {
       </div>
 
       {/* Testimonials Carousel */}
-      <div className="relative bg-gray-100 rounded-xl p-6 overflow-hidden min-h-[200px] border border-gray-500">
+      <div className="relative bg-gray-100 rounded-xl p-6 overflow-hidden min-h-[150px] border border-gray-500">
         <AnimatePresence initial={false}>
           <motion.div
             key={currentTestimonial}
@@ -124,12 +124,13 @@ const Testimonials = () => {
                 width={20}
                 height={15}
               />
-            </div>
-            <div className="flex mb-4">
+              <div className="flex mb-4 mt-2 ml-3">
               {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
                 <IoStarOutline key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />
               ))}
             </div>
+            </div>
+            
             <div className="text-gray-600 relative font-semibold">
               {`"${testimonials[currentTestimonial].comment}"`}
             </div>
