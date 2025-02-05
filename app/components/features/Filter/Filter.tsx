@@ -3,9 +3,6 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import FilterDrawer from "./FilterDrawer";
 
 interface FilterProps {
