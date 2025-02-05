@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 interface FilterDrawerProps {

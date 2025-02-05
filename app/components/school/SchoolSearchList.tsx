@@ -5,6 +5,7 @@ import { Grid, List, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LuHeart } from "react-icons/lu";
 import Link from "next/link";
+import Image from "next/image";
 
 const schoolImages = [
   "/images/3.png",
@@ -174,10 +175,12 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         </p>
       </div>
       <div className="mt-4 flex flex-col w-full sm:flex-row items-center justify-between">
-        <img
+        <Image
           src={school.logo}
           alt="Logo"
           className="h-32 w-32 object-contain mb-2 sm:mb-0"
+          width={640}
+          height={480}
         />
         <div className="text-center sm:text-right">
           <div className="text-xl text-gray-600 lg:text-xl">Desde</div>
