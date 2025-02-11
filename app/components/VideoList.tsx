@@ -102,7 +102,7 @@ interface Video {
     return (
       <Card className="overflow-hidden bg-white rounded-lg shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105">
         <CardContent className="p-0">
-          <Link href={`http://localhost:3000/servicios/${videoId}`} className="block relative aspect-video group">
+          <Link href={`/servicios/${videoId}`} className="block relative aspect-video group">
             <Image src={imageError ? "/placeholder.svg" : thumbnailUrl} alt={video.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" width={640} height={480} onError={() => setImageError(true)} />
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300">
               <div className="w-12 h-12 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-110">
