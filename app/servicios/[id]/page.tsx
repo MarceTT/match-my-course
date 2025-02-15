@@ -2,7 +2,7 @@
 
 import { raleway } from "@/app/ui/fonts";
 import Header from "@/app/components/common/Header";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import Picture from "@/public/images/placeholder_img.svg";
 import Carousel from "@/app/components/features/Carousel/Carousel";
@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Testimonials from "@/app/components/servicios/Testimonials";
 import RandomConsultations from "@/app/components/common/RandomConsultations";
+import DialogMatch from "@/app/components/common/DialogMatch";
 
 const ServiceDetail = () => {
   const { id } = useParams();
+  const [openAsesoria, setOpenAsesoria] = useState(false)
 
   return (
     <>
@@ -80,9 +82,10 @@ const ServiceDetail = () => {
               con nosotros
             </p>
             <div className="flex justify-center mt-8">
-              <Button className="bg-[#FFA500] hover:bg-[#FF9900] text-black font-semibold px-8 py-2 text-xl h-auto rounded-full border border-[#000]">
+              <Button onClick={() => setOpenAsesoria(true)} className="bg-[#FFA500] hover:bg-[#FF9900] text-black font-semibold px-8 py-2 text-xl h-auto rounded-full border border-[#000]">
                 Agendar asesoría
               </Button>
+              <DialogMatch open={openAsesoria} onOpenChange={setOpenAsesoria} />
             </div>
           </div>
 
