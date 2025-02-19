@@ -10,7 +10,7 @@ import Logo from "../../../public/logos/final-logo.png";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import DialogMatch from "./DialogMatch";
+import StepForm from "./StepForm";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,9 +71,9 @@ const Header = () => {
             className="mx-2 sm:mr-4 lg:mr-10"
           >
             <Button onClick={() => setOpen(true)} className="w-full bg-[#E51D58] hover:bg-[#E51D58]/80 text-white font-bold py-2 px-4 rounded-lg">
-             Reservar
+             Hacer match
             </Button>
-            <DialogMatch open={open} onOpenChange={setOpen} />
+            <StepForm open={open} onOpenChange={setOpen} />
           </motion.div>
           <button
             className="md:hidden focus:outline-none"

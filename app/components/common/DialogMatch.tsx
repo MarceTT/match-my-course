@@ -55,12 +55,11 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
     },
   });
 
-
   useEffect(() => {
     if (!open) {
-      form.reset()
+      form.reset();
     }
-  }, [open, form])
+  }, [open, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Aquí iría la lógica para enviar los datos
@@ -68,7 +67,10 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
   }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        className="sm:max-w-md"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="text-xl font-normal">
             Completa el formulario para reservar reunión
@@ -180,7 +182,6 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
                     .
                     <FormMessage className="mt-4 font-semibold" />
                   </div>
-                 
                 </FormItem>
               )}
             />
