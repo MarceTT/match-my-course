@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import {  Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { raleway } from "./ui/fonts";
+import { Toaster } from "@/components/ui/sonner"
+import { ReactQueryProvider } from "./providers";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -23,7 +25,10 @@ export default function RootLayout({
       <body
         className={`${raleway.className} ${geistMono.variable} antialiased`}
       >
+        <ReactQueryProvider>
         {children}
+        <Toaster position="top-center" richColors closeButton />
+        </ReactQueryProvider>
       </body>
     </html>
   );
