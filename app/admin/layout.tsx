@@ -15,26 +15,19 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useRouter } from "next/navigation";
 import { ThemeProvider } from "./components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "../providers";
-import { raleway } from "../ui/fonts";
-import { Geist_Mono } from "next/font/google";
 import { AuthProvider } from "../context/AuthContext";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
 
   return (
     <AuthProvider>

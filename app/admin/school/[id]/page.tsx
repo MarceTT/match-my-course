@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch";
-import { schoolFormSchema, SchoolFormValues } from "../create/SchoolSchema";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import compressImage from "@/app/hooks/useResizeImage";
@@ -34,8 +33,6 @@ const EditSchoolPage = () => {
   const router = useRouter();
   const params = useParams();
   const schoolId = params?.id as string;
-
-  const [isLoading, setIsLoading] = useState(false);
   const [loadingLogo, setLoadingLogo] = useState(false);
   const [loadingMainImage, setLoadingMainImage] = useState(false);
   const [loadingGallery, setLoadingGallery] = useState(false);
