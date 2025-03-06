@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import { School } from "@/app/types";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from 'sonner';
 import { toggleSchoolStatus } from "../actions/school";
 import React from "react";
+import LoadingImage from "../components/LoadTableImage";
 
 export const columns: ColumnDef<School>[] = [
   {
@@ -43,18 +43,7 @@ export const columns: ColumnDef<School>[] = [
     accessorKey: "logo",
     header: "Logo",
     cell: ({ row }) => (
-      <React.Suspense fallback={
-        <div className="h-20 w-20 rounded-md bg-primary/10 animate-pulse" />
-      }>
-        <Image
-          src={row.original.logo}
-          alt={row.original.name}
-          width={80}
-          height={80}
-          className="rounded-md"
-          loading="lazy"
-        />
-      </React.Suspense>
+      <LoadingImage src={row.original.logo} alt={row.original.name} />
     ),
   },
   {
