@@ -21,6 +21,8 @@ import * as z from "zod";
 import { loginAction } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Logo from "@/public/logos/final-logo.png";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -59,10 +61,13 @@ const LoginForm = () => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Logo y título */}
       <div className="mb-8 flex flex-col items-center text-white space-y-4">
-        <Building2 className="h-12 w-12" />
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Enterprise Portal
-        </h1>
+        <Image
+          src={Logo}
+          width={200}
+          height={200}
+          alt="Logo"
+          className="w-80 h-50"
+        />
       </div>
 
       <Card className="w-full max-w-md mx-4 shadow-[0_0_40px_rgba(8,_112,_184,_0.7)] backdrop-blur-sm bg-white/95">

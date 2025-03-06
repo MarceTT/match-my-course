@@ -6,6 +6,8 @@ import { columns } from "./columns";
 import { useSchools } from "@/app/hooks/useSchools";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const SchoolPage = () => {
   const { data: schools, isLoading, error } = useSchools();
@@ -17,7 +19,12 @@ const SchoolPage = () => {
   }
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Lista de Escuelas</h2>
+      <div className="flex items-center justify-between py-4 px-4">
+        <h2 className="text-xl font-bold">Lista de Escuelas</h2>
+        <Link href="/admin/school/create">
+          <Button className="ml-auto">Agregar Escuela</Button>
+        </Link>
+      </div>
 
       {isLoading ? (
         <div className="border border-gray-200 rounded-md overflow-hidden shadow-sm">
