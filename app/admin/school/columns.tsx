@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from 'sonner';
 import { toggleSchoolStatus } from "../actions/school";
+import React from "react";
 
 export const columns: ColumnDef<School>[] = [
   {
@@ -42,13 +43,18 @@ export const columns: ColumnDef<School>[] = [
     accessorKey: "logo",
     header: "Logo",
     cell: ({ row }) => (
-      <Image
-        src={row.original.logo}
-        alt={row.original.name}
-        width={80}
-        height={80}
-        className="rounded-md"
-      />
+      <React.Suspense fallback={
+        <div className="h-20 w-20 rounded-md bg-primary/10 animate-pulse" />
+      }>
+        <Image
+          src={row.original.logo}
+          alt={row.original.name}
+          width={80}
+          height={80}
+          className="rounded-md"
+          loading="lazy"
+        />
+      </React.Suspense>
     ),
   },
   {
