@@ -4,7 +4,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getInfoUser } from "@/app/admin/actions/user";
 import { User } from "@/app/types";
-import { redirect } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
+import { toast } from 'sonner';
 
 type AuthContextType = {
   user: User | null;
@@ -26,9 +27,25 @@ export function useAuth() {
 // 🔥 Componente proveedor del contexto de autenticación
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+
+  useEffect(() => {
+    const originalFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args);
+
+      if (response.status === 401 || response.status === 403) {
+        console.warn("⚠️ Sesión expirada o token inválido.");
+        logout(); // Invalidar sesión y redirigir
+      }
+      return response;
+    };
   }, []);
 
   // Consulta de autenticación
@@ -45,15 +62,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const user = data && !("error" in data) ? data : null;
 
 
- 
-    if (mounted && !isLoading && !user) {
-      redirect("/login");
+  // Redirigir al login si la sesión expira
+  useEffect(() => {
+    if (mounted && !isLoading && !user && pathname !== "/login") {
+      toast.error("⚠️ Sesión expirada. Redirigiendo al login...");
+      router.push("/login");
     }
+  }, [pathname, isLoading, user, mounted, router]);
 
 
   const logout = () => {
     document.cookie = "token=; Path=/; Max-Age=0"; // Elimina la cookie
     refetch(); // 🔄 Revalida la sesión
+    router.push("/login");
   };
 
   if (!mounted) {

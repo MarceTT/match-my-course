@@ -28,6 +28,7 @@ import compressImage from "@/app/hooks/useResizeImage";
 import { deleteImageSchool, getSchoolById, updateSchool } from "../../actions/school";
 import ConfirmDialog from "../../components/dialog-delete-image";
 import { schoolEditSchema, SchoolEditValues } from "./SchoolEditSchema";
+import FullScreenLoader from "../../components/FullScreenLoader";
 
 const EditSchoolPage = () => {
   const router = useRouter();
@@ -55,6 +56,16 @@ const EditSchoolPage = () => {
     retry: 2,
     staleTime: 1000 * 60 * 5,
   });
+
+
+  const [loadingScreen, setLoadingScreen] = useState(true);
+
+useEffect(() => {
+  if (!isFetching) {
+    const delay = setTimeout(() => setLoadingScreen(false), 2000); // 🔥 Retrasa la desaparición
+    return () => clearTimeout(delay);
+  }
+}, [isFetching]);
 
   // Inicializamos el formulario con react-hook-form y zod
   const form = useForm<SchoolEditValues>({
@@ -211,8 +222,8 @@ const EditSchoolPage = () => {
 
   return (
     <div className="p-4">
-      {isFetching ? (
-        <p className="text-gray-500">Cargando datos...</p>
+      {loadingScreen ? (
+        <FullScreenLoader isLoading={loadingScreen} />
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
