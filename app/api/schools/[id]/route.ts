@@ -7,7 +7,7 @@ export const config = {
   },
 };
 
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: any) {
   try {
     const { id } = context.params;
     // 1. Verificar autenticación
