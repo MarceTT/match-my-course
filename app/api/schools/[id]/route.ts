@@ -7,8 +7,9 @@ export const config = {
   },
 };
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   try {
+    const { id } = context.params;
     // 1. Verificar autenticación
     const token = await refreshAccessToken();
     if (!token) {
@@ -19,7 +20,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const formData = await req.formData();
 
     // 3. Enviar TODO el FormData directamente al backend
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${params.id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`
