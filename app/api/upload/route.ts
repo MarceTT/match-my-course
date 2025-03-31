@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const token = await refreshAccessToken();
 
     if (!token) {
-      return { error: "No autorizado" }; // Si no hay cookie, devolver error
+      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
     formData.forEach((value, key) => console.log(`➡️ ${key}:`, value));
     const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools`, {
@@ -29,8 +29,6 @@ export async function POST(req: NextRequest) {
       });
 
     const responseData = await backendResponse.json();
-
-    console.log("📥 Respuesta del backend:", responseData); 
 
     if (!backendResponse.ok) {
       return NextResponse.json(responseData, { status: backendResponse.status });
