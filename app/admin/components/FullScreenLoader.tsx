@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Logo from "@/public/logos/Logo_Match.png";
-import { Loader2 } from "lucide-react";
+
 
 interface FullScreenLoaderProps {
   isLoading: boolean;

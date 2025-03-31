@@ -15,6 +15,8 @@ import Atc from "../public/images/5.png";
 import Ces from "../public/images/9.png";
 import Apollo from "../public/images/6.png";
 import SchoolPage from "./school/page";
+import { Suspense } from "react";
+import SuspenseLoader from "./admin/components/SuspenseLoader";
 
 const schools = [
   {
@@ -79,7 +81,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
       <Hero />
+      </Suspense>
       <Carousel />
       <Features />
       <div className="container mx-auto px-6 py-16">
