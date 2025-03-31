@@ -2,18 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
   const { pathname } = request.nextUrl;
 
 
-  if (token && pathname === "/login") {
+  if (refreshToken && pathname === "/login") {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
 
-  if (pathname.startsWith("/admin")) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url)); // 🚀 Redirigir si no está autenticado
-    }
+  if (!refreshToken && pathname.startsWith("/admin")) {
+    return NextResponse.redirect(new URL("/login", request.url)); // 🚀 Redirigir si no está autenticado
   }
 
   return NextResponse.next();

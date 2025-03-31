@@ -1,11 +1,13 @@
 "use server";
 
 import { School, SchoolResponse } from "@/app/types";
+import { refreshAccessToken } from "@/app/utils/requestServer";
 import { cookies } from "next/headers";
 
 export async function getSchools(): Promise<School[] | { error: string }> {
   try {
-    const token = (await cookies()).get("token")?.value;
+
+    const token = await refreshAccessToken();
 
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
@@ -14,7 +16,7 @@ export async function getSchools(): Promise<School[] | { error: string }> {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       credentials: "include",
     });
@@ -40,7 +42,7 @@ export async function getSchools(): Promise<School[] | { error: string }> {
 
 export async function createSchool(formData: FormData) {
   try {
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
 
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
@@ -49,9 +51,8 @@ export async function createSchool(formData: FormData) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
       body: formData,
     });
 
@@ -61,6 +62,7 @@ export async function createSchool(formData: FormData) {
     }
 
     const responseData = await res.json();
+    console.log("🚀 Response:", responseData);
     if (!res.ok) {
         return { error: responseData.message || "Error al crear la escuela" };
       }
@@ -73,7 +75,7 @@ export async function createSchool(formData: FormData) {
 
 export async function updateSchool(id: string, formData: FormData) {
   try {
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
 
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
@@ -81,7 +83,7 @@ export async function updateSchool(id: string, formData: FormData) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}`, {
       method: "PUT",
       headers: {
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       credentials: "include",
       body: formData,
@@ -105,7 +107,7 @@ export async function updateSchool(id: string, formData: FormData) {
 
 export async function toggleSchoolStatus(id: string, status: boolean) {
   try {
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
 
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
@@ -114,7 +116,7 @@ export async function toggleSchoolStatus(id: string, status: boolean) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       credentials: "include",
       body: JSON.stringify({ status: !status }),
@@ -136,7 +138,8 @@ export async function toggleSchoolStatus(id: string, status: boolean) {
 
 export async function getSchoolById(id: string) {
   try {
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
+
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
     }
@@ -144,7 +147,7 @@ export async function getSchoolById(id: string) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       credentials: "include",
     });
@@ -168,7 +171,7 @@ export async function deleteImageSchool(id: string, imageKey: string, imageType:
 
   //console.log("🔥 Eliminando imagen:", imageKey, "de tipo:", imageType, "con el id", id);
   try {
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
     if (!token) {
       return { error: "No autorizado" }; // Si no hay cookie, devolver error
     }
@@ -176,7 +179,7 @@ export async function deleteImageSchool(id: string, imageKey: string, imageType:
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": `token=${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       credentials: "include",
       body: JSON.stringify({ imageKey, imageType }),

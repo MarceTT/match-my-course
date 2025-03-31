@@ -5,6 +5,7 @@ import { nunito } from "../ui/fonts";
 import Link from "next/link";
 
 interface SchoolCardProps {
+    _id: string
     name: string
     image: string | StaticImageData; // Permitir ambos tipos
     location: string
@@ -12,16 +13,19 @@ interface SchoolCardProps {
     price: number
   }
 
-const School = ({ name, image, location, rating, price }: SchoolCardProps) => {
+const School = ({ _id, name, image, location, rating, price }: SchoolCardProps) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-full">
-      <Link href={`/school-detail`}>
+      <Link href={`/school-detail/${_id}`}>
         <div className="block">
           <div className="relative">
             <Image
               src={image || "/placeholder.svg"}
               alt={name}
+              width={1000}
+              height={1000}
               className="w-full h-64 object-cover"
+              loading="lazy"
             />
             <button className="absolute bottom-4 right-4 p-2 bg-[#F15368] rounded-full shadow-md">
               <LuHeart className="h-5 w-5 text-white fill-white" />
@@ -34,7 +38,9 @@ const School = ({ name, image, location, rating, price }: SchoolCardProps) => {
                 Opiniones de estudiantes:
               </span>
               <div className="flex items-center">
-                <span className="text-sm font-semibold">{rating}</span>
+                <span className="text-sm font-semibold">{parseFloat(String(rating ?? 0)).toFixed(
+                  1
+                )}</span>
                 <span className="text-yellow-400 ml-1">★</span>
               </div>
             </div>

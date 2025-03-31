@@ -1,16 +1,15 @@
 "use client";
 
-import type React from "react";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ImagePlus, Loader2 } from "lucide-react";
+import { ImagePlus, Loader2, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -25,7 +24,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import compressImage from "@/app/hooks/useResizeImage";
-import { deleteImageSchool, getSchoolById, updateSchool } from "../../actions/school";
+import { deleteImageSchool, getSchoolById } from "../../actions/school";
 import ConfirmDialog from "../../components/dialog-delete-image";
 import { schoolEditSchema, SchoolEditValues } from "./SchoolEditSchema";
 import FullScreenLoader from "../../components/FullScreenLoader";
@@ -34,22 +33,25 @@ const EditSchoolPage = () => {
   const router = useRouter();
   const params = useParams();
   const schoolId = params?.id as string;
+  
+  // Estados para carga
   const [loadingLogo, setLoadingLogo] = useState(false);
   const [loadingMainImage, setLoadingMainImage] = useState(false);
   const [loadingGallery, setLoadingGallery] = useState(false);
-  const [progressGallery, setProgressGallery] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [loadingScreen, setLoadingScreen] = useState(true);
+  const [removingImages, setRemovingImages] = useState<Record<string, boolean>>({});
 
   // Fetch existing school data
-  const { data: schoolData, isLoading: isFetching } = useQuery({
+  const { 
+    data: schoolData, 
+    isLoading: isFetching, 
+    refetch: refetchSchoolData 
+  } = useQuery({
     queryKey: ["school", schoolId],
     queryFn: async () => {
       const response = await getSchoolById(schoolId);
-
-      if (response.error) {
-        console.error("❌ Error obteniendo la escuela:", response.error);
-        throw new Error(response.error);
-      }
-
+      if (response.error) throw new Error(response.error);
       return response.data;
     },
     enabled: !!schoolId,
@@ -57,17 +59,14 @@ const EditSchoolPage = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  useEffect(() => {
+    if (!isFetching) {
+      const timer = setTimeout(() => setLoadingScreen(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isFetching]);
 
-  const [loadingScreen, setLoadingScreen] = useState(true);
-
-useEffect(() => {
-  if (!isFetching) {
-    const delay = setTimeout(() => setLoadingScreen(false), 2000); // 🔥 Retrasa la desaparición
-    return () => clearTimeout(delay);
-  }
-}, [isFetching]);
-
-  // Inicializamos el formulario con react-hook-form y zod
+  // Inicializar formulario
   const form = useForm<SchoolEditValues>({
     resolver: zodResolver(schoolEditSchema),
     defaultValues: {
@@ -80,7 +79,7 @@ useEffect(() => {
     },
   });
 
-  // Precargar datos cuando schoolData esté disponible
+  // Precargar datos cuando schoolData cambie
   useEffect(() => {
     if (schoolData) {
       form.reset({
@@ -94,131 +93,152 @@ useEffect(() => {
     }
   }, [schoolData, form]);
 
+  // Mutation para actualizar con API route
   const mutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const response = await updateSchool(schoolId, data);
-
-      if (response.error) {
-        throw new Error(response.error);
+    mutationFn: async (data: SchoolEditValues) => {
+      const formData = new FormData();
+    
+      // Agregar TODOS los campos del formulario
+      formData.append('name', data.name);
+      formData.append('city', data.city);
+      formData.append('status', data.status.toString());
+  
+      // Agregar archivos si existen (sin validaciones extras)
+      if (data.logo) formData.append('logo', data.logo);
+      if (data.mainImage) formData.append('mainImage', data.mainImage);
+      
+      // Agregar todas las imágenes de la galería
+      data.galleryImages.forEach(file => {
+        formData.append('galleryImages', file);
+      });
+  
+      // Enviar TODO en una sola petición
+      const response = await fetch(`/api/schools/${schoolId}`, {
+        method: 'PUT',
+        body: formData, // Sin headers manuales
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al actualizar');
       }
-
-      return response;
+  
+      return response.json();
     },
-    onSuccess: (result) => {
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Escuela actualizada exitosamente");
-        router.push("/admin/school");
-      }
+    onSuccess: async (result) => {
+      await refetchSchoolData();
+      toast.success("Escuela actualizada exitosamente");
+      router.push("/admin/school");
     },
-    onError: () => {
-      toast.error("Error al actualizar la escuela. Inténtalo nuevamente.");
+    onError: (error: Error) => {
+      toast.error(error.message || "Error al actualizar la escuela");
     },
   });
 
+  // Función para manejar cambios en archivos individuales
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: any,
     setLoading: (value: boolean) => void
   ) => {
     if (e.target.files?.[0]) {
-      setLoading(true);
-      const compressedFile = await compressImage(e.target.files[0]);
-      field.onChange(compressedFile);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const compressedFile = await compressImage(e.target.files[0]);
+        field.onChange(compressedFile);
+      } catch (error) {
+        toast.error("Error al procesar la imagen");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
+  // Función para manejar cambios en la galería
   const handleGalleryChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: any
   ) => {
-    if (e.target.files) {
-      setLoadingGallery(true);
-      setProgressGallery(0);
+    if (e.target.files && e.target.files.length > 0) {
+      try {
+        setLoadingGallery(true);
+        setUploadProgress(0);
 
-      const files = Array.from(e.target.files);
-      const totalFiles = files.length;
-      let compressedFiles: File[] = [];
+        const files = Array.from(e.target.files);
+        const totalFiles = files.length;
+        let processedCount = 0;
 
-      for (let i = 0; i < totalFiles; i++) {
-        const compressedFile = await compressImage(files[i]);
-        compressedFiles.push(compressedFile);
-        setProgressGallery(((i + 1) / totalFiles) * 100);
-      }
+        // Procesar en lotes para mejor performance
+        const batchSize = 3;
+        let compressedFiles: File[] = [];
 
-      setLoadingGallery(false);
-      field.onChange([...field.value, ...compressedFiles].slice(0, 10));
-    }
-  };
+        for (let i = 0; i < files.length; i += batchSize) {
+          const batch = files.slice(i, i + batchSize);
+          const batchResults = await Promise.all(
+            batch.map(file => compressImage(file))
+          );
+          
+          compressedFiles = [...compressedFiles, ...batchResults];
+          processedCount += batch.length;
+          setUploadProgress((processedCount / totalFiles) * 100);
+        }
 
-  const handleRemoveLogo = async () => {
-    const imageKey = schoolData.logo.split(".com/")[1];
+        // Limitar a 10 imágenes como máximo
+        const currentImages = field.value || [];
+        const newImages = [...currentImages, ...compressedFiles].slice(0, 10);
+        field.onChange(newImages);
 
-    const response = await deleteImageSchool(schoolId, imageKey, "logo");
-
-    if (response.error) {
-      toast.error("No se pudo eliminar el logo.");
-      return;
-    }
-
-    form.setValue("logo", null);
-    toast.success("Logo eliminado correctamente.");
-  };
-
-  const handleRemoveMainImage = async () => {
-    const imageKey = schoolData.mainImage.split(".com/")[1];
-
-    const response = await deleteImageSchool(schoolId, imageKey, "mainImage");
-
-    if (response.error) {
-      toast.error("No se pudo eliminar la imagen principal.");
-      return;
-    }
-
-    form.setValue("mainImage", null);
-    toast.success("Imagen principal eliminada correctamente.");
-  };
-
-  const handleRemoveGalleryImage = async (item: File | string, field: any) => {
-    if (typeof item === "string") {
-      // 🔥 Imagen de la BD (AWS S3), eliminar del servidor
-      const imageKey = item.split(".com/")[1];
-
-      const response = await deleteImageSchool(schoolId, imageKey, "galleryImages");
-
-      if (response.error) {
-        toast.error("No se pudo eliminar la imagen.");
-        return;
+      } catch (error) {
+        toast.error("Error al procesar las imágenes");
+      } finally {
+        setLoadingGallery(false);
+        setUploadProgress(0);
       }
     }
-
-    // 🔥 Remover la imagen de la lista del formulario
-    const newFiles = field.value.filter((img: File | string) => img !== item);
-    field.onChange(newFiles);
-
-    toast.success("Imagen eliminada correctamente.");
   };
 
-  async function onSubmit(data: SchoolEditValues) {
-    const formData = new FormData();
+  // Función para eliminar imágenes
+  const handleRemoveImage = async (
+    imageType: "logo" | "mainImage" | "galleryImages", 
+    imageUrl?: string
+  ) => {
+    if (!schoolData) return;
 
-    formData.append("name", data.name);
-    formData.append("city", data.city);
-    formData.append("status", data.status.toString());
+    const imageKey = imageUrl || imageType;
+    setRemovingImages(prev => ({ ...prev, [imageKey]: true }));
 
-    if (data.logo) formData.append("logo", data.logo);
-    if (data.mainImage) formData.append("mainImage", data.mainImage);
+    try {
+      let s3ImageKey = "";
+      if (imageUrl) {
+        s3ImageKey = imageUrl.split(".com/")[1];
+      } else if (imageType === "logo" && schoolData.logo) {
+        s3ImageKey = schoolData.logo.split(".com/")[1];
+      } else if (imageType === "mainImage" && schoolData.mainImage) {
+        s3ImageKey = schoolData.mainImage.split(".com/")[1];
+      }
 
-    if (data.galleryImages.length > 0) {
-      data.galleryImages.forEach((file) => {
-        formData.append("galleryImages", file);
-      });
+      if (s3ImageKey) {
+        const response = await deleteImageSchool(schoolId, s3ImageKey, imageType);
+        if (response.error) throw new Error(response.error);
+      }
+
+      // Actualizar formulario localmente
+      if (imageType === "galleryImages" && imageUrl) {
+        const currentGallery = form.getValues("galleryImages");
+        form.setValue("galleryImages", currentGallery.filter(img => img !== imageUrl));
+      } else {
+        form.setValue(imageType, null);
+      }
+
+      // Refrescar datos del servidor
+      await refetchSchoolData();
+      toast.success("Imagen eliminada correctamente");
+    } catch (error) {
+      toast.error("No se pudo eliminar la imagen");
+    } finally {
+      setRemovingImages(prev => ({ ...prev, [imageKey]: false }));
     }
-
-    mutation.mutate(formData);
-  }
+  };
 
   return (
     <div className="p-4">
@@ -226,7 +246,8 @@ useEffect(() => {
         <FullScreenLoader isLoading={loadingScreen} />
       ) : (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(data => mutation.mutate(data))} className="space-y-6">
+            {/* Sección de Información Básica */}
             <Card>
               <CardContent className="pt-6">
                 <div className="grid gap-6 md:grid-cols-2">
@@ -280,7 +301,7 @@ useEffect(() => {
               </CardContent>
             </Card>
 
-            {/* Logo */}
+            {/* Sección de Logo */}
             <Card>
               <CardContent className="pt-6">
                 <FormField
@@ -296,19 +317,14 @@ useEffect(() => {
                             accept="image/*"
                             className="hidden"
                             id="logo"
-                            onChange={(e) =>
-                              handleFileChange(e, field, setLoadingLogo)
-                            }
+                            onChange={(e) => handleFileChange(e, field, setLoadingLogo)}
                           />
-                          <label
-                            htmlFor="logo"
-                            className="cursor-pointer block"
-                          >
+                          <label htmlFor="logo" className="cursor-pointer block">
                             {loadingLogo ? (
                               <div className="flex flex-col items-center gap-2">
                                 <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
                                 <span className="text-sm text-muted-foreground">
-                                  Comprimendo imagen...
+                                  Comprimiendo imagen...
                                 </span>
                               </div>
                             ) : field.value ? (
@@ -325,38 +341,33 @@ useEffect(() => {
                                 />
                                 <ConfirmDialog
                                   title="Eliminar Logo"
-                                  description="¿Estás seguro de eliminar el logo? Esta acción no se puede deshacer."
-                                  onConfirm={handleRemoveLogo}
+                                  description="¿Estás seguro de eliminar el logo?"
+                                  onConfirm={() => handleRemoveImage("logo")}
                                 >
                                   <Button
                                     variant="destructive"
                                     className="absolute top-2 right-2"
+                                    disabled={removingImages['logo']}
                                   >
-                                    Cambiar
+                                    {removingImages['logo'] ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      "Eliminar"
+                                    )}
                                   </Button>
                                 </ConfirmDialog>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => field.onChange(null)}
-                                >
-                                  Eliminar
-                                </Button>
                               </div>
                             ) : (
                               <div className="flex flex-col items-center gap-2">
                                 <ImagePlus className="h-8 w-8 text-muted-foreground" />
                                 <span className="text-sm text-muted-foreground">
-                                  Haga clic para subir el logo
+                                  Haz clic para subir el logo
                                 </span>
                               </div>
                             )}
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription>
-                        Logo oficial de la escuela (opcional)
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -364,7 +375,7 @@ useEffect(() => {
               </CardContent>
             </Card>
 
-            {/* Imagen Principal */}
+            {/* Sección de Imagen Principal */}
             <Card>
               <CardContent className="pt-6">
                 <FormField
@@ -380,19 +391,14 @@ useEffect(() => {
                             accept="image/*"
                             className="hidden"
                             id="mainImage"
-                            onChange={(e) =>
-                              handleFileChange(e, field, setLoadingMainImage)
-                            }
+                            onChange={(e) => handleFileChange(e, field, setLoadingMainImage)}
                           />
-                          <label
-                            htmlFor="mainImage"
-                            className="cursor-pointer block"
-                          >
+                          <label htmlFor="mainImage" className="cursor-pointer block">
                             {loadingMainImage ? (
                               <div className="flex flex-col items-center gap-2">
                                 <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
                                 <span className="text-sm text-muted-foreground">
-                                  Comprimendo imagen...
+                                  Comprimiendo imagen...
                                 </span>
                               </div>
                             ) : field.value ? (
@@ -403,44 +409,39 @@ useEffect(() => {
                                       ? field.value
                                       : URL.createObjectURL(field.value)
                                   }
-                                  alt="Imagen Principal preview"
+                                  alt="Imagen principal preview"
                                   fill
                                   className="object-contain rounded-lg"
                                 />
                                 <ConfirmDialog
                                   title="Eliminar Imagen Principal"
-                                  description="¿Estás seguro de eliminar esta imagen? Esta acción no se puede deshacer."
-                                  onConfirm={handleRemoveMainImage}
+                                  description="¿Estás seguro de eliminar esta imagen?"
+                                  onConfirm={() => handleRemoveImage("mainImage")}
                                 >
                                   <Button
                                     variant="destructive"
                                     className="absolute top-2 right-2"
+                                    disabled={removingImages['mainImage']}
                                   >
-                                    Eliminar
+                                    {removingImages['mainImage'] ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      "Eliminar"
+                                    )}
                                   </Button>
                                 </ConfirmDialog>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => field.onChange(null)}
-                                >
-                                  Eliminar
-                                </Button>
                               </div>
                             ) : (
                               <div className="flex flex-col items-center gap-2">
                                 <ImagePlus className="h-8 w-8 text-muted-foreground" />
                                 <span className="text-sm text-muted-foreground">
-                                  Haga clic para subir la imagen principal
+                                  Haz clic para subir la imagen principal
                                 </span>
                               </div>
                             )}
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription>
-                        Imagen principal de la escuela
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -448,117 +449,92 @@ useEffect(() => {
               </CardContent>
             </Card>
 
-            {/* Galería de Imágenes */}
+            {/* Sección de Galería de Imágenes */}
             <Card>
-              <CardContent className="pt-6">
+              <CardHeader>
+                <CardTitle>Galería de Imágenes</CardTitle>
+                <CardDescription>
+                  Sube hasta 10 imágenes para la galería
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <FormField
                   control={form.control}
                   name="galleryImages"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Galería de Imágenes</FormLabel>
                       <FormControl>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {/* 🔄 Indicador de carga */}
-                          {loadingGallery && (
-                            <div className="col-span-2 md:col-span-4 flex flex-col items-center gap-2">
-                              <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-                              <span className="text-sm text-muted-foreground">
-                                Comprimiendo imágenes...
+                        <div className="space-y-4">
+                          <div className="border-2 border-dashed rounded-lg p-4 hover:bg-muted/50 transition cursor-pointer">
+                            <Input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              onChange={(e) => handleGalleryChange(e, field)}
+                              disabled={loadingGallery}
+                              className="hidden"
+                              id="gallery-upload"
+                            />
+                            <label
+                              htmlFor="gallery-upload"
+                              className="flex flex-col items-center justify-center gap-2"
+                            >
+                              <UploadCloud className="h-10 w-10 text-muted-foreground" />
+                              <span className="font-medium">
+                                {loadingGallery
+                                  ? `Cargando... ${uploadProgress.toFixed(0)}%`
+                                  : "Arrastra imágenes o haz clic para seleccionar"}
                               </span>
-                              <div className="w-full bg-gray-200 h-2 rounded-md overflow-hidden">
-                                <Progress value={progressGallery} />
-                              </div>
-                            </div>
+                            </label>
+                          </div>
+
+                          {loadingGallery && (
+                            <Progress value={uploadProgress} className="h-2" />
                           )}
 
-                          {/* 📌 Renderizar imágenes en la galería */}
-                          {field.value &&
-                            Array.isArray(field.value) &&
-                            field.value.map(
-                              (item: File | string, index: number) => (
-                                <div
-                                  key={index}
-                                  className="relative aspect-square"
-                                >
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {field.value?.map((item, index) => {
+                              const imageUrl = typeof item === "string" ? item : URL.createObjectURL(item);
+                              const isRemoving = removingImages[imageUrl] || false;
+                              
+                              return (
+                                <div key={imageUrl} className="relative aspect-square">
                                   <Image
-                                    src={
-                                      typeof item === "string"
-                                        ? item
-                                        : URL.createObjectURL(item)
-                                    }
-                                    alt={`Galería ${index + 1}`}
+                                    src={imageUrl}
+                                    alt={`Imagen ${index + 1}`}
                                     fill
                                     className="object-cover rounded-lg"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                   />
-
-                                  {/* 🔥 Botón para eliminar imágenes almacenadas en AWS S3 */}
-                                  {typeof item === "string" ? (
-                                    <div className="absolute top-2 right-2 flex gap-2">
-                                      <ConfirmDialog
-                                        title="Eliminar Imagen"
-                                        description="¿Seguro que quieres eliminar esta imagen de la galería?"
-                                        onConfirm={() => handleRemoveGalleryImage(item, field)}
-                                      >
-                                        <Button
-                                          variant="destructive"
-                                          size="icon"
-                                        >
-                                          <FaRegTrashAlt className="h-4 w-4" />
-                                        </Button>
-                                      </ConfirmDialog>
-                                    </div>
-                                  ) : (
-                                    // 🔥 Botón para quitar imágenes recién agregadas (sin afectar AWS)
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => {
-                                        const newFiles = field.value.filter(
-                                          (img: File | string) => img !== item
-                                        );
-                                        field.onChange(newFiles);
-                                      }}
-                                      className="absolute bottom-2 right-2"
+                                  <ConfirmDialog
+                                    title="Eliminar Imagen"
+                                    description="¿Estás seguro de eliminar esta imagen?"
+                                    onConfirm={() => 
+                                      handleRemoveImage(
+                                        "galleryImages", 
+                                        typeof item === "string" ? item : undefined
+                                      )
+                                    }
+                                  >
+                                    <Button 
+                                      variant="destructive" 
+                                      size="icon" 
+                                      className="absolute top-2 right-2"
+                                      disabled={isRemoving}
                                     >
-                                      Quitar
+                                      {isRemoving ? (
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                      ) : (
+                                        <FaRegTrashAlt className="h-4 w-4" />
+                                      )}
                                     </Button>
-                                  )}
+                                  </ConfirmDialog>
                                 </div>
-                              )
-                            )}
-
-                          {/* 📌 Input para agregar más imágenes */}
-                          {(!field.value ||
-                            (Array.isArray(field.value) &&
-                              field.value.length < 5)) && (
-                            <div className="border-2 border-dashed rounded-lg aspect-square flex items-center justify-center hover:bg-muted/50 transition cursor-pointer">
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                id="gallery"
-                                multiple
-                                onChange={(e) => handleGalleryChange(e, field)}
-                              />
-                              <label
-                                htmlFor="gallery"
-                                className="cursor-pointer"
-                              >
-                                <div className="flex flex-col items-center gap-2">
-                                  <ImagePlus className="h-8 w-8 text-muted-foreground" />
-                                  <span className="text-sm text-muted-foreground text-center">
-                                    Agregar imágenes
-                                  </span>
-                                </div>
-                              </label>
-                            </div>
-                          )}
+                              );
+                            })}
+                          </div>
                         </div>
                       </FormControl>
-                      <FormDescription>
-                        Sube hasta 5 imágenes para la galería
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -575,14 +551,17 @@ useEffect(() => {
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={mutation.isPending}>
+              <Button 
+                type="submit" 
+                disabled={mutation.isPending}
+              >
                 {mutation.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Guardando...
                   </>
                 ) : (
-                  "Editar Cambios"
+                  "Actualizar Escuela"
                 )}
               </Button>
             </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { refreshAccessToken } from "@/app/utils/requestServer";
 
 export const config = {
   api: {
@@ -12,17 +12,17 @@ export const config = {
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const token = (await cookies()).get("token")?.value;
+    const token = await refreshAccessToken();
 
     if (!token) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+      return { error: "No autorizado" }; // Si no hay cookie, devolver error
     }
     formData.forEach((value, key) => console.log(`➡️ ${key}:`, value));
     const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools`, {
         method: "POST",
         headers: {
-          "Accept": "application/json",
-          "Cookie": `token=${token}`
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         credentials: "include",
         body: formData,

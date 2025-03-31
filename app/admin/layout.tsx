@@ -20,6 +20,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "../providers";
 import { AuthProvider } from "../context/AuthContext";
+import { usePathname } from "next/navigation";
 
 
 
@@ -28,6 +29,9 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter((segment) => segment);
 
   return (
     <AuthProvider>
@@ -48,15 +52,29 @@ export default function AdminLayout({
                   <Separator orientation="vertical" className="mr-2 h-4" />
                   <Breadcrumb>
                     <BreadcrumbList>
-                      <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#">
-                          Building Your Application
-                        </BreadcrumbLink>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink href="/admin/dashboard">Inicio</BreadcrumbLink>
                       </BreadcrumbItem>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                      </BreadcrumbItem>
+
+                      {pathSegments.map((segment, index) => {
+                        const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
+                        const isLast = index === pathSegments.length - 1;
+
+                        return (
+                          <span key={path} className="flex items-center">
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                              {isLast ? (
+                                <BreadcrumbPage>{formatSegment(segment)}</BreadcrumbPage>
+                              ) : (
+                                <BreadcrumbLink href={path}>
+                                  {formatSegment(segment)}
+                                </BreadcrumbLink>
+                              )}
+                            </BreadcrumbItem>
+                          </span>
+                        );
+                      })}
                     </BreadcrumbList>
                   </Breadcrumb>
                 </div>
@@ -70,3 +88,9 @@ export default function AdminLayout({
     </AuthProvider>
   );
 }
+
+const formatSegment = (segment: string) => {
+  return segment
+    .replace(/-/g, " ") // Reemplaza guiones por espacios
+    .replace(/\b\w/g, (l) => l.toUpperCase()); // Capitaliza cada palabra
+};

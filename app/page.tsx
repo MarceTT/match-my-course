@@ -1,7 +1,6 @@
 import Header from "./components/common/Header";
 import Hero from "./components/features/Hero/Hero";
 import Features from "./components/Features";
-import School from "./components/School";
 import Footer from "./components/common/Footer";
 
 //importar la imagen desde images
@@ -15,65 +14,66 @@ import Cork4 from "../public/images/2.png";
 import Atc from "../public/images/5.png";
 import Ces from "../public/images/9.png";
 import Apollo from "../public/images/6.png";
+import SchoolPage from "./school/page";
 
 const schools = [
   {
-    name: 'Cork English Academy',
+    name: "Cork English Academy",
     image: Cork,
-    location: 'Cork',
+    location: "Cork",
     rating: 4.6,
-    price: 290
+    price: 290,
   },
   {
-    name: 'Cork English World',
+    name: "Cork English World",
     image: Cork2,
-    location: 'Cork',
+    location: "Cork",
     rating: 4.3,
-    price: 190
+    price: 190,
   },
   {
-    name: 'Emerald Cultural Institute',
+    name: "Emerald Cultural Institute",
     image: Dublin,
-    location: 'Dublin',
+    location: "Dublin",
     rating: 4.9,
-    price: 390
+    price: 390,
   },
   {
-    name: 'University College Cork',
+    name: "University College Cork",
     image: Cork3,
-    location: 'Cork',
+    location: "Cork",
     rating: 4.7,
-    price: 230
+    price: 230,
   },
   {
-    name: 'Cork English College',
+    name: "Cork English College",
     image: Cork4,
-    location: 'Cork',
+    location: "Cork",
     rating: 4.5,
-    price: 290
+    price: 290,
   },
   {
-    name: 'ATC Language Schools',
+    name: "ATC Language Schools",
     image: Atc,
-    location: 'Dublin',
+    location: "Dublin",
     rating: 4.3,
-    price: 190
+    price: 190,
   },
   {
-    name: 'Centre of English Studies - CES',
+    name: "Centre of English Studies - CES",
     image: Ces,
-    location: 'Dublin',
+    location: "Dublin",
     rating: 4.9,
-    price: 390
+    price: 390,
   },
   {
-    name: 'Apollo Language Centre',
+    name: "Apollo Language Centre",
     image: Apollo,
-    location: 'Dublin',
+    location: "Dublin",
     rating: 4.7,
-    price: 230
-  }
-]
+    price: 230,
+  },
+];
 
 export default function Home() {
   return (
@@ -83,13 +83,9 @@ export default function Home() {
       <Carousel />
       <Features />
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {schools.map((school, i) => (
-            <School key={i} {...school} />
-          ))}
-        </div>
+        <SchoolPage />
       </div>
       <Footer />
     </div>
   );
-}
+} 

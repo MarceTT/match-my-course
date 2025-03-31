@@ -8,9 +8,7 @@ import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import Logo from "@/public/logos/final-logo.png";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import StepForm from "./StepForm";
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,7 +62,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center">
-          <motion.div
+          {/* <motion.div
             initial={{ scale: 1 }}
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 0.5, repeat: Infinity }}
@@ -74,7 +72,7 @@ const Header = () => {
              Hacer match
             </Button>
             <StepForm open={open} onOpenChange={setOpen} />
-          </motion.div>
+          </motion.div> */}
           <button
             className="md:hidden focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}

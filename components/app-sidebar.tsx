@@ -49,78 +49,48 @@ const data = {
           title: "Ver Escuelas",
           url: "/admin/school",
         },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
       ],
     },
     {
-      title: "Models",
+      title: "Cargas",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Cargar Alojamiento",
+          url: "/admin/cargas/alojamiento",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Cargar Detalle Alojamiento",
+          url: "/admin/cargas/alojamiento-detalle-web",
         },
         {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
+          title: "Cargar Calidad",
+          url: "/admin/cargas/calidad",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Cargar Descripcion de Escuela",
+          url: "/admin/cargas/descripcion",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Cargar Instalaciones",
+          url: "/admin/cargas/instalaciones",
         },
         {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
+          title: "Cargar Nacionalidades",
+          url: "/admin/cargas/nacionalidades",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Cargar Precios",
+          url: "/admin/cargas/precios",
         },
         {
-          title: "Billing",
-          url: "#",
+          title: "Cargar Rango de Semanas",
+          url: "/admin/cargas/rango-semanas-precio",
         },
         {
-          title: "Limits",
-          url: "#",
+          title: "Cargar Semanas de Precio",
+          url: "/admin/cargas/semanas-precio",
         },
       ],
     },
@@ -146,6 +116,8 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, isLoading } = useAuth();
+
+  console.log(user);
 
   return (
     <Sidebar collapsible="icon" {...props}>

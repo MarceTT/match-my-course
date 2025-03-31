@@ -7,10 +7,13 @@ export async function loginAction(email: string, password: string) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
     });
 
 
     const data = await res.json();
+
+    console.log(data);
 
 
     if(data.message !== "success"){
@@ -18,9 +21,8 @@ export async function loginAction(email: string, password: string) {
     }
 
 
-
-        const cookie = await cookies();
-        cookie.set("token", data.data.token, { httpOnly: true });
+    const cookieStore = await cookies();
+    cookieStore.set("refreshToken", data.data.refreshToken, { httpOnly: true });    
         
         return {
             success: true,
