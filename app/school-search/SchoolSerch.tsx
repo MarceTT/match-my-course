@@ -3,11 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../components/common/Footer";
 import Filter from "../components/features/Filter/Filter";
-import SchoolList from "../components/school/SchoolSearchList";
 import Header from "../components/common/Header";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
 import filtersConfig from "@/app/utils/filterConfig";
+import InfiniteSchoolList from "../components/school/InfiniteSchoolList";
 
 const normalizeCourse = (course: string) => {
   return course
@@ -28,7 +27,6 @@ const SchoolSearch = () => {
 
   Object.entries(filtersConfig).forEach(([key, config]) => {
     if (key === "courseTypes") {
-      // ✅ Agrega el tipo de curso normalizado al filtro si viene desde la URL
       initialFilters[key] = normalizedCourse ? [normalizedCourse] : [];
     } else if (config.type === "slider") {
       initialFilters[key] = config.slider?.default ?? 0;
@@ -39,42 +37,32 @@ const SchoolSearch = () => {
 
   const [filters, setFilters] = useState<Record<string, any>>(initialFilters);
 
-  // 🔁 Actualiza la URL en base a los filtros dinámicamente
   useEffect(() => {
     const params = new URLSearchParams();
-  
+
     if (courseType) {
-      params.set("course", courseType); // Siempre incluye el curso
+      params.set("course", courseType);
     }
-  
+
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = filters[key];
-  
+
       if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
       } else if (
         !Array.isArray(value) &&
         value !== null &&
         value !== undefined &&
-        value !== 0 && // Evita agregar sliders con valor inicial = 0
+        value !== 0 &&
         config.type === "slider"
       ) {
         params.set(key, String(value));
       }
     });
-  
+
     const queryString = params.toString();
     router.replace(`/school-search?${queryString}`);
   }, [filters, courseType, router]);
-  
-
-  const {
-    data: schoolsData,
-    isLoading,
-    isError,
-  } = useFilteredSchools(filters);
-
-  const schools = Array.isArray(schoolsData) ? schoolsData : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,12 +75,7 @@ const SchoolSearch = () => {
             filters={filters}
             setFilters={setFilters}
           />
-          <SchoolList
-            isFilterOpen={isOpen}
-            schools={schools}
-            isLoading={isLoading}
-            isError={isError}
-          />
+          <InfiniteSchoolList filters={filters} isFilterOpen={isOpen} />
         </div>
       </div>
       <Footer />
