@@ -24,6 +24,7 @@ export const useInfiniteSchools = ({ filters, limit = 10 }: UseInfiniteSchoolsPa
   return useInfiniteQuery<SchoolApiResponse>({
     queryKey: ['schools', filters],
     queryFn: async ({ pageParam }: { pageParam: unknown }) => {
+        console.log("Calling backend with filters", filters, "and page", pageParam);
       const currentPage = typeof pageParam === 'number' ? pageParam : 1;
 
       const params = new URLSearchParams();

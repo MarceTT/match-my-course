@@ -25,7 +25,6 @@ export async function PUT(req: NextRequest, context: any) {
       headers: {
         "Authorization": `Bearer ${token}`
       },
-      credentials: "include",
       body: formData, // Enviamos el FormData original sin modificaciones
     });
 
