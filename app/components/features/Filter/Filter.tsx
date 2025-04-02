@@ -20,21 +20,25 @@ interface FilterProps {
 const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
   const searchParams = useSearchParams();
 
-  // Marcar automáticamente checkboxes desde URL para filtros tipo array
   useEffect(() => {
-    const categories = ["course", "cities", "type", "hours", "accreditation", "certification"];
-    const newFilters: Record<string, any> = {};
+    const defaultKeys = ["course", "cities", "type", "hours", "accreditation", "certification"];
+    const updatedFilters: Record<string, any> = { ...filters };
 
-    categories.forEach((category) => {
-      const values = searchParams.getAll(category);
-      if (values.length > 0) {
-        newFilters[category] = values;
+    defaultKeys.forEach((key) => {
+      const value = searchParams.get(key);
+      if (value && !updatedFilters[key]?.length) {
+        const match = filtersConfig[key]?.options?.find(
+          (opt) =>
+            opt.id === value ||
+            opt.label.toLowerCase() === decodeURIComponent(value).toLowerCase()
+        );
+        if (match) {
+          updatedFilters[key] = [match.id];
+        }
       }
     });
 
-    if (Object.keys(newFilters).length > 0) {
-      setFilters((prev) => ({ ...prev, ...newFilters }));
-    }
+    setFilters(updatedFilters);
   }, [searchParams, setFilters]);
 
   const handleCheckboxChange = (category: string, value: string) => {
@@ -281,3 +285,5 @@ function SliderSection({
     </>
   );
 }
+
+

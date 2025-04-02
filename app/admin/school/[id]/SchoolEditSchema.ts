@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Definimos el esquema de validación con Zod para la edición de escuelas
-const MAX_FILE_SIZE = 35 * 1024 * 1024; // 35MB
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -26,7 +26,7 @@ export const schoolEditSchema = z.object({
     .refine((file) => {
       if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
       return file.size <= MAX_FILE_SIZE;
-    }, "El archivo debe ser menor a 35MB")
+    }, "El archivo debe ser menor a 100MB")
     .refine((file) => {
       if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
       return ACCEPTED_IMAGE_TYPES.includes(file.type);
@@ -38,7 +38,7 @@ export const schoolEditSchema = z.object({
     .refine((file) => {
       if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
       return file.size <= MAX_FILE_SIZE;
-    }, "El archivo debe ser menor a 35MB")
+    }, "El archivo debe ser menor a 100MB")
     .refine((file) => {
       if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
       return ACCEPTED_IMAGE_TYPES.includes(file.type);
@@ -52,7 +52,7 @@ export const schoolEditSchema = z.object({
         files.every(
           (file) => typeof file === "string" || file?.size <= MAX_FILE_SIZE
         ),
-      "Cada archivo debe ser menor a 35MB"
+      "Cada archivo debe ser menor a  100MB"
     )
     .refine(
       (files) =>
