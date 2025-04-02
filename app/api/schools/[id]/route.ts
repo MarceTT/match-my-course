@@ -9,12 +9,15 @@ export const config = {
 
 export async function PUT(req: NextRequest, context: any) {
   try {
-    const { id } = context.params;
+    const params = await context.params;
+const { id } = params;
     // 1. Verificar autenticación
     const token = await refreshAccessToken();
     if (!token) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
+
+    console.log("🔐 Enviando token:", token);
 
     // 2. Obtener FormData directamente
     const formData = await req.formData();
