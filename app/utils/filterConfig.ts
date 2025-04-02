@@ -17,19 +17,19 @@ export interface FilterOption {
   
   const filtersConfig: Record<string, FilterConfig> = {
     course: {
-        label: "Tipo de curso",
-        options: [
-          { id: "ingles-general", label: "Inglés general" },
-          { id: "ingles-general-mas-sesiones-individuales", label: "Inglés general más sesiones individuales" },
-          { id: "ingles-general-intensivo", label: "Inglés general intensivo" },
-          { id: "ingles-general-orientado-a-negocios", label: "Inglés general orientado a negocios" },
-          { id: "ingles-vista-de-trabajo", label: "Inglés + visa de trabajo" },
-        ],
-      },
+      label: "Tipo de curso",
+      options: [
+        { id: "ingles-general", label: "Inglés general" },
+        { id: "ingles-general-mas-sesiones-individuales", label: "Inglés general más sesiones individuales" },
+        { id: "ingles-general-intensivo", label: "Inglés general intensivo" },
+        { id: "ingles-general-orientado-a-negocios", label: "Inglés general orientado a negocios" },
+        { id: "ingles-vista-de-trabajo", label: "Inglés + visa de trabajo" },
+      ],
+    },
     cities: {
       label: "Ciudad",
       options: [
-        { id: "dublin", label: "Dublin" },
+        { id: "dublin", label: "Dublín" },
         { id: "cork", label: "Cork" },
         { id: "galway", label: "Galway" },
         { id: "limerick", label: "Limerick" },
@@ -80,3 +80,4 @@ export interface FilterOption {
   };
   
   export default filtersConfig;
+  
