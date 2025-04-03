@@ -2,9 +2,9 @@ import axios from "axios";
 
 let accessToken: string | null = null;
 
-// 🔁 Función para sincronizar token desde AuthContext
 export const setAccessToken = (token: string) => {
   accessToken = token;
+  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
 // Crear instancia de Axios
