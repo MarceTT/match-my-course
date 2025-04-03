@@ -1,15 +1,15 @@
 import axios from "axios";
 
 let accessToken: string | null = null;
+let refreshTokenPromise: Promise<string> | null = null;
 
 export const setAccessToken = (token: string) => {
   accessToken = token;
-  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  withCredentials: true, // Necesario para enviar el refreshToken
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
@@ -30,25 +30,28 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`, {
+      if (!refreshTokenPromise) {
+        refreshTokenPromise = fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`, {
           method: "POST",
-          credentials: "include", // Enviar cookie refreshToken
-        });
+          credentials: "include",
+        })
+          .then(async (res) => {
+            const data = await res.json();
+            if (!res.ok || !data.data?.token) {
+              throw new Error("No se pudo renovar el token");
+            }
+            accessToken = data.data.token;
+            axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+            return data.data.token as string; // ✅ TypeScript se asegura que nunca sea null
+          })
+          .finally(() => {
+            refreshTokenPromise = null;
+          });
+      }
 
-        const data = await refreshRes.json();
-
-        if (!refreshRes.ok || !data.data?.token) {
-          console.warn("❌ No se pudo renovar el token. Debes volver a iniciar sesión.");
-          return Promise.reject(error);
-        }
-
-        accessToken = data.data.token;
-
-        // Aplica el nuevo token a la petición original y a futuras
-        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+      try {
+        const newToken = await refreshTokenPromise;
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
         console.error("❌ Error al renovar token:", err);
