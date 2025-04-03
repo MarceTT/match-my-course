@@ -2,18 +2,18 @@ import axios from "axios";
 
 let accessToken: string | null = null;
 
+// 👉 Esta función la puedes llamar desde el login o refresco manual
 export const setAccessToken = (token: string) => {
   accessToken = token;
-  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
-// Crear instancia de Axios
+// Crear instancia de axios
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  withCredentials: true, // necesario para que envíe cookies (refreshToken)
+  withCredentials: true, // 🔐 Necesario para enviar cookies (refreshToken)
 });
 
-// Interceptor de solicitud: agrega el accessToken actual si existe
+// Interceptor de solicitud
 axiosInstance.interceptors.request.use(
   (config) => {
     if (accessToken) {
@@ -24,31 +24,34 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor de respuesta: si da 401, intenta renovar el token con la cookie
+// Interceptor de respuesta (manejo automático de renovación)
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    // Solo intenta renovar si es 401 y no lo ha intentado antes
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const refreshRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`, {
-          method: "POST",
-          credentials: "include", // envía la cookie refreshToken
-        });
+        const refreshResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`,
+          {
+            method: "POST",
+            credentials: "include", // 🔐 Necesario para enviar la cookie
+          }
+        );
 
-        const data = await refreshRes.json();
+        const data = await refreshResponse.json();
 
-        if (!refreshRes.ok || !data.data?.token) {
-          console.warn("❌ No se pudo renovar el token. Debes volver a iniciar sesión.");
+        if (!refreshResponse.ok || !data.data?.token) {
+          console.warn("❌ No se pudo renovar el token. Vuelve a iniciar sesión.");
           return Promise.reject(error);
         }
 
+        // ✅ Guardamos nuevo accessToken en memoria
         accessToken = data.data.token;
-
-        // Actualizar el token en la solicitud original y en futuras
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
