@@ -53,7 +53,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     document.cookie = "isLoggedIn=; Path=/; Max-Age=0";
     setUser(null);
     setToken(null); // 👈 limpiar token también
-    router.replace("/login");
+    setTimeout(() => {
+      router.replace("/login");
+    }, 10);
   }, [router]);
 
   useEffect(() => {
