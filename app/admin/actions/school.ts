@@ -1,6 +1,7 @@
 "use server";
 
 import { School, SchoolResponse } from "@/app/types";
+import axiosInstance from "@/app/utils/axiosInterceptor";
 import { refreshAccessToken } from "@/app/utils/requestServer";
 import { cookies } from "next/headers";
 
@@ -136,13 +137,14 @@ export async function toggleSchoolStatus(id: string, status: boolean) {
   }
 }
 
-export async function getSchoolById(id: string) {
+export async function getSchoolById(id: string): Promise<{ data?: School; error?: string }> {
   try {
     const token = await refreshAccessToken();
 
     if (!token) {
-      return { error: "No autorizado" }; // Si no hay cookie, devolver error
+      return { error: "No autorizado" };
     }
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}`, {
       method: "GET",
       headers: {
@@ -151,46 +153,54 @@ export async function getSchoolById(id: string) {
       },
       credentials: "include",
     });
-    if (!res.ok) {
-      console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
-      return { error: "Error en la solicitud" };
-    }
+
     const responseData = await res.json();
 
-    if (!responseData?.data?.school) {
-        return { error: "Datos no encontrados para esta escuela." };
-      }
-    return { success: true, data: responseData.data.school };
-  } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
-    return { error: "Error en la solicitud" };
+    if (!res.ok || !responseData?.data?.school) {
+      console.error("❌ Error en getSchoolById", responseData);
+      return { error: "Error al obtener escuela" };
+    }
+
+    return { data: responseData.data.school };
+  } catch (err) {
+    console.error("❌ Error general en getSchoolById:", err);
+    return { error: "Error inesperado" };
   }
 }
 
-export async function deleteImageSchool(id: string, imageKey: string, imageType: "galleryImages" | "logo" | "mainImage") {
-
-  //console.log("🔥 Eliminando imagen:", imageKey, "de tipo:", imageType, "con el id", id);
+export async function deleteImageSchool(
+  id: string,
+  imageKey: string,
+  imageType: "galleryImages" | "logo" | "mainImage"
+) {
   try {
-    const token = await refreshAccessToken();
+    const cookieStore = cookies();
+    const token = (await cookieStore).get("token")?.value;
+
     if (!token) {
-      return { error: "No autorizado" }; // Si no hay cookie, devolver error
+      console.warn("❌ No hay token en cookies");
+      return { error: "No autorizado" };
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}/deleteImage`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}/deleteImage`,
+      {
+        method: "DELETE",
+        headers: {
         "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
-      body: JSON.stringify({ imageKey, imageType }),
-    });
+        credentials: "include",
+        body: JSON.stringify({ imageKey, imageType }),
+      }
+    );
+
     if (!res.ok) {
       console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
       return { error: "Error en la solicitud" };
     }
+
     const responseData = await res.json();
-    console.log("🔥 Respuesta del backend:", responseData);
-    return { success: true, data: responseData.data.school };
+    return { success: true, data: responseData };
   } catch (error) {
     console.error("❌ Error en la solicitud:", error);
     return { error: "Error en la solicitud" };

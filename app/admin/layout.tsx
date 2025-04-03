@@ -21,6 +21,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "../providers";
 import { AuthProvider } from "../context/AuthContext";
 import { usePathname } from "next/navigation";
+import { AccessTokenSync } from "./components/AccessTokenSync";
 
 
 
@@ -33,8 +34,10 @@ export default function AdminLayout({
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter((segment) => segment);
 
+
   return (
     <AuthProvider>
+      <AccessTokenSync />
       <ReactQueryProvider>
         <ThemeProvider
           attribute="class"

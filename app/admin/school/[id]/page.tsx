@@ -21,12 +21,16 @@ import {
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import compressImage from "@/app/hooks/useResizeImage";
-import { deleteImageSchool, getSchoolById } from "../../actions/school";
+import { deleteImageSchool } from "../../actions/school";
 import ConfirmDialog from "../../components/dialog-delete-image";
 import { schoolEditSchema, SchoolEditValues } from "./SchoolEditSchema";
 import FullScreenLoader from "../../components/FullScreenLoader";
+import axiosInstance from "@/app/utils/axiosInterceptor";
+import { useSchoolById } from "@/app/hooks/useSchoolById";
+import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
+import { deleteSchoolImage } from "@/app/lib/api/schools";
 
 const MAX_GALLERY_IMAGES = 5;
 
@@ -78,17 +82,7 @@ const EditSchoolPage = () => {
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [removingImages, setRemovingImages] = useState<Record<string, boolean>>({});
 
-  const { data: schoolData, isLoading: isFetching, refetch: refetchSchoolData } = useQuery({
-    queryKey: ["school", schoolId],
-    queryFn: async () => {
-      const response = await getSchoolById(schoolId);
-      if (response.error) throw new Error(response.error);
-      return response.data;
-    },
-    enabled: !!schoolId,
-    retry: 2,
-    staleTime: 1000 * 60 * 5,
-  });
+  const { data: schoolData, isLoading: isFetching, refetch: refetchSchoolData } = useSchoolById(schoolId);
 
   useEffect(() => {
     if (!isFetching) {
@@ -118,48 +112,17 @@ const EditSchoolPage = () => {
         logo: schoolData.logo || null,
         mainImage: schoolData.mainImage || null,
         galleryImages: schoolData.galleryImages?.map((img: string) => ({
-          id: img.split('/').pop()?.split('.')[0],
+          id: img.split("/").pop()?.split(".")[0],
           url: img,
-          isNew: false
+          isNew: false,
         })) || [],
       });
     }
   }, [schoolData, form]);
 
-  const mutation = useMutation({
-    mutationFn: async (data: SchoolEditValues) => {
-      const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('city', data.city);
-      formData.append('status', data.status.toString());
-  
-      if (data.logo instanceof File) formData.append('logo', data.logo);
-      if (data.mainImage instanceof File) formData.append('mainImage', data.mainImage);
-      
-      if (Array.isArray(data.galleryImages)) {
-        data.galleryImages.forEach(img => {
-          if (img instanceof File || (img.file && img.isNew)) {
-            formData.append('galleryImages', img.file || img);
-          }
-        });
-      }
-
-      const response = await fetch(`/api/schools/${schoolId}`, {
-        method: 'PUT',
-        body: formData,
-      });
-  
-      if (!response.ok) throw new Error(await response.text());
-      return response.json();
-    },
-    onSuccess: async () => {
-      await refetchSchoolData();
-      toast.success("Escuela actualizada exitosamente");
-      router.push("/admin/school");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || "Error al actualizar la escuela");
-    },
+  const mutation = useUpdateSchool(schoolId, async () => {
+    await refetchSchoolData(); // Refresca los datos tras la actualización
+    router.push("/admin/school"); // Redirige después de guardar
   });
 
   const handleFileChange = async (
@@ -258,35 +221,39 @@ const EditSchoolPage = () => {
   };
 
   const handleRemoveImage = async (
-    imageType: "logo" | "mainImage" | "galleryImages", 
+    imageType: "logo" | "mainImage" | "galleryImages",
     imageId?: string,
     imageUrl?: string
   ) => {
-    const imageKey = imageUrl || imageType;
-    setRemovingImages(prev => ({ ...prev, [imageKey]: true }));
-
+    const imageKey = imageUrl?.split("/").pop(); // para eliminar desde S3
+    const imageIdentifier = imageUrl || imageType;
+  
+    setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
+  
     try {
-      if (imageId) {
-        const response = await deleteImageSchool(schoolId, imageId, imageType);
-        if (response.error) throw new Error(response.error);
-      }
-
+      const result = await deleteSchoolImage(schoolId, imageKey!, imageType); // 👈 ESTA, no la server action
+  
+      if (result.error) throw new Error(result.error);
+  
       if (imageType === "galleryImages") {
         const currentGallery = form.getValues("galleryImages");
-        form.setValue("galleryImages", currentGallery.filter(img => 
-          typeof img !== 'object' || img.url !== imageUrl
-        ));
+        form.setValue(
+          "galleryImages",
+          currentGallery.filter((img) =>
+            typeof img !== "object" || img.url !== imageUrl
+          )
+        );
       } else {
         form.setValue(imageType, null);
       }
-
-      toast.success("Imagen eliminada");
-    } catch (error) {
-      console.error('Error eliminando:', error);
-      toast.error("No se pudo eliminar la imagen");
+  
+      toast.success("Imagen eliminada correctamente");
+    } catch (error: any) {
+      console.error("❌ Error al eliminar imagen:", error);
+      toast.error(error.message || "No se pudo eliminar la imagen");
     } finally {
-      setRemovingImages(prev => ({ ...prev, [imageKey]: false }));
-      if (imageUrl?.startsWith('blob:')) URL.revokeObjectURL(imageUrl);
+      setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: false }));
+      if (imageUrl?.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     }
   };
 
@@ -344,7 +311,7 @@ const EditSchoolPage = () => {
   return (
     <div className="p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(data => mutation.mutate(data))} className="space-y-6">
+        <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-6">
           
           {/* Sección de Información Básica */}
           <Card>

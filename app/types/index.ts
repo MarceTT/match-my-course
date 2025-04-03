@@ -177,3 +177,11 @@ export interface Option {
   price?: number;
   image?: string;
 }
+
+
+export type GalleryImage = {
+  id?: string;
+  file?: File;
+  url: string;
+  isNew?: boolean;
+};

@@ -1,18 +1,15 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getSchools } from "@/app/admin/actions/school";
 import { School } from "@/app/types";
+import axiosInstance from "../utils/axiosInterceptor";
 
 export function useSchools() {
   return useQuery<School[]>({
     queryKey: ["schools"],
     queryFn: async () => {
-      const result = await getSchools();
-      if ("error" in result) {
-        throw new Error(result.error);
-      }
-      return result;
+      const { data } = await axiosInstance.get("/schools");
+      return data.data.schools;
     },
   });
 }
