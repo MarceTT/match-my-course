@@ -19,11 +19,17 @@ export const fetchSchoolById = async (id: string): Promise<SchoolDetails> => {
     imageType: "logo" | "mainImage" | "galleryImages"
   ) => {
     try {
-      const res = await axiosInstance.delete(`/schools/${schoolId}/deleteImage`, {
-        data: { imageKey, imageType },
-      });
+        const response = await axiosInstance.delete(
+            `/schools/${schoolId}/deleteImage`,
+            {
+              params: {
+                imageKey,
+                imageType,
+              },
+            }
+          );
   
-      return res.data;
+      return response.data;
     } catch (error: any) {
       console.error("❌ Error desde deleteSchoolImage:", error);
       return { error: error?.response?.data?.message || "Error desconocido" };
