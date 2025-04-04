@@ -121,7 +121,6 @@ const EditSchoolPage = () => {
   }, [schoolData, form]);
 
   const mutation = useUpdateSchool(schoolId, async () => {
-    console.log("Logo antes de enviar:", form.getValues("logo"));
     await refetchSchoolData(); // Refresca los datos tras la actualización
     router.push("/admin/school"); // Redirige después de guardar
   });
@@ -226,7 +225,7 @@ const EditSchoolPage = () => {
     imageId?: string,
     imageUrl?: string
   ) => {
-    const imageKey = imageUrl?.split("/").pop(); // para eliminar desde S3
+    const imageKey = imageUrl?.split(".amazonaws.com/")[1]; // ✅ Cambio aquí
     const imageIdentifier = imageUrl || imageType;
   
     setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
@@ -257,6 +256,7 @@ const EditSchoolPage = () => {
       if (imageUrl?.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     }
   };
+  
 
   const renderGalleryImages = (field: any) => {
     return (field.value || []).map((img: GalleryImage | File | string, index: number) => {
