@@ -41,19 +41,20 @@ const LoginForm = () => {
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: true,
+        redirect: false,
         callbackUrl: "/admin/dashboard",
       });
-
-      if (!res || !res.ok) {
+  
+      if (!res || res.error) {
         toast.error("Credenciales incorrectas");
         return;
       }
-
+  
       toast.success("Inicio de sesión exitoso 🎉");
-      // Espera un poco para que las cookies se seteen correctamente
+  
+      // ⏳ Esperar brevemente para asegurar que las cookies se apliquen correctamente
       setTimeout(() => {
-        router.push(res.url!);
+        window.location.href = res.url!; // 🔁 Redirección manual
       }, 100);
     } catch (error) {
       console.error("Error inesperado:", error);
