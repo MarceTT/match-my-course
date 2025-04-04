@@ -2,39 +2,39 @@ import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+interface AuthenticatedUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string; // Tipo explícito
+  accessToken: string;
+}
+
 export async function middleware(request: NextRequest) {
   const session = await auth();
   const { pathname } = request.nextUrl;
 
-  // ✅ Rutas protegidas y los roles permitidos
-  const roleAccessMap: Record<string, string[]> = {
-    "/admin/dashboard": ["admin"],
-    // Agrega más rutas si es necesario
-  };
+  // Rutas protegidas
+  const ADMIN_ROUTES = ['/admin', '/admin/dashboard'];
 
-  const matchedPath = Object.keys(roleAccessMap).find((route) =>
-    pathname.startsWith(route)
-  );
+  if (ADMIN_ROUTES.some(route => pathname.startsWith(route))) {
+    // Verificación de tipo seguro
+    const user = session?.user as AuthenticatedUser | undefined;
 
-  // 🔐 Si la ruta requiere login y NO hay sesión → redirige a login
-  if (matchedPath && !session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+    if (!user) {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
 
-  // 🔒 Si hay sesión pero el usuario no tiene rol válido → redirige a /unauthorized
-  if (matchedPath && session?.user) {
-    const allowedRoles = roleAccessMap[matchedPath];
-    const userRole = (session.user as any).role;
-
-    if (!allowedRoles.includes(userRole)) {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    if (user.role !== 'admin') {
+      return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
   }
 
   return NextResponse.next();
 }
 
-// ✅ Middleware aplicado solo a rutas protegidas
 export const config = {
-  matcher: ["/admin/:path*", "/login"],
+  matcher: ['/admin/:path*']
 };

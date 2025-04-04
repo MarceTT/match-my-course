@@ -46,17 +46,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      if (user) {
-        return {
-          ...token,
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
-          accessTokenExpires: Date.now() + 5 * 60 * 1000,
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+        if (user) {
+            return {
+              ...token,
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              role: user.role, // ← Pasa el rol al token JWT
+              accessToken: user.accessToken,
+              refreshToken: user.refreshToken
+            };
       }
 
       if (
@@ -70,6 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       session.user = {
+        ...session.user,
         id: token.id as string,
         name: token.name as string,
         email: token.email as string,
