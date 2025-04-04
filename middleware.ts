@@ -8,9 +8,7 @@ export async function middleware(request: NextRequest) {
 
   // ✅ Rutas protegidas y los roles permitidos
   const roleAccessMap: Record<string, string[]> = {
-    "/admin": ["admin"],
     "/admin/dashboard": ["admin"],
-    "/admin/settings": ["admin"],
     // Agrega más rutas si es necesario
   };
 

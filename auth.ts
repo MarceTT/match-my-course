@@ -46,24 +46,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-        if (user) {
-            return {
-              ...token,
-              accessToken: user.accessToken,
-              refreshToken: user.refreshToken,
-              accessTokenExpires: Date.now() + 5 * 60 * 1000,
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              role: user.role,
-            };
-          }
-        
-          if (typeof token.accessTokenExpires === 'number' && Date.now() < token.accessTokenExpires) {
-            return token;
-          }
-        
-          return await refreshAccessToken(token);
+      if (user) {
+        return {
+          ...token,
+          accessToken: user.accessToken,
+          refreshToken: user.refreshToken,
+          accessTokenExpires: Date.now() + 5 * 60 * 1000,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
+      }
+
+      if (
+        typeof token.accessTokenExpires === "number" &&
+        Date.now() < token.accessTokenExpires
+      ) {
+        return token;
+      }
+
+      return await refreshAccessToken(token);
     },
     async session({ session, token }) {
       session.user = {
@@ -91,10 +94,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  trustHost: true
+  trustHost: true,
 });
-
-
 
 async function refreshAccessToken(token: any) {
   try {
@@ -135,6 +136,10 @@ async function refreshAccessToken(token: any) {
       ...token,
       accessToken: newAccessToken,
       accessTokenExpires: Date.now() + 5 * 60 * 1000, // 5 minutos
+      id: token.id,
+      name: token.name,
+      email: token.email,
+      role: token.role,
     };
   } catch (error) {
     console.error("[RefreshToken] Error al refrescar token:", error);
