@@ -90,7 +90,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  secret: process.env.NEXTAUTH_SECRET,
 });
+
+
 
 async function refreshAccessToken(token: any) {
   try {
