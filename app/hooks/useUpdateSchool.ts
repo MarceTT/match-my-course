@@ -14,22 +14,6 @@ export function useUpdateSchool(
 ) {
   return useMutation({
     mutationFn: async (data: SchoolEditValues) => {
-      console.log("🚀 Enviando datos al backend para actualizar escuela:");
-      console.log("Nombre:", data.name);
-      console.log("Ciudad:", data.city);
-      console.log("Estado:", data.status);
-      console.log("Logo es archivo:", isFileOrBlob(data.logo));
-      console.log("MainImage es archivo:", isFileOrBlob(data.mainImage));
-      console.log("Cantidad de imágenes en galería:", data.galleryImages?.length);
-
-      data.galleryImages?.forEach((img, i) => {
-        if (img instanceof File) {
-          console.log(`🖼️ Imagen nueva ${i + 1}:`, img.name);
-        } else if (img?.file && img?.isNew) {
-          console.log(`🖼️ Imagen nueva ${i + 1} (desde objeto):`, img.file.name);
-        }
-      });
-
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("city", data.city);

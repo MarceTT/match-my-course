@@ -14,13 +14,20 @@ export const fetchSchoolById = async (id: string): Promise<SchoolDetails> => {
 
 
   export const deleteSchoolImage = async (
-    id: string,
+    schoolId: string,
     imageKey: string,
-    imageType: "galleryImages" | "logo" | "mainImage"
-  ): Promise<any> => {
-    const response = await axiosInstance.delete(`/schools/${id}/deleteImage`, {
-      data: { imageKey, imageType },
-    });
+    imageType: "logo" | "mainImage" | "galleryImages"
+  ) => {
+    try {
+      const res = await axiosInstance.post(`/schools/delete-image/${schoolId}`, {
+        imageKey,
+        imageType,
+      });
   
-    return response.data;
+      return res.data;
+    } catch (error: any) {
+      console.error("❌ Error desde deleteSchoolImage:", error);
+      return { error: error?.response?.data?.message || "Error desconocido" };
+    }
   };
+  
