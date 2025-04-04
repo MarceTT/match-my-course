@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const ADMIN_ROUTES = ["/admin", "/admin/dashboard"];
-
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
+
+  const ADMIN_ROUTES = ["/admin", "/admin/dashboard"];
 
   const isAdminRoute = ADMIN_ROUTES.some((route) =>
     pathname.startsWith(route)
   );
 
-  if (!isAdminRoute) {
-    return NextResponse.next();
-  }
+  if (!isAdminRoute) return NextResponse.next();
 
+  // ✅ Aquí va el código que preguntas:
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: true, // 👈 MUY IMPORTANTE en producción
   });
 
-  // 🔍 Log temporal para producción
   console.log("[MIDDLEWARE] Token recibido:", token);
 
   if (!token) {
@@ -28,7 +27,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  const userRole = token.role as string;
+  const userRole = token.role;
+
   if (userRole !== "admin") {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
