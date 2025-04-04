@@ -116,6 +116,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, status } = useSession();
+  console.log("📦 Session en AppSidebar:", session);
 
   const loading = status === "loading";
   const user = session?.user;

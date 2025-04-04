@@ -1,40 +1,34 @@
-import { auth } from "@/auth";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-interface AuthenticatedUser {
-  id: string;
-  name: string;
-  email: string;
-  role: string; // Tipo explícito
-  accessToken: string;
-}
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const session = await auth();
-  const { pathname } = request.nextUrl;
+  const pathname = request.nextUrl.pathname;
 
-  // Rutas protegidas
-  const ADMIN_ROUTES = ['/admin', '/admin/dashboard'];
+  const ADMIN_ROUTES = ["/admin", "/admin/dashboard"];
 
-  if (ADMIN_ROUTES.some(route => pathname.startsWith(route))) {
-    // Verificación de tipo seguro
-    const user = session?.user as AuthenticatedUser | undefined;
+  const isAdminRoute = ADMIN_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
 
-    if (!user) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (!isAdminRoute) return NextResponse.next();
 
-    if (user.role !== 'admin') {
-      return NextResponse.redirect(new URL('/unauthorized', request.url));
-    }
+  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  const userRole = token.role as string;
+
+  if (userRole !== "admin") {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
+  matcher: ["/admin/:path*"],
 };

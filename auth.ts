@@ -52,9 +52,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               id: user.id,
               name: user.name,
               email: user.email,
-              role: user.role, // ← Pasa el rol al token JWT
+              role: user.role, 
               accessToken: user.accessToken,
-              refreshToken: user.refreshToken
+              refreshToken: user.refreshToken,
+              accessTokenExpires: Date.now() + 5 * 60 * 1000,
             };
       }
 
@@ -95,6 +96,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
+  debug: true,
 });
 
 async function refreshAccessToken(token: any) {
