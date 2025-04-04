@@ -41,16 +41,20 @@ const LoginForm = () => {
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: "/admin/dashboard",
       });
-  
+
       if (!res || !res.ok) {
         toast.error("Credenciales incorrectas");
         return;
       }
-  
+
       toast.success("Inicio de sesión exitoso 🎉");
-      router.push("/admin/dashboard");
+      // Espera un poco para que las cookies se seteen correctamente
+      setTimeout(() => {
+        router.push(res.url!);
+      }, 100);
     } catch (error) {
       console.error("Error inesperado:", error);
       toast.error("Error inesperado. Inténtalo de nuevo.");
