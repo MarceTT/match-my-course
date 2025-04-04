@@ -7,6 +7,14 @@ import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+const courseLabelToIdMap: Record<string, string> = {
+  "Inglés general": "ingles-general",
+  "Inglés general más sesiones individuales": "ingles-general-mas-sesiones-individuales",
+  "Inglés general intensivo": "ingles-general-intensivo",
+  "Inglés general orientado a negocios": "ingles-general-orientado-a-negocios",
+  "Inglés general más trabajo(6 meses)": "ingles-visa-de-trabajo",
+};
+
 const Hero = () => {
   const searchParams = useSearchParams();
   const courseFromUrl = searchParams.get("course");
@@ -20,8 +28,9 @@ const Hero = () => {
   }, [courseFromUrl]);
 
   const handleSearch = () => {
-    if (courseType) {
-      router.push(`/school-search?course=${encodeURIComponent(courseType)}`);
+    const normalizedId = courseLabelToIdMap[courseType];
+    if (normalizedId) {
+      router.push(`/school-search?course=${encodeURIComponent(normalizedId)}`);
     }
   };
 

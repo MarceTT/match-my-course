@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import filtersConfig from "@/app/utils/filterConfig";
 import { useSearchParams } from "next/navigation";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FilterProps {
   isOpen: boolean;
@@ -16,14 +17,6 @@ interface FilterProps {
   filters: Record<string, any>;
   setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 }
-
-const exclusiveCourseOptions = [
-  "ingles-general",
-  "ingles-general-mas-sesiones-individuales",
-  "ingles-general-intensivo",
-  "ingles-general-orientado-a-negocios",
-  "ingles-visa-de-trabajo",
-];
 
 const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
   const searchParams = useSearchParams();
@@ -53,21 +46,6 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
     setFilters((prev) => {
       const current = prev[category] || [];
       const isChecked = current.includes(value);
-
-      if (category === "course") {
-        if (exclusiveCourseOptions.includes(value)) {
-          return {
-            ...prev,
-            [category]: isChecked ? [] : [value],
-          };
-        }
-
-        const exclusiveSelected = prev[category].some((v: string) =>
-          exclusiveCourseOptions.includes(v)
-        );
-        if (exclusiveSelected) return prev;
-      }
-
       return {
         ...prev,
         [category]: isChecked
@@ -145,6 +123,9 @@ function FilterContent({
   onReset: () => void;
   isDefaultFilters: () => boolean;
 }) {
+  const selectedCourse = filters.course || [];
+  const isVisaCourseSelected = selectedCourse.includes("ingles-visa-de-trabajo");
+
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       {Object.entries(filtersConfig).map(([key, config]) => {
@@ -154,38 +135,45 @@ function FilterContent({
           return (
             <FilterSection title={config.label} key={key}>
               <SliderSection
-                value={value}
+                value={isVisaCourseSelected ? 25 : value}
                 config={config.slider}
-                onChange={(val) => onSliderChange(key, val)}
+                onChange={(val) => {
+                  if (!isVisaCourseSelected) onSliderChange(key, val);
+                }}
+                disabled={isVisaCourseSelected}
               />
             </FilterSection>
           );
         }
 
-        const exclusiveSelected = key === "course" && filters[key]?.some((v: string) =>
-          ["ingles-visa-de-trabajo", "ingles-general-orientado-a-negocios"].includes(v)
-        );
-
         return (
           <FilterSection title={config.label} key={key}>
             {config.options?.map(({ id, label }) => {
-              const isExclusive = [
-                "ingles-general",
-                "ingles-general-mas-sesiones-individuales",
-                "ingles-general-intensivo",
-              ].includes(id);
-
-              const disabled = exclusiveSelected && !filters[key]?.includes(id);
-
+              const disabled =
+                key === "course" &&
+                ((isVisaCourseSelected && id !== "ingles-visa-de-trabajo") ||
+                  (!isVisaCourseSelected && id === "ingles-visa-de-trabajo" && selectedCourse.length > 0));
               return (
-                <CheckboxItem
-                  key={id}
-                  id={id}
-                  label={label}
-                  checked={(filters[key] || []).includes(id)}
-                  onChange={() => onCheckboxChange(key, id)}
-                  disabled={!!disabled}
-                />
+                <TooltipProvider key={id}>
+                  <Tooltip delayDuration={200}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <CheckboxItem
+                          id={id}
+                          label={label}
+                          checked={(filters[key] || []).includes(id)}
+                          onChange={() => onCheckboxChange(key, id)}
+                          disabled={disabled || undefined}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    {disabled && (
+                      <TooltipContent side="right">
+                        <p>Solo se puede seleccionar un curso de visa o cursos generales</p>
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
               );
             })}
           </FilterSection>
@@ -248,12 +236,18 @@ function SliderSection({
   value,
   config,
   onChange,
+  disabled,
 }: {
   value: number;
   config: { min: number; max: number; step: number };
   onChange: (value: number[]) => void;
+  disabled?: boolean;
 }) {
   const [localValue, setLocalValue] = useState<number>(value);
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
 
   return (
     <>
@@ -266,7 +260,7 @@ function SliderSection({
             setLocalValue(val);
             onChange([val]);
           }}
-          disabled={localValue <= config.min}
+          disabled={localValue <= config.min || disabled}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -282,6 +276,7 @@ function SliderSection({
               onChange(val);
             }}
             className="my-5"
+            disabled={disabled}
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>{config.min}</span>
@@ -298,7 +293,7 @@ function SliderSection({
             setLocalValue(val);
             onChange([val]);
           }}
-          disabled={localValue >= config.max}
+          disabled={localValue >= config.max || disabled}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>

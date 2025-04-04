@@ -1,6 +1,8 @@
 export interface FilterOption {
     id: string;
     label: string;
+    exclusiveGroup?: string; // Si pertenece a un grupo exclusivo de selección
+    lockWeeks?: number; // Si fuerza a bloquear las semanas en un número fijo
   }
   
   export interface FilterConfig {
@@ -31,14 +33,30 @@ export interface FilterOption {
     course: {
       label: "Tipo de curso",
       options: [
-        "Inglés general",
-        "Inglés general más sesiones individuales",
-        "Inglés general intensivo",
-        "Inglés general orientado a negocios",
-        "Inglés + visa de trabajo (6 meses)",
-      ].map((label) => ({
-        id: normalize(label),
-        label,
+        {
+          label: "Inglés general",
+          exclusiveGroup: "general",
+        },
+        {
+          label: "Inglés general más sesiones individuales",
+          exclusiveGroup: "general",
+        },
+        {
+          label: "Inglés general intensivo",
+          exclusiveGroup: "general",
+        },
+        {
+          label: "Inglés general orientado a negocios",
+          exclusiveGroup: "business-or-work",
+        },
+        {
+          label: "Inglés + visa de trabajo (6 meses)",
+          exclusiveGroup: "business-or-work",
+          lockWeeks: 25,
+        },
+      ].map((opt) => ({
+        id: normalize(opt.label),
+        ...opt,
       })),
     },
     cities: {
@@ -110,4 +128,3 @@ export interface FilterOption {
   };
   
   export default filtersConfig;
-  

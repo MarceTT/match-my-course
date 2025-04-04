@@ -3,16 +3,41 @@ import { toast } from "sonner";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import { SchoolEditValues } from "@/app/admin/school/[id]/SchoolEditSchema";
 
-export function useUpdateSchool(schoolId: string, onSuccessCallback?: () => void) {
+export function useUpdateSchool(
+  schoolId: string,
+  onSuccessCallback?: () => void
+) {
   return useMutation({
     mutationFn: async (data: SchoolEditValues) => {
+      console.log("🚀 Enviando datos al backend para actualizar escuela:");
+      console.log("Nombre:", data.name);
+      console.log("Ciudad:", data.city);
+      console.log("Estado:", data.status);
+      console.log("Logo es archivo:", data.logo instanceof File);
+      console.log("MainImage es archivo:", data.mainImage instanceof File);
+      console.log(
+        "Cantidad de imágenes en galería:",
+        data.galleryImages?.length
+      );
+
+      data.galleryImages?.forEach((img, i) => {
+        if (img instanceof File) {
+          console.log(`🖼️ Imagen nueva ${i + 1}:`, img.name);
+        } else if (img?.file && img?.isNew) {
+          console.log(
+            `🖼️ Imagen nueva ${i + 1} (desde objeto):`,
+            img.file.name
+          );
+        }
+      });
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("city", data.city);
       formData.append("status", data.status.toString());
 
       if (data.logo instanceof File) formData.append("logo", data.logo);
-      if (data.mainImage instanceof File) formData.append("mainImage", data.mainImage);
+      if (data.mainImage instanceof File)
+        formData.append("mainImage", data.mainImage);
 
       if (Array.isArray(data.galleryImages)) {
         data.galleryImages.forEach((img) => {
@@ -24,11 +49,15 @@ export function useUpdateSchool(schoolId: string, onSuccessCallback?: () => void
         });
       }
 
-      const response = await axiosInstance.put(`/schools/${schoolId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosInstance.put(
+        `/schools/${schoolId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (!response.data) throw new Error("Error al actualizar la escuela");
       return response.data;

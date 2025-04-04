@@ -121,6 +121,7 @@ const EditSchoolPage = () => {
   }, [schoolData, form]);
 
   const mutation = useUpdateSchool(schoolId, async () => {
+    console.log("Logo antes de enviar:", form.getValues("logo"));
     await refetchSchoolData(); // Refresca los datos tras la actualización
     router.push("/admin/school"); // Redirige después de guardar
   });
@@ -231,7 +232,7 @@ const EditSchoolPage = () => {
     setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
   
     try {
-      const result = await deleteSchoolImage(schoolId, imageKey!, imageType); // 👈 ESTA, no la server action
+      const result = await deleteSchoolImage(schoolId, imageKey!, imageType); 
   
       if (result.error) throw new Error(result.error);
   
