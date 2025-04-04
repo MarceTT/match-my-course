@@ -28,6 +28,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { logoutAction } from "@/app/admin/actions/user";
 import { toast } from "sonner";
+import { signOut } from "next-auth/react";
 
 export function NavUser({
   user,
@@ -39,23 +40,14 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
 
-  const queryClient = useQueryClient();
-
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      const result = await logoutAction();
-      if ("error" in result) throw new Error(result.error);
-      return result;
-    },
-    onSuccess: async () => {
-      toast.success("Sesión cerrada exitosamente");
-      await queryClient.invalidateQueries({ queryKey: ["user"] });
-      window.location.href = "/login";
-    },
-    onError: (error: any) => {
+  const handleLogout = async () => {
+    try {
+      toast.success("Cerrando sesión...");
+      await signOut({ callbackUrl: "/login" }); // ✅ Cierre oficial
+    } catch (error: any) {
       toast.error("Error al cerrar sesión: " + error.message);
-    },
-  });
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -125,10 +117,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={(e) => {
-                e.preventDefault(); // 🔥 Prevenir cualquier comportamiento inesperado
-                logoutMutation.mutate(); // ✅ Ejecutar el logout
-              }}
+              onClick={handleLogout}
             >
               <LogOut />
               Log out

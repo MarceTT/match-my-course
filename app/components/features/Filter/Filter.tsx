@@ -17,6 +17,14 @@ interface FilterProps {
   setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
 }
 
+const exclusiveCourseOptions = [
+  "ingles-general",
+  "ingles-general-mas-sesiones-individuales",
+  "ingles-general-intensivo",
+  "ingles-general-orientado-a-negocios",
+  "ingles-visa-de-trabajo",
+];
+
 const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
   const searchParams = useSearchParams();
 
@@ -45,6 +53,21 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
     setFilters((prev) => {
       const current = prev[category] || [];
       const isChecked = current.includes(value);
+
+      if (category === "course") {
+        if (exclusiveCourseOptions.includes(value)) {
+          return {
+            ...prev,
+            [category]: isChecked ? [] : [value],
+          };
+        }
+
+        const exclusiveSelected = prev[category].some((v: string) =>
+          exclusiveCourseOptions.includes(v)
+        );
+        if (exclusiveSelected) return prev;
+      }
+
       return {
         ...prev,
         [category]: isChecked
@@ -139,17 +162,32 @@ function FilterContent({
           );
         }
 
+        const exclusiveSelected = key === "course" && filters[key]?.some((v: string) =>
+          ["ingles-visa-de-trabajo", "ingles-general-orientado-a-negocios"].includes(v)
+        );
+
         return (
           <FilterSection title={config.label} key={key}>
-            {config.options?.map(({ id, label }) => (
-              <CheckboxItem
-                key={id}
-                id={id}
-                label={label}
-                checked={(filters[key] || []).includes(id)}
-                onChange={() => onCheckboxChange(key, id)}
-              />
-            ))}
+            {config.options?.map(({ id, label }) => {
+              const isExclusive = [
+                "ingles-general",
+                "ingles-general-mas-sesiones-individuales",
+                "ingles-general-intensivo",
+              ].includes(id);
+
+              const disabled = exclusiveSelected && !filters[key]?.includes(id);
+
+              return (
+                <CheckboxItem
+                  key={id}
+                  id={id}
+                  label={label}
+                  checked={(filters[key] || []).includes(id)}
+                  onChange={() => onCheckboxChange(key, id)}
+                  disabled={!!disabled}
+                />
+              );
+            })}
           </FilterSection>
         );
       })}
@@ -188,15 +226,17 @@ function CheckboxItem({
   label,
   checked,
   onChange,
+  disabled,
 }: {
   id: string;
   label: string;
   checked: boolean;
   onChange: () => void;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox id={id} checked={checked} onCheckedChange={onChange} />
+      <Checkbox id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} />
       <label htmlFor={id} className="text-sm">
         {label}
       </label>
@@ -285,5 +325,3 @@ function SliderSection({
     </>
   );
 }
-
-

@@ -1,3 +1,6 @@
+import NextAuth from "next-auth";
+
+
 export interface SearchParams {
     [key: string]: string | string[] | undefined
   }
@@ -185,3 +188,25 @@ export type GalleryImage = {
   url: string;
   isNew?: boolean;
 };
+
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      name: string;
+      email: string;
+      accessToken: string;
+      refreshToken: string;
+    };
+  }
+
+  interface User {
+    accessToken: string;
+    refreshToken: string;
+  }
+
+  interface JWT {
+    accessToken: string;
+    refreshToken: string;
+  }
+}

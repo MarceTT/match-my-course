@@ -276,7 +276,7 @@ const EditSchoolPage = () => {
             alt={`Imagen ${index + 1}`}
             fill
             className="object-cover rounded-lg"
-            onLoadingComplete={() => imageObj.url.startsWith('blob:') && URL.revokeObjectURL(imageObj.url)}
+            onLoad={() => imageObj.url.startsWith('blob:') && URL.revokeObjectURL(imageObj.url)}
           />
           <ConfirmDialog
             title="Eliminar Imagen"

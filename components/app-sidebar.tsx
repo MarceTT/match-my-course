@@ -23,7 +23,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Logo from "@/public/logos/Logo_Match.png";
-import { useAuth } from "@/app/context/AuthContext";
+import { useSession } from "next-auth/react";
 
 // This is sample data.
 const data = {
@@ -115,9 +115,10 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isLoading } = useAuth();
+  const { data: session, status } = useSession();
 
-  console.log(user);
+  const loading = status === "loading";
+  const user = session?.user;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -129,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-      {isLoading ? (
+      {loading ? (
           <p className="text-gray-500">Cargando usuario...</p>
         ) : (
           <NavUser user={user || { name: "Cargando...", email: "Cargando..." }} />

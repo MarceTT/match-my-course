@@ -15,26 +15,44 @@ export interface FilterOption {
     };
   }
   
+  const normalize = (str: string) =>
+    str
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\(.*?\)/g, "")
+      .replace(/\+/g, "-")
+      .replace(/--+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/^-+|-+$/g, "");
+  
   const filtersConfig: Record<string, FilterConfig> = {
     course: {
       label: "Tipo de curso",
       options: [
-        { id: "ingles-general", label: "Inglés general" },
-        { id: "ingles-general-mas-sesiones-individuales", label: "Inglés general más sesiones individuales" },
-        { id: "ingles-general-intensivo", label: "Inglés general intensivo" },
-        { id: "ingles-general-orientado-a-negocios", label: "Inglés general orientado a negocios" },
-        { id: "ingles-vista-de-trabajo", label: "Inglés + visa de trabajo" },
-      ],
+        "Inglés general",
+        "Inglés general más sesiones individuales",
+        "Inglés general intensivo",
+        "Inglés general orientado a negocios",
+        "Inglés + visa de trabajo (6 meses)",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
     cities: {
       label: "Ciudad",
       options: [
-        { id: "dublin", label: "Dublín" },
-        { id: "cork", label: "Cork" },
-        { id: "galway", label: "Galway" },
-        { id: "limerick", label: "Limerick" },
-        { id: "todos", label: "Todos" },
-      ],
+        "Dublín",
+        "Cork",
+        "Galway",
+        "Limerick",
+        "Todos",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
     weeks: {
       label: "Semanas a estudiar",
@@ -49,33 +67,45 @@ export interface FilterOption {
     type: {
       label: "Tipo de Curso",
       options: [
-        { id: "am", label: "Por las mañanas AM" },
-        { id: "pm", label: "Por la tardes PM" },
-      ],
+        "Por las mañanas AM",
+        "Por la tardes PM",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
     hours: {
       label: "Horas de Clases",
       options: [
-        { id: "15-horas", label: "15 Horas" },
-        { id: "18-horas", label: "18 Horas" },
-        { id: "20-horas", label: "20 Horas" },
-      ],
+        "15 Horas",
+        "18 Horas",
+        "20 Horas",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
     accreditation: {
       label: "Acreditación Educacional",
       options: [
-        { id: "equals", label: "Eaquals" },
-        { id: "ialc", label: "IALC" },
-        { id: "acels", label: "ACELS" },
-      ],
+        "Eaquals",
+        "IALC",
+        "ACELS",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
     certification: {
       label: "Certificación",
       options: [
-        { id: "quality-english", label: "Quality English" },
-        { id: "english-education-ireland", label: "English Education Ireland" },
-        { id: "select-ireland", label: "Select Ireland" },
-      ],
+        "Quality English",
+        "English Education Ireland",
+        "Select Ireland",
+      ].map((label) => ({
+        id: normalize(label),
+        label,
+      })),
     },
   };
   

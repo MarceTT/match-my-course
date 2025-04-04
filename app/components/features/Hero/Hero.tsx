@@ -70,6 +70,7 @@ const Hero = () => {
                     <option value="Inglés general más sesiones individuales">Inglés general más sesiones individuales</option>
                     <option value="Inglés general intensivo">Inglés general intensivo</option>
                     <option value="Inglés general orientado a negocios">Inglés general orientado a negocios</option>
+                    <option value="Inglés general más trabajo(6 meses)">Inglés general más trabajo(6 meses)</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

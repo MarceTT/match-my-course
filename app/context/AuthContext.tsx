@@ -1,18 +1,15 @@
 "use client";
 
-import React, {
+import { useSession, signOut } from "next-auth/react";
+import {
   createContext,
   useContext,
-  useState,
-  useEffect,
-  useCallback,
+  ReactNode,
+  useMemo,
 } from "react";
-import { useRouter } from "next/navigation";
-import { getInfoUser } from "@/app/admin/actions/user";
-import { User } from "@/app/types";
 
 interface AuthContextType {
-  user: User | null;
+  user: any; // o define tu tipo si quieres
   token: string | null;
   isLoading: boolean;
   logout: () => void;
@@ -20,7 +17,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth debe estar dentro de AuthProvider");
@@ -28,43 +25,26 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null); 
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const { data: session, status } = useSession();
 
-  const fetchUser = useCallback(async () => {
-    setIsLoading(true);
-    const userData = await getInfoUser();
+  const isLoading = status === "loading";
+  const user = session?.user ?? null;
+  const token = session?.user?.accessToken ?? null;
 
-    if ("error" in userData) {
-      logout();
-    } else {
-      setUser(userData.user);
-      setToken(userData.token || null); // 👈 importante
-    }
+  const logout = () => {
+    signOut({ callbackUrl: "/login" });
+  };
 
-    setIsLoading(false);
-  }, []);
-
-  const logout = useCallback(() => {
-    document.cookie = "refreshToken=; Path=/; Max-Age=0";
-    document.cookie = "isLoggedIn=; Path=/; Max-Age=0";
-    setUser(null);
-    setToken(null); // 👈 limpiar token también
-    setTimeout(() => {
-      router.replace("/login");
-    }, 10);
-  }, [router]);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
-  return (
-    <AuthContext.Provider value={{ user, isLoading, logout, token }}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      token,
+      isLoading,
+      logout,
+    }),
+    [user, token, isLoading]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

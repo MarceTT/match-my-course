@@ -18,11 +18,11 @@ import { useForm } from "react-hook-form";
 import { LoginSchema } from "./LoginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { loginAction } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/public/logos/final-logo.png";
+import { signIn } from "next-auth/react";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -38,19 +38,19 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     try {
-      const result = await loginAction(values.email, values.password);
-
-      console.log("Resultado del loginAction:", result); // ✅ Depuración
-
-    // ✅ Verificar si `success` es `false` y hay un mensaje de error
-    if (result && !result.success && result.error) {
-      toast.error(result.error); // ❌ Muestra "Invalid credentials"
-      return;
-    }
-
-    toast.success("Inicio de sesión exitoso 🎉");
-    router.push("/admin/dashboard");
-   
+      const res = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+  
+      if (!res || !res.ok) {
+        toast.error("Credenciales incorrectas");
+        return;
+      }
+  
+      toast.success("Inicio de sesión exitoso 🎉");
+      router.push("/admin/dashboard");
     } catch (error) {
       console.error("Error inesperado:", error);
       toast.error("Error inesperado. Inténtalo de nuevo.");
