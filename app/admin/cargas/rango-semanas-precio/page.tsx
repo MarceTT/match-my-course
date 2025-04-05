@@ -220,7 +220,7 @@ const RangoSemanasPrecio = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
+    console.log([...formData.entries()]);
     uploadMutation.mutate(formData);
   };
 
@@ -425,7 +425,7 @@ const RangoSemanasPrecio = () => {
         {uploadedFiles?.success && uploadedFiles.files.length > 0 ? (
           <HistorialArchivos<WeekRange>
             files={uploadedFiles.files}
-            fileType="RangoSemanasPrecio"
+            fileType="Rango-Semanas"
             columns={columnas}
             fetchDetails={fetchWeekRangeDetails}
           />
