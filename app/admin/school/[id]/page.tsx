@@ -86,9 +86,11 @@ const EditSchoolPage = () => {
   const [loadingGallery, setLoadingGallery] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(true);
-  const [removingImages, setRemovingImages] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [removingImages, setRemovingImages] = useState({
+    logo: false,
+    mainImage: false,
+    gallery: {} as Record<string, boolean>
+  });
 
   const {
     data: schoolData,
@@ -271,7 +273,15 @@ const EditSchoolPage = () => {
   
     const imageIdentifier = imageUrl || imageType;
   
-    setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
+    setRemovingImages(prev => {
+      if (imageType === 'galleryImages') {
+        return {
+          ...prev,
+          gallery: { ...prev.gallery, [imageUrl!]: true }
+        };
+      }
+      return { ...prev, [imageType]: true };
+    });
   
     try {
       const result = await deleteSchoolImage(schoolId, imageKey!, imageType);
@@ -342,9 +352,9 @@ const EditSchoolPage = () => {
                 variant="destructive"
                 size="icon"
                 className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                disabled={removingImages[imageObj.url]}
+                disabled={removingImages.gallery[imageObj.url]}
               >
-                {removingImages[imageObj.url] ? (
+                {removingImages.gallery[imageObj.url] ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <FaRegTrashAlt className="h-4 w-4" />
@@ -473,9 +483,9 @@ const EditSchoolPage = () => {
                                 <Button
                                   variant="destructive"
                                   className="absolute top-2 right-2"
-                                  disabled={removingImages["logo"]}
+                                  disabled={removingImages.logo}
                                 >
-                                  {removingImages["logo"] ? (
+                                  {removingImages.logo ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                   ) : (
                                     "Eliminar"
@@ -555,9 +565,9 @@ const EditSchoolPage = () => {
                                 <Button
                                   variant="destructive"
                                   className="absolute top-2 right-2"
-                                  disabled={removingImages["mainImage"]}
+                                  disabled={removingImages.mainImage}
                                 >
-                                  {removingImages["mainImage"] ? (
+                                  {removingImages.mainImage ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                   ) : (
                                     "Eliminar"
