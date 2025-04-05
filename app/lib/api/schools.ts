@@ -19,6 +19,7 @@ export const fetchSchoolById = async (id: string): Promise<SchoolDetails> => {
     imageType: "logo" | "mainImage" | "galleryImages"
   ) => {
     try {
+        console.log("🚀 Eliminando imagen:", imageKey, imageType);
         const response = await axiosInstance.delete(
             `/schools/${schoolId}/deleteImage`,
             {
