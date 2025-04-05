@@ -31,31 +31,31 @@ import { toast } from "sonner";
 import HistorialArchivos from "../../components/historial-files-table";
 
 interface WeekRange {
-    schoolId: string;
-    NombreEnADMIN: string;
-    Ciudad: string;
-    NombreDelCurso: string;
-    DetallesDelCurso: string;
-    InicioDeClases: string;
-    RequisitoDeIngreso: string;
-    HORARIO: string;
-    HorarioEspecifico: string;
-    HorasDeClase: number;
-    Matricula: number;
-    Materiales: string;
-    HorasDeClaseIndividual: string;
-    Lessons: number;
-    MinutosPorLesson: number;
-    RangoDeSemanas1: number;
-    RangoDeSemanas2: number;
-    Precio: number;
+  schoolId: string;
+  NombreEnADMIN: string;
+  Ciudad: string;
+  NombreDelCurso: string;
+  DetallesDelCurso: string;
+  InicioDeClases: string;
+  RequisitoDeIngreso: string;
+  HORARIO: string;
+  HorarioEspecifico: string;
+  HorasDeClase: number;
+  Matricula: number;
+  Materiales: string;
+  HorasDeClaseIndividual: string;
+  Lessons: number;
+  MinutosPorLesson: number;
+  RangoDeSemanas1: number;
+  RangoDeSemanas2: number;
+  Precio: number;
 }
 
 interface ColumnDefinition<T> {
-    key: keyof T; // Asegura que `key` sea una clave válida de `T`
-    header: string;
-    render?: (value: any, row: T) => React.ReactNode;
-  }
+  key: keyof T;
+  header: string;
+  render?: (value: any, row: T) => React.ReactNode;
+}
 
 const RangoSemanasPrecio = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -66,6 +66,7 @@ const RangoSemanasPrecio = () => {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [previewData, setPreviewData] = useState<WeekRange[]>([]);
 
   const {
     data: uploadedFiles,
@@ -97,13 +98,14 @@ const RangoSemanasPrecio = () => {
       setFile(null);
       setSelectedColumns([]);
       setColumns([]);
+      setPreviewData([]);
     },
     onError: (error: any) => {
       setError(error.message || "Error al procesar los datos en el servidor");
     },
   });
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setError(null);
     setSuccess(null);
 
@@ -111,13 +113,11 @@ const RangoSemanasPrecio = () => {
 
     const selectedFile = acceptedFiles[0];
 
-    // Validar tipo de archivo
     if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
       setError("Por favor seleccione un archivo Excel válido (.xlsx o .xls)");
       return;
     }
 
-    // Validar tamaño (máximo 10MB)
     if (selectedFile.size > 10 * 1024 * 1024) {
       setError("El archivo es demasiado grande. El tamaño máximo es 10MB.");
       return;
@@ -144,25 +144,32 @@ const RangoSemanasPrecio = () => {
 
       let columnNames = jsonData[0] as string[];
 
-      // Normalizar nombres de columnas y evitar duplicados
       const uniqueColumns: string[] = [];
       const columnCount: Record<string, number> = {};
 
       columnNames.forEach((col) => {
-        let cleanCol = col.trim().replace(/\s+/g, "_"); // Normalizar nombre
-
+        let cleanCol = col.trim().replace(/\s+/g, "_");
         if (columnCount[cleanCol] !== undefined) {
           columnCount[cleanCol]++;
           cleanCol = `${cleanCol}_${columnCount[cleanCol]}`;
         } else {
           columnCount[cleanCol] = 0;
         }
-
         uniqueColumns.push(cleanCol);
       });
 
       setColumns(uniqueColumns);
       setSelectedColumns(uniqueColumns);
+
+      // Crear datos de vista previa
+      const preview = jsonData.slice(1, 6).map((row) => {
+        const item: any = {};
+        uniqueColumns.forEach((header, i) => {
+          item[header] = row[i];
+        });
+        return item as WeekRange;
+      });
+      setPreviewData(preview);
     };
 
     reader.readAsArrayBuffer(selectedFile);
@@ -201,6 +208,7 @@ const RangoSemanasPrecio = () => {
     setSuccess(null);
     setIsLoading(false);
     setProgress(0);
+    setPreviewData([]);
   };
 
   const handleUpload = () => {
@@ -231,180 +239,210 @@ const RangoSemanasPrecio = () => {
       </Alert>
     );
   }
+
   return (
     <div className="p-4">
-    <div className="space-y-6">
-      {/* Mensajes de error y éxito */}
-      {error && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      <div className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-      {success && (
-        <Alert variant="default" className="bg-green-50 border-green-200">
-          <CheckCircle2 className="h-4 w-4 text-green-500" />
-          <AlertTitle className="text-green-700">Éxito</AlertTitle>
-          <AlertDescription className="text-green-600">
-            {success}
-          </AlertDescription>
-        </Alert>
-      )}
+        {success && (
+          <Alert variant="default" className="bg-green-50 border-green-200">
+            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <AlertTitle className="text-green-700">Éxito</AlertTitle>
+            <AlertDescription className="text-green-600">
+              {success}
+            </AlertDescription>
+          </Alert>
+        )}
 
-      {/* Dropzone para subir archivos */}
-      {!file && (
-        <Card
-          className={`border-2 border-dashed p-6 ${
-            isDragActive ? "border-primary bg-primary/5" : "border-gray-300"
-          }`}
-        >
-          <div
-            {...getRootProps()}
-            className="flex flex-col items-center justify-center space-y-4 py-10 text-center cursor-pointer"
+        {!file && (
+          <Card
+            className={`border-2 border-dashed p-6 ${
+              isDragActive ? "border-primary bg-primary/5" : "border-gray-300"
+            }`}
           >
-            <input {...getInputProps()} />
-            <div className="rounded-full bg-primary/10 p-3">
-              <Upload className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <p className="text-lg font-medium">
-                {isDragActive
-                  ? "Suelte el archivo aquí"
-                  : "Arrastre y suelte un archivo de Precios Excel aquí"}
-              </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                o haga clic para seleccionar un archivo
-              </p>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Formatos soportados: .xlsx, .xls (máximo 10MB)
-            </p>
-          </div>
-        </Card>
-      )}
-
-      {/* Barra de progreso */}
-      {isLoading && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">
-              Procesando e insertando datos...
-            </span>
-            <span className="text-sm text-muted-foreground">{progress}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-      )}
-
-      {/* Información del archivo seleccionado */}
-      {file && !isLoading && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="rounded-full bg-primary/10 p-2">
-                <FileSpreadsheet className="h-5 w-5 text-primary" />
+            <div
+              {...getRootProps()}
+              className="flex flex-col items-center justify-center space-y-4 py-10 text-center cursor-pointer"
+            >
+              <input {...getInputProps()} />
+              <div className="rounded-full bg-primary/10 p-3">
+                <Upload className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="font-medium">{file.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB
+                <p className="text-lg font-medium">
+                  {isDragActive
+                    ? "Suelte el archivo aquí"
+                    : "Arrastre y suelte un archivo de Precios Excel aquí"}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  o haga clic para seleccionar un archivo
                 </p>
               </div>
+              <p className="text-xs text-muted-foreground">
+                Formatos soportados: .xlsx, .xls (máximo 10MB)
+              </p>
             </div>
-            <Button variant="ghost" size="icon" onClick={handleReset}>
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      )}
+          </Card>
+        )}
 
-      {/* Filtro y selección de columnas */}
-      {file && columns.length > 0 && (
-        <div className="border rounded-md p-4 bg-gray-50">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="font-semibold">
-              Selecciona las columnas a incluir:
-            </h3>
-            <Button size="sm" variant="outline" onClick={toggleSelectAll}>
-              {selectedColumns.length === columns.length ? (
-                <>
-                  <CheckSquare className="h-4 w-4" /> Deseleccionar todas
-                </>
-              ) : (
-                <>
-                  <Square className="h-4 w-4" /> Seleccionar todas
-                </>
-              )}
-            </Button>
+        {isLoading && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">
+                Procesando e insertando datos...
+              </span>
+              <span className="text-sm text-muted-foreground">{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
+        )}
 
-          <Input
-            placeholder="Buscar columna..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="mb-3"
+        {file && !isLoading && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="rounded-full bg-primary/10 p-2">
+                  <FileSpreadsheet className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium">{file.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" onClick={handleReset}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {previewData.length > 0 && (
+          <div className="mt-4">
+            <h3 className="font-medium mb-2">Vista previa (primeras 5 filas)</h3>
+            <div className="border rounded-md overflow-auto max-h-60">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0">
+                  <tr>
+                    {columns.slice(0, 5).map((col) => (
+                      <th
+                        key={col}
+                        className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        {col}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {previewData.map((row, i) => (
+                    <tr key={i}>
+                      {columns.slice(0, 5).map((col) => (
+                        <td
+                          key={col}
+                          className="px-4 py-2 text-sm text-gray-500"
+                        >
+                          {row[col as keyof WeekRange]?.toString().substring(0, 30) || "-"}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {file && columns.length > 0 && (
+          <div className="border rounded-md p-4 bg-gray-50">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-semibold">
+                Selecciona las columnas a incluir:
+              </h3>
+              <Button size="sm" variant="outline" onClick={toggleSelectAll}>
+                {selectedColumns.length === columns.length ? (
+                  <>
+                    <CheckSquare className="h-4 w-4" /> Deseleccionar todas
+                  </>
+                ) : (
+                  <>
+                    <Square className="h-4 w-4" /> Seleccionar todas
+                  </>
+                )}
+              </Button>
+            </div>
+
+            <Input
+              placeholder="Buscar columna..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="mb-3"
+            />
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {columns
+                .filter((col) =>
+                  col.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((col) => (
+                  <label key={col} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={selectedColumns.includes(col)}
+                      onCheckedChange={() => handleColumnSelection(col)}
+                    />
+                    <span>{col}</span>
+                  </label>
+                ))}
+            </div>
+          </div>
+        )}
+
+        {file && (
+          <Button
+            onClick={handleUpload}
+            disabled={uploadMutation.isPending}
+            className="w-full flex items-center justify-center"
+          >
+            {uploadMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Subiendo...
+              </>
+            ) : (
+              <>Subir {selectedColumns.length} columnas seleccionadas</>
+            )}
+          </Button>
+        )}
+
+        {uploadedFiles?.success && uploadedFiles.files.length > 0 ? (
+          <HistorialArchivos<WeekRange>
+            files={uploadedFiles.files}
+            fileType="RangoSemanasPrecio"
+            columns={columnas}
+            fetchDetails={fetchWeekRangeDetails}
           />
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-            {columns
-              .filter((col) =>
-                col.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-              .map((col) => (
-                <label key={col} className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={selectedColumns.includes(col)}
-                    onCheckedChange={() => handleColumnSelection(col)}
-                  />
-                  <span>{col}</span>
-                </label>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {/* Botón de subida */}
-      {file && (
-        <Button
-          onClick={handleUpload}
-          disabled={uploadMutation.isPending}
-          className="w-full flex items-center justify-center"
-        >
-          {uploadMutation.isPending ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Subiendo...
-            </>
-          ) : (
-            <>Subir {selectedColumns.length} columnas seleccionadas</>
-          )}
-        </Button>
-      )}
-
-      {/* Tabla de archivos cargados */}
-      {uploadedFiles?.success && uploadedFiles.files.length > 0 ? (
-        <HistorialArchivos<WeekRange>
-          files={uploadedFiles.files}
-          fileType="RangoSemanasPrecio"
-          columns={columnas}
-          fetchDetails={fetchWeekRangeDetails}
-        />
-      ) : (
-        <Alert
-          variant="default"
-          className="bg-blue-50 border-blue-300 text-center"
-        >
-          <TriangleAlert className="h-4 w-4 text-blue-500 text-center justify-center" />
-          <AlertTitle className="text-blue-700">Atencion</AlertTitle>
-          <AlertDescription className="text-blue-600">
-            No hay archivos cargados
-          </AlertDescription>
-        </Alert>
-      )}
+        ) : (
+          <Alert
+            variant="default"
+            className="bg-blue-50 border-blue-300 text-center"
+          >
+            <TriangleAlert className="h-4 w-4 text-blue-500 text-center justify-center" />
+            <AlertTitle className="text-blue-700">Atención</AlertTitle>
+            <AlertDescription className="text-blue-600">
+              No hay archivos cargados
+            </AlertDescription>
+          </Alert>
+        )}
+      </div>
     </div>
-  </div>
   );
 };
 
