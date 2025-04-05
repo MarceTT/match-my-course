@@ -89,7 +89,7 @@ const EditSchoolPage = () => {
   const [removingImages, setRemovingImages] = useState({
     logo: false,
     mainImage: false,
-    gallery: {} as Record<string, boolean>
+    gallery: {} as Record<string, boolean>,
   });
 
   const {
@@ -143,30 +143,48 @@ const EditSchoolPage = () => {
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: any,
-    setLoading: (value: boolean) => void
+    setLoading: (value: boolean) => void,
+    shouldCompress: boolean = true
   ) => {
     if (!e.target.files?.[0]) return;
 
     const file = e.target.files[0];
 
+    if (!shouldCompress && file.size > 2 * 1024 * 1024) {
+      // 2MB
+      toast.error("El logo no puede superar los 2MB");
+      e.target.value = ""; // Limpia el input
+      return;
+    }
+    setLoading(true);
     try {
-      setLoading(true);
-      const originalSizeMB = file.size / (1024 * 1024);
-      toast.info(`Comprimiendo imagen de ${originalSizeMB.toFixed(2)}MB...`);
+      let processedFile = file;
 
-      const compressedFile = await compressImage(file);
-      const compressedSizeMB = compressedFile.size / (1024 * 1024);
+      if (shouldCompress) {
+        const originalSizeMB = file.size / (1024 * 1024);
+        toast.info(`Comprimiendo imagen de ${originalSizeMB.toFixed(2)}MB...`);
 
-      toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
-        description: `Reducción de ${(
-          originalSizeMB - compressedSizeMB
-        ).toFixed(2)}MB (${(
-          ((originalSizeMB - compressedSizeMB) / originalSizeMB) *
-          100
-        ).toFixed(0)}%)`,
-      });
+        processedFile = await compressImage(file);
+        const compressedSizeMB = processedFile.size / (1024 * 1024);
 
-      field.onChange(compressedFile);
+        toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
+          description: `Reducción de ${(
+            originalSizeMB - compressedSizeMB
+          ).toFixed(2)}MB (${(
+            ((originalSizeMB - compressedSizeMB) / originalSizeMB) *
+            100
+          ).toFixed(0)}%)`,
+        });
+      } else {
+        toast.info(
+          `Subiendo imagen sin compresión (${(
+            file.size /
+            (1024 * 1024)
+          ).toFixed(2)}MB)`
+        );
+      }
+
+      field.onChange(processedFile);
     } catch (error) {
       console.error("Error comprimiendo imagen:", error);
       toast.error(
@@ -260,46 +278,46 @@ const EditSchoolPage = () => {
       // Para logo y mainImage, obtenemos la URL del form
       imageUrl = form.getValues(imageType);
     }
-  
+
     // Extracción más robusta del key desde la URL
-    const imageKey = imageUrl 
-      ? imageUrl.split('/').pop()?.split('?')[0] 
+    const imageKey = imageUrl
+      ? imageUrl.split("/").pop()?.split("?")[0]
       : undefined;
-  
+
     if (!imageKey) {
       toast.error("No se pudo obtener la referencia de la imagen");
       return;
     }
-  
+
     const imageIdentifier = imageUrl || imageType;
-  
-    setRemovingImages(prev => {
-      if (imageType === 'galleryImages') {
+
+    setRemovingImages((prev) => {
+      if (imageType === "galleryImages") {
         return {
           ...prev,
-          gallery: { ...prev.gallery, [imageUrl!]: true }
+          gallery: { ...prev.gallery, [imageUrl!]: true },
         };
       }
       return { ...prev, [imageType]: true };
     });
-  
+
     try {
       const result = await deleteSchoolImage(schoolId, imageKey!, imageType);
-  
+
       if (result.error) throw new Error(result.error);
-  
+
       if (imageType === "galleryImages") {
         const currentGallery = form.getValues("galleryImages");
         form.setValue(
           "galleryImages",
-          currentGallery.filter((img) =>
-            typeof img !== "object" || img.url !== imageUrl
+          currentGallery.filter(
+            (img) => typeof img !== "object" || img.url !== imageUrl
           )
         );
       } else {
         form.setValue(imageType, null);
       }
-  
+
       toast.success("Imagen eliminada correctamente ✅");
     } catch (error: any) {
       console.error("❌ Error al eliminar imagen:", error);
@@ -309,7 +327,6 @@ const EditSchoolPage = () => {
       if (imageUrl?.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     }
   };
-  
 
   const renderGalleryImages = (field: any) => {
     return (field.value || []).map(
@@ -452,7 +469,7 @@ const EditSchoolPage = () => {
                           className="hidden"
                           id="logo"
                           onChange={(e) =>
-                            handleFileChange(e, field, setLoadingLogo)
+                            handleFileChange(e, field, setLoadingLogo, false)
                           }
                         />
                         <label htmlFor="logo" className="cursor-pointer block">
@@ -475,10 +492,19 @@ const EditSchoolPage = () => {
                                 fill
                                 className="object-contain rounded-lg"
                               />
+                              <div className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                                Sin compresión {/* ✅ Indicador visual */}
+                              </div>
                               <ConfirmDialog
                                 title="Eliminar Logo"
                                 description="¿Estás seguro de eliminar el logo?"
-                                onConfirm={() => handleRemoveImage("logo", undefined, form.getValues("logo"))}
+                                onConfirm={() =>
+                                  handleRemoveImage(
+                                    "logo",
+                                    undefined,
+                                    form.getValues("logo")
+                                  )
+                                }
                               >
                                 <Button
                                   variant="destructive"
@@ -560,7 +586,13 @@ const EditSchoolPage = () => {
                               <ConfirmDialog
                                 title="Eliminar Imagen"
                                 description="¿Estás seguro de eliminar esta imagen?"
-                                onConfirm={() => handleRemoveImage("mainImage", undefined, form.getValues("mainImage"))}
+                                onConfirm={() =>
+                                  handleRemoveImage(
+                                    "mainImage",
+                                    undefined,
+                                    form.getValues("mainImage")
+                                  )
+                                }
                               >
                                 <Button
                                   variant="destructive"
