@@ -254,10 +254,20 @@ const EditSchoolPage = () => {
     imageId?: string,
     imageUrl?: string
   ) => {
-    // ✅ Extracción segura del key desde la URL completa de S3
-    const imageKey = imageUrl?.includes(".amazonaws.com/")
-      ? imageUrl.split(".amazonaws.com/")[1]
+    if (!imageUrl && imageType !== "galleryImages") {
+      // Para logo y mainImage, obtenemos la URL del form
+      imageUrl = form.getValues(imageType);
+    }
+  
+    // Extracción más robusta del key desde la URL
+    const imageKey = imageUrl 
+      ? imageUrl.split('/').pop()?.split('?')[0] 
       : undefined;
+  
+    if (!imageKey) {
+      toast.error("No se pudo obtener la referencia de la imagen");
+      return;
+    }
   
     const imageIdentifier = imageUrl || imageType;
   
@@ -458,7 +468,7 @@ const EditSchoolPage = () => {
                               <ConfirmDialog
                                 title="Eliminar Logo"
                                 description="¿Estás seguro de eliminar el logo?"
-                                onConfirm={() => handleRemoveImage("logo")}
+                                onConfirm={() => handleRemoveImage("logo", undefined, form.getValues("logo"))}
                               >
                                 <Button
                                   variant="destructive"
@@ -540,7 +550,7 @@ const EditSchoolPage = () => {
                               <ConfirmDialog
                                 title="Eliminar Imagen"
                                 description="¿Estás seguro de eliminar esta imagen?"
-                                onConfirm={() => handleRemoveImage("mainImage")}
+                                onConfirm={() => handleRemoveImage("mainImage", undefined, form.getValues("mainImage"))}
                               >
                                 <Button
                                   variant="destructive"

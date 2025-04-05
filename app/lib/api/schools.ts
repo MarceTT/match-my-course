@@ -1,5 +1,6 @@
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import { School, SchoolDetails } from "@/app/types";
+import axios from "axios";
 
 export const fetchSchools = async (): Promise<School[]> => {
   const res = await axiosInstance.get("/schools"); // ✅ El interceptor se encarga del token
@@ -23,10 +24,24 @@ export const fetchSchoolById = async (id: string): Promise<SchoolDetails> => {
         imageKey,
         imageType,
       });
+      
+      if (res.data.error) {
+        throw new Error(res.data.error);
+      }
+      
       return res.data;
     } catch (error) {
       console.error("❌ Error desde deleteSchoolImage:", error);
-      return { error: "No se pudo eliminar la imagen" };
+      if (axios.isAxiosError(error)) {
+        return { 
+          error: error.response?.data?.message || 
+                error.message || 
+                "No se pudo eliminar la imagen" 
+        };
+      }
+      return { 
+        error: error instanceof Error ? error.message : "No se pudo eliminar la imagen" 
+      };
     }
   };
   
