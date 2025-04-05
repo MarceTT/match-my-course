@@ -254,37 +254,33 @@ const EditSchoolPage = () => {
     imageId?: string,
     imageUrl?: string
   ) => {
+    // ✅ Extracción segura del key desde la URL completa de S3
     const imageKey = imageUrl?.includes(".amazonaws.com/")
       ? imageUrl.split(".amazonaws.com/")[1]
       : undefined;
-
+  
     const imageIdentifier = imageUrl || imageType;
-
-    if (!imageKey) {
-      toast.error("No se pudo obtener el key de la imagen");
-      return;
-    }
-
+  
     setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
-
+  
     try {
       const result = await deleteSchoolImage(schoolId, imageKey!, imageType);
-
+  
       if (result.error) throw new Error(result.error);
-
+  
       if (imageType === "galleryImages") {
         const currentGallery = form.getValues("galleryImages");
         form.setValue(
           "galleryImages",
-          currentGallery.filter(
-            (img) => typeof img !== "object" || img.url !== imageUrl
+          currentGallery.filter((img) =>
+            typeof img !== "object" || img.url !== imageUrl
           )
         );
       } else {
         form.setValue(imageType, null);
       }
-
-      toast.success("Imagen eliminada correctamente");
+  
+      toast.success("Imagen eliminada correctamente ✅");
     } catch (error: any) {
       console.error("❌ Error al eliminar imagen:", error);
       toast.error(error.message || "No se pudo eliminar la imagen");
@@ -293,6 +289,7 @@ const EditSchoolPage = () => {
       if (imageUrl?.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     }
   };
+  
 
   const renderGalleryImages = (field: any) => {
     return (field.value || []).map(
