@@ -8,7 +8,13 @@ import { ImagePlus, Loader2, UploadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -80,9 +86,15 @@ const EditSchoolPage = () => {
   const [loadingGallery, setLoadingGallery] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(true);
-  const [removingImages, setRemovingImages] = useState<Record<string, boolean>>({});
+  const [removingImages, setRemovingImages] = useState<Record<string, boolean>>(
+    {}
+  );
 
-  const { data: schoolData, isLoading: isFetching, refetch: refetchSchoolData } = useSchoolById(schoolId);
+  const {
+    data: schoolData,
+    isLoading: isFetching,
+    refetch: refetchSchoolData,
+  } = useSchoolById(schoolId);
 
   useEffect(() => {
     if (!isFetching) {
@@ -111,11 +123,12 @@ const EditSchoolPage = () => {
         status: schoolData.status,
         logo: schoolData.logo || null,
         mainImage: schoolData.mainImage || null,
-        galleryImages: schoolData.galleryImages?.map((img: string) => ({
-          id: img.split("/").pop()?.split(".")[0],
-          url: img,
-          isNew: false,
-        })) || [],
+        galleryImages:
+          schoolData.galleryImages?.map((img: string) => ({
+            id: img.split("/").pop()?.split(".")[0],
+            url: img,
+            isNew: false,
+          })) || [],
       });
     }
   }, [schoolData, form]);
@@ -133,27 +146,34 @@ const EditSchoolPage = () => {
     if (!e.target.files?.[0]) return;
 
     const file = e.target.files[0];
-    
+
     try {
       setLoading(true);
       const originalSizeMB = file.size / (1024 * 1024);
       toast.info(`Comprimiendo imagen de ${originalSizeMB.toFixed(2)}MB...`);
-      
+
       const compressedFile = await compressImage(file);
       const compressedSizeMB = compressedFile.size / (1024 * 1024);
-      
+
       toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
-        description: `Reducción de ${(originalSizeMB - compressedSizeMB).toFixed(2)}MB (${((originalSizeMB - compressedSizeMB) / originalSizeMB * 100).toFixed(0)}%)`
+        description: `Reducción de ${(
+          originalSizeMB - compressedSizeMB
+        ).toFixed(2)}MB (${(
+          ((originalSizeMB - compressedSizeMB) / originalSizeMB) *
+          100
+        ).toFixed(0)}%)`,
       });
-      
+
       field.onChange(compressedFile);
     } catch (error) {
-      console.error('Error comprimiendo imagen:', error);
-      toast.error(error instanceof Error ? error.message : "Error al procesar la imagen");
+      console.error("Error comprimiendo imagen:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Error al procesar la imagen"
+      );
       field.onChange(null);
     } finally {
       setLoading(false);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -170,7 +190,7 @@ const EditSchoolPage = () => {
       const files = Array.from(e.target.files);
       const currentImages = field.value || [];
       const availableSlots = MAX_GALLERY_IMAGES - currentImages.length;
-      
+
       if (availableSlots <= 0) {
         toast.warning(`Solo puedes subir hasta ${MAX_GALLERY_IMAGES} imágenes`);
         return;
@@ -184,39 +204,48 @@ const EditSchoolPage = () => {
         try {
           processedCount++;
           setUploadProgress((processedCount / validFiles.length) * 80);
-          
+
           const originalSizeMB = file.size / (1024 * 1024);
           toast.info(`Procesando imagen (${originalSizeMB.toFixed(2)}MB)`);
-          
+
           const compressedFile = await compressImage(file);
           const compressedSizeMB = compressedFile.size / (1024 * 1024);
-          
-          toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
-            description: `Reducción de ${(originalSizeMB - compressedSizeMB).toFixed(2)}MB`
-          });
+
+          toast.success(
+            `Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`,
+            {
+              description: `Reducción de ${(
+                originalSizeMB - compressedSizeMB
+              ).toFixed(2)}MB`,
+            }
+          );
 
           newImages.push({
             file: compressedFile,
             url: URL.createObjectURL(compressedFile),
-            isNew: true
+            isNew: true,
           });
         } catch (error) {
           console.error(`Error procesando imagen:`, error);
-          toast.error(error instanceof Error ? error.message : `Error al procesar imagen`);
+          toast.error(
+            error instanceof Error ? error.message : `Error al procesar imagen`
+          );
           continue;
         } finally {
           setUploadProgress((processedCount / validFiles.length) * 100);
         }
       }
 
-      field.onChange([...currentImages, ...newImages].slice(0, MAX_GALLERY_IMAGES));
+      field.onChange(
+        [...currentImages, ...newImages].slice(0, MAX_GALLERY_IMAGES)
+      );
     } catch (error) {
-      console.error('Error general:', error);
+      console.error("Error general:", error);
       toast.error("Error al procesar las imágenes");
     } finally {
       setLoadingGallery(false);
       setUploadProgress(0);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -225,28 +254,36 @@ const EditSchoolPage = () => {
     imageId?: string,
     imageUrl?: string
   ) => {
-    const imageKey = imageUrl?.split(".amazonaws.com/")[1]; // ✅ Cambio aquí
+    const imageKey = imageUrl?.includes(".amazonaws.com/")
+      ? imageUrl.split(".amazonaws.com/")[1]
+      : undefined;
+
     const imageIdentifier = imageUrl || imageType;
-  
+
+    if (!imageKey) {
+      toast.error("No se pudo obtener el key de la imagen");
+      return;
+    }
+
     setRemovingImages((prev) => ({ ...prev, [imageIdentifier]: true }));
-  
+
     try {
-      const result = await deleteSchoolImage(schoolId, imageKey!, imageType); 
-  
+      const result = await deleteSchoolImage(schoolId, imageKey!, imageType);
+
       if (result.error) throw new Error(result.error);
-  
+
       if (imageType === "galleryImages") {
         const currentGallery = form.getValues("galleryImages");
         form.setValue(
           "galleryImages",
-          currentGallery.filter((img) =>
-            typeof img !== "object" || img.url !== imageUrl
+          currentGallery.filter(
+            (img) => typeof img !== "object" || img.url !== imageUrl
           )
         );
       } else {
         form.setValue(imageType, null);
       }
-  
+
       toast.success("Imagen eliminada correctamente");
     } catch (error: any) {
       console.error("❌ Error al eliminar imagen:", error);
@@ -256,55 +293,66 @@ const EditSchoolPage = () => {
       if (imageUrl?.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     }
   };
-  
 
   const renderGalleryImages = (field: any) => {
-    return (field.value || []).map((img: GalleryImage | File | string, index: number) => {
-      const imageObj: GalleryImage = typeof img === 'string' ? {
-        id: img.split('/').pop()?.split('.')[0],
-        url: img,
-        isNew: false
-      } : img instanceof File ? {
-        file: img,
-        url: URL.createObjectURL(img),
-        isNew: true
-      } : img;
+    return (field.value || []).map(
+      (img: GalleryImage | File | string, index: number) => {
+        const imageObj: GalleryImage =
+          typeof img === "string"
+            ? {
+                id: img.split("/").pop()?.split(".")[0],
+                url: img,
+                isNew: false,
+              }
+            : img instanceof File
+            ? {
+                file: img,
+                url: URL.createObjectURL(img),
+                isNew: true,
+              }
+            : img;
 
-      return (
-        <div key={imageObj.url} className="relative aspect-square group">
-          <Image
-            src={imageObj.url}
-            alt={`Imagen ${index + 1}`}
-            fill
-            className="object-cover rounded-lg"
-            onLoad={() => imageObj.url.startsWith('blob:') && URL.revokeObjectURL(imageObj.url)}
-          />
-          <ConfirmDialog
-            title="Eliminar Imagen"
-            description="¿Estás seguro de eliminar esta imagen?"
-            onConfirm={() => handleRemoveImage("galleryImages", imageObj.id, imageObj.url)}
-          >
-            <Button 
-              variant="destructive" 
-              size="icon" 
-              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-              disabled={removingImages[imageObj.url]}
+        return (
+          <div key={imageObj.url} className="relative aspect-square group">
+            <Image
+              src={imageObj.url}
+              alt={`Imagen ${index + 1}`}
+              fill
+              className="object-cover rounded-lg"
+              onLoad={() =>
+                imageObj.url.startsWith("blob:") &&
+                URL.revokeObjectURL(imageObj.url)
+              }
+            />
+            <ConfirmDialog
+              title="Eliminar Imagen"
+              description="¿Estás seguro de eliminar esta imagen?"
+              onConfirm={() =>
+                handleRemoveImage("galleryImages", imageObj.id, imageObj.url)
+              }
             >
-              {removingImages[imageObj.url] ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <FaRegTrashAlt className="h-4 w-4" />
-              )}
-            </Button>
-          </ConfirmDialog>
-          {imageObj.isNew && (
-            <span className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-              Nuevo
-            </span>
-          )}
-        </div>
-      );
-    });
+              <Button
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                disabled={removingImages[imageObj.url]}
+              >
+                {removingImages[imageObj.url] ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FaRegTrashAlt className="h-4 w-4" />
+                )}
+              </Button>
+            </ConfirmDialog>
+            {imageObj.isNew && (
+              <span className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                Nuevo
+              </span>
+            )}
+          </div>
+        );
+      }
+    );
   };
 
   if (loadingScreen) return <FullScreenLoader isLoading={loadingScreen} />;
@@ -312,8 +360,10 @@ const EditSchoolPage = () => {
   return (
     <div className="p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-6">
-          
+        <form
+          onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
+          className="space-y-6"
+        >
           {/* Sección de Información Básica */}
           <Card>
             <CardContent className="pt-6">
@@ -356,7 +406,10 @@ const EditSchoolPage = () => {
                         </FormDescription>
                       </div>
                       <FormControl>
-                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
@@ -381,18 +434,26 @@ const EditSchoolPage = () => {
                           accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
                           className="hidden"
                           id="logo"
-                          onChange={(e) => handleFileChange(e, field, setLoadingLogo)}
+                          onChange={(e) =>
+                            handleFileChange(e, field, setLoadingLogo)
+                          }
                         />
                         <label htmlFor="logo" className="cursor-pointer block">
                           {loadingLogo ? (
                             <div className="flex flex-col items-center gap-2">
                               <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-                              <span className="text-sm text-muted-foreground">Optimizando imagen...</span>
+                              <span className="text-sm text-muted-foreground">
+                                Optimizando imagen...
+                              </span>
                             </div>
                           ) : field.value ? (
                             <div className="relative h-40 w-full">
                               <Image
-                                src={typeof field.value === "string" ? field.value : URL.createObjectURL(field.value)}
+                                src={
+                                  typeof field.value === "string"
+                                    ? field.value
+                                    : URL.createObjectURL(field.value)
+                                }
                                 alt="Logo preview"
                                 fill
                                 className="object-contain rounded-lg"
@@ -402,16 +463,28 @@ const EditSchoolPage = () => {
                                 description="¿Estás seguro de eliminar el logo?"
                                 onConfirm={() => handleRemoveImage("logo")}
                               >
-                                <Button variant="destructive" className="absolute top-2 right-2" disabled={removingImages['logo']}>
-                                  {removingImages['logo'] ? <Loader2 className="h-4 w-4 animate-spin" /> : "Eliminar"}
+                                <Button
+                                  variant="destructive"
+                                  className="absolute top-2 right-2"
+                                  disabled={removingImages["logo"]}
+                                >
+                                  {removingImages["logo"] ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    "Eliminar"
+                                  )}
                                 </Button>
                               </ConfirmDialog>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2">
                               <ImagePlus className="h-8 w-8 text-muted-foreground" />
-                              <span className="text-sm text-muted-foreground">Subir logo</span>
-                              <span className="text-xs text-muted-foreground">Formatos: JPG, PNG, WEBP, SVG</span>
+                              <span className="text-sm text-muted-foreground">
+                                Subir logo
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                Formatos: JPG, PNG, WEBP, SVG
+                              </span>
                             </div>
                           )}
                         </label>
@@ -440,18 +513,29 @@ const EditSchoolPage = () => {
                           accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
                           className="hidden"
                           id="mainImage"
-                          onChange={(e) => handleFileChange(e, field, setLoadingMainImage)}
+                          onChange={(e) =>
+                            handleFileChange(e, field, setLoadingMainImage)
+                          }
                         />
-                        <label htmlFor="mainImage" className="cursor-pointer block">
+                        <label
+                          htmlFor="mainImage"
+                          className="cursor-pointer block"
+                        >
                           {loadingMainImage ? (
                             <div className="flex flex-col items-center gap-2">
                               <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-                              <span className="text-sm text-muted-foreground">Optimizando imagen...</span>
+                              <span className="text-sm text-muted-foreground">
+                                Optimizando imagen...
+                              </span>
                             </div>
                           ) : field.value ? (
                             <div className="relative h-40 w-full">
                               <Image
-                                src={typeof field.value === "string" ? field.value : URL.createObjectURL(field.value)}
+                                src={
+                                  typeof field.value === "string"
+                                    ? field.value
+                                    : URL.createObjectURL(field.value)
+                                }
                                 alt="Imagen principal"
                                 fill
                                 className="object-cover rounded-lg"
@@ -461,16 +545,28 @@ const EditSchoolPage = () => {
                                 description="¿Estás seguro de eliminar esta imagen?"
                                 onConfirm={() => handleRemoveImage("mainImage")}
                               >
-                                <Button variant="destructive" className="absolute top-2 right-2" disabled={removingImages['mainImage']}>
-                                  {removingImages['mainImage'] ? <Loader2 className="h-4 w-4 animate-spin" /> : "Eliminar"}
+                                <Button
+                                  variant="destructive"
+                                  className="absolute top-2 right-2"
+                                  disabled={removingImages["mainImage"]}
+                                >
+                                  {removingImages["mainImage"] ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    "Eliminar"
+                                  )}
                                 </Button>
                               </ConfirmDialog>
                             </div>
                           ) : (
                             <div className="flex flex-col items-center gap-2">
                               <ImagePlus className="h-8 w-8 text-muted-foreground" />
-                              <span className="text-sm text-muted-foreground">Subir imagen principal</span>
-                              <span className="text-xs text-muted-foreground">Formatos: JPG, PNG, WEBP, SVG</span>
+                              <span className="text-sm text-muted-foreground">
+                                Subir imagen principal
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                Formatos: JPG, PNG, WEBP, SVG
+                              </span>
                             </div>
                           )}
                         </label>
@@ -488,7 +584,8 @@ const EditSchoolPage = () => {
             <CardHeader>
               <CardTitle>Galería de Imágenes</CardTitle>
               <CardDescription>
-                Sube hasta {MAX_GALLERY_IMAGES} imágenes (se optimizarán automáticamente)
+                Sube hasta {MAX_GALLERY_IMAGES} imágenes (se optimizarán
+                automáticamente)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -505,26 +602,36 @@ const EditSchoolPage = () => {
                             accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
                             multiple
                             onChange={(e) => handleGalleryChange(e, field)}
-                            disabled={loadingGallery || (field.value?.length || 0) >= MAX_GALLERY_IMAGES}
+                            disabled={
+                              loadingGallery ||
+                              (field.value?.length || 0) >= MAX_GALLERY_IMAGES
+                            }
                             className="hidden"
                             id="gallery-upload"
                           />
-                          <label htmlFor="gallery-upload" className="flex flex-col items-center justify-center gap-2">
+                          <label
+                            htmlFor="gallery-upload"
+                            className="flex flex-col items-center justify-center gap-2"
+                          >
                             <UploadCloud className="h-10 w-10 text-muted-foreground" />
                             <span className="font-medium">
                               {loadingGallery
                                 ? `Procesando... ${uploadProgress.toFixed(0)}%`
-                                : (field.value?.length || 0) >= MAX_GALLERY_IMAGES
-                                  ? `Máximo ${MAX_GALLERY_IMAGES} imágenes`
-                                  : "Arrastra o selecciona imágenes"}
+                                : (field.value?.length || 0) >=
+                                  MAX_GALLERY_IMAGES
+                                ? `Máximo ${MAX_GALLERY_IMAGES} imágenes`
+                                : "Arrastra o selecciona imágenes"}
                             </span>
                             <span className="text-xs text-muted-foreground">
-                              Formatos: JPG, PNG, WEBP, SVG. Se optimizarán automáticamente
+                              Formatos: JPG, PNG, WEBP, SVG. Se optimizarán
+                              automáticamente
                             </span>
                           </label>
                         </div>
 
-                        {loadingGallery && <Progress value={uploadProgress} className="h-2" />}
+                        {loadingGallery && (
+                          <Progress value={uploadProgress} className="h-2" />
+                        )}
 
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                           {renderGalleryImages(field)}
@@ -539,7 +646,12 @@ const EditSchoolPage = () => {
           </Card>
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => router.back()} disabled={mutation.isPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.back()}
+              disabled={mutation.isPending}
+            >
               Cancelar
             </Button>
             <Button type="submit" disabled={mutation.isPending}>
@@ -548,7 +660,9 @@ const EditSchoolPage = () => {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Guardando...
                 </>
-              ) : "Actualizar Escuela"}
+              ) : (
+                "Actualizar Escuela"
+              )}
             </Button>
           </div>
         </form>
