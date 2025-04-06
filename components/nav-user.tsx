@@ -43,7 +43,7 @@ export function NavUser({
   const handleLogout = async () => {
     try {
       toast.success("Cerrando sesión...");
-      await signOut({ callbackUrl: "/login" }); // ✅ Cierre oficial
+      await signOut({ callbackUrl: "/login" });
     } catch (error: any) {
       toast.error("Error al cerrar sesión: " + error.message);
     }

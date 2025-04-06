@@ -318,6 +318,9 @@ export async function uploadWeekRange(formData: FormData, selectedColumns: strin
     throw new Error("No file uploaded");
   }
 
+  console.log([...formData.entries()]);
+  console.log(file);
+
   const data = new FormData();
   data.append("file", file);
   data.append("selectedColumns", JSON.stringify(selectedColumns));
@@ -343,6 +346,8 @@ export async function uploadWeekRange(formData: FormData, selectedColumns: strin
     if (!response.ok) {
       throw new Error(result?.message || "Error uploading file");
     }
+
+    console.log(response.status);
 
     return {
       status: response.status, // Aquí retornamos el código de estado
