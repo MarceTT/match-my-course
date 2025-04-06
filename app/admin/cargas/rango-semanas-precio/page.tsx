@@ -41,7 +41,7 @@ interface WeekRange {
   HORARIO: string;
   HorarioEspecifico: string;
   HorasDeClase: number;
-  Matricula: number;
+  Matrícula: number;
   Materiales: string;
   HorasDeClaseIndividual: string;
   Lessons: number;
@@ -86,7 +86,7 @@ const RangoSemanasPrecio = () => {
     { key: "RequisitoDeIngreso", header: "Requisito" },
     { key: "HORARIO", header: "Horario" },
     { key: "HorasDeClase", header: "Horas Clase" },
-    { key: "Matricula", header: "Matrícula" },
+    { key: "Matrícula", header: "Matrícula" },
     { key: "Precio", header: "Precio" },
   ];
 
