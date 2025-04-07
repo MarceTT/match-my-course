@@ -1,8 +1,8 @@
 export interface FilterOption {
     id: string;
     label: string;
-    exclusiveGroup?: string; // Si pertenece a un grupo exclusivo de selección
-    lockWeeks?: number; // Si fuerza a bloquear las semanas en un número fijo
+    exclusiveGroup?: string;
+    lockWeeks?: number;
   }
   
   export interface FilterConfig {
@@ -61,13 +61,7 @@ export interface FilterOption {
     },
     cities: {
       label: "Ciudad",
-      options: [
-        "Dublín",
-        "Cork",
-        "Galway",
-        "Limerick",
-        "Todos",
-      ].map((label) => ({
+      options: ["Dublín", "Cork", "Galway", "Limerick", "Todos"].map((label) => ({
         id: normalize(label),
         label,
       })),
@@ -84,32 +78,21 @@ export interface FilterOption {
     },
     type: {
       label: "Tipo de Curso",
-      options: [
-        "Por las mañanas AM",
-        "Por la tardes PM",
-      ].map((label) => ({
+      options: ["AM", "PM"].map((label) => ({
         id: normalize(label),
         label,
       })),
     },
     hours: {
       label: "Horas de Clases",
-      options: [
-        "15 Horas",
-        "18 Horas",
-        "20 Horas",
-      ].map((label) => ({
+      options: ["15", "18", "20"].map((label) => ({
         id: normalize(label),
         label,
       })),
     },
     accreditation: {
       label: "Acreditación Educacional",
-      options: [
-        "Eaquals",
-        "IALC",
-        "ACELS",
-      ].map((label) => ({
+      options: ["Eaquals", "IALC", "ACELS"].map((label) => ({
         id: normalize(label),
         label,
       })),
@@ -125,6 +108,16 @@ export interface FilterOption {
         label,
       })),
     },
+    offers: {
+      label: "Cursos en oferta",
+      options: [
+        {
+          id: normalize("Ver promociones"),
+          label: "Ver promociones",
+        },
+      ],
+    },
   };
   
   export default filtersConfig;
+  

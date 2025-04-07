@@ -12,7 +12,7 @@ import filtersConfig from "@/app/utils/filterConfig";
 const normalizeCourse = (course: string) => {
   return course
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\u0300-\u036f/g, "")
     .toLowerCase()
     .replace(/\s+/g, "-");
 };
@@ -27,8 +27,7 @@ const SchoolSearch = () => {
   const initialFilters: Record<string, any> = {};
 
   Object.entries(filtersConfig).forEach(([key, config]) => {
-    if (key === "courseTypes") {
-      // ✅ Agrega el tipo de curso normalizado al filtro si viene desde la URL
+    if (key === "course") {
       initialFilters[key] = normalizedCourse ? [normalizedCourse] : [];
     } else if (config.type === "slider") {
       initialFilters[key] = config.slider?.default ?? 0;
@@ -39,34 +38,31 @@ const SchoolSearch = () => {
 
   const [filters, setFilters] = useState<Record<string, any>>(initialFilters);
 
-  // 🔁 Actualiza la URL en base a los filtros dinámicamente
   useEffect(() => {
     const params = new URLSearchParams();
-  
+
     if (courseType) {
-      params.set("course", courseType); // Siempre incluye el curso
+      params.set("course", courseType);
     }
-  
+
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = filters[key];
-  
       if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
       } else if (
         !Array.isArray(value) &&
         value !== null &&
         value !== undefined &&
-        value !== 0 && // Evita agregar sliders con valor inicial = 0
+        value !== 0 &&
         config.type === "slider"
       ) {
         params.set(key, String(value));
       }
     });
-  
+
     const queryString = params.toString();
     router.replace(`/school-search?${queryString}`);
   }, [filters, courseType, router]);
-  
 
   const {
     data: schoolsData,
@@ -77,7 +73,7 @@ const SchoolSearch = () => {
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
       <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -96,6 +92,15 @@ const SchoolSearch = () => {
         </div>
       </div>
       <Footer />
+
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="lg:hidden fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
+        >
+          Filtros
+        </button>
+      )}
     </div>
   );
 };
