@@ -58,6 +58,7 @@ export interface Option {
     nationalities?: Nationalities;
     prices: Price[];
     description?: SchoolDescription;
+    lowestPrice?: number;
   }
   
   export interface Installations {

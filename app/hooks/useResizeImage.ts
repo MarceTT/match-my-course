@@ -11,7 +11,9 @@ const compressImage = async (file: File): Promise<File> => {
     maxSizeMB: Math.min(1, originalSizeMB * 0.3), // Más agresivo con imágenes grandes
     maxWidthOrHeight: originalSizeMB > 5 ? 800 : 1200,
     useWebWorker: true,
-    fileType: file.type.includes('png') ? 'image/png' : 'image/webp',
+    fileType: ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
+      ? file.type
+      : 'image/webp',
     initialQuality: 0.7,
   };
 
