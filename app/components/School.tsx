@@ -29,9 +29,9 @@ const School = ({ _id, name, image, location, rating, price, priority }: SchoolC
               loading={priority ? "eager" : "lazy"}
   priority={priority}
             />
-            <button className="absolute bottom-4 right-4 p-2 bg-[#F15368] rounded-full shadow-md">
+            {/* <button className="absolute bottom-4 right-4 p-2 bg-[#F15368] rounded-full shadow-md">
               <LuHeart className="h-5 w-5 text-white fill-white" />
-            </button>
+            </button> */}
           </div>
           <div className="p-6 flex flex-col justify-between flex-grow">
             <h3 className="font-semibold text-xl mb-2">{name}</h3>
