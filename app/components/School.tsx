@@ -11,9 +11,10 @@ interface SchoolCardProps {
     location: string
     rating: number
     price: number
+    priority?: boolean
   }
 
-const School = ({ _id, name, image, location, rating, price }: SchoolCardProps) => {
+const School = ({ _id, name, image, location, rating, price, priority }: SchoolCardProps) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-full">
       <Link href={`/school-detail/${_id}`}>
@@ -25,7 +26,8 @@ const School = ({ _id, name, image, location, rating, price }: SchoolCardProps) 
               width={1000}
               height={1000}
               className="w-full h-64 object-cover"
-              loading="lazy"
+              loading={priority ? "eager" : "lazy"}
+  priority={priority}
             />
             <button className="absolute bottom-4 right-4 p-2 bg-[#F15368] rounded-full shadow-md">
               <LuHeart className="h-5 w-5 text-white fill-white" />
