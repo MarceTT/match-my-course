@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Footer from "../components/common/Footer";
 import Filter from "../components/features/Filter/Filter";
 import SchoolList from "../components/school/SchoolSearchList";
@@ -23,9 +23,9 @@ const SchoolSearch = () => {
   const router = useRouter();
   const courseType = searchParams.get("course") || "";
   const normalizedCourse = normalizeCourse(courseType);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   const initialFilters: Record<string, any> = {};
-
   Object.entries(filtersConfig).forEach(([key, config]) => {
     if (key === "course") {
       initialFilters[key] = normalizedCourse ? [normalizedCourse] : [];
@@ -40,36 +40,45 @@ const SchoolSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-
     if (courseType) {
       params.set("course", courseType);
     }
-
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = filters[key];
       if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
-      } else if (
-        !Array.isArray(value) &&
-        value !== null &&
-        value !== undefined &&
-        value !== 0 &&
-        config.type === "slider"
-      ) {
+      } else if (!Array.isArray(value) && value !== null && value !== undefined && value !== 0 && config.type === "slider") {
         params.set(key, String(value));
       }
     });
-
     const queryString = params.toString();
     router.replace(`/school-search?${queryString}`);
+
+    setTimeout(() => {
+        listRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest",
+          });
+    }, 200);
   }, [filters, courseType, router]);
 
-  const {
-    data: schoolsData,
-    isLoading,
-    isError,
-  } = useFilteredSchools(filters);
+  const handleResetFilters = () => {
+    const resetFilters: Record<string, any> = {};
+    Object.entries(filtersConfig).forEach(([key, config]) => {
+      if (config.type === "slider" && config.slider) {
+        resetFilters[key] = config.slider.default;
+      } else {
+        resetFilters[key] = [];
+      }
+    });
+    setFilters(resetFilters);
+    setTimeout(() => {
+      listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 200);
+  };
 
+  const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
 
   return (
@@ -82,13 +91,16 @@ const SchoolSearch = () => {
             setIsOpen={setIsOpen}
             filters={filters}
             setFilters={setFilters}
+            onResetFilters={handleResetFilters}
           />
-          <SchoolList
-            isFilterOpen={isOpen}
-            schools={schools}
-            isLoading={isLoading}
-            isError={isError}
-          />
+          <div ref={listRef} className="flex-1">
+            <SchoolList
+              isFilterOpen={isOpen}
+              schools={schools}
+              isLoading={isLoading}
+              isError={isError}
+            />
+          </div>
         </div>
       </div>
       <Footer />
@@ -96,7 +108,7 @@ const SchoolSearch = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="lg:hidden fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
+          className="lg:hidden fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
         >
           Filtros
         </button>

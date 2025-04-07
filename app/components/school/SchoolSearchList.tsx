@@ -9,7 +9,12 @@ import Image from "next/image";
 import { SchoolDetails } from "@/app/types/index";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import { Switch } from "@/components/ui/switch";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 interface SchoolListProps {
   isFilterOpen: boolean;
@@ -31,7 +36,7 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
   if (schools.length === 0) return <p className="text-gray-500 text-sm p-4">No se encontraron resultados.</p>;
 
   return (
-    <div className={`flex-1 flex flex-col ${isFilterOpen ? "mt-64" : "mt-0"}`}>
+    <div className={`flex-1 flex flex-col ${isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"}`}>
       <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
         <span className="text-sm text-gray-600 hidden md:inline">Vista</span>
         <div className="hidden md:flex items-center space-x-2">
@@ -68,7 +73,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const hasOffer = offer && offer.trim() !== "" && offer.trim() !== "0";
 
   return (
-    <div className={`relative rounded-lg border bg-white p-4 shadow-sm hover:shadow-md transition-shadow ${viewType === "grid" ? "flex flex-col h-[490px]" : "flex flex-col sm:flex-row"}`}>
+    <div className={`relative rounded-lg border bg-white p-4 shadow-sm hover:shadow-md transition-shadow ${viewType === "grid" ? "flex flex-col h-[500px] justify-between" : "flex flex-col sm:flex-row"}`}>
       {hasOffer && (
         <div className="absolute top-2 right-2 z-10">
           <TooltipProvider>
@@ -127,9 +132,9 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           <Image
             src={school.logo || "/placeholder.svg"}
             alt="Logo"
-            className="object-contain"
-            width={200}
-            height={120}
+            className={`object-contain ${viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""}`}
+            width={viewType === "grid" ? 150 : 200}
+            height={viewType === "grid" ? 80 : 120}
           />
           <div className="text-center sm:text-right mt-4 sm:mt-0">
             <div className="flex items-center space-x-2">

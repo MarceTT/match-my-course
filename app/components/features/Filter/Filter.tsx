@@ -16,9 +16,10 @@ interface FilterProps {
   setIsOpen: (isOpen: boolean) => void;
   filters: Record<string, any>;
   setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  onResetFilters?: () => void;
 }
 
-const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
+const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -46,12 +47,19 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters }: FilterProps) => {
     setFilters((prev) => {
       const current = prev[category] || [];
       const isChecked = current.includes(value);
-      return {
+      const newFilters = {
         ...prev,
         [category]: isChecked
           ? current.filter((item: string) => item !== value)
           : [...current, value],
       };
+  
+      // 🔒 Auto-cerrar el filtro si está en mobile
+      if (typeof window !== "undefined" && window.innerWidth <= 768) {
+        setIsOpen(false);
+      }
+  
+      return newFilters;
     });
   };
 
