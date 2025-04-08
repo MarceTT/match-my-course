@@ -221,6 +221,11 @@ const EditSchoolPage = () => {
       let processedCount = 0;
 
       for (const file of validFiles) {
+        console.log("🟡 Imagen seleccionada:", {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+        });
         try {
           processedCount++;
           setUploadProgress((processedCount / validFiles.length) * 80);
@@ -239,6 +244,12 @@ const EditSchoolPage = () => {
               ).toFixed(2)}MB`,
             }
           );
+
+          console.log("🟢 Imagen comprimida:", {
+            name: compressedFile.name,
+            type: compressedFile.type,
+            size: compressedFile.size,
+          });
 
           newImages.push({
             file: compressedFile,
