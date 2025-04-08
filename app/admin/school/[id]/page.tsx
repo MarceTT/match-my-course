@@ -267,6 +267,8 @@ const EditSchoolPage = () => {
         }
       }
 
+      console.log("✅ Imágenes nuevas:", newImages);
+
       field.onChange(
         [...currentImages, ...newImages].slice(0, MAX_GALLERY_IMAGES)
       );
@@ -406,7 +408,10 @@ const EditSchoolPage = () => {
     <div className="p-4">
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) => mutation.mutate(data))}
+          onSubmit={form.handleSubmit((data) => {
+            console.log("📦 Datos completos que se van a enviar:", data);
+            mutation.mutate(data);
+          })}
           className="space-y-6"
         >
           {/* Sección de Información Básica */}
