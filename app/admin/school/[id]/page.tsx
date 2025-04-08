@@ -52,8 +52,9 @@ const customResolver: Resolver<SchoolEditValues> = async (values) => {
     ...values,
     galleryImages: (values.galleryImages || [])
       .map((img: any) => {
-        if (typeof img === "string" || img instanceof File) return img;
-        if (img?.file instanceof File) return img.file;
+        if (img instanceof File) return img;
+        if (typeof img === "string") return img;
+        if (img?.file && img?.isNew) return img.file;
         return null;
       })
       .filter(Boolean),
@@ -272,6 +273,7 @@ const EditSchoolPage = () => {
       field.onChange(
         [...currentImages, ...newImages].slice(0, MAX_GALLERY_IMAGES)
       );
+      console.log("🧪 field.value después de onChange:", field.value);
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al procesar las imágenes");

@@ -15,6 +15,7 @@ export function useUpdateSchool(
   return useMutation({
     mutationFn: async (data: SchoolEditValues) => {
       const formData = new FormData();
+      console.log("📤 Galería antes de enviar:", data.galleryImages);
       formData.append("name", data.name);
       formData.append("city", data.city);
       formData.append("status", data.status.toString());
