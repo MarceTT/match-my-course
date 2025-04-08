@@ -24,10 +24,10 @@ export function useUpdateSchool(
 
       if (Array.isArray(data.galleryImages)) {
         data.galleryImages.forEach((img) => {
-          if (img instanceof File) {
-            formData.append("galleryImages", img);
-          } else if (img?.file && img?.isNew) {
+          if (img && typeof img === "object" && "file" in img && img.isNew) {
             formData.append("galleryImages", img.file);
+          } else if (img instanceof File) {
+            formData.append("galleryImages", img);
           }
         });
       }
