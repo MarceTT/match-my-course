@@ -56,10 +56,11 @@ export const schoolEditSchema = z.object({
     )
     .refine(
       (files) =>
-        files.every(
-          (file) =>
-            typeof file === "string" || ACCEPTED_IMAGE_TYPES.includes(file?.type)
-        ),
+        files.every((file) => {
+          if (typeof file === "string") return true;
+          if (!file || !file.type) return false; // ⚠️ aseguramos que tenga tipo
+          return ACCEPTED_IMAGE_TYPES.includes(file?.type);
+        }),
       "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg"
     )
     .refine((files) => files.length <= 5, "No puedes subir más de 5 imágenes")
