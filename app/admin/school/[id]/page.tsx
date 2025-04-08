@@ -203,55 +203,47 @@ const EditSchoolPage = () => {
     field: any
   ) => {
     if (!e.target.files || e.target.files.length === 0) return;
-
+  
     try {
       setLoadingGallery(true);
       setUploadProgress(0);
-
+  
       const files = Array.from(e.target.files);
-      const currentImages = field.value || [];
+      const currentImages = form.getValues("galleryImages") || [];
       const availableSlots = MAX_GALLERY_IMAGES - currentImages.length;
-
+  
       if (availableSlots <= 0) {
         toast.warning(`Solo puedes subir hasta ${MAX_GALLERY_IMAGES} imágenes`);
         return;
       }
-
+  
       const validFiles = files.slice(0, availableSlots);
       const newImages: GalleryImage[] = [];
       let processedCount = 0;
-
+  
       for (const file of validFiles) {
         console.log("🟡 Imagen seleccionada:", {
           name: file.name,
           type: file.type,
           size: file.size,
         });
+  
         try {
           processedCount++;
           setUploadProgress((processedCount / validFiles.length) * 80);
-
+  
           const originalSizeMB = file.size / (1024 * 1024);
           toast.info(`Procesando imagen (${originalSizeMB.toFixed(2)}MB)`);
-
+  
           const compressedFile = await compressImage(file);
           const compressedSizeMB = compressedFile.size / (1024 * 1024);
-
-          toast.success(
-            `Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`,
-            {
-              description: `Reducción de ${(
-                originalSizeMB - compressedSizeMB
-              ).toFixed(2)}MB`,
-            }
-          );
-
-          console.log("🟢 Imagen comprimida:", {
-            name: compressedFile.name,
-            type: compressedFile.type,
-            size: compressedFile.size,
+  
+          toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
+            description: `Reducción de ${(
+              originalSizeMB - compressedSizeMB
+            ).toFixed(2)}MB`,
           });
-
+  
           newImages.push({
             file: compressedFile,
             url: URL.createObjectURL(compressedFile),
@@ -262,18 +254,22 @@ const EditSchoolPage = () => {
           toast.error(
             error instanceof Error ? error.message : `Error al procesar imagen`
           );
-          continue;
         } finally {
           setUploadProgress((processedCount / validFiles.length) * 100);
         }
       }
-
-      console.log("✅ Imágenes nuevas:", newImages);
-
-      field.onChange(
-        [...currentImages, ...newImages].slice(0, MAX_GALLERY_IMAGES)
+  
+      const updatedGallery = [...currentImages, ...newImages].slice(
+        0,
+        MAX_GALLERY_IMAGES
       );
-      console.log("🧪 field.value después de onChange:", field.value);
+  
+      console.log("✅ Imágenes nuevas:", newImages);
+      console.log("🧪 Galería final:", updatedGallery);
+  
+      form.setValue("galleryImages", updatedGallery);
+      await form.trigger("galleryImages"); // fuerza validación si estás usando Zod
+  
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al procesar las imágenes");
@@ -283,6 +279,7 @@ const EditSchoolPage = () => {
       e.target.value = "";
     }
   };
+  
 
   const handleRemoveImage = async (
     imageType: "logo" | "mainImage" | "galleryImages",
