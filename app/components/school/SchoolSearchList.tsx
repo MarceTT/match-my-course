@@ -15,6 +15,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
+import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 
 interface SchoolListProps {
   isFilterOpen: boolean;
@@ -69,6 +70,11 @@ interface SchoolCardProps {
 }
 
 function SchoolCard({ school, viewType }: SchoolCardProps) {
+  const prefetchSchool = usePrefetchSchoolDetails();
+  const handlePrefetch = () => {
+    //console.log(`🔄 Prefetching details for school: ${_id}`);
+    prefetchSchool(school._id);
+  };
   const offer = school.prices?.[0]?.horarios?.oferta;
   const hasOffer = offer && offer.trim() !== "" && offer.trim() !== "0";
 
@@ -143,7 +149,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 €{school.prices?.[0]?.horarios?.precio?.toLocaleString() || "0"}
               </div>
             </div>
-            <Link href={`/school-detail/${school._id}`}>
+            <Link href={`/school-detail/${school._id}`} onMouseEnter={handlePrefetch} onTouchStart={handlePrefetch}>
               <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
                 Ver escuela
               </Button>

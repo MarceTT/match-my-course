@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import { nunito } from "../ui/fonts";
 import Link from "next/link";
+import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 
 interface SchoolCardProps {
   _id: string;
@@ -21,13 +22,18 @@ const School = ({
   image,
   location,
   rating,
-  price,
   priority,
   lowestPrice,
 }: SchoolCardProps) => {
+  const prefetchSchool = usePrefetchSchoolDetails();
+  const handlePrefetch = () => {
+    //console.log(`🔄 Prefetching details for school: ${_id}`);
+    prefetchSchool(_id);
+  };
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-full hover:shadow-lg transition-shadow">
-      <Link href={`/school-detail/${_id}`}>
+      <Link href={`/school-detail/${_id}`} onMouseEnter={handlePrefetch}>
         <div className="block">
           <div className="relative">
             <Image

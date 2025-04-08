@@ -19,6 +19,24 @@ interface FilterProps {
   onResetFilters?: () => void;
 }
 
+const visaCities = [
+  "Dublín", "Bray", "Galway", "Schull", "Naas", "Tralee", "Cork",
+  "Ennis", "Donegal", "Drogheda", "Limerick", "Athlone", "Waterford",
+  "Killarney", "Sligo", "Cahersiveen", "Wexford"
+];
+
+const normalize = (str: string) =>
+  str
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/\(.*?\)/g, "")
+    .replace(/\+/g, "-")
+    .replace(/--+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/^-+|-+$/g, "");
+
 const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
   const searchParams = useSearchParams();
 
@@ -53,12 +71,11 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
           ? current.filter((item: string) => item !== value)
           : [...current, value],
       };
-  
-      // 🔒 Auto-cerrar el filtro si está en mobile
+
       if (typeof window !== "undefined" && window.innerWidth <= 768) {
         setIsOpen(false);
       }
-  
+
       return newFilters;
     });
   };
@@ -137,9 +154,14 @@ function FilterContent({
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       {Object.entries(filtersConfig).map(([key, config]) => {
+        const isCities = key === "cities";
+        const options =
+          isCities && isVisaCourseSelected
+            ? visaCities.map((label) => ({ id: normalize(label), label }))
+            : config.options;
+
         if (config.type === "slider" && config.slider) {
           const value = filters[key] || config.slider.default;
-
           return (
             <FilterSection title={config.label} key={key}>
               <SliderSection
@@ -156,7 +178,7 @@ function FilterContent({
 
         return (
           <FilterSection title={config.label} key={key}>
-            {config.options?.map(({ id, label }) => {
+            {options?.map(({ id, label }) => {
               const disabled =
                 key === "course" &&
                 ((isVisaCourseSelected && id !== "ingles-visa-de-trabajo") ||
@@ -310,11 +332,7 @@ function SliderSection({
       <div className="flex items-center justify-center">
         <div className="relative w-24 h-24 flex items-center justify-center">
           <div className="absolute inset-0 bg-primary/10 rounded-full" />
-          <div
-            className={cn(
-              "absolute inset-2 bg-primary/20 rounded-full transition-all duration-300",
-              "flex items-center justify-center"
-            )}
+          <div className={cn("absolute inset-2 bg-primary/20 rounded-full transition-all duration-300", "flex items-center justify-center")}
           >
             <div className="text-center">
               <span className="text-3xl font-bold">{localValue}</span>
