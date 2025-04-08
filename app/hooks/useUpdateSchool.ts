@@ -32,6 +32,18 @@ export function useUpdateSchool(
         });
       }
 
+      for (let pair of formData.entries()) {
+        if (pair[1] instanceof File) {
+          console.log(`📦 ${pair[0]}:`, {
+            name: (pair[1] as File).name,
+            type: (pair[1] as File).type,
+            size: (pair[1] as File).size,
+          });
+        } else {
+          console.log(`📦 ${pair[0]}: ${pair[1]}`);
+        }
+      }
+
       const response = await axiosInstance.put(
         `/schools/${schoolId}`,
         formData,
