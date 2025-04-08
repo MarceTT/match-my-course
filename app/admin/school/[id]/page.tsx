@@ -50,14 +50,11 @@ type GalleryImage = {
 const customResolver: Resolver<SchoolEditValues> = async (values) => {
   const transformedValues = {
     ...values,
-    galleryImages: (values.galleryImages || [])
-      .map((img: any) => {
-        if (img instanceof File) return img;
-        if (typeof img === "string") return img;
-        if (img?.file && img?.isNew) return img.file;
-        return null;
-      })
-      .filter(Boolean),
+    galleryImages: values.galleryImages?.map((img: any) => {
+      if (img instanceof File) return img;
+      if (img?.file && img?.isNew) return img.file;
+      return img; // Mantener la URL si es string de imagen existente
+    }) || [],
   };
 
   try {
