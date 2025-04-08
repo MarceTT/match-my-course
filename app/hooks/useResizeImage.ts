@@ -18,7 +18,8 @@ const compressImage = async (file: File): Promise<File> => {
   };
 
   try {
-    return await imageCompression(file, options);
+    const compressed = await imageCompression(file, options);
+    return new File([compressed], file.name, { type: file.type });
   } catch (error) {
     console.error("Error al comprimir:", error);
     throw new Error("No se pudo optimizar la imagen. Intente con otro archivo");
