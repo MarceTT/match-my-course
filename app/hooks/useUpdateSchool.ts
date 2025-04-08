@@ -24,13 +24,24 @@ export function useUpdateSchool(
       if (isFileOrBlob(data.mainImage)) formData.append("mainImage", data.mainImage);
 
       if (Array.isArray(data.galleryImages)) {
-        data.galleryImages.forEach((img) => {
-          if (img && typeof img === "object" && "file" in img && img.isNew) {
-            formData.append("galleryImages", img.file);
-          } else if (img instanceof File) {
-            formData.append("galleryImages", img);
-          }
+        const galleryToSend = data.galleryImages.filter((img: any) => {
+          return (
+            img &&
+            (img instanceof File || (img?.file instanceof File && img?.isNew))
+          );
         });
+      
+        console.log("📤 Galería antes de enviar:", galleryToSend);
+      
+        for (const img of galleryToSend) {
+          const fileToSend =
+            img instanceof File ? img : img?.file instanceof File ? img.file : null;
+      
+          if (fileToSend) {
+            formData.append("galleryImages", fileToSend);
+            console.log("📦 Enviando imagen:", fileToSend.name);
+          }
+        }
       }
 
       for (let pair of formData.entries()) {
