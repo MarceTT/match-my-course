@@ -261,9 +261,6 @@ const EditSchoolPage = () => {
         MAX_GALLERY_IMAGES
       );
   
-      console.log("✅ Imágenes nuevas:", newImages);
-      console.log("🧪 Galería final:", updatedGallery);
-  
       form.setValue("galleryImages", updatedGallery);
       await form.trigger("galleryImages"); // fuerza validación si estás usando Zod
   
