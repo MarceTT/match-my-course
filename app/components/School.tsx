@@ -27,13 +27,12 @@ const School = ({
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => {
-    //console.log(`🔄 Prefetching details for school: ${_id}`);
     prefetchSchool(_id);
   };
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-full hover:shadow-lg transition-shadow">
-      <Link href={`/school-detail/${_id}`} onMouseEnter={handlePrefetch}>
+      <Link href={`/school-detail/${_id}`} onMouseEnter={handlePrefetch} onTouchStart={handlePrefetch}>
         <div className="block">
           <div className="relative">
             <Image

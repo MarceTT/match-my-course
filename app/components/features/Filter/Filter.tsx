@@ -9,7 +9,12 @@ import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import filtersConfig from "@/app/utils/filterConfig";
 import { useSearchParams } from "next/navigation";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FilterProps {
   isOpen: boolean;
@@ -20,9 +25,23 @@ interface FilterProps {
 }
 
 const visaCities = [
-  "Dublín", "Bray", "Galway", "Schull", "Naas", "Tralee", "Cork",
-  "Ennis", "Donegal", "Drogheda", "Limerick", "Athlone", "Waterford",
-  "Killarney", "Sligo", "Cahersiveen", "Wexford"
+  "Dublín",
+  "Bray",
+  "Galway",
+  "Schull",
+  "Naas",
+  "Tralee",
+  "Cork",
+  "Ennis",
+  "Donegal",
+  "Drogheda",
+  "Limerick",
+  "Athlone",
+  "Waterford",
+  "Killarney",
+  "Sligo",
+  "Cahersiveen",
+  "Wexford",
 ];
 
 const normalize = (str: string) =>
@@ -37,11 +56,24 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
-const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
+const Filter = ({
+  isOpen,
+  setIsOpen,
+  filters,
+  setFilters,
+  onResetFilters,
+}: FilterProps) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const defaultKeys = ["course", "cities", "type", "hours", "accreditation", "certification"];
+    const defaultKeys = [
+      "course",
+      "cities",
+      "type",
+      "hours",
+      "accreditation",
+      "certification",
+    ];
     const updatedFilters: Record<string, any> = { ...filters };
 
     defaultKeys.forEach((key) => {
@@ -65,25 +97,33 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
     setFilters((prev) => {
       const current = prev[category] || [];
       const isChecked = current.includes(value);
-      const newFilters = {
+      let newValues = isChecked
+        ? current.filter((item: string) => item !== value)
+        : [...current.filter((item: string) => item !== "todos"), value];
+
+      const updatedFilters = {
         ...prev,
-        [category]: isChecked
-          ? current.filter((item: string) => item !== value)
-          : [...current, value],
+        [category]: newValues,
       };
 
-      if (typeof window !== "undefined" && window.innerWidth <= 768) {
-        setIsOpen(false);
+      if (category === "course" && newValues.length === 0) {
+        updatedFilters.course = ["todos"];
+        updatedFilters.weeks = [1, 52];
+        updatedFilters.cities = [];
+        updatedFilters.hours = [];
+        updatedFilters.type = [];
+        updatedFilters.accreditation = [];
+        updatedFilters.certification = [];
       }
 
-      return newFilters;
+      return updatedFilters;
     });
   };
 
   const handleSliderChange = (category: string, value: number[]) => {
     setFilters((prev) => ({
       ...prev,
-      [category]: value[0],
+      [category]: value,
     }));
   };
 
@@ -92,6 +132,8 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
     Object.entries(filtersConfig).forEach(([key, config]) => {
       if (config.type === "slider" && config.slider) {
         resetFilters[key] = config.slider.default;
+      } else {
+        resetFilters[key] = [];
       }
     });
     setFilters(resetFilters);
@@ -101,7 +143,10 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
     return Object.entries(filtersConfig).every(([key, config]) => {
       const currentValue = filters[key];
       if (config.type === "slider" && config.slider) {
-        return currentValue === config.slider.default;
+        return Array.isArray(currentValue)
+          ? currentValue[0] === config.slider.min &&
+              currentValue[1] === config.slider.max
+          : currentValue === config.slider.default;
       } else {
         return !currentValue || currentValue.length === 0;
       }
@@ -149,7 +194,12 @@ function FilterContent({
   isDefaultFilters: () => boolean;
 }) {
   const selectedCourse = filters.course || [];
-  const isVisaCourseSelected = selectedCourse.includes("ingles-visa-de-trabajo");
+  const isVisaCourseSelected = selectedCourse.includes(
+    "ingles-visa-de-trabajo"
+  );
+  const actualSelectedCourses = selectedCourse.filter(
+    (id: string) => id !== "todos"
+  );
 
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
@@ -162,10 +212,11 @@ function FilterContent({
 
         if (config.type === "slider" && config.slider) {
           const value = filters[key] || config.slider.default;
+
           return (
             <FilterSection title={config.label} key={key}>
               <SliderSection
-                value={isVisaCourseSelected ? 25 : value}
+                value={value}
                 config={config.slider}
                 onChange={(val) => {
                   if (!isVisaCourseSelected) onSliderChange(key, val);
@@ -182,7 +233,9 @@ function FilterContent({
               const disabled =
                 key === "course" &&
                 ((isVisaCourseSelected && id !== "ingles-visa-de-trabajo") ||
-                  (!isVisaCourseSelected && id === "ingles-visa-de-trabajo" && selectedCourse.length > 0));
+                  (!isVisaCourseSelected &&
+                    id === "ingles-visa-de-trabajo" &&
+                    actualSelectedCourses.length > 0));
               return (
                 <TooltipProvider key={id}>
                   <Tooltip delayDuration={200}>
@@ -199,7 +252,10 @@ function FilterContent({
                     </TooltipTrigger>
                     {disabled && (
                       <TooltipContent side="right">
-                        <p>Solo se puede seleccionar un curso de visa o cursos generales</p>
+                        <p>
+                          Solo se puede seleccionar un curso de visa o cursos
+                          generales
+                        </p>
                       </TooltipContent>
                     )}
                   </Tooltip>
@@ -254,7 +310,12 @@ function CheckboxItem({
 }) {
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} />
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={onChange}
+        disabled={disabled}
+      />
       <label htmlFor={id} className="text-sm">
         {label}
       </label>
@@ -268,81 +329,41 @@ function SliderSection({
   onChange,
   disabled,
 }: {
-  value: number;
+  value: number[] | number;
   config: { min: number; max: number; step: number };
   onChange: (value: number[]) => void;
   disabled?: boolean;
 }) {
-  const [localValue, setLocalValue] = useState<number>(value);
+  const [localValue, setLocalValue] = useState<number[]>(
+    Array.isArray(value) ? value : [config.min, config.max]
+  );
 
   useEffect(() => {
-    setLocalValue(value);
+    if (Array.isArray(value)) {
+      setLocalValue(value);
+    }
   }, [value]);
 
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            const val = Math.max(config.min, localValue - config.step);
-            setLocalValue(val);
-            onChange([val]);
-          }}
-          disabled={localValue <= config.min || disabled}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-
-        <div className="relative flex-1 mx-4">
-          <Slider
-            value={[localValue]}
-            max={config.max}
-            min={config.min}
-            step={config.step}
-            onValueChange={(val) => {
-              setLocalValue(val[0]);
-              onChange(val);
-            }}
-            className="my-5"
-            disabled={disabled}
-          />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>{config.min}</span>
-            <span>{Math.round((config.min + config.max) / 2)}</span>
-            <span>{config.max}</span>
-          </div>
+    <div className="px-2">
+      <Slider
+        value={localValue}
+        min={config.min}
+        max={config.max}
+        step={config.step}
+        onValueChange={(val) => setLocalValue(val)}
+        onValueCommit={(val) => onChange(val)}
+        className="w-full"
+        disabled={disabled}
+      />
+      <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+        <div className="bg-primary text-white px-2 py-1 rounded shadow">
+          {localValue[0]} semanas
         </div>
-
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            const val = Math.min(config.max, localValue + config.step);
-            setLocalValue(val);
-            onChange([val]);
-          }}
-          disabled={localValue >= config.max || disabled}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-
-      <div className="flex items-center justify-center">
-        <div className="relative w-24 h-24 flex items-center justify-center">
-          <div className="absolute inset-0 bg-primary/10 rounded-full" />
-          <div className={cn("absolute inset-2 bg-primary/20 rounded-full transition-all duration-300", "flex items-center justify-center")}
-          >
-            <div className="text-center">
-              <span className="text-3xl font-bold">{localValue}</span>
-              <p className="text-xs font-medium mt-1">
-                {localValue === 1 ? "Semana" : "Semanas"}
-              </p>
-            </div>
-          </div>
+        <div className="bg-primary text-white px-2 py-1 rounded shadow">
+          {localValue[1]} semanas
         </div>
       </div>
-    </>
+    </div>
   );
 }

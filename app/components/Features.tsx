@@ -6,19 +6,23 @@ const Features = () => {
     const features = [
         {
           image: '/features-images/asesorias_gratis_PRINCIPAL.svg',
-          text: 'Asesores gratuitas'
+          text: 'Asesores gratuitas',
+          url: '/servicios'
         },
         {
           image: '/features-images/COMO_FUNCIONA_PRINCIPAL.svg',
-          text: 'Requisitos visas de estudio'
+          text: 'Requisitos visas de estudio',
+          url: '/school-search?course=todos'
         },
         {
           image: '/features-images/MATCH_PRINCIPAL.svg',
-          text: 'Busca una escuela a tu medida'
+          text: 'Busca una escuela a tu medida',
+          url: '/servicios'
         },
         {
           image: '/features-images/BENEFICIOS_PRINCIPAL.svg',
-          text: 'Preparación e inserción en el extranjero'
+          text: 'Preparación e inserción en el extranjero',
+          url: '/servicios'
         }
       ]
   return (
@@ -37,7 +41,7 @@ const Features = () => {
                 alt={feature.text}
               />
             </div>
-            <p className="text-md text-gray-700 lg:mt-2">{feature.text}</p>
+            <p className="text-md text-gray-700 lg:mt-2"><a href={feature.url}>{feature.text}</a></p>
           </div>
         ))}
       </div>

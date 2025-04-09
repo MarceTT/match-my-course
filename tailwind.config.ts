@@ -14,7 +14,9 @@ export default {
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
+  				foreground: 'hsl(var(--card-foreground))',
+				sliderTrack: "#d1d5db",
+				sliderThumb: "#3b82f6",
   			},
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
@@ -74,7 +76,8 @@ export default {
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			sm: 'calc(var(--radius) - 4px)',
+			full: "9999px",
   		}
   	}
   },

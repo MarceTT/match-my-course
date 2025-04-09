@@ -13,7 +13,7 @@ export interface FilterConfig {
     min: number;
     max: number;
     step: number;
-    default: number;
+    default: number | [number, number];
   };
 }
 
@@ -54,6 +54,10 @@ const filtersConfig: Record<string, FilterConfig> = {
         exclusiveGroup: "business-or-work",
         lockWeeks: 25,
       },
+      {
+        label: "Ver todos los cursos",
+        id: "todos",
+      },
     ].map((opt) => ({
       id: normalize(opt.label),
       ...opt,
@@ -75,7 +79,7 @@ const filtersConfig: Record<string, FilterConfig> = {
       min: 1,
       max: 52,
       step: 1,
-      default: 0,
+      default: [1, 52],
     },
   },
 
