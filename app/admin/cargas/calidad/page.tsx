@@ -184,14 +184,9 @@ const CalidadPage = () => {
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
-
     if (acceptedFiles.length === 0) return;
 
     const selectedFile = acceptedFiles[0];
-    if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
-      setError("Por favor seleccione un archivo Excel válido (.xlsx o .xls)");
-      return;
-    }
 
     setFile(selectedFile);
 
@@ -200,35 +195,32 @@ const CalidadPage = () => {
       if (!event.target?.result) return;
       const data = new Uint8Array(event.target.result as ArrayBuffer);
       const workbook = XLSX.read(data, { type: "array" });
-      
-      // Buscar hoja CALIDAD
-      const sheetName = workbook.SheetNames.find(name => name.toLowerCase().includes("calidad")) || workbook.SheetNames[0];
+      const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
+      let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
 
-      if (!jsonData || jsonData.length === 0) {
-        setError("El archivo Excel está vacío o mal formateado.");
-        return;
-      }
+      jsonData = jsonData.filter((row) => row.some((cell: any) => cell !== undefined && cell !== null && cell !== ""));
 
-      const columnCount: Record<string, number> = {};
-      const uniqueColumns: string[] = jsonData[0].map((col: any) => col?.toString().trim());
+      const firstRow = jsonData[0];
 
-
-      setColumns(uniqueColumns);
-      setSelectedColumns(uniqueColumns);
+      setColumns(firstRow);
+      setSelectedColumns(firstRow);
     };
 
     reader.readAsArrayBuffer(selectedFile);
-  }, [selectedColumns]);
+  }, []);
 
   const handleColumnSelection = (column: string) => {
     setSelectedColumns((prev) => prev.includes(column) ? prev.filter((col) => col !== column) : [...prev, column]);
   };
 
   const toggleSelectAll = () => {
-    setSelectedColumns(selectedColumns.length === columns.length ? [] : [...columns]);
+    if (selectedColumns.length === columns.length) {
+      setSelectedColumns([]);
+    } else {
+      setSelectedColumns(columns);
+    }
   };
 
   const handleUpload = () => {
@@ -239,8 +231,6 @@ const CalidadPage = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
     uploadMutation.mutate(formData);
   };
 
