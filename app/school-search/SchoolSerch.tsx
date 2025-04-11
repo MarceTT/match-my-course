@@ -42,14 +42,14 @@ const SchoolSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-
+  
     if (courseType) {
       params.set("course", courseType);
     }
-
+  
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = debouncedFilters[key];
-
+  
       if (Array.isArray(value) && key === "weeks" && value.length === 2) {
         const [min, max] = value;
         const isDefault = min === config.slider?.min && max === config.slider?.max;
@@ -69,18 +69,22 @@ const SchoolSearch = () => {
         params.set(key, String(value));
       }
     });
-
+  
     const queryString = params.toString();
     router.replace(`/school-search?${queryString}`);
-
-    setTimeout(() => {
-      listRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-        inline: "nearest",
-      });
-    }, 200);
+  
+    // solo scroll si el usuario está muy abajo
+    if (window.scrollY > 500) {
+      setTimeout(() => {
+        listRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
+      }, 200);
+    }
   }, [debouncedFilters, courseType, router]);
+  
 
   const handleResetFilters = () => {
     const resetFilters: Record<string, any> = {

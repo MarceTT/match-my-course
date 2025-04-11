@@ -17,16 +17,32 @@ export interface FilterConfig {
   };
 }
 
-const normalize = (str: string, toLower = true) =>
-  str
+// Normaliza general (sin guiones)
+const normalize = (str: string, toLower = true) => {
+  const normalized = str
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .replace(/\(.*?\)/g, "")
     .replace(/\+/g, "-")
     .replace(/--+/g, "-")
     .replace(/[^a-zA-Z0-9-]/g, "")
-    .replace(/^-+|-+$/g, "")
-    [toLower ? 'toLowerCase' : 'toString']();
+    .replace(/^-+|-+$/g, "");
+
+  return toLower ? normalized.toLowerCase() : normalized;
+};
+
+// Normaliza para url con guiones
+const normalizeUrl = (str: string) =>
+  str
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/\(.*?\)/g, "")
+    .replace(/\+/g, "-")
+    .replace(/--+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/^-+|-+$/g, "");
 
 const filtersConfig: Record<string, FilterConfig> = {
   course: {
@@ -39,7 +55,7 @@ const filtersConfig: Record<string, FilterConfig> = {
       { label: "Inglés + visa de trabajo (6 meses)", exclusiveGroup: "business-or-work", lockWeeks: 25 },
       { label: "Ver todos los cursos", id: "todos" },
     ].map((opt) => ({
-      id: normalize(opt.label),
+      id: opt.id || normalizeUrl(opt.label),  // SOLO aquí usamos normalizeUrl
       ...opt,
     })),
   },
@@ -66,7 +82,7 @@ const filtersConfig: Record<string, FilterConfig> = {
   type: {
     label: "Tipo de Curso",
     options: ["AM", "PM"].map((label) => ({
-      id: normalize(label, false), // sin lowercase
+      id: normalize(label, false),
       label,
     })),
   },

@@ -56,6 +56,7 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
+
 const Filter = ({
   isOpen,
   setIsOpen,
@@ -66,59 +67,56 @@ const Filter = ({
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const defaultKeys = [
-      "course",
-      "cities",
-      "type",
-      "hours",
-      "accreditation",
-      "certification",
-    ];
-    const updatedFilters: Record<string, any> = { ...filters };
-
-    defaultKeys.forEach((key) => {
-      const value = searchParams.get(key);
-      if (value && !updatedFilters[key]?.length) {
-        const match = filtersConfig[key]?.options?.find(
-          (opt) =>
-            opt.id === value ||
-            opt.label.toLowerCase() === decodeURIComponent(value).toLowerCase()
-        );
-        if (match) {
-          updatedFilters[key] = [match.id];
-        }
-      }
-    });
-
-    setFilters(updatedFilters);
-  }, [searchParams, setFilters]);
-
-  const handleCheckboxChange = (category: string, value: string) => {
+    const courseFromUrl = searchParams.get("course") || "todos";
+  
     setFilters((prev) => {
-      const current = prev[category] || [];
-      const isChecked = current.includes(value);
-      let newValues = isChecked
-        ? current.filter((item: string) => item !== value)
-        : [...current.filter((item: string) => item !== "todos"), value];
-
-      const updatedFilters = {
-        ...prev,
-        [category]: newValues,
-      };
-
-      if (category === "course" && newValues.length === 0) {
-        updatedFilters.course = ["todos"];
-        updatedFilters.weeks = [1, 52];
+      const updatedFilters = { ...prev };
+  
+      if (!prev.course?.includes(normalize(courseFromUrl))) {
+        updatedFilters.course = [normalize(courseFromUrl)];
         updatedFilters.cities = [];
         updatedFilters.hours = [];
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
         updatedFilters.certification = [];
       }
+  
+      return updatedFilters;
+    });
+  }, [searchParams, setFilters]);
+  
+  
+  
 
+  const handleCheckboxChange = (category: string, value: string) => {
+    setFilters((prev) => {
+      const current = prev[category] || [];
+      const isChecked = current.includes(value);
+  
+      const updatedFilters = { ...prev };
+  
+      if (category === "course") {
+        updatedFilters.course = isChecked ? ["todos"] : [value];
+  
+        if (!isChecked) {
+          updatedFilters.cities = [];
+          updatedFilters.hours = [];
+          updatedFilters.type = [];
+          updatedFilters.accreditation = [];
+          updatedFilters.certification = [];
+        }
+      } else {
+        updatedFilters[category] = isChecked
+          ? current.filter((item: string) => item !== value)
+          : [...current.filter((item: string) => item !== "todos"), value];
+      }
+  
       return updatedFilters;
     });
   };
+  
+  
+  
 
   const handleSliderChange = (category: string, value: number[]) => {
     setFilters((prev) => ({
