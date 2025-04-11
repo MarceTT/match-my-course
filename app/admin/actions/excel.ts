@@ -90,48 +90,36 @@ export async function uploadExcelCalidad(formData: FormData, selectedColumns: st
   const token = await refreshAccessToken();
 
   if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
+    throw new Error("No autorizado");
   }
 
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
+  // Crear nuevo FormData para evitar posibles problemas
+  const uploadData = new FormData();
+  uploadData.append("file", formData.get("file") as File);
+  
+  // Si necesitas enviar selectedColumns, mejor como header
+  const headers = new Headers();
+  headers.append("Authorization", `Bearer ${token}`);
+  headers.append("X-Selected-Columns", JSON.stringify(selectedColumns));
 
-  console.log([...data.entries()]);
-  console.log(file);
-
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
-
-
-
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
+      method: "POST",
+      headers,
+      body: uploadData,
+      credentials: "include",
+    });
 
     if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.message || "Error uploading file");
     }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
+    return await response.json();
+  } catch (error) {
+    console.error("Upload error:", error);
+    throw error;
+  }
 }
 
 export async function uploadExcelDetalleEscuela(formData: FormData, selectedColumns: string[]) {
