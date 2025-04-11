@@ -41,8 +41,13 @@ interface QualityItem {
     IALC: boolean;
   };
   accreditations: {
+    ILEP: string;
+    QualityEnglish: string;
+    EEI: string;
+    SelectIreland: string;
     Eaquals: string;
     IALC: string;
+    ACELS: string;
   };
   trayectoria: number;
   __v: number;
@@ -64,6 +69,17 @@ const CalidadPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const cleanHeader = (header: string) => {
+    return header
+      .toString()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9_]/g, "")
+      .toLowerCase();
+  };
 
   const {
     data: uploadedFiles,
@@ -168,15 +184,15 @@ const CalidadPage = () => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
     if (acceptedFiles.length === 0) return;
-
+  
     const selectedFile = acceptedFiles[0];
     if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
       setError("Por favor seleccione un archivo Excel válido (.xlsx o .xls)");
       return;
     }
-
+  
     setFile(selectedFile);
-
+  
     const reader = new FileReader();
     reader.onload = (event) => {
       if (!event.target?.result) return;
@@ -184,41 +200,33 @@ const CalidadPage = () => {
       const workbook = XLSX.read(data, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      let jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        header: 1,
-      }) as any[];
-
-      jsonData = jsonData.filter((row) =>
-        row.some(
-          (cell: any) => cell !== undefined && cell !== null && cell !== ""
-        )
-      );
-
-      let columnNames = jsonData[0] as string[];
-
-      // Normalizar nombres de columnas y evitar duplicados
-      const uniqueColumns: string[] = [];
+  
+      let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
+  
+      jsonData = jsonData.filter((row) => row.some((cell: any) => cell !== undefined && cell !== null && cell !== ""));
+  
       const columnCount: Record<string, number> = {};
-
-      columnNames.forEach((col) => {
-        let cleanCol = col.trim().replace(/\s+/g, "_"); // Normalizar nombre
-
+  
+      const uniqueColumns: string[] = jsonData[0].map((col: any) => {
+        let cleanCol = cleanHeader(col);
+  
         if (columnCount[cleanCol] !== undefined) {
           columnCount[cleanCol]++;
           cleanCol = `${cleanCol}_${columnCount[cleanCol]}`;
         } else {
           columnCount[cleanCol] = 0;
         }
-
-        uniqueColumns.push(cleanCol);
+  
+        return cleanCol;
       });
-
+  
       setColumns(uniqueColumns);
       setSelectedColumns(uniqueColumns);
     };
-
+  
     reader.readAsArrayBuffer(selectedFile);
   }, []);
+  
 
   const handleColumnSelection = (column: string) => {
     setSelectedColumns((prev) =>
