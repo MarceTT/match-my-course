@@ -101,6 +101,9 @@ export async function uploadExcelCalidad(formData: FormData, selectedColumns: st
   data.append("file", file);
   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
+  console.log([...data.entries()]);
+  console.log(file);
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
     method: "POST",
     headers: {
