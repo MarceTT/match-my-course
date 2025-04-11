@@ -169,7 +169,8 @@ const CalidadPage = () => {
   ];
 
   const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) => uploadExcelCalidad(formData),
+    mutationFn: (formData: FormData) =>
+      uploadExcelCalidad(formData, selectedColumns),
     onSuccess: () => {
       toast.success("Se insertaron los registros correctamente.");
       setFile(null);
