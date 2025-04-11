@@ -76,8 +76,9 @@ const CalidadPage = () => {
       .normalize("NFD")
       .replace(/\p{Diacritic}/gu, "")
       .trim()
-      .replace(/\s+/g, "_")
-      .replace(/[^a-zA-Z0-9_]/g, "")
+      .replace(/[^a-zA-Z0-9\s]/g, "")  // Saca simbolos raros
+      .replace(/\s+/g, "_")               // Espacios por underscore
+      .replace(/__+/g, "_")               // Saca dobles underscores
       .toLowerCase();
   };
 
@@ -209,14 +210,14 @@ const CalidadPage = () => {
   
       const uniqueColumns: string[] = jsonData[0].map((col: any) => {
         let cleanCol = cleanHeader(col);
-  
+      
         if (columnCount[cleanCol] !== undefined) {
           columnCount[cleanCol]++;
           cleanCol = `${cleanCol}_${columnCount[cleanCol]}`;
         } else {
           columnCount[cleanCol] = 0;
         }
-  
+      
         return cleanCol;
       });
   
