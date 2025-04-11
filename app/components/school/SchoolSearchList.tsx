@@ -98,7 +98,6 @@ interface SchoolCardProps {
 function SchoolCard({ school, viewType }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => {
-    //console.log(`🔄 Prefetching details for school: ${_id}`);
     prefetchSchool(school._id);
   };
   const offer = school.prices?.[0]?.horarios?.oferta;
@@ -181,27 +180,45 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           </Button> */}
         </div>
 
-        {school.description?.añoFundacion && (
-          <div className="inline-flex items-center gap-2 text-sm text-gray-700 bg-gray-100 px-2 py-1 rounded-full w-fit">
-            <svg
-              className="h-4 w-4 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>
-              {new Date().getFullYear() - school.description.añoFundacion} años
-              de trayectoria
-            </span>
-          </div>
-        )}
+        <div className="mt-2 flex flex-col gap-2 text-sm text-gray-700">
+          {school.city && (
+            <p className="font-semibold text-base">
+              Ciudad: <span className="text-gray-900">{school.city}</span>
+            </p>
+          )}
+
+          {school.description?.añoFundacion &&
+            (() => {
+              const antiguedad =
+                new Date().getFullYear() - school.description.añoFundacion;
+              return (
+                <span
+                  className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
+                    antiguedad < 2
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  {antiguedad < 2
+                    ? "Nueva escuela"
+                    : `${antiguedad} años de trayectoria`}
+                </span>
+              );
+            })()}
+        </div>
 
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between">
           <Image
