@@ -169,8 +169,7 @@ const CalidadPage = () => {
   ];
 
   const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelCalidad(formData, selectedColumns),
+    mutationFn: (formData: FormData) => uploadExcelCalidad(formData),
     onSuccess: () => {
       toast.success("Se insertaron los registros correctamente.");
       setFile(null);
@@ -182,9 +181,8 @@ const CalidadPage = () => {
     },
   });
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setError(null);
-
     if (acceptedFiles.length === 0) return;
 
     const selectedFile = acceptedFiles[0];
@@ -197,34 +195,29 @@ const CalidadPage = () => {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      if (!event.target?.result) return;
-      const data = new Uint8Array(event.target.result as ArrayBuffer);
+      const data = new Uint8Array(event.target?.result as ArrayBuffer);
       const workbook = XLSX.read(data, { type: "array" });
-      
-      // Buscar hoja CALIDAD
-      const sheetName = workbook.SheetNames.find(name => name.toLowerCase().includes("calidad")) || workbook.SheetNames[0];
+      const sheetName = workbook.SheetNames.find(name => 
+        name.toLowerCase().includes("calidad")) || workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
-
       if (!jsonData || jsonData.length === 0) {
         setError("El archivo Excel está vacío o mal formateado.");
         return;
       }
 
-      const columnCount: Record<string, number> = {};
       const uniqueColumns: string[] = jsonData[0].map((col: any) => col?.toString().trim());
-
-
       setColumns(uniqueColumns);
       setSelectedColumns(uniqueColumns);
     };
-
     reader.readAsArrayBuffer(selectedFile);
-  }, [selectedColumns]);
+  }, []);
 
   const handleColumnSelection = (column: string) => {
-    setSelectedColumns((prev) => prev.includes(column) ? prev.filter((col) => col !== column) : [...prev, column]);
+    setSelectedColumns((prev) => 
+      prev.includes(column) ? prev.filter((col) => col !== column) : [...prev, column]
+    );
   };
 
   const toggleSelectAll = () => {

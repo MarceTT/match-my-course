@@ -86,27 +86,27 @@ export async function uploadExcelDetalleAlojamiento(formData: FormData, selected
     };
 }
 
-export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
+export async function uploadExcelCalidad(formData: FormData) {
   const token = await refreshAccessToken();
 
   if (!token) {
     throw new Error("No autorizado");
   }
 
-  // Crear nuevo FormData para evitar posibles problemas
-  const uploadData = new FormData();
-  uploadData.append("file", formData.get("file") as File);
-  
-  // Si necesitas enviar selectedColumns, mejor como header
+  // Verificar contenido del FormData antes de enviar
+  const file = formData.get("file") as File;
+  if (!file) {
+    throw new Error("No file uploaded");
+  }
+
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${token}`);
-  headers.append("X-Selected-Columns", JSON.stringify(selectedColumns));
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
       method: "POST",
       headers,
-      body: uploadData,
+      body: formData,
       credentials: "include",
     });
 
