@@ -213,16 +213,8 @@ const CalidadPage = () => {
       }
 
       const columnCount: Record<string, number> = {};
-      const uniqueColumns: string[] = jsonData[0].map((col: any) => {
-        let cleanCol = cleanHeader(col);
-        if (columnCount[cleanCol] !== undefined) {
-          columnCount[cleanCol]++;
-          cleanCol = `${cleanCol}_${columnCount[cleanCol]}`;
-        } else {
-          columnCount[cleanCol] = 0;
-        }
-        return cleanCol;
-      });
+      const uniqueColumns: string[] = jsonData[0].map((col: any) => col?.toString().trim());
+
 
       setColumns(uniqueColumns);
       setSelectedColumns(uniqueColumns);
