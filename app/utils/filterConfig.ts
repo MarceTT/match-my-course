@@ -17,47 +17,27 @@ export interface FilterConfig {
   };
 }
 
-const normalize = (str: string) =>
+const normalize = (str: string, toLower = true) =>
   str
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/\s+/g, "-")
     .replace(/\(.*?\)/g, "")
     .replace(/\+/g, "-")
     .replace(/--+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-zA-Z0-9-]/g, "")
+    .replace(/^-+|-+$/g, "")
+    [toLower ? 'toLowerCase' : 'toString']();
 
 const filtersConfig: Record<string, FilterConfig> = {
   course: {
     label: "Tipo de curso",
     options: [
-      {
-        label: "Inglés general",
-        exclusiveGroup: "general",
-      },
-      {
-        label: "Inglés general más sesiones individuales",
-        exclusiveGroup: "general",
-      },
-      {
-        label: "Inglés general intensivo",
-        exclusiveGroup: "general",
-      },
-      {
-        label: "Inglés general orientado a negocios",
-        exclusiveGroup: "business-or-work",
-      },
-      {
-        label: "Inglés + visa de trabajo (6 meses)",
-        exclusiveGroup: "business-or-work",
-        lockWeeks: 25,
-      },
-      {
-        label: "Ver todos los cursos",
-        id: "todos",
-      },
+      { label: "Inglés general", exclusiveGroup: "general" },
+      { label: "Inglés general más sesiones individuales", exclusiveGroup: "general" },
+      { label: "Inglés general intensivo", exclusiveGroup: "general" },
+      { label: "Inglés general orientado a negocios", exclusiveGroup: "business-or-work" },
+      { label: "Inglés + visa de trabajo (6 meses)", exclusiveGroup: "business-or-work", lockWeeks: 25 },
+      { label: "Ver todos los cursos", id: "todos" },
     ].map((opt) => ({
       id: normalize(opt.label),
       ...opt,
@@ -77,16 +57,16 @@ const filtersConfig: Record<string, FilterConfig> = {
     type: "slider",
     slider: {
       min: 1,
-      max: 52,
+      max: 25,
       step: 1,
-      default: [1, 52],
+      default: [1, 25],
     },
   },
 
   type: {
     label: "Tipo de Curso",
     options: ["AM", "PM"].map((label) => ({
-      id: normalize(label),
+      id: normalize(label, false), // sin lowercase
       label,
     })),
   },

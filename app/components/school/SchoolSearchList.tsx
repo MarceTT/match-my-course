@@ -102,6 +102,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   };
   const offer = school.prices?.[0]?.horarios?.oferta;
   const hasOffer = offer && offer.trim() !== "" && offer.trim() !== "0";
+  const price = school.prices?.[0]?.horarios?.precio || 0;
 
   return (
     <div
@@ -112,19 +113,10 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       }`}
     >
       {hasOffer && (
-        <div className="absolute top-2 right-2 z-10">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded">
-                  <Sparkles className="w-4 h-4 mr-1" /> Oferta: €{offer}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                Esta escuela tiene una promoción disponible
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="absolute top-4 right-4 z-10">
+          <div className="bg-yellow-400 text-yellow-900 text-sm md:text-base font-extrabold px-3 py-1 rounded-full shadow-lg animate-pulse">
+            OFERTA €{offer}
+          </div>
         </div>
       )}
 
@@ -150,6 +142,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             <h3 className="text-xl font-semibold lg:text-2xl lg:font-bold">
               {school.name}
             </h3>
+
             <div className="mt-1 flex items-center">
               {[...Array(5)].map((_, i) => {
                 const rating = Number(school.qualities?.ponderado ?? 0);
@@ -175,9 +168,6 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
               </span>
             </div>
           </div>
-          {/* <Button className="bg-[#F15368] hover:bg-[#F15368]/90 rounded-full w-8 h-8 p-0">
-            <LuHeart className="w-5 h-5 text-white fill-white" />
-          </Button> */}
         </div>
 
         <div className="mt-2 flex flex-col gap-2 text-sm text-gray-700">
@@ -230,13 +220,25 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             width={viewType === "grid" ? 150 : 200}
             height={viewType === "grid" ? 80 : 120}
           />
+
           <div className="text-center sm:text-right mt-4 sm:mt-0">
-            <div className="flex items-center space-x-2">
-              <div className="text-lg text-gray-600 font-bold mt-1">Desde</div>
-              <div className="text-2xl font-bold">
-                €{school.prices?.[0]?.horarios?.precio?.toLocaleString() || "0"}
-              </div>
+            <div className="flex flex-col items-center sm:items-end">
+              {hasOffer ? (
+                <>
+                  <div className="flex items-center gap-2 text-sm text-gray-500 line-through">
+                    €{price.toLocaleString()}
+                  </div>
+                  <div className="text-3xl font-extrabold text-green-600">
+                    €{offer}
+                  </div>
+                </>
+              ) : (
+                <div className="text-2xl font-bold text-gray-800">
+                  €{price.toLocaleString()}
+                </div>
+              )}
             </div>
+
             <Link
               href={`/school-detail/${school._id}`}
               onMouseEnter={handlePrefetch}
