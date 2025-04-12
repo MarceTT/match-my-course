@@ -182,36 +182,36 @@ const CalidadPage = () => {
     },
   });
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
     if (acceptedFiles.length === 0) return;
-
+  
     const selectedFile = acceptedFiles[0];
     if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
       setError("Por favor seleccione un archivo Excel válido (.xlsx o .xls)");
       return;
     }
-
+  
     setFile(selectedFile);
-
+  
     const reader = new FileReader();
     reader.onload = (event) => {
-      const data = new Uint8Array(event.target?.result as ArrayBuffer);
+      if (!event.target?.result) return;
+      const data = new Uint8Array(event.target.result as ArrayBuffer);
       const workbook = XLSX.read(data, { type: "array" });
-      const sheetName = workbook.SheetNames.find(name => 
-        name.toLowerCase().includes("calidad")) || workbook.SheetNames[0];
+      const sheetName = workbook.SheetNames.find(name => name.toLowerCase().includes("calidad")) || workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
-      if (!jsonData || jsonData.length === 0) {
-        setError("El archivo Excel está vacío o mal formateado.");
-        return;
-      }
-
-      const uniqueColumns: string[] = jsonData[0].map((col: any) => col?.toString().trim());
-      setColumns(uniqueColumns);
-      setSelectedColumns(uniqueColumns);
+  
+      let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[];
+  
+      jsonData = jsonData.filter((row) => row.some((cell: any) => cell !== undefined && cell !== null && cell !== ""));
+  
+      const columns: string[] = jsonData[0].map((col: any) => col?.toString()?.trim()?.toLowerCase()?.replace(/\s+/g, '_') || '');
+  
+      setColumns(columns);
+      setSelectedColumns(columns);
     };
+  
     reader.readAsArrayBuffer(selectedFile);
   }, []);
 
@@ -230,11 +230,11 @@ const CalidadPage = () => {
       setError("No se ha seleccionado ningún archivo.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", file);
     formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
+  
     uploadMutation.mutate(formData);
   };
 
