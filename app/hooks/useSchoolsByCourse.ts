@@ -9,6 +9,10 @@ const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<Schoo
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
+    if (key === "weeks" && filters.course === "ingles-visa-de-trabajo") {
+      return; // no enviar weeks si es ingles-visa-de-trabajo
+    }
+
     if (Array.isArray(value) && value.length > 0) {
       params.set(key, value.join(","));
     } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
@@ -21,6 +25,7 @@ const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<Schoo
   const res = await axios.get(url);
   return res.data?.data?.schools ?? [];
 };
+
 
 export const useFilteredSchools = (filters: Record<string, any>) => {
   return useQuery({
