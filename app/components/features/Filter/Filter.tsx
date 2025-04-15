@@ -42,27 +42,33 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
-const getQueryParams = (filters: Record<string, any>) => {
-  const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (Array.isArray(value) && value.length > 0) {
-      if (key === 'cities') {
-        const citiesLabels = value.map((cityId: string) => {
-          const option = filtersConfig.cities.options?.find(o => o.id === cityId);
-          return option?.label || cityId;
-        });
-        params.set(key, citiesLabels.join(","));
-      } else {
-        params.set(key, value.join(","));
-      }
-    } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
-      params.set(key, String(value));
-    }
-  });
-
-  return params;
-};
+    const getQueryParams = (filters: Record<string, any>) => {
+      const params = new URLSearchParams();
+    
+      Object.entries(filters).forEach(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) {
+          if (key === 'cities') {
+            const citiesLabels = value.map((cityId: string) => {
+              const option = filtersConfig.cities.options?.find(o => o.id === cityId);
+              return option?.label || cityId;
+            });
+            params.set(key, citiesLabels.join(","));
+          } else {
+            params.set(key, value.join(","));
+          }
+        } else if (
+          !Array.isArray(value) &&
+          value !== undefined &&
+          value !== null &&
+          value !== 0
+        ) {
+          params.set(key, String(value));
+        }
+      });
+    
+      return params;
+    };
+    
 
 const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
   const searchParams = useSearchParams();
