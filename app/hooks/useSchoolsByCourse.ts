@@ -10,23 +10,17 @@ const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<Schoo
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
-    // 👇 Omitir sliders con valor por defecto (ej. weeks)
-    const sliderConfig = filtersConfig[key]?.slider;
-    if (sliderConfig && Array.isArray(value)) {
-      const isDefault =
-        value[0] === sliderConfig.min && value[1] === sliderConfig.max;
-      if (isDefault) return; // ⚠️ No enviar si es valor por defecto
-    }
-
     if (Array.isArray(value) && value.length > 0) {
-      params.set(key, value.join(","));
-    } else if (
-      !Array.isArray(value) &&
-      value !== undefined &&
-      value !== null &&
-      value !== 0 &&
-      value !== ""
-    ) {
+      if (key === 'cities') {
+        const citiesLabels = value.map((cityId: string) => {
+          const option = filtersConfig.cities.options?.find(o => o.id === cityId);
+          return option?.label || cityId;
+        });
+        params.set(key, citiesLabels.join(","));
+      } else {
+        params.set(key, value.join(","));
+      }
+    } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
       params.set(key, String(value));
     }
   });
