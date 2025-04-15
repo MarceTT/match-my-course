@@ -4,19 +4,20 @@ import axios from "axios";
 import { SchoolDetails } from "@/app/types/index";
 import filtersConfig from "../utils/filterConfig";
 
-
+const cityIdToLabel = filtersConfig.cities.options?.reduce((acc, opt) => {
+  acc[opt.id] = opt.label;
+  return acc;
+}, {} as Record<string, string>);
 
 const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<SchoolDetails[]> => {
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
     if (Array.isArray(value) && value.length > 0) {
-      if (key === 'cities') {
-        const citiesLabels = value.map((cityId: string) => {
-          const option = filtersConfig.cities.options?.find(o => o.id === cityId);
-          return option?.label || cityId;
-        });
-        params.set(key, citiesLabels.join(","));
+      if (key === "cities") {
+        // Convertir id normalizado → label con tildes
+        const denormalized = value.map((id) => cityIdToLabel?.[id] || id);
+        params.set(key, denormalized.join(","));
       } else {
         params.set(key, value.join(","));
       }
