@@ -96,8 +96,10 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
         updatedFilters.certification = [];
-
-        if (courseFromUrl !== "ingles-visa-de-trabajo") {
+      
+        if (courseFromUrl === "ingles-visa-de-trabajo") {
+          delete updatedFilters.weeks;
+        } else {
           updatedFilters.offers = [];
         }
       }
