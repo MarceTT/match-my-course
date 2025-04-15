@@ -4,8 +4,8 @@ import axios from "axios";
 import { SchoolDetails } from "@/app/types/index";
 import filtersConfig from "../utils/filterConfig";
 
-const cityIdToLabel = filtersConfig.cities.options?.reduce((acc, opt) => {
-  acc[opt.id] = opt.label;
+const cityIdToLabel = (filtersConfig.cities?.options || []).reduce((acc, option) => {
+  acc[option.id] = option.label;
   return acc;
 }, {} as Record<string, string>);
 
@@ -15,9 +15,8 @@ const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<Schoo
   Object.entries(filters).forEach(([key, value]) => {
     if (Array.isArray(value) && value.length > 0) {
       if (key === "cities") {
-        // Convertir id normalizado → label con tildes
-        const denormalized = value.map((id) => cityIdToLabel?.[id] || id);
-        params.set(key, denormalized.join(","));
+        const originalCities = value.map((id) => cityIdToLabel[id] || id);
+        params.set(key, originalCities.join(","));
       } else {
         params.set(key, value.join(","));
       }
