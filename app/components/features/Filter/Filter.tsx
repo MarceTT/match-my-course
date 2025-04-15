@@ -47,9 +47,18 @@ const normalize = (str: string) =>
     
       Object.entries(filters).forEach(([key, value]) => {
         if (Array.isArray(value) && value.length > 0) {
-          if (key === 'cities') {
+          // EXCEPCIÓN solo si el curso es visa
+          if (
+            key === "weeks" &&
+            filters.course?.includes("ingles-visa-de-trabajo")
+          ) {
+            return; // no enviar weeks
+          }
+    
+          if (key === "cities") {
             const citiesLabels = value.map((cityId: string) => {
-              const option = filtersConfig.cities.options?.find(o => o.id === cityId);
+              const option =
+                filtersConfig.cities.options?.find((o) => o.id === cityId);
               return option?.label || cityId;
             });
             params.set(key, citiesLabels.join(","));
