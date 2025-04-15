@@ -234,6 +234,9 @@ const CalidadPage = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("selectedColumns", JSON.stringify(selectedColumns));
+
+    console.log("🔥 Columnas seleccionadas que se envían:", selectedColumns);
+  console.log("🔥 Archivo que se envía:", file.name);
   
     uploadMutation.mutate(formData);
   };

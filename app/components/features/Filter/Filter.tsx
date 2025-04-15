@@ -15,6 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useRouter } from "next/navigation";
 
 interface FilterProps {
   isOpen: boolean;
@@ -56,65 +57,73 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
+    const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
+      const searchParams = useSearchParams();
+      const router = useRouter();
+    
+      useEffect(() => {
+        const courseFromUrl = searchParams.get("course") || "todos";
+    
+        setFilters((prev) => {
+          const updatedFilters = { ...prev };
+    
+          if (!prev.course?.includes(normalize(courseFromUrl))) {
+            updatedFilters.course = [normalize(courseFromUrl)];
+            updatedFilters.cities = [];
+            updatedFilters.hours = [];
+            updatedFilters.type = [];
+            updatedFilters.accreditation = [];
+            updatedFilters.certification = [];
+    
+            if (courseFromUrl !== "ingles-visa-de-trabajo") {
+              updatedFilters.offers = [];
+            }
+          }
+    
+          if (courseFromUrl !== "ingles-visa-de-trabajo") {
+            const params = new URLSearchParams(window.location.search);
+            params.delete("offers");
+            router.push(`?${params.toString()}`);
+          }
+    
+          return updatedFilters;
+        });
+      }, [searchParams, setFilters, router]);
+  
+  
+  
 
-const Filter = ({
-  isOpen,
-  setIsOpen,
-  filters,
-  setFilters,
-  onResetFilters,
-}: FilterProps) => {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const courseFromUrl = searchParams.get("course") || "todos";
-  
-    setFilters((prev) => {
-      const updatedFilters = { ...prev };
-  
-      if (!prev.course?.includes(normalize(courseFromUrl))) {
-        updatedFilters.course = [normalize(courseFromUrl)];
-        updatedFilters.cities = [];
-        updatedFilters.hours = [];
-        updatedFilters.type = [];
-        updatedFilters.accreditation = [];
-        updatedFilters.certification = [];
-      }
-  
-      return updatedFilters;
-    });
-  }, [searchParams, setFilters]);
-  
-  
-  
-
-  const handleCheckboxChange = (category: string, value: string) => {
-    setFilters((prev) => {
-      const current = prev[category] || [];
-      const isChecked = current.includes(value);
-  
-      const updatedFilters = { ...prev };
-  
-      if (category === "course") {
-        updatedFilters.course = isChecked ? ["todos"] : [value];
-  
-        if (!isChecked) {
-          updatedFilters.cities = [];
-          updatedFilters.hours = [];
-          updatedFilters.type = [];
-          updatedFilters.accreditation = [];
-          updatedFilters.certification = [];
-        }
-      } else {
-        updatedFilters[category] = isChecked
-          ? current.filter((item: string) => item !== value)
-          : [...current.filter((item: string) => item !== "todos"), value];
-      }
-  
-      return updatedFilters;
-    });
-  };
-  
+      const handleCheckboxChange = (category: string, value: string) => {
+        setFilters((prev) => {
+          const current = prev[category] || [];
+          const isChecked = current.includes(value);
+          const updatedFilters = { ...prev };
+    
+          if (category === "course") {
+            updatedFilters.course = isChecked ? ["todos"] : [value];
+            if (!isChecked) {
+              updatedFilters.cities = [];
+              updatedFilters.hours = [];
+              updatedFilters.type = [];
+              updatedFilters.accreditation = [];
+              updatedFilters.certification = [];
+    
+              if (value !== "ingles-visa-de-trabajo") {
+                updatedFilters.offers = [];
+                const params = new URLSearchParams(window.location.search);
+                params.delete("offers");
+                router.push(`?${params.toString()}`);
+              }
+            }
+          } else {
+            updatedFilters[category] = isChecked
+              ? current.filter((item: string) => item !== value)
+              : [...current.filter((item: string) => item !== "todos"), value];
+          }
+    
+          return updatedFilters;
+        });
+      };
   
   
 
@@ -202,67 +211,70 @@ function FilterContent({
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       {Object.entries(filtersConfig).map(([key, config]) => {
-        const isCities = key === "cities";
-        const options =
-          isCities && isVisaCourseSelected
-            ? visaCities.map((label) => ({ id: normalize(label), label }))
-            : config.options;
+  if (key === "offers" && !isVisaCourseSelected) return null;
 
-        if (config.type === "slider" && config.slider) {
-          const value = filters[key] || config.slider.default;
+  const isCities = key === "cities";
+  const options =
+    isCities && isVisaCourseSelected
+      ? visaCities.map((label) => ({ id: normalize(label), label }))
+      : config.options;
 
-          return (
-            <FilterSection title={config.label} key={key}>
-              <SliderSection
-                value={value}
-                config={config.slider}
-                onChange={(val) => {
-                  if (!isVisaCourseSelected) onSliderChange(key, val);
-                }}
-                disabled={isVisaCourseSelected}
-              />
-            </FilterSection>
-          );
-        }
+  if (config.type === "slider" && config.slider) {
+    const value = filters[key] || config.slider.default;
+
+    return (
+      <FilterSection title={config.label} key={key}>
+        <SliderSection
+          value={value}
+          config={config.slider}
+          onChange={(val) => {
+            if (!isVisaCourseSelected) onSliderChange(key, val);
+          }}
+          disabled={isVisaCourseSelected}
+        />
+      </FilterSection>
+    );
+  }
+
+  return (
+    <FilterSection title={config.label} key={key}>
+      {options?.map(({ id, label }) => {
+        const disabled =
+          key === "course" &&
+          ((isVisaCourseSelected && id !== "ingles-visa-de-trabajo") ||
+            (!isVisaCourseSelected &&
+              id === "ingles-visa-de-trabajo" &&
+              actualSelectedCourses.length > 0));
 
         return (
-          <FilterSection title={config.label} key={key}>
-            {options?.map(({ id, label }) => {
-              const disabled =
-                key === "course" &&
-                ((isVisaCourseSelected && id !== "ingles-visa-de-trabajo") ||
-                  (!isVisaCourseSelected &&
-                    id === "ingles-visa-de-trabajo" &&
-                    actualSelectedCourses.length > 0));
-              return (
-                <TooltipProvider key={id}>
-                  <Tooltip delayDuration={200}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <CheckboxItem
-                          id={id}
-                          label={label}
-                          checked={(filters[key] || []).includes(id)}
-                          onChange={() => onCheckboxChange(key, id)}
-                          disabled={disabled || undefined}
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    {disabled && (
-                      <TooltipContent side="right">
-                        <p>
-                          Solo se puede seleccionar un curso de visa o cursos
-                          generales
-                        </p>
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
-                </TooltipProvider>
-              );
-            })}
-          </FilterSection>
+          <TooltipProvider key={id}>
+            <Tooltip delayDuration={200}>
+              <TooltipTrigger asChild>
+                <div>
+                  <CheckboxItem
+                    id={id}
+                    label={label}
+                    checked={(filters[key] || []).includes(id)}
+                    onChange={() => onCheckboxChange(key, id)}
+                    disabled={disabled || undefined}
+                  />
+                </div>
+              </TooltipTrigger>
+              {disabled && (
+                <TooltipContent side="right">
+                  <p>
+                    Solo se puede seleccionar un curso de visa o cursos generales
+                  </p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         );
       })}
+    </FilterSection>
+  );
+})}
+
 
       {!isDefaultFilters() && (
         <Button
