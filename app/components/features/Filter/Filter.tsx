@@ -26,28 +26,13 @@ interface FilterProps {
 }
 
 const visaCities = [
-  "Dublín",
-  "Bray",
-  "Galway",
-  "Schull",
-  "Naas",
-  "Tralee",
-  "Cork",
-  "Ennis",
-  "Donegal",
-  "Drogheda",
-  "Limerick",
-  "Athlone",
-  "Waterford",
-  "Killarney",
-  "Sligo",
-  "Cahersiveen",
-  "Wexford",
+  "Dublín", "Bray", "Galway", "Schull", "Naas", "Tralee", "Cork",
+  "Ennis", "Donegal", "Drogheda", "Limerick", "Athlone", "Waterford",
+  "Killarney", "Sligo", "Cahersiveen", "Wexford",
 ];
 
 const normalize = (str: string) =>
-  str
-    .normalize("NFD")
+  str.normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -57,75 +42,92 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
-    const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
-      const searchParams = useSearchParams();
-      const router = useRouter();
-    
-      useEffect(() => {
-        const courseFromUrl = searchParams.get("course") || "todos";
-    
-        setFilters((prev) => {
-          const updatedFilters = { ...prev };
-    
-          if (!prev.course?.includes(normalize(courseFromUrl))) {
-            updatedFilters.course = [normalize(courseFromUrl)];
-            updatedFilters.cities = [];
-            updatedFilters.hours = [];
-            updatedFilters.type = [];
-            updatedFilters.accreditation = [];
-            updatedFilters.certification = [];
-    
-            if (courseFromUrl !== "ingles-visa-de-trabajo") {
-              updatedFilters.offers = [];
-            }
-          }
-    
-          if (courseFromUrl !== "ingles-visa-de-trabajo") {
-            const params = new URLSearchParams(window.location.search);
+const getQueryParams = (filters: Record<string, any>) => {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (Array.isArray(value) && value.length > 0) {
+      if (key === 'cities') {
+        const citiesLabels = value.map((cityId: string) => {
+          const option = filtersConfig.cities.options?.find(o => o.id === cityId);
+          return option?.label || cityId;
+        });
+        params.set(key, citiesLabels.join(","));
+      } else {
+        params.set(key, value.join(","));
+      }
+    } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
+      params.set(key, String(value));
+    }
+  });
+
+  return params;
+};
+
+const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const courseFromUrl = searchParams.get("course") || "todos";
+
+    setFilters((prev) => {
+      const updatedFilters = { ...prev };
+
+      if (!prev.course?.includes(normalize(courseFromUrl))) {
+        updatedFilters.course = [normalize(courseFromUrl)];
+        updatedFilters.cities = [];
+        updatedFilters.hours = [];
+        updatedFilters.type = [];
+        updatedFilters.accreditation = [];
+        updatedFilters.certification = [];
+
+        if (courseFromUrl !== "ingles-visa-de-trabajo") {
+          updatedFilters.offers = [];
+        }
+      }
+
+      if (courseFromUrl !== "ingles-visa-de-trabajo") {
+        const params = getQueryParams(updatedFilters);
+        params.delete("offers");
+        router.push(`?${params.toString()}`);
+      }
+
+      return updatedFilters;
+    });
+  }, [searchParams, setFilters, router]);
+
+  const handleCheckboxChange = (category: string, value: string) => {
+    setFilters((prev) => {
+      const current = prev[category] || [];
+      const isChecked = current.includes(value);
+      const updatedFilters = { ...prev };
+
+      if (category === "course") {
+        updatedFilters.course = isChecked ? ["todos"] : [value];
+        if (!isChecked) {
+          updatedFilters.cities = [];
+          updatedFilters.hours = [];
+          updatedFilters.type = [];
+          updatedFilters.accreditation = [];
+          updatedFilters.certification = [];
+
+          if (value !== "ingles-visa-de-trabajo") {
+            updatedFilters.offers = [];
+            const params = getQueryParams(updatedFilters);
             params.delete("offers");
             router.push(`?${params.toString()}`);
           }
-    
-          return updatedFilters;
-        });
-      }, [searchParams, setFilters, router]);
-  
-  
-  
+        }
+      } else {
+        updatedFilters[category] = isChecked
+          ? current.filter((item: string) => item !== value)
+          : [...current.filter((item: string) => item !== "todos"), value];
+      }
 
-      const handleCheckboxChange = (category: string, value: string) => {
-        setFilters((prev) => {
-          const current = prev[category] || [];
-          const isChecked = current.includes(value);
-          const updatedFilters = { ...prev };
-    
-          if (category === "course") {
-            updatedFilters.course = isChecked ? ["todos"] : [value];
-            if (!isChecked) {
-              updatedFilters.cities = [];
-              updatedFilters.hours = [];
-              updatedFilters.type = [];
-              updatedFilters.accreditation = [];
-              updatedFilters.certification = [];
-    
-              if (value !== "ingles-visa-de-trabajo") {
-                updatedFilters.offers = [];
-                const params = new URLSearchParams(window.location.search);
-                params.delete("offers");
-                router.push(`?${params.toString()}`);
-              }
-            }
-          } else {
-            updatedFilters[category] = isChecked
-              ? current.filter((item: string) => item !== value)
-              : [...current.filter((item: string) => item !== "todos"), value];
-          }
-    
-          return updatedFilters;
-        });
-      };
-  
-  
+      return updatedFilters;
+    });
+  };
 
   const handleSliderChange = (category: string, value: number[]) => {
     setFilters((prev) => ({
