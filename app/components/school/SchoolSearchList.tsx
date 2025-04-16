@@ -9,7 +9,6 @@ import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import Image from "next/image";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
-import { getBestSchoolPrice } from "@/app/utils/schoolPricing";
 
 interface SchoolListProps {
   isFilterOpen: boolean;
@@ -18,11 +17,49 @@ interface SchoolListProps {
   isError: boolean;
 }
 
+const getBestSchoolPrice = (
+  school: SchoolDetails,
+  courseType: string
+): { price: number; offer: number | null; fromLabel: boolean } => {
+  const raw = school.prices?.[0]?.horarios;
+
+  if (courseType === "ingles-visa-de-trabajo" && raw) {
+    const offer = raw.oferta
+      ? parseFloat(String(raw.oferta).replace(/[^0-9.,]/g, "").replace(",", "."))
+      : null;
+    const regular = raw.precio
+      ? parseFloat(String(raw.precio).replace(/[^0-9.,]/g, "").replace(",", "."))
+      : 0;
+
+    if (!isNaN(offer ?? NaN) && offer && offer > 0) {
+      return { price: regular, offer, fromLabel: false };
+    }
+
+    if (!isNaN(regular) && regular > 0) {
+      return { price: regular, offer: null, fromLabel: false };
+    }
+  }
+
+  if (
+    typeof school.bestPrice === "number" &&
+    school.bestPrice > 0 &&
+    ["weekprices", "weekranges"].includes(school.priceSource ?? "")
+  ) {
+    return { price: school.bestPrice, offer: null, fromLabel: true };
+  }
+
+  return { price: 0, offer: null, fromLabel: false };
+};
+
 const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolListProps) => {
   const [viewType, setViewType] = useState<"grid" | "list">("list");
+  const [courseType, setCourseType] = useState("todos");
 
   useEffect(() => {
     if (window.innerWidth <= 768) setViewType("list");
+    const params = new URLSearchParams(window.location.search);
+    const course = params.get("course") || "todos";
+    setCourseType(course);
   }, []);
 
   if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
@@ -42,11 +79,15 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
 
       {viewType === "list" ? (
         <div className="space-y-6 mt-4">
-          {schools.map((school) => <SchoolCard key={school._id} school={school} viewType="list" />)}
+          {schools.map((school) => (
+            <SchoolCard key={school._id} school={school} viewType="list" courseType={courseType} />
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {schools.map((school) => <SchoolCard key={school._id} school={school} viewType="grid" />)}
+          {schools.map((school) => (
+            <SchoolCard key={school._id} school={school} viewType="grid" courseType={courseType} />
+          ))}
         </div>
       )}
     </div>
@@ -56,11 +97,12 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
 interface SchoolCardProps {
   school: SchoolDetails;
   viewType: "grid" | "list";
+  courseType: string;
 }
 
-function SchoolCard({ school, viewType }: SchoolCardProps) {
+function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
-  const { price, offer, fromLabel } = getBestSchoolPrice(school);
+  const { price, offer, fromLabel } = getBestSchoolPrice(school, courseType);
   const antiguedad = school.description?.añoFundacion
     ? new Date().getFullYear() - school.description.añoFundacion
     : null;
