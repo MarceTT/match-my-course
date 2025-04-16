@@ -47,7 +47,6 @@ const normalize = (str: string) =>
     
       Object.entries(filters).forEach(([key, value]) => {
         if (Array.isArray(value) && value.length > 0) {
-          // 🟡 Condición especial para weeks
           if (key === "weeks") {
             const isDefault =
               Array.isArray(value) &&
@@ -56,10 +55,7 @@ const normalize = (str: string) =>
     
             const isVisaCourse = filters.course?.includes("ingles-visa-de-trabajo");
     
-            if (isVisaCourse || isDefault) {
-              return; // ⛔ no enviar weeks por defecto o si es visa
-            }
-    
+            if (isVisaCourse || isDefault) return;
             params.set(key, value.join(","));
             return;
           }
@@ -88,42 +84,41 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
 
   useEffect(() => {
     const courseFromUrl = searchParams.get("course") || "todos";
+    const normalizedCourse = normalize(courseFromUrl);
+    const citiesFromUrl = searchParams.get("cities");
+    const normalizedCities = citiesFromUrl
+      ? citiesFromUrl.split(",").map((c) => normalize(c))
+      : [];
 
     setFilters((prev) => {
+      const prevCourse = prev.course?.[0] || "todos";
+      const prevCities = prev.cities || [];
+
+      const courseChanged = prevCourse !== normalizedCourse;
+      const citiesChanged =
+        normalizedCities.length !== prevCities.length ||
+        normalizedCities.some((c, i) => c !== prevCities[i]);
+
+      if (!courseChanged && !citiesChanged) return prev;
+
       const updatedFilters = { ...prev };
 
-      if (!prev.course?.includes(normalize(courseFromUrl))) {
-        updatedFilters.course = [normalize(courseFromUrl)];
-        const citiesFromUrl = searchParams.get("cities");
-        if (citiesFromUrl) {
-          const cityList = citiesFromUrl.split(",").map((c) => normalize(c));
-          updatedFilters.cities = cityList;
-        }
-        updatedFilters.hours = [];
-        updatedFilters.type = [];
-        updatedFilters.accreditation = [];
-        updatedFilters.certification = [];
-      
-        if (courseFromUrl === "ingles-visa-de-trabajo") {
-          delete updatedFilters.weeks;
-        } else {
-          updatedFilters.offers = [];
-        }
-      }
+      updatedFilters.course = [normalizedCourse];
+      updatedFilters.cities = normalizedCities;
+      updatedFilters.hours = [];
+      updatedFilters.type = [];
+      updatedFilters.accreditation = [];
+      updatedFilters.certification = [];
 
-      if (courseFromUrl !== "ingles-visa-de-trabajo") {
-        const params = getQueryParams(updatedFilters);
-        params.delete("offers");
-        const newUrl = `?${params.toString()}`;
-      
-        if (newUrl !== window.location.search) {
-          router.push(newUrl);
-        }
+      if (normalizedCourse === "ingles-visa-de-trabajo") {
+        delete updatedFilters.weeks;
+      } else {
+        updatedFilters.offers = [];
       }
 
       return updatedFilters;
     });
-  }, [searchParams, setFilters, router]);
+  }, [searchParams, setFilters]);
 
   const handleCheckboxChange = (category: string, value: string) => {
     setFilters((prev) => {
