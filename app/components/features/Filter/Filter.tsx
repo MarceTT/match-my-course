@@ -47,22 +47,26 @@ const normalize = (str: string) =>
     
       Object.entries(filters).forEach(([key, value]) => {
         if (Array.isArray(value) && value.length > 0) {
-          // EXCEPCIÓN solo si el curso es visa
-          if (
-            key === "weeks" &&
-            filters.course?.includes("ingles-visa-de-trabajo")
-          ) {
-            return; // no enviar weeks
-          }
+          // 🟡 Condición especial para weeks
           if (key === "weeks") {
-            const isDefault = value[0] === 1 && value[1] === 25;
-            if (isDefault) return;
+            const isDefault =
+              Array.isArray(value) &&
+              value[0] === filtersConfig.weeks.slider?.min &&
+              value[1] === filtersConfig.weeks.slider?.max;
+    
+            const isVisaCourse = filters.course?.includes("ingles-visa-de-trabajo");
+    
+            if (isVisaCourse || isDefault) {
+              return; // ⛔ no enviar weeks por defecto o si es visa
+            }
+    
+            params.set(key, value.join(","));
+            return;
           }
     
           if (key === "cities") {
             const citiesLabels = value.map((cityId: string) => {
-              const option =
-                filtersConfig.cities.options?.find((o) => o.id === cityId);
+              const option = filtersConfig.cities.options?.find(o => o.id === cityId);
               return option?.label || cityId;
             });
             params.set(key, citiesLabels.join(","));
