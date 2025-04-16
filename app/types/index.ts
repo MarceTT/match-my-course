@@ -62,6 +62,7 @@ export interface Option {
     bestPrice?: number;
     originalPrice?: number;
     hasOffer?: boolean;
+    priceSource?: string;
   }
   
   export interface Installations {

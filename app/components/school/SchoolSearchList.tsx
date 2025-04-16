@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { Grid, List, Star, Sparkles } from "lucide-react";
+import { Grid, List, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LuHeart } from "react-icons/lu";
 import Link from "next/link";
@@ -23,6 +23,35 @@ interface SchoolListProps {
   isLoading: boolean;
   isError: boolean;
 }
+
+const getPriceFromSchool = (school: SchoolDetails) => {
+  const offer = school.prices?.[0]?.horarios?.oferta;
+  const regular = school.prices?.[0]?.horarios?.precio;
+
+  const bestPrice = school.bestPrice ?? 0;
+  const priceSource = school.priceSource ?? "";
+
+  const hasVisaPricing = offer || regular;
+  const hasGenericPricing = bestPrice > 0 && ["weekprices", "weekranges"].includes(priceSource);
+
+  if (hasVisaPricing) {
+    return {
+      price: Number(regular) || 0,
+      offer: Number(offer) || null,
+      fromLabel: false,
+    };
+  }
+
+  if (hasGenericPricing) {
+    return {
+      price: bestPrice,
+      offer: null,
+      fromLabel: true,
+    };
+  }
+
+  return { price: 0, offer: null, fromLabel: false };
+};
 
 const SchoolSearchList = ({
   isFilterOpen,
@@ -100,9 +129,8 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const handlePrefetch = () => {
     prefetchSchool(school._id);
   };
-  const offer = school.prices?.[0]?.horarios?.oferta;
-  const hasOffer = offer && offer.trim() !== "" && offer.trim() !== "0";
-  const price = school.prices?.[0]?.horarios?.precio || 0;
+
+  const { price, offer, fromLabel } = getPriceFromSchool(school);
 
   return (
     <div
@@ -112,7 +140,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           : "flex flex-col sm:flex-row"
       }`}
     >
-      {hasOffer && (
+      {offer && (
         <div className="absolute top-4 right-4 z-10">
           <div className="bg-yellow-400 text-yellow-900 text-sm md:text-base font-extrabold px-3 py-1 rounded-full shadow-lg animate-pulse">
             OFERTA €{offer}
@@ -177,53 +205,33 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             </p>
           )}
 
-          {school.description?.añoFundacion &&
-            (() => {
-              const antiguedad =
-                new Date().getFullYear() - school.description.añoFundacion;
-              return (
-                <span
-                  className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
-                    antiguedad < 2
-                      ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  {antiguedad < 2
-                    ? "Nueva escuela"
-                    : `${antiguedad} años de trayectoria`}
-                </span>
-              );
-            })()}
+          {school.description?.añoFundacion && (() => {
+            const antiguedad = new Date().getFullYear() - school.description.añoFundacion;
+            return (
+              <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
+                antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+              }`}>
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {antiguedad < 2 ? "Nueva escuela" : `${antiguedad} años de trayectoria`}
+              </span>
+            );
+          })()}
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between">
           <Image
             src={school.logo || "/placeholder.svg"}
             alt="Logo"
-            className={`object-contain ${
-              viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""
-            }`}
+            className={`object-contain ${viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""}`}
             width={viewType === "grid" ? 150 : 200}
             height={viewType === "grid" ? 80 : 120}
           />
 
           <div className="text-center sm:text-right mt-4 sm:mt-0">
             <div className="flex flex-col items-center sm:items-end">
-              {hasOffer ? (
+              {offer ? (
                 <>
                   <div className="flex items-center gap-2 text-sm text-gray-500 line-through">
                     €{price.toLocaleString()}
@@ -234,7 +242,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 </>
               ) : (
                 <div className="text-2xl font-bold text-gray-800">
-                  €{price.toLocaleString()}
+                  {fromLabel ? "Desde " : ""}€{price.toLocaleString()}
                 </div>
               )}
             </div>
