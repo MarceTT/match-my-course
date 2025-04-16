@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Grid, List, Star } from "lucide-react";
+import { Grid, List, Star, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
@@ -66,7 +66,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
     <div className={`relative rounded-lg border bg-white p-4 shadow-sm hover:shadow-md transition-shadow ${
       viewType === "grid" ? "flex flex-col h-[500px] justify-between" : "flex flex-col sm:flex-row"
     }`}>
-      {offer && (
+      {school.hasOffer && (
         <div className="absolute top-4 right-4 z-10">
           <div className="bg-yellow-400 text-yellow-900 text-sm md:text-base font-extrabold px-3 py-1 rounded-full shadow-lg animate-pulse">
             OFERTA €{offer}
