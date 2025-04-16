@@ -79,41 +79,41 @@ const filtersConfig: Record<string, FilterConfig> = {
     },
   },
 
-  type: {
-    label: "Tipo de Curso",
-    options: ["AM", "PM"].map((label) => ({
-      id: normalize(label, false),
-      label,
-    })),
-  },
+  // type: {
+  //   label: "Tipo de Curso",
+  //   options: ["AM", "PM"].map((label) => ({
+  //     id: normalize(label, false),
+  //     label,
+  //   })),
+  // },
 
-  hours: {
-    label: "Horas de Clases",
-    options: ["15", "18", "20"].map((label) => ({
-      id: normalize(label),
-      label,
-    })),
-  },
+  // hours: {
+  //   label: "Horas de Clases",
+  //   options: ["15", "18", "20"].map((label) => ({
+  //     id: normalize(label),
+  //     label,
+  //   })),
+  // },
 
-  accreditation: {
-    label: "Acreditación Educacional",
-    options: ["Eaquals", "IALC", "ACELS"].map((label) => ({
-      id: normalize(label),
-      label,
-    })),
-  },
+  // accreditation: {
+  //   label: "Acreditación Educacional",
+  //   options: ["Eaquals", "IALC", "ACELS"].map((label) => ({
+  //     id: normalize(label),
+  //     label,
+  //   })),
+  // },
 
-  certification: {
-    label: "Certificación",
-    options: [
-      "Quality English",
-      "English Education Ireland",
-      "Select Ireland",
-    ].map((label) => ({
-      id: normalize(label),
-      label,
-    })),
-  },
+  // certification: {
+  //   label: "Certificación",
+  //   options: [
+  //     "Quality English",
+  //     "English Education Ireland",
+  //     "Select Ireland",
+  //   ].map((label) => ({
+  //     id: normalize(label),
+  //     label,
+  //   })),
+  // },
 
   offers: {
     label: "Cursos en oferta",
