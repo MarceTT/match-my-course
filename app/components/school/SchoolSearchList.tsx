@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Grid, List, Star, Tag } from "lucide-react";
+import { Grid, List, Star, BadgePercent, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
@@ -61,15 +61,29 @@ interface SchoolCardProps {
 function SchoolCard({ school, viewType }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
   const { price, offer, fromLabel } = getBestSchoolPrice(school);
+  const antiguedad = school.description?.añoFundacion
+    ? new Date().getFullYear() - school.description.añoFundacion
+    : null;
+  const rating = Number(school.qualities?.ponderado ?? 0);
 
   return (
     <div className={`relative rounded-lg border bg-white p-4 shadow-sm hover:shadow-md transition-shadow ${
       viewType === "grid" ? "flex flex-col h-[500px] justify-between" : "flex flex-col sm:flex-row"
     }`}>
-      {school.hasOffer && (
+      {offer && (
         <div className="absolute top-4 right-4 z-10">
-          <div className="bg-yellow-400 text-yellow-900 text-sm md:text-base font-extrabold px-3 py-1 rounded-full shadow-lg animate-pulse">
-            OFERTA €{offer}
+          <div className="bg-yellow-400 text-yellow-900 text-sm md:text-base font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 animate-pulse">
+            <BadgePercent className="w-4 h-4" />
+            Oferta activa
+          </div>
+        </div>
+      )}
+
+      {rating >= 4.5 && (
+        <div className="absolute top-4 left-4 z-10">
+          <div className="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-full shadow flex items-center gap-1">
+            <Sparkles className="w-4 h-4" />
+            Top valorado
           </div>
         </div>
       )}
@@ -88,13 +102,12 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             <h3 className="text-xl font-semibold lg:text-2xl lg:font-bold">{school.name}</h3>
             <div className="mt-1 flex items-center">
               {[...Array(5)].map((_, i) => {
-                const rating = Number(school.qualities?.ponderado ?? 0);
                 const full = i + 1 <= Math.floor(rating);
                 const half = i + 0.5 === Math.round(rating * 2) / 2;
                 return <Star key={i} className={`h-4 w-4 ${full ? "fill-yellow-400 text-yellow-400" : half ? "fill-yellow-200 text-yellow-200" : "fill-gray-200 text-gray-200"}`} />;
               })}
               <span className="ml-2 text-sm text-gray-600">
-                {parseFloat(String(school.qualities?.ponderado ?? 0)).toFixed(1)}
+                {parseFloat(String(rating)).toFixed(1)}
               </span>
             </div>
           </div>
@@ -107,19 +120,16 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             </p>
           )}
 
-          {school.description?.añoFundacion && (() => {
-            const antiguedad = new Date().getFullYear() - school.description.añoFundacion;
-            return (
-              <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
-                antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
-              }`}>
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {antiguedad < 2 ? "Nueva escuela" : `${antiguedad} años de trayectoria`}
-              </span>
-            );
-          })()}
+          {antiguedad !== null && (
+            <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
+              antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+            }`}>
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {antiguedad < 2 ? "Nueva escuela" : `${antiguedad} años de trayectoria`}
+            </span>
+          )}
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between">

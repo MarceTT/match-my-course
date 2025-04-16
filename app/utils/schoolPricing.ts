@@ -1,34 +1,50 @@
 import { SchoolDetails } from "@/app/types/index";
 
-export interface SchoolPriceInfo {
-  price: number;
-  offer: number | null;
-  fromLabel: boolean;
-}
-
-export const getBestSchoolPrice = (school: SchoolDetails): SchoolPriceInfo => {
-  const visaPrice = school.prices?.[0]?.horarios?.precio;
-  const visaOffer = school.prices?.[0]?.horarios?.oferta;
-  const bestPrice = school.bestPrice ?? 0;
-
-  const hasVisaData = visaPrice !== undefined || visaOffer !== undefined;
-  const hasGeneralData = bestPrice > 0;
-
-  if (hasVisaData) {
-    return {
-      price: Number(visaPrice ?? 0),
-      offer: visaOffer ? Number(visaOffer) : null,
-      fromLabel: false
-    };
+interface PriceResult {
+    price: number;
+    offer: number | null;
+    fromLabel: boolean;
   }
-
-  if (hasGeneralData) {
+  
+  export const getBestSchoolPrice = (school: SchoolDetails): PriceResult => {
+    // Caso 1: visa-trabajo u otros con prices.horarios
+    const raw = school.prices?.[0]?.horarios;
+    const offer = raw?.oferta ? parseFloat(String(raw.oferta).replace(/[^0-9.,]/g, "").replace(",", ".")) : null;
+    const regular = raw?.precio ? parseFloat(String(raw.precio).replace(/[^0-9.,]/g, "").replace(",", ".")) : 0;
+  
+    if (!isNaN(offer ?? NaN) && offer && offer > 0) {
+      return {
+        price: regular,
+        offer,
+        fromLabel: false,
+      };
+    }
+  
+    if (!isNaN(regular) && regular > 0) {
+      return {
+        price: regular,
+        offer: null,
+        fromLabel: false,
+      };
+    }
+  
+    // Caso 2: pipelines con bestPrice y priceSource
+    if (
+      typeof school.bestPrice === "number" &&
+      school.bestPrice > 0 &&
+      ["weekprices", "weekranges"].includes(school.priceSource ?? "")
+    ) {
+      return {
+        price: school.bestPrice,
+        offer: null,
+        fromLabel: true,
+      };
+    }
+  
     return {
-      price: bestPrice,
+      price: 0,
       offer: null,
-      fromLabel: true
+      fromLabel: false,
     };
-  }
-
-  return { price: 0, offer: null, fromLabel: false };
-};
+  };
+  
