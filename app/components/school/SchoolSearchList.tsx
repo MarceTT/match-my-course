@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Grid, List, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LuHeart } from "react-icons/lu";
@@ -27,6 +27,7 @@ interface SchoolListProps {
 const getPriceFromSchool = (school: SchoolDetails) => {
   const offer = school.prices?.[0]?.horarios?.oferta;
   const regular = school.prices?.[0]?.horarios?.precio;
+
   const bestPrice = school.bestPrice ?? 0;
   const priceSource = school.priceSource ?? "";
 
@@ -61,8 +62,10 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
   }, []);
 
   if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
-  if (isError) return <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>;
-  if (schools.length === 0) return <p className="text-gray-500 text-sm p-4">No se encontraron resultados.</p>;
+  if (isError)
+    return <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>;
+  if (schools.length === 0)
+    return <p className="text-gray-500 text-sm p-4">No se encontraron resultados.</p>;
 
   return (
     <div className={`flex-1 flex flex-col ${isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"}`}>
@@ -109,7 +112,6 @@ interface SchoolCardProps {
 function SchoolCard({ school, viewType }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(school._id);
-
   const { price, offer, fromLabel } = getPriceFromSchool(school);
 
   return (
@@ -126,14 +128,25 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         </div>
       )}
 
-      <div className={`${viewType === "grid" ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"} overflow-hidden rounded-lg flex-shrink-0`}>
-        <img src={school.mainImage || "/placeholder.svg"} alt={school.name} className="h-full w-full object-cover" />
+      <div className={`${
+        viewType === "grid" ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"
+      } overflow-hidden rounded-lg flex-shrink-0`}>
+        <img
+          src={school.mainImage || "/placeholder.svg"}
+          alt={school.name}
+          className="h-full w-full object-cover"
+        />
       </div>
 
-      <div className={`flex flex-1 flex-col justify-between ${viewType === "grid" ? "mt-4" : "sm:ml-4"}`}>
+      <div className={`flex flex-1 flex-col justify-between ${
+        viewType === "grid" ? "mt-4" : "sm:ml-4"
+      }`}>
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-xl font-semibold lg:text-2xl lg:font-bold">{school.name}</h3>
+            <h3 className="text-xl font-semibold lg:text-2xl lg:font-bold">
+              {school.name}
+            </h3>
+
             <div className="mt-1 flex items-center">
               {[...Array(5)].map((_, i) => {
                 const rating = Number(school.qualities?.ponderado ?? 0);
@@ -143,7 +156,11 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                   <Star
                     key={i}
                     className={`h-4 w-4 ${
-                      full ? "fill-yellow-400 text-yellow-400" : half ? "fill-yellow-200 text-yellow-200" : "fill-gray-200 text-gray-200"
+                      full
+                        ? "fill-yellow-400 text-yellow-400"
+                        : half
+                        ? "fill-yellow-200 text-yellow-200"
+                        : "fill-gray-200 text-gray-200"
                     }`}
                   />
                 );
@@ -161,10 +178,13 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
               Ciudad: <span className="text-gray-900">{school.city}</span>
             </p>
           )}
+
           {school.description?.añoFundacion && (() => {
             const antiguedad = new Date().getFullYear() - school.description.añoFundacion;
             return (
-              <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}>
+              <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
+                antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
+              }`}>
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -175,7 +195,14 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between">
-          <Image src={school.logo || "/placeholder.svg"} alt="Logo" className={`object-contain ${viewType === "grid" ? "h-16 w-auto max-w-[150px]" : "max-w-[150px] h-auto"}`} width={150} height={80} />
+          <Image
+            src={school.logo || "/placeholder.svg"}
+            alt="Logo"
+            className={`object-contain ${viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""}`}
+            width={viewType === "grid" ? 150 : 200}
+            height={viewType === "grid" ? 80 : 120}
+          />
+
           <div className="text-center sm:text-right mt-4 sm:mt-0">
             <div className="flex flex-col items-center sm:items-end">
               {offer ? (
@@ -193,8 +220,16 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 </div>
               )}
             </div>
-            <Link href={`/school-detail/${school._id}`} onMouseEnter={handlePrefetch} onTouchStart={handlePrefetch}>
-              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
+
+            <Link
+              href={`/school-detail/${school._id}`}
+              onMouseEnter={handlePrefetch}
+              onTouchStart={handlePrefetch}
+            >
+              <Button
+                className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold"
+                size="lg"
+              >
                 Ver escuela
               </Button>
             </Link>
