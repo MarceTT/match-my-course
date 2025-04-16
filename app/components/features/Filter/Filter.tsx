@@ -65,13 +65,8 @@ const normalize = (str: string) =>
           }
     
           if (key === "cities") {
-            const citiesLabels = value.map((cityId: string) => {
-              const option = filtersConfig.cities.options?.find(o => o.id === cityId);
-              return option?.label || cityId;
-            });
-            params.set(key, citiesLabels.join(","));
-          } else {
-            params.set(key, value.join(","));
+            const normalizedCities = value.map((cityId: string) => normalize(cityId));
+            params.set(key, normalizedCities.join(","));
           }
         } else if (
           !Array.isArray(value) &&
@@ -99,7 +94,11 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
 
       if (!prev.course?.includes(normalize(courseFromUrl))) {
         updatedFilters.course = [normalize(courseFromUrl)];
-        updatedFilters.cities = [];
+        const citiesFromUrl = searchParams.get("cities");
+        if (citiesFromUrl) {
+          const cityList = citiesFromUrl.split(",").map((c) => normalize(c));
+          updatedFilters.cities = cityList;
+        }
         updatedFilters.hours = [];
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
