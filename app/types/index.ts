@@ -59,6 +59,9 @@ export interface Option {
     prices: Price[];
     description?: SchoolDescription;
     lowestPrice?: number;
+    bestPrice?: number;
+    originalPrice?: number;
+    hasOffer?: boolean;
   }
   
   export interface Installations {
