@@ -54,6 +54,10 @@ const normalize = (str: string) =>
           ) {
             return; // no enviar weeks
           }
+          if (key === "weeks") {
+            const isDefault = value[0] === 1 && value[1] === 25;
+            if (isDefault) return;
+          }
     
           if (key === "cities") {
             const citiesLabels = value.map((cityId: string) => {
