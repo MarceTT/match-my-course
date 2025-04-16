@@ -114,7 +114,11 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       if (courseFromUrl !== "ingles-visa-de-trabajo") {
         const params = getQueryParams(updatedFilters);
         params.delete("offers");
-        router.push(`?${params.toString()}`);
+        const newUrl = `?${params.toString()}`;
+      
+        if (newUrl !== window.location.search) {
+          router.push(newUrl);
+        }
       }
 
       return updatedFilters;
