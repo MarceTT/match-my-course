@@ -48,15 +48,19 @@ const normalize = (str: string) =>
       Object.entries(filters).forEach(([key, value]) => {
         if (Array.isArray(value) && value.length > 0) {
           if (key === "weeks") {
-            const isDefault =
-              Array.isArray(value) &&
-              value[0] === filtersConfig.weeks.slider?.min &&
-              value[1] === filtersConfig.weeks.slider?.max;
-    
             const isVisaCourse = filters.course?.includes("ingles-visa-de-trabajo");
+            const sliderConfig = filtersConfig.weeks.slider;
+            
+            const isDefaultWeeks =
+              sliderConfig &&
+              value[0] === sliderConfig.min &&
+              value[1] === sliderConfig.max;
+            
+            if (isVisaCourse || isDefaultWeeks) return;
     
-            if (isVisaCourse || isDefault) return;
-            params.set(key, value.join(","));
+            // Correcto: separar weeks en weeksMin y weeksMax
+            params.set("weeksMin", String(value[0]));
+            params.set("weeksMax", String(value[1]));
             return;
           }
     
@@ -76,6 +80,7 @@ const normalize = (str: string) =>
     
       return params;
     };
+    
     
 
 const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
