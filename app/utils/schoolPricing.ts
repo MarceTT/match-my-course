@@ -30,16 +30,13 @@ interface PriceResult {
   
     // Caso 2: pipelines con bestPrice y priceSource
     if (
-      typeof school.bestPrice === "number" &&
-      school.bestPrice > 0 &&
-      ["weekprices", "weekranges"].includes(school.priceSource ?? "")
-    ) {
-      return {
-        price: school.bestPrice,
-        offer: null,
-        fromLabel: true,
-      };
-    }
+        typeof school.bestPrice === "number" &&
+        school.bestPrice > 0 &&
+        ["weekprices", "weekranges"].includes(school.priceSource ?? "")
+      ) {
+        return { price: school.bestPrice, offer: null, fromLabel: true };
+      }
+    
   
     return {
       price: 0,
