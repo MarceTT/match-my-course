@@ -286,13 +286,13 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
                   {fromLabel ? (
                     <>
                       Desde{" "}
-                      <span className="text-blue-600 text-2xl font-bold">
+                      <span className="text-blue-600 text-3xl font-bold">
                         €{price.toLocaleString()}
                       </span>{" "}
                       / Semana
                     </>
                   ) : (
-                    <span className="text-blue-600 text-2xl font-bold">
+                    <span className="text-blue-600 text-3xl font-extrabold">
                       €{price.toLocaleString()}
                     </span>
                   )}
