@@ -114,14 +114,25 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
   
       if (category === "course") {
         if (isChecked) {
-          // 🔥 Evitar deschequear el último curso
+          // Evitar desmarcar si es el único seleccionado
           if (current.length === 1) {
-            return prev; // no hacer nada
+            return prev;
           }
           updatedFilters.course = current.filter((item: string) => item !== value);
         } else {
-          // ✅ Seleccionar uno solo (desmarcar otros)
+          // ✅ Seleccionar uno nuevo (de cualquier grupo)
           updatedFilters.course = [value];
+        }
+  
+        // Limpiar filtros relacionados si cambia de grupo
+        updatedFilters.cities = [];
+        updatedFilters.hours = [];
+        updatedFilters.type = [];
+        updatedFilters.accreditation = [];
+        updatedFilters.certification = [];
+  
+        if (value !== "ingles-visa-de-trabajo") {
+          updatedFilters.offers = [];
         }
       } else {
         updatedFilters[category] = isChecked
@@ -132,6 +143,7 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       return updatedFilters;
     });
   };
+  
   
 
   const handleSliderChange = (category: string, value: number[]) => {
