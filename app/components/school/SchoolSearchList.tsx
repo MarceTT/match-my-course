@@ -289,7 +289,6 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
                       <span className="text-blue-600 text-3xl font-bold">
                         €{price.toLocaleString()}
                       </span>{" "}
-                      / Semana
                     </>
                   ) : (
                     <span className="text-blue-600 text-3xl font-extrabold">

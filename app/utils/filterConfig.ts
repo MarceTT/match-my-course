@@ -53,9 +53,8 @@ const filtersConfig: Record<string, FilterConfig> = {
       { label: "Inglés general intensivo", exclusiveGroup: "general" },
       { label: "Inglés general orientado a negocios", exclusiveGroup: "business-or-work" },
       { label: "Inglés + visa de trabajo (6 meses)", exclusiveGroup: "business-or-work", lockWeeks: 25 },
-      { label: "Ver todos los cursos", id: "todos" },
     ].map((opt) => ({
-      id: opt.id || normalizeUrl(opt.label),  // SOLO aquí usamos normalizeUrl
+      id: normalizeUrl(opt.label),  // SOLO aquí usamos normalizeUrl
       ...opt,
     })),
   },
@@ -73,9 +72,9 @@ const filtersConfig: Record<string, FilterConfig> = {
     type: "slider",
     slider: {
       min: 1,
-      max: 25,
+      max: 36,
       step: 1,
-      default: [1, 25],
+      default: [1, 36],
     },
   },
 

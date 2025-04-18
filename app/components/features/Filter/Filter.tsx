@@ -88,74 +88,51 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
   const router = useRouter();
 
   useEffect(() => {
-    const courseFromUrl = searchParams.get("course") || "todos";
-    const normalizedCourse = normalize(courseFromUrl);
+    const courseFromUrl = searchParams.get("course");
+    const normalizedCourse = normalize(courseFromUrl || "ingles-general"); // 👈 default ingles-general
     const citiesFromUrl = searchParams.get("cities");
     const normalizedCities = citiesFromUrl
       ? citiesFromUrl.split(",").map((c) => normalize(c))
       : [];
-
+  
     setFilters((prev) => {
-      const prevCourse = prev.course?.[0] || "todos";
-      const prevCities = prev.cities || [];
-
-      const courseChanged = prevCourse !== normalizedCourse;
-      const citiesChanged =
-        normalizedCities.length !== prevCities.length ||
-        normalizedCities.some((c, i) => c !== prevCities[i]);
-
-      if (!courseChanged && !citiesChanged) return prev;
-
       const updatedFilters = { ...prev };
-
+  
       updatedFilters.course = [normalizedCourse];
       updatedFilters.cities = normalizedCities;
-      updatedFilters.hours = [];
-      updatedFilters.type = [];
-      updatedFilters.accreditation = [];
-      updatedFilters.certification = [];
-
-      if (normalizedCourse === "ingles-visa-de-trabajo") {
-        delete updatedFilters.weeks;
-      } else {
-        updatedFilters.offers = [];
-      }
-
+  
       return updatedFilters;
     });
   }, [searchParams, setFilters]);
+  
 
   const handleCheckboxChange = (category: string, value: string) => {
     setFilters((prev) => {
       const current = prev[category] || [];
       const isChecked = current.includes(value);
       const updatedFilters = { ...prev };
-
+  
       if (category === "course") {
-        updatedFilters.course = isChecked ? ["todos"] : [value];
-        if (!isChecked) {
-          updatedFilters.cities = [];
-          updatedFilters.hours = [];
-          updatedFilters.type = [];
-          updatedFilters.accreditation = [];
-          updatedFilters.certification = [];
-
-          if (value !== "ingles-visa-de-trabajo") {
-            updatedFilters.offers = [];
-            const params = getQueryParams(updatedFilters);
-            params.delete("offers");
-            router.push(`?${params.toString()}`);
+        if (isChecked) {
+          // 🔥 Evitar deschequear el último curso
+          if (current.length === 1) {
+            return prev; // no hacer nada
           }
+          updatedFilters.course = current.filter((item: string) => item !== value);
+        } else {
+          // ✅ Seleccionar uno solo (desmarcar otros)
+          updatedFilters.course = [value];
         }
       } else {
         updatedFilters[category] = isChecked
           ? current.filter((item: string) => item !== value)
-          : [...current.filter((item: string) => item !== "todos"), value];
+          : [...current, value];
       }
-
+  
       return updatedFilters;
     });
   };
+  
 
   const handleSliderChange = (category: string, value: number[]) => {
     setFilters((prev) => ({
