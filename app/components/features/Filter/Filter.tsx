@@ -114,24 +114,21 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
   
       if (category === "course") {
         if (isChecked) {
-          // Evitar desmarcar si es el único seleccionado
           if (current.length === 1) {
-            return prev;
+            return prev; // No deseleccionar el único curso activo
           }
           updatedFilters.course = current.filter((item: string) => item !== value);
         } else {
-          // ✅ Seleccionar uno nuevo (de cualquier grupo)
           updatedFilters.course = [value];
         }
   
-        // Limpiar filtros relacionados si cambia de grupo
         updatedFilters.cities = [];
         updatedFilters.hours = [];
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
         updatedFilters.certification = [];
   
-        if (value !== "ingles-visa-de-trabajo") {
+        if (value !== "ingles-visa-de-trabajo" && value !== "ingles-mas-visa-de-trabajo-6-meses") {
           updatedFilters.offers = [];
         }
       } else {
@@ -143,6 +140,7 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       return updatedFilters;
     });
   };
+  
   
   
 
