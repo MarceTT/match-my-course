@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
@@ -7,12 +9,7 @@ import { RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import filtersConfig from "@/app/utils/filterConfig";
 import { useSearchParams, useRouter } from "next/navigation";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface FilterProps {
   isOpen: boolean;
@@ -41,20 +38,13 @@ const normalize = (str: string) =>
 
 const getQueryParams = (filters: Record<string, any>) => {
   const params = new URLSearchParams();
-
   Object.entries(filters).forEach(([key, value]) => {
     if (Array.isArray(value) && value.length > 0) {
       if (key === "weeks") {
-        const isVisaCourse = filters.course?.includes("ingles-visa-de-trabajo") || filters.course?.includes("ingles-mas-visa-de-trabajo-6-meses");
+        const isVisaCourse = filters.course?.includes("ingles-mas-visa-de-trabajo-6-meses");
         const sliderConfig = filtersConfig.weeks.slider;
-
-        const isDefaultWeeks =
-          sliderConfig &&
-          value[0] === sliderConfig.min &&
-          value[1] === sliderConfig.max;
-
+        const isDefaultWeeks = sliderConfig && value[0] === sliderConfig.min && value[1] === sliderConfig.max;
         if (isVisaCourse || isDefaultWeeks) return;
-
         params.set("weeksMin", String(value[0]));
         params.set("weeksMax", String(value[1]));
         return;
@@ -63,11 +53,10 @@ const getQueryParams = (filters: Record<string, any>) => {
         const normalizedCities = value.map((cityId: string) => normalize(cityId));
         params.set(key, normalizedCities.join(","));
       }
-    } else if (value !== undefined && value !== null && value !== 0) {
+    } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
       params.set(key, String(value));
     }
   });
-
   return params;
 };
 
@@ -79,16 +68,13 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
     const courseFromUrl = searchParams.get("course");
     const normalizedCourse = normalize(courseFromUrl || "ingles-general");
     const citiesFromUrl = searchParams.get("cities");
-    const normalizedCities = citiesFromUrl
-      ? citiesFromUrl.split(",").map((c) => normalize(c))
-      : [];
+    const normalizedCities = citiesFromUrl ? citiesFromUrl.split(",").map((c) => normalize(c)) : [];
 
-    setFilters((prev) => {
-      const updatedFilters = { ...prev };
-      updatedFilters.course = [normalizedCourse];
-      updatedFilters.cities = normalizedCities;
-      return updatedFilters;
-    });
+    setFilters((prev) => ({
+      ...prev,
+      course: [normalizedCourse],
+      cities: normalizedCities,
+    }));
   }, [searchParams, setFilters]);
 
   const handleCheckboxChange = (category: string, value: string) => {
@@ -99,21 +85,17 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
 
       if (category === "course") {
         if (isChecked) {
-          if (current.length === 1) {
-            return prev;
-          }
+          if (current.length === 1) return prev;
           updatedFilters.course = current.filter((item: string) => item !== value);
         } else {
           updatedFilters.course = [value];
         }
-
         updatedFilters.cities = [];
         updatedFilters.hours = [];
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
         updatedFilters.certification = [];
-
-        if (value !== "ingles-visa-de-trabajo" && value !== "ingles-mas-visa-de-trabajo-6-meses") {
+        if (value !== "ingles-mas-visa-de-trabajo-6-meses") {
           updatedFilters.offers = [];
         }
       } else {
@@ -121,7 +103,6 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
           ? current.filter((item: string) => item !== value)
           : [...current, value];
       }
-
       return updatedFilters;
     });
   };
@@ -136,11 +117,7 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
   const handleReset = () => {
     const resetFilters: Record<string, any> = {};
     Object.entries(filtersConfig).forEach(([key, config]) => {
-      if (config.type === "slider" && config.slider) {
-        resetFilters[key] = config.slider.default;
-      } else {
-        resetFilters[key] = [];
-      }
+      resetFilters[key] = config.type === "slider" && config.slider ? config.slider.default : [];
     });
     setFilters(resetFilters);
   };
@@ -150,8 +127,7 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       const currentValue = filters[key];
       if (config.type === "slider" && config.slider) {
         return Array.isArray(currentValue)
-          ? currentValue[0] === config.slider.min &&
-              currentValue[1] === config.slider.max
+          ? currentValue[0] === config.slider.min && currentValue[1] === config.slider.max
           : currentValue === config.slider.default;
       } else {
         return !currentValue || currentValue.length === 0;
@@ -188,20 +164,16 @@ export default Filter;
 
 function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isDefaultFilters }: any) {
   const selectedCourse = filters.course || [];
-  const actualSelectedCourses = selectedCourse.filter((id: string) => id !== "todos");
-
-  const selectedExclusiveGroup = filtersConfig.course.options?.find(opt => opt.id === actualSelectedCourses[0])?.exclusiveGroup;
+  const isVisaCourseSelected = selectedCourse.includes("ingles-mas-visa-de-trabajo-6-meses");
 
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       {Object.entries(filtersConfig).map(([key, config]) => {
-        if (key === "offers" && !selectedExclusiveGroup?.includes("business-or-work")) return null;
-
+        if (key === "offers" && !isVisaCourseSelected) return null;
         const isCities = key === "cities";
-        const options =
-          isCities && selectedExclusiveGroup?.includes("business-or-work")
-            ? visaCities.map((label) => ({ id: normalize(label), label }))
-            : config.options;
+        const options = isCities && isVisaCourseSelected
+          ? visaCities.map((label) => ({ id: normalize(label), label }))
+          : config.options;
 
         if (config.type === "slider" && config.slider) {
           const value = filters[key] || config.slider.default;
@@ -210,7 +182,8 @@ function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isD
               <SliderSection
                 value={value}
                 config={config.slider}
-                onChange={(val) => onSliderChange(key, val)}
+                onChange={(val: number[]) => { if (!isVisaCourseSelected) onSliderChange(key, val); }}
+                disabled={isVisaCourseSelected}
               />
             </FilterSection>
           );
@@ -218,37 +191,25 @@ function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isD
 
         return (
           <FilterSection title={config.label} key={key}>
-            {options?.map(({ id, label }: any) => {
-              const courseExclusiveGroup = filtersConfig.course.options?.find(opt => opt.id === id)?.exclusiveGroup;
-
-              const disabled =
-                key === "course" &&
-                selectedExclusiveGroup &&
-                courseExclusiveGroup !== selectedExclusiveGroup;
-
-              return (
-                <TooltipProvider key={id}>
-                  <Tooltip delayDuration={200}>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <CheckboxItem
-                          id={id}
-                          label={label}
-                          checked={(filters[key] || []).includes(id)}
-                          onChange={() => onCheckboxChange(key, id)}
-                          disabled={disabled || undefined}
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    {disabled && (
-                      <TooltipContent side="right">
-                        <p>Solo se puede seleccionar un curso de visa o cursos generales</p>
-                      </TooltipContent>
-                    )}
-                  </Tooltip>
-                </TooltipProvider>
-              );
-            })}
+            {options?.map(({ id, label }) => (
+              <TooltipProvider key={id}>
+                <Tooltip delayDuration={200}>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <CheckboxItem
+                        id={id}
+                        label={label}
+                        checked={(filters[key] || []).includes(id)}
+                        onChange={() => onCheckboxChange(key, id)}
+                      />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Solo se puede seleccionar un curso a la vez</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
           </FilterSection>
         );
       })}
@@ -272,24 +233,20 @@ function FilterSection({ title, children }: { title: string; children: React.Rea
   );
 }
 
-function CheckboxItem({ id, label, checked, onChange, disabled }: { id: string; label: string; checked: boolean; onChange: () => void; disabled?: boolean; }) {
+function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
   return (
     <div className="flex items-center space-x-2">
       <Checkbox id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} />
-      <label htmlFor={id} className="text-sm">{label}</label>
+      <label htmlFor={id} className="text-sm">
+        {label}
+      </label>
     </div>
   );
 }
 
-function SliderSection({ value, config, onChange }: { value: number[] | number; config: { min: number; max: number; step: number }; onChange: (value: number[]) => void; }) {
-  const [localValue, setLocalValue] = useState<number[]>(Array.isArray(value) ? value : [config.min, config.max]);
-
-  useEffect(() => {
-    if (Array.isArray(value)) {
-      setLocalValue(value);
-    }
-  }, [value]);
-
+function SliderSection({ value, config, onChange, disabled }: any) {
+  const [localValue, setLocalValue] = useState(Array.isArray(value) ? value : [config.min, config.max]);
+  useEffect(() => { if (Array.isArray(value)) setLocalValue(value); }, [value]);
   return (
     <div className="px-2">
       <Slider
@@ -300,6 +257,7 @@ function SliderSection({ value, config, onChange }: { value: number[] | number; 
         onValueChange={(val) => setLocalValue(val)}
         onValueCommit={(val) => onChange(val)}
         className="w-full"
+        disabled={disabled}
       />
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
         <div className="bg-primary text-white px-2 py-1 rounded shadow">{localValue[0]} semanas</div>
