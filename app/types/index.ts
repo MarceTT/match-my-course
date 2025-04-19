@@ -58,10 +58,10 @@ export interface Option {
     nationalities?: Nationalities;
     prices: Price[];
     description?: SchoolDescription;
-    lowestPrice?: number;
-    bestPrice?: number;
-    bestOffer?: number;
-    originalPrice?: number;
+    lowestPrice?: number | null;
+    bestPrice?: number | null;
+    bestOffer?: number | null;
+    originalPrice?: number | null;
     hasOffer?: boolean;
     priceSource?: string;
   }
