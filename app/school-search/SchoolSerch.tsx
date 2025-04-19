@@ -13,7 +13,7 @@ import { useDebounce } from "@/app/hooks/useDebounce";
 const normalizeCourse = (course: string) => {
   return course
     .normalize("NFD")
-    .replace(/\u0300-\u036f/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/\s+/g, "-");
 };
@@ -22,92 +22,50 @@ const SchoolSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const courseType = searchParams.get("course") || "";
+  const courseType = searchParams.get("course") || "ingles-general";
   const normalizedCourse = normalizeCourse(courseType);
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  const initialFilters: Record<string, any> = {};
-  Object.entries(filtersConfig).forEach(([key, config]) => {
-    if (key === "course") {
-      initialFilters[key] = normalizedCourse ? [normalizedCourse] : ["todos"];
-    } else if (config.type === "slider") {
-      initialFilters[key] = config.slider?.default ?? 0;
-    } else {
-      initialFilters[key] = [];
-    }
-  });
+  const generateInitialFilters = (course: string): Record<string, any> => {
+    const initial: Record<string, any> = {};
+    Object.entries(filtersConfig).forEach(([key, config]) => {
+      if (key === "course") {
+        initial[key] = course ? [course] : ["ingles-general"];
+      } else if (config.type === "slider") {
+        initial[key] = config.slider?.default ?? 0;
+      } else {
+        initial[key] = [];
+      }
+    });
+    return initial;
+  };
 
-  const [filters, setFilters] = useState<Record<string, any>>(initialFilters);
-  const debouncedFilters = useDebounce(filters, 1500);
+  const [filters, setFilters] = useState<Record<string, any>>(generateInitialFilters(normalizedCourse));
+  const debouncedFilters = useDebounce(filters, 600);
+
+  useEffect(() => {
+    setFilters(generateInitialFilters(normalizedCourse));
+  }, [courseType]);
 
   useEffect(() => {
     const params = new URLSearchParams();
-  
-    if (courseType) {
-      params.set("course", courseType);
+    if (filters.course?.length) {
+      params.set("course", filters.course[0]);
     }
-  
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = debouncedFilters[key];
-  
       if (Array.isArray(value) && key === "weeks" && value.length === 2) {
         const [min, max] = value;
-        const isDefault = min === config.slider?.min && max === config.slider?.max;
-        if (!isDefault) {
+        if (!(min === config.slider?.min && max === config.slider?.max)) {
           params.set("weeksMin", String(min));
           params.set("weeksMax", String(max));
         }
       } else if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
-      } else if (
-        !Array.isArray(value) &&
-        value !== null &&
-        value !== undefined &&
-        value !== 0 &&
-        config.type === "slider"
-      ) {
-        params.set(key, String(value));
       }
     });
-  
-    const queryString = params.toString();
-    router.replace(`/school-search?${queryString}`);
-  
-    // solo scroll si el usuario está muy abajo
-    if (window.scrollY > 500) {
-      setTimeout(() => {
-        listRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
-        });
-      }, 200);
-    }
-  }, [debouncedFilters, courseType, router]);
-  
-
-  const handleResetFilters = () => {
-    const resetFilters: Record<string, any> = {
-      course: ["todos"],
-    };
-
-    Object.entries(filtersConfig).forEach(([key, config]) => {
-      if (key !== "course") {
-        if (config.type === "slider" && config.slider) {
-          resetFilters[key] = config.slider.default;
-        } else {
-          resetFilters[key] = [];
-        }
-      }
-    });
-
-    setFilters(resetFilters);
-    router.replace("/school-search?course=todos");
-
-    setTimeout(() => {
-      listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 200);
-  };
+    router.replace(`/school-search?${params.toString()}`);
+  }, [debouncedFilters, router]);
 
   const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
@@ -117,7 +75,6 @@ const SchoolSearch = () => {
       <Header />
       <div className="container mx-auto px-4 py-8 h-[calc(100vh-80px)]">
         <div className="flex flex-col lg:flex-row gap-6 h-full">
-          {/* 👉 Sticky Filter solo en escritorio */}
           {!isOpen && (
             <div className="hidden lg:block w-64 flex-shrink-0 sticky top-[100px] self-start h-fit z-10">
               <Filter
@@ -125,23 +82,17 @@ const SchoolSearch = () => {
                 setIsOpen={setIsOpen}
                 filters={filters}
                 setFilters={setFilters}
-                onResetFilters={handleResetFilters}
               />
             </div>
           )}
-
-          {/* 👉 Drawer Filter en mobile */}
           {isOpen && (
             <Filter
               isOpen={isOpen}
               setIsOpen={setIsOpen}
               filters={filters}
               setFilters={setFilters}
-              onResetFilters={handleResetFilters}
             />
           )}
-
-          {/* 👉 Scroll sólo para las escuelas */}
           <div
             ref={listRef}
             className="flex-1 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300"
@@ -157,7 +108,6 @@ const SchoolSearch = () => {
       </div>
       <Footer />
 
-      {/* 👉 Botón flotante solo en mobile */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
