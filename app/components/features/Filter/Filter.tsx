@@ -164,7 +164,7 @@ export default Filter;
 
 function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isDefaultFilters }: any) {
   const selectedCourse = filters.course || [];
-  const isVisaCourseSelected = selectedCourse.includes("ingles-mas-visa-de-trabajo-6-meses");
+  const isVisaCourseSelected = selectedCourse.includes("ingles-visa-de-trabajo");
 
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
