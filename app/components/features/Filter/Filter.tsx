@@ -245,24 +245,40 @@ function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
 }
 
 function SliderSection({ value, config, onChange, disabled }: any) {
-  const [localValue, setLocalValue] = useState(Array.isArray(value) ? value : [config.min, config.max]);
-  useEffect(() => { if (Array.isArray(value)) setLocalValue(value); }, [value]);
+  const [localValue, setLocalValue] = useState<number>(
+    Array.isArray(value) ? value[0] : config.min
+  );
+
+  useEffect(() => {
+    if (Array.isArray(value)) {
+      setLocalValue(value[0]);
+    }
+  }, [value]);
+
   return (
     <div className="px-2">
       <Slider
-        value={localValue}
+        value={[localValue]}
         min={config.min}
         max={config.max}
         step={config.step}
-        onValueChange={(val) => setLocalValue(val)}
-        onValueCommit={(val) => onChange(val)}
+        onValueChange={(val) => {
+          const newMin = val[0];
+          setLocalValue(newMin);
+          onChange([newMin, config.max]); // weeksMin actualizado, weeksMax fijo en 36
+        }}
         className="w-full"
         disabled={disabled}
       />
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-        <div className="bg-primary text-white px-2 py-1 rounded shadow">{localValue[0]} semanas</div>
-        <div className="bg-primary text-white px-2 py-1 rounded shadow">{localValue[1]} semanas</div>
+        <div className="bg-primary text-white px-2 py-1 rounded shadow">
+          {localValue} semanas
+        </div>
+        <div className="bg-primary text-white px-2 py-1 rounded shadow">
+          36 semanas
+        </div>
       </div>
     </div>
   );
 }
+
