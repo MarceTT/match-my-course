@@ -21,7 +21,7 @@ const getBestSchoolPrice = (
   school: SchoolDetails,
   courseType: string
 ): { price: number; offer: number | null; fromLabel: boolean } => {
-  const raw = school.prices?.[0]?.horarios;
+  const raw = school.prices?.find((p) => p?.horarios?.precio && p.horarios.precio !== "-" && p.horarios.precio !== "" && p.horarios.precio !== null)?.horarios;
 
   if (courseType === "ingles-visa-de-trabajo" && raw) {
     const offer = raw.oferta
