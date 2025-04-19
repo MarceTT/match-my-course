@@ -62,6 +62,7 @@ export interface Option {
     bestPrice?: number | null;
     bestOffer?: number | null;
     originalPrice?: number | null;
+    selectedPrice?: number | null;
     hasOffer?: boolean;
     priceSource?: string;
   }

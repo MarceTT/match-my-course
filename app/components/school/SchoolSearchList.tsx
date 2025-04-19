@@ -21,6 +21,10 @@ const getBestSchoolPrice = (
   school: SchoolDetails,
   courseType: string
 ): { price: number; offer: number | null; fromLabel: boolean } => {
+  if (typeof school.selectedPrice === "number" && school.selectedPrice > 0) {
+    return { price: school.selectedPrice, offer: null, fromLabel: true };
+  }
+
   const raw = school.prices?.find((p) => p?.horarios?.precio && p.horarios.precio !== "-" && p.horarios.precio !== "" && p.horarios.precio !== null)?.horarios;
 
   if (courseType === "ingles-visa-de-trabajo" && raw) {
@@ -58,6 +62,7 @@ const getBestSchoolPrice = (
 
   return { price: 0, offer: null, fromLabel: false };
 };
+
 
 const SchoolSearchList = ({
   isFilterOpen,
