@@ -1,46 +1,40 @@
-"use client";
-
-import React from 'react'
+import React from "react";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Filter } from "lucide-react";
 
 interface FilterDrawerProps {
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
-    children: React.ReactNode; // Contenido del filtro
-  }
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  children: React.ReactNode;
+}
 
 const FilterDrawer = ({ isOpen, setIsOpen, children }: FilterDrawerProps) => {
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-    <SheetTrigger asChild>
-      <Button
-        variant="outline"
-        className="w-full mb-4 flex justify-between items-center lg:hidden"
-      >
-        Filtros
-        {isOpen ? (
-          <ChevronUp className="h-4 w-4" />
-        ) : (
-          <ChevronDown className="h-4 w-4" />
-        )}
-      </Button>
-    </SheetTrigger>
-
-    {/* Contenido del drawer (Sheet) en mobile */}
-    <SheetContent side="right" className="w-64 sm:w-96 p-0">
-      <SheetHeader className="p-4 border-b">
-        <SheetTitle>Filtros</SheetTitle>
-      </SheetHeader>
-
-      {/* Contenido del filtro */}
-      <div className="h-[calc(100vh-200px)] overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      <DrawerTrigger asChild>
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 w-full justify-center lg:hidden"
+        >
+          <Filter className="w-4 h-4" />
+          Filtros
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent className="p-4 pt-8">
         {children}
-      </div>
-    </SheetContent>
-  </Sheet>
-  )
-}
+        <div className="mt-4 flex justify-center">
+          <Button
+            variant="secondary"
+            onClick={() => setIsOpen(false)}
+            className="w-full"
+          >
+            Aplicar filtros
+          </Button>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
 
-export default FilterDrawer
+export default FilterDrawer;
