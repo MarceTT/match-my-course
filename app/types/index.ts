@@ -60,6 +60,7 @@ export interface Option {
     description?: SchoolDescription;
     lowestPrice?: number;
     bestPrice?: number;
+    bestOffer?: number;
     originalPrice?: number;
     hasOffer?: boolean;
     priceSource?: string;
