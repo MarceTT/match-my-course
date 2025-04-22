@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Grid, List, Star, BadgePercent, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
@@ -9,10 +8,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useInfiniteFilteredSchools } from "@/app/hooks/useInfiniteFilteredSchools"; // Nuevo hook paginado
 import { useInView } from "react-intersection-observer";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
+
+interface SchoolListProps {
+  isFilterOpen: boolean;
+  schools: SchoolDetails[];
+  isLoading: boolean;
+  isError: boolean;
+}
 
 const getBestSchoolPrice = (school: SchoolDetails, courseType: string) => {
   const isVisaCourse = courseType.includes("visa-de-trabajo");
@@ -30,40 +34,10 @@ const getBestSchoolPrice = (school: SchoolDetails, courseType: string) => {
   return { price: 0, offer: null, fromLabel: false };
 };
 
-interface SchoolListProps {
-  isFilterOpen: boolean;
-  filters: Record<string, any>;
-}
-
-const SchoolSearchList = ({ isFilterOpen, filters }: SchoolListProps) => {
+const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolListProps) => {
   const [viewType, setViewType] = useState<"grid" | "list">("list");
   const [courseType, setCourseType] = useState("todos");
   const { ref, inView } = useInView();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-  } = useInfiniteFilteredSchools(filters);
-
-  const schools = data?.pages.flatMap((page) => page.schools) || [];
-
-  useEffect(() => {
-    const course = searchParams.get("course") || "todos";
-    setCourseType(course);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) return <FullScreenLoader isLoading />;
   if (isError) return <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>;
@@ -91,22 +65,24 @@ const SchoolSearchList = ({ isFilterOpen, filters }: SchoolListProps) => {
 
       {viewType === "list" ? (
         <div className="space-y-6 mt-4">
-          {schools.map((school) => (
-            <SchoolCard key={school._id} school={school} viewType="list" courseType={courseType} />
+          {schools.filter(Boolean).map((school) => (
+            school._id && (
+              <SchoolCard key={school._id} school={school} viewType="list" courseType={courseType} />
+            )
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {schools.map((school) => (
-            <SchoolCard key={school._id} school={school} viewType="grid" courseType={courseType} />
+          {schools.filter(Boolean).map((school) => (
+            school._id && (
+              <SchoolCard key={school._id} school={school} viewType="grid" courseType={courseType} />
+            )
           ))}
         </div>
       )}
 
       <div ref={ref} className="flex justify-center items-center mt-10">
-        {isFetchingNextPage && (
-          <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        )}
+        {/* Optionally show loader */}
       </div>
     </div>
   );

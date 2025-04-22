@@ -9,6 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
 import filtersConfig from "@/app/utils/filterConfig";
 import { useDebounce } from "@/app/hooks/useDebounce";
+import InfiniteSchoolFiltered from "../components/school/InfiniteSchoolFiltered";
 
 const normalizeCourse = (course: string) => {
   return course
@@ -40,7 +41,9 @@ const SchoolSearch = () => {
     return initial;
   };
 
-  const [filters, setFilters] = useState<Record<string, any>>(generateInitialFilters(normalizedCourse));
+  const [filters, setFilters] = useState<Record<string, any>>(
+    generateInitialFilters(normalizedCourse)
+  );
   const debouncedFilters = useDebounce(filters, 600);
 
   useEffect(() => {
@@ -49,14 +52,14 @@ const SchoolSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-  
+
     if (filters.course?.length) {
       params.set("course", filters.course[0]);
     }
-  
+
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = debouncedFilters[key];
-  
+
       if (Array.isArray(value) && key === "weeks" && value.length > 0) {
         const weeksMin = value[0];
         if (weeksMin !== config.slider?.min) {
@@ -66,10 +69,9 @@ const SchoolSearch = () => {
         params.set(key, value.join(","));
       }
     });
-  
+
     router.replace(`/school-search?${params.toString()}`);
   }, [debouncedFilters, router]);
-  
 
   const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
@@ -101,10 +103,10 @@ const SchoolSearch = () => {
             ref={listRef}
             className="flex-1 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300"
           >
-            <SchoolList
-  isFilterOpen={isOpen}
-  filters={filters}
-/>
+            <InfiniteSchoolFiltered
+              filters={filters}
+              isFilterOpen={isOpen}
+            />
           </div>
         </div>
       </div>
