@@ -1,25 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
+import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
+import { useSearchParams, useRouter } from "next/navigation";
+import filtersConfig from "@/app/utils/filterConfig";
 import FilterDrawer from "./FilterDrawer";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
-import filtersConfig from "@/app/utils/filterConfig";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 
-interface FilterProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-  filters: Record<string, any>;
-  setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
-  onResetFilters?: () => void;
-}
-
-const visaCities = [
+const visaCities: string[] = [
   "Dublín", "Bray", "Galway", "Schull", "Naas", "Tralee", "Cork",
   "Ennis", "Donegal", "Drogheda", "Limerick", "Athlone", "Waterford",
   "Killarney", "Sligo", "Cahersiveen", "Wexford",
@@ -36,46 +33,49 @@ const normalize = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
-const getQueryParams = (filters: Record<string, any>) => {
-  const params = new URLSearchParams();
-  Object.entries(filters).forEach(([key, value]) => {
-    if (Array.isArray(value) && value.length > 0) {
-      if (key === "weeks") {
-        const isVisaCourse = filters.course?.includes("ingles-mas-visa-de-trabajo-6-meses");
-        const sliderConfig = filtersConfig.weeks.slider;
-        const isDefaultWeeks = sliderConfig && value[0] === sliderConfig.min && value[1] === sliderConfig.max;
-        if (isVisaCourse || isDefaultWeeks) return;
-        params.set("weeksMin", String(value[0]));
-        params.set("weeksMax", String(value[1]));
-        return;
-      }
-      if (key === "cities") {
-        const normalizedCities = value.map((cityId: string) => normalize(cityId));
-        params.set(key, normalizedCities.join(","));
-      }
-    } else if (!Array.isArray(value) && value !== undefined && value !== null && value !== 0) {
-      params.set(key, String(value));
-    }
-  });
-  return params;
-};
+interface FilterProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  filters: Record<string, any>;
+  setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  onResetFilters?: () => void;
+}
 
-const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: FilterProps) => {
+const Filter = ({
+  isOpen,
+  setIsOpen,
+  filters,
+  setFilters,
+  onResetFilters,
+}: FilterProps) => {
   const searchParams = useSearchParams();
+  const debouncedSearchParams = useDebounce(searchParams.toString(), 150); // 💥 debounce 150ms
   const router = useRouter();
 
   useEffect(() => {
-    const courseFromUrl = searchParams.get("course");
-    const normalizedCourse = normalize(courseFromUrl || "ingles-general");
-    const citiesFromUrl = searchParams.get("cities");
-    const normalizedCities = citiesFromUrl ? citiesFromUrl.split(",").map((c) => normalize(c)) : [];
+    const params = new URLSearchParams(debouncedSearchParams);
+    const courseFromUrl = params.get("course") || "ingles-general";
+    const normalizedCourse = normalize(courseFromUrl);
 
-    setFilters((prev) => ({
-      ...prev,
-      course: [normalizedCourse],
-      cities: normalizedCities,
-    }));
-  }, [searchParams, setFilters]);
+    setFilters((prev) => {
+      const prevCourse = prev.course?.[0] || "";
+      if (prevCourse === normalizedCourse) {
+        return prev;
+      }
+
+      const citiesFromUrl = params.get("cities");
+      const normalizedCities = citiesFromUrl
+        ? citiesFromUrl.split(",").map((c) => normalize(c))
+        : [];
+
+      return {
+        ...prev,
+        course: [normalizedCourse],
+        cities: normalizedCities,
+      };
+    });
+  }, [debouncedSearchParams, setFilters]);
+  
 
   const handleCheckboxChange = (category: string, value: string) => {
     setFilters((prev) => {
@@ -86,7 +86,9 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       if (category === "course") {
         if (isChecked) {
           if (current.length === 1) return prev;
-          updatedFilters.course = current.filter((item: string) => item !== value);
+          updatedFilters.course = current.filter(
+            (item: string) => item !== value
+          );
         } else {
           updatedFilters.course = [value];
         }
@@ -117,9 +119,37 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
   const handleReset = () => {
     const resetFilters: Record<string, any> = {};
     Object.entries(filtersConfig).forEach(([key, config]) => {
-      resetFilters[key] = config.type === "slider" && config.slider ? config.slider.default : [];
+      if (config.type === "slider" && config.slider) {
+        if (key === "weeks") {
+          resetFilters[key] = []; // 🔥 Weeks vacías, no enviar weeksMin
+        } else {
+          resetFilters[key] = config.slider.default;
+        }
+      } else {
+        resetFilters[key] = [];
+      }
     });
+
+    // 🔥 Mantener el curso actual
+    if (filters.course) {
+      resetFilters.course = [...filters.course];
+    }
+
     setFilters(resetFilters);
+
+    setTimeout(() => {
+      const slider = document.querySelector<HTMLInputElement>('[role="slider"]');
+      if (slider) {
+        slider.value = String(filtersConfig.weeks.slider?.min || 1); // forzamos a "1"
+      }
+    }, 100);
+
+    // 🔥 Opcional: limpiar weeksMin de la URL
+    const params = new URLSearchParams(window.location.search);
+    params.delete("weeksMin");
+    router.replace(`?${params.toString()}`);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const isDefaultFilters = () => {
@@ -127,7 +157,7 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
       const currentValue = filters[key];
       if (config.type === "slider" && config.slider) {
         return Array.isArray(currentValue)
-          ? currentValue[0] === config.slider.min && currentValue[1] === config.slider.max
+          ? currentValue.length === 0 || currentValue[0] === config.slider.min
           : currentValue === config.slider.default;
       } else {
         return !currentValue || currentValue.length === 0;
@@ -162,18 +192,27 @@ const Filter = ({ isOpen, setIsOpen, filters, setFilters, onResetFilters }: Filt
 
 export default Filter;
 
-function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isDefaultFilters }: any) {
+function FilterContent({
+  filters,
+  onCheckboxChange,
+  onSliderChange,
+  onReset,
+  isDefaultFilters,
+}: any) {
   const selectedCourse = filters.course || [];
-  const isVisaCourseSelected = selectedCourse.includes("ingles-visa-de-trabajo");
+  const isVisaCourseSelected = selectedCourse.includes(
+    "ingles-visa-de-trabajo"
+  );
 
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
       {Object.entries(filtersConfig).map(([key, config]) => {
         if (key === "offers" && !isVisaCourseSelected) return null;
         const isCities = key === "cities";
-        const options = isCities && isVisaCourseSelected
-          ? visaCities.map((label) => ({ id: normalize(label), label }))
-          : config.options;
+        const options =
+          isCities && isVisaCourseSelected
+            ? visaCities.map((label) => ({ id: normalize(label), label }))
+            : config.options;
 
         if (config.type === "slider" && config.slider) {
           const value = filters[key] || config.slider.default;
@@ -182,7 +221,9 @@ function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isD
               <SliderSection
                 value={value}
                 config={config.slider}
-                onChange={(val: number[]) => { if (!isVisaCourseSelected) onSliderChange(key, val); }}
+                onChange={(val: number[]) => {
+                  if (!isVisaCourseSelected) onSliderChange(key, val);
+                }}
                 disabled={isVisaCourseSelected}
               />
             </FilterSection>
@@ -215,7 +256,11 @@ function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isD
       })}
 
       {!isDefaultFilters() && (
-        <Button variant="outline" onClick={onReset} className="w-full flex items-center justify-center gap-2">
+        <Button
+          variant="outline"
+          onClick={onReset}
+          className="w-full flex items-center justify-center gap-2"
+        >
           <RotateCcw className="h-4 w-4" />
           Limpiar filtros
         </Button>
@@ -224,7 +269,13 @@ function FilterContent({ filters, onCheckboxChange, onSliderChange, onReset, isD
   );
 }
 
-function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
+function FilterSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
       <h3 className="mb-2 text-sm font-medium">{title}</h3>
@@ -236,7 +287,12 @@ function FilterSection({ title, children }: { title: string; children: React.Rea
 function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox id={id} checked={checked} onCheckedChange={onChange} disabled={disabled} />
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={onChange}
+        disabled={disabled}
+      />
       <label htmlFor={id} className="text-sm">
         {label}
       </label>
@@ -245,15 +301,15 @@ function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
 }
 
 function SliderSection({ value, config, onChange, disabled }: any) {
-  const [localValue, setLocalValue] = useState<number>(
-    Array.isArray(value) ? value[0] : config.min
-  );
+  const [localValue, setLocalValue] = useState<number>(config.min);
 
   useEffect(() => {
-    if (Array.isArray(value)) {
+    if (Array.isArray(value) && value.length > 0) {
       setLocalValue(value[0]);
+    } else {
+      setLocalValue(config.min);
     }
-  }, [value]);
+  }, [value, config.min]); // 👈 escucha cambios en `value`
 
   return (
     <div className="px-2">
@@ -265,7 +321,7 @@ function SliderSection({ value, config, onChange, disabled }: any) {
         onValueChange={(val) => {
           const newMin = val[0];
           setLocalValue(newMin);
-          onChange([newMin, config.max]); // weeksMin actualizado, weeksMax fijo en 36
+          onChange([newMin]);
         }}
         className="w-full"
         disabled={disabled}
@@ -273,9 +329,6 @@ function SliderSection({ value, config, onChange, disabled }: any) {
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
         <div className="bg-primary text-white px-2 py-1 rounded shadow">
           {localValue} semanas
-        </div>
-        <div className="bg-primary text-white px-2 py-1 rounded shadow">
-          36 semanas
         </div>
       </div>
     </div>

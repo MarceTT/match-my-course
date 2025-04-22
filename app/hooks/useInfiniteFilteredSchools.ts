@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { SchoolDetails } from "@/app/types/index";
-import filtersConfig from "../utils/filterConfig";
+import filtersConfig from "@/app/utils/filterConfig";
 
 const normalize = (str: string): string =>
-  str
-    .normalize("NFD")
+  str.normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -20,14 +19,15 @@ const cityIdToLabel = (filtersConfig.cities?.options || []).reduce((acc, option)
   return acc;
 }, {} as Record<string, string>);
 
-const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<SchoolDetails[]> => {
+const LIMIT = 8;
+
+const fetchPaginatedSchools = async ({ pageParam = 1, filters }: { pageParam?: number; filters: Record<string, any> }): Promise<any> => {
   const params = new URLSearchParams();
 
   const course = filters.course?.[0] || "";
-
   const isVisaCourse = course.includes("visa-de-trabajo");
 
-  Object.entries(filters).forEach(([key, value]) => {
+  Object.entries(filters || {}).forEach(([key, value]) => {
     if (key === "weeks" && Array.isArray(value) && value.length > 0) {
       if (!isVisaCourse) {
         params.set("weeksMin", String(value[0]));
@@ -45,21 +45,35 @@ const fetchSchoolsByCourse = async (filters: Record<string, any>): Promise<Schoo
     }
   });
 
+  params.set("page", String(pageParam));
+  params.set("limit", String(LIMIT));
+
   const queryString = params.toString();
   const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-by-type?${queryString}`;
+
   const res = await axios.get(url);
-  return res.data?.data?.schools ?? [];
+
+  return {
+    schools: res.data?.data?.schools || [],
+    currentPage: res.data?.data?.pagination?.currentPage || 1,
+    totalPages: res.data?.data?.pagination?.totalPages || 1,
+  };
 };
 
-
-
-export const useFilteredSchools = (filters: Record<string, any>) => {
-  return useQuery({
-    queryKey: ["filtered-schools", filters],
-    queryFn: () => fetchSchoolsByCourse(filters),
-    enabled: Object.keys(filters).length > 0,
-    staleTime: 1000 * 60 * 5,
+export const useInfiniteFilteredSchools = (filters: Record<string, any> | undefined) => {
+  return useInfiniteQuery({
+    queryKey: ["infinite-schools", filters],
+    queryFn: ({ pageParam = 1 }) => fetchPaginatedSchools({ pageParam, filters: filters || {} }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage < lastPage.totalPages) {
+        return lastPage.currentPage + 1;
+      }
+      return undefined;
+    },
     placeholderData: (previousData) => previousData,
+    retry: 1,
+    staleTime: 1000 * 60 * 5,
+    enabled: !!filters && Object.keys(filters).length > 0,
   });
 };
-

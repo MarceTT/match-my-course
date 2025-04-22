@@ -49,23 +49,27 @@ const SchoolSearch = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
+  
     if (filters.course?.length) {
       params.set("course", filters.course[0]);
     }
+  
     Object.entries(filtersConfig).forEach(([key, config]) => {
       const value = debouncedFilters[key];
-      if (Array.isArray(value) && key === "weeks" && value.length === 2) {
-        const [min, max] = value;
-        if (!(min === config.slider?.min && max === config.slider?.max)) {
-          params.set("weeksMin", String(min));
-          params.set("weeksMax", String(max));
+  
+      if (Array.isArray(value) && key === "weeks" && value.length > 0) {
+        const weeksMin = value[0];
+        if (weeksMin !== config.slider?.min) {
+          params.set("weeksMin", String(weeksMin));
         }
       } else if (Array.isArray(value) && value.length > 0) {
         params.set(key, value.join(","));
       }
     });
+  
     router.replace(`/school-search?${params.toString()}`);
   }, [debouncedFilters, router]);
+  
 
   const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
@@ -98,11 +102,9 @@ const SchoolSearch = () => {
             className="flex-1 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300"
           >
             <SchoolList
-              isFilterOpen={isOpen}
-              schools={schools}
-              isLoading={isLoading}
-              isError={isError}
-            />
+  isFilterOpen={isOpen}
+  filters={filters}
+/>
           </div>
         </div>
       </div>

@@ -68,14 +68,14 @@ const filtersConfig: Record<string, FilterConfig> = {
   },
 
   weeks: {
-    label: "Semanas a estudiar",
     type: "slider",
+    label: "Semanas",
     slider: {
       min: 1,
       max: 36,
       step: 1,
-      default: [1, 36],
-    },
+      default: 1, // Solo un valor: weeksMin
+    }
   },
 
   // type: {
