@@ -1,6 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Grid, List, Star, BadgePercent, Sparkles, Loader2 } from "lucide-react";
+import {
+  Grid,
+  List,
+  Star,
+  BadgePercent,
+  Sparkles,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
 import { Switch } from "@/components/ui/switch";
@@ -26,7 +33,9 @@ const getBestSchoolPrice = (school: SchoolDetails, courseType: string) => {
   const best = school.bestPrice ?? 0;
 
   if (isVisaCourse) {
-    if (offer && offer > 0) return { price: original, offer, fromLabel: false };
+    if (offer && offer > 0 && offer < original) {
+      return { price: original, offer, fromLabel: false };
+    }
     return { price: original, offer: null, fromLabel: false };
   }
   if (selected > 0) return { price: selected, offer: null, fromLabel: true };
@@ -34,23 +43,40 @@ const getBestSchoolPrice = (school: SchoolDetails, courseType: string) => {
   return { price: 0, offer: null, fromLabel: false };
 };
 
-const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolListProps) => {
+const SchoolSearchList = ({
+  isFilterOpen,
+  schools,
+  isLoading,
+  isError,
+}: SchoolListProps) => {
   const [viewType, setViewType] = useState<"grid" | "list">("list");
   const [courseType, setCourseType] = useState("todos");
   const { ref, inView } = useInView();
 
   if (isLoading) return <FullScreenLoader isLoading />;
-  if (isError) return <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>;
-  if (schools.length === 0) return <p className="text-gray-500 text-sm p-4">No se encontraron resultados.</p>;
+  if (isError)
+    return (
+      <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>
+    );
+  if (schools.length === 0)
+    return (
+      <p className="text-gray-500 text-sm p-4">No se encontraron resultados.</p>
+    );
 
   return (
-    <div className={`flex-1 flex flex-col ${isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"}`}>
+    <div
+      className={`flex-1 flex flex-col ${
+        isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"
+      }`}
+    >
       <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
         <span className="text-sm text-gray-600 hidden md:inline">Vista</span>
         <div className="hidden md:flex items-center space-x-2">
           <Switch
             checked={viewType === "grid"}
-            onCheckedChange={(checked) => setViewType(checked ? "grid" : "list")}
+            onCheckedChange={(checked) =>
+              setViewType(checked ? "grid" : "list")
+            }
           />
           {viewType === "grid" ? (
             <Grid className="text-blue-500 w-4 h-4" />
@@ -65,19 +91,35 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
 
       {viewType === "list" ? (
         <div className="space-y-6 mt-4">
-          {schools.filter(Boolean).map((school) => (
-            school._id && (
-              <SchoolCard key={school._id} school={school} viewType="list" courseType={courseType} />
-            )
-          ))}
+          {schools
+            .filter(Boolean)
+            .map(
+              (school) =>
+                school._id && (
+                  <SchoolCard
+                    key={school._id}
+                    school={school}
+                    viewType="list"
+                    courseType={courseType}
+                  />
+                )
+            )}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {schools.filter(Boolean).map((school) => (
-            school._id && (
-              <SchoolCard key={school._id} school={school} viewType="grid" courseType={courseType} />
-            )
-          ))}
+          {schools
+            .filter(Boolean)
+            .map(
+              (school) =>
+                school._id && (
+                  <SchoolCard
+                    key={school._id}
+                    school={school}
+                    viewType="grid"
+                    courseType={courseType}
+                  />
+                )
+            )}
         </div>
       )}
 
@@ -96,7 +138,9 @@ interface SchoolCardProps {
 
 function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
-  const { price, offer, fromLabel } = getBestSchoolPrice(school, courseType);
+  const parsedPrice = Number(school.selectedPrice ?? school.bestPrice ?? 0);
+  const parsedOffer = Number(school.bestOffer ?? 0);
+  const hasDiscount = parsedOffer > 0 && parsedOffer < parsedPrice;
   const antiguedad = school.description?.añoFundacion
     ? new Date().getFullYear() - school.description.añoFundacion
     : null;
@@ -108,10 +152,12 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`relative rounded-lg border bg-white p-4 shadow-sm hover:shadow-md transition-shadow ${
-        viewType === "grid" ? "flex flex-col h-[500px] justify-between" : "flex flex-col sm:flex-row"
+        viewType === "grid"
+          ? "flex flex-col h-[500px] justify-between"
+          : "flex flex-col sm:flex-row"
       }`}
     >
-      {offer && (
+      {hasDiscount && (
         <div className="absolute top-4 right-4 z-10">
           <div className="bg-yellow-400 text-yellow-900 text-sm font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 animate-pulse">
             <BadgePercent className="w-4 h-4" />
@@ -129,7 +175,13 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
         </div>
       )}
 
-      <div className={`${viewType === "grid" ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"} overflow-hidden rounded-lg flex-shrink-0`}>
+      <div
+        className={`${
+          viewType === "grid"
+            ? "h-48 w-full"
+            : "lg:h-72 lg:w-72 sm:w-56 h-40"
+        } overflow-hidden rounded-lg flex-shrink-0`}
+      >
         <img
           src={school.mainImage || "/placeholder.svg"}
           alt={school.name}
@@ -137,7 +189,11 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
         />
       </div>
 
-      <div className={`flex flex-1 flex-col justify-between ${viewType === "grid" ? "mt-4" : "sm:ml-4"}`}>
+      <div
+        className={`flex flex-1 flex-col justify-between ${
+          viewType === "grid" ? "mt-4" : "sm:ml-4"
+        }`}
+      >
         <div className="flex items-start justify-between">
           <div>
             <h3 className="text-xl font-semibold lg:text-2xl lg:font-bold">
@@ -175,13 +231,29 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
           )}
 
           {antiguedad !== null && (
-            <span className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
-              antiguedad < 2 ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"
-            }`}>
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <span
+              className={`inline-flex items-center gap-2 text-sm px-2 py-1 rounded-full w-fit ${
+                antiguedad < 2
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
-              {antiguedad < 2 ? "Nueva escuela" : `${antiguedad} años de trayectoria`}
+              {antiguedad < 2
+                ? "Nueva escuela"
+                : `${antiguedad} años de trayectoria`}
             </span>
           )}
         </div>
@@ -190,42 +262,35 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
           <Image
             src={school.logo || "/placeholder.svg"}
             alt="Logo"
-            className={`object-contain ${viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""}`}
+            className={`object-contain ${
+              viewType === "grid" ? "h-16 w-auto max-w-[150px]" : ""
+            }`}
             width={viewType === "grid" ? 150 : 200}
             height={viewType === "grid" ? 80 : 120}
           />
 
           <div className="text-center sm:text-right mt-4 sm:mt-0">
             <motion.div
-              key={`${price}-${offer}`}
+              key={`${parsedPrice}-${parsedOffer}`}
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col items-center sm:items-end"
             >
-              {offer ? (
+              {hasDiscount ? (
                 <>
                   <div className="flex items-center gap-2 text-sm text-gray-500 line-through">
-                    €{price.toLocaleString()}
+                    €{parsedPrice.toLocaleString()}
                   </div>
                   <div className="text-3xl font-extrabold text-green-600">
-                    €{offer.toLocaleString()}
+                    €{parsedOffer.toLocaleString()}
                   </div>
                 </>
               ) : (
                 <div className="text-2xl font-bold text-gray-800">
-                  {fromLabel ? (
-                    <>
-                      Desde{" "}
-                      <span className="text-blue-600 text-3xl font-bold">
-                        €{price.toLocaleString()}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-blue-600 text-3xl font-extrabold">
-                      €{price.toLocaleString()}
-                    </span>
-                  )}
+                  <span className="text-blue-600 text-3xl font-extrabold">
+                    €{parsedPrice.toLocaleString()}
+                  </span>
                 </div>
               )}
             </motion.div>
@@ -235,10 +300,7 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
               onMouseEnter={() => prefetchSchool(school._id)}
               onTouchStart={() => prefetchSchool(school._id)}
             >
-              <Button
-                className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold"
-                size="lg"
-              >
+              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
                 Ver escuela
               </Button>
             </Link>
@@ -248,5 +310,6 @@ function SchoolCard({ school, viewType, courseType }: SchoolCardProps) {
     </motion.div>
   );
 }
+
 
 export default SchoolSearchList;

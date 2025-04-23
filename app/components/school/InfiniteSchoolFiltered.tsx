@@ -3,6 +3,7 @@ import { useInfiniteFilteredSchools } from "@/app/hooks/useInfiniteFilteredSchoo
 import { SchoolDetails } from "@/app/types/index";
 import SchoolSearchList from "./SchoolSearchList";
 import { Loader2 } from "lucide-react";
+import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 
 interface InfiniteSchoolFilteredProps {
   filters: Record<string, any>;
@@ -39,6 +40,10 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const schools = (data?.pages.flatMap((page) => page.schools) ?? []) as SchoolDetails[];
+
+  if (isLoading && !isFetchingNextPage) {
+    return <FullScreenLoader isLoading={true} />;
+  }
 
   return (
     <div className="relative">
