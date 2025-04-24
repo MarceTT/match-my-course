@@ -87,16 +87,20 @@ export async function uploadExcelDetalleAlojamiento(formData: FormData, selected
 }
 
 export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
-  console.log("🔥 Recibido formData:", formData);
   const token = await refreshAccessToken();
-  if (!token) throw new Error("No autorizado");
 
+  if (!token) {
+    return { error: "No autorizado" }; // Si no hay cookie, devolver error
+  }
   const file = formData.get("file") as File;
-  if (!file) throw new Error("No file uploaded");
+  if (!file) {
+    throw new Error("No file uploaded");
+  }
 
   const data = new FormData();
   data.append("file", file);
   data.append("selectedColumns", JSON.stringify(selectedColumns));
+
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
     method: "POST",
@@ -107,25 +111,26 @@ export async function uploadExcelCalidad(formData: FormData, selectedColumns: st
     credentials: "include",
   });
 
-  const text = await response.text();
 
-  try {
-    const result = JSON.parse(text);
+
+  const text = await response.text();
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (e) {
+      console.error("❌ Error: El servidor no devolvió JSON válido", text);
+      throw new Error("El servidor respondió con un formato inesperado.");
+    }
+
     if (!response.ok) {
-      console.error("❌ Backend Error:", result);
       throw new Error(result?.message || "Error uploading file");
     }
 
     return {
-      status: response.status,
-      data: result,
+      status: response.status, // Aquí retornamos el código de estado
+      data: result, // La respuesta JSON del backend
     };
-  } catch (e) {
-    console.error("❌ Error parsing response JSON:", text);
-    throw new Error("El servidor respondió con un formato inesperado.");
-  }
 }
-
 
 export async function uploadExcelDetalleEscuela(formData: FormData, selectedColumns: string[]) {
   const token = await refreshAccessToken();
