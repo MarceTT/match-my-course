@@ -89,8 +89,10 @@ export async function uploadExcelDetalleAlojamiento(formData: FormData, selected
 export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
   const token = await refreshAccessToken();
 
+  console.log("token", token);
+
   if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
+    return { error: "No autorizado" }; 
   }
   const file = formData.get("file") as File;
   if (!file) {
