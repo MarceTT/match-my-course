@@ -87,7 +87,9 @@ export async function uploadExcelDetalleAlojamiento(formData: FormData, selected
 }
 
 export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
-  const token = await refreshAccessToken();
+
+  try {
+    const token = await refreshAccessToken();
 
   console.log("token", token);
 
@@ -132,6 +134,11 @@ export async function uploadExcelCalidad(formData: FormData, selectedColumns: st
       status: response.status, // Aquí retornamos el código de estado
       data: result, // La respuesta JSON del backend
     };
+  } catch (error) {
+    console.error("❌ Error en la solicitud:", error);
+    return { error: "Error en la solicitud" };
+  }
+  
 }
 
 export async function uploadExcelDetalleEscuela(formData: FormData, selectedColumns: string[]) {
