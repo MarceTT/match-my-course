@@ -70,18 +70,6 @@ const CalidadPage = () => {
   const [progress, setProgress] = useState(0);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const cleanHeader = (header: string) => {
-    return header
-      .toString()
-      .normalize("NFD")
-      .replace(/\p{Diacritic}/gu, "")
-      .trim()
-      .replace(/[^a-zA-Z0-9\s]/g, "")  // Saca simbolos raros
-      .replace(/\s+/g, "_")               // Espacios por underscore
-      .replace(/__+/g, "_")               // Saca dobles underscores
-      .toLowerCase();
-  };
-
   const {
     data: uploadedFiles,
     isLoading: queryLoading,
@@ -234,9 +222,9 @@ const CalidadPage = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
+  
     console.log("🔥 Columnas seleccionadas que se envían:", selectedColumns);
-  console.log("🔥 Archivo que se envía:", file.name);
+    console.log("🔥 Archivo que se envía:", file.name);
   
     uploadMutation.mutate(formData);
   };
