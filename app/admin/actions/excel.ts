@@ -87,6 +87,7 @@ export async function uploadExcelDetalleAlojamiento(formData: FormData, selected
 }
 
 export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
+  console.log("🔥 Recibido formData:", formData);
   const token = await refreshAccessToken();
   if (!token) throw new Error("No autorizado");
 
@@ -99,7 +100,6 @@ export async function uploadExcelCalidad(formData: FormData, selectedColumns: st
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
     method: "POST",
-    // ⛔️ NO pongas headers Content-Type tú manualmente
     headers: {
       "Authorization": `Bearer ${token}`,
     },
