@@ -3,13 +3,16 @@
 
 import React from 'react'
 import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 
 export default function PartnersPage() {
   return (
     <>
       <section className="relative h-96 bg-cover bg-center" style={{ backgroundImage: "url('/images/2.png')" }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-white text-4xl md:text-5xl font-bold">Escuelas Socias</h1>
+          <h1 className="text-white text-4xl md:text-5xl font-bold">
+            Escuelas Socias
+          </h1>
         </div>
       </section>
 
@@ -17,12 +20,12 @@ export default function PartnersPage() {
         {/* Section 1 */}
         <div className="container mx-auto px-4 space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-4xl font-bold">
               Conocemos las escuelas <br />que ofrecemos 
             </h2>
             <p className="mt-4 text-lg text-gray-700">
               Nos caracterizamos por conocer todas nuestras escuelas que ofrecemos para entregarte 
-              la información más actualizada y detallada de cada escuela de inglés. Trabajamos con 
+              la información más <br /> actualizada y detallada de cada escuela de inglés. Trabajamos con 
               más de 50 instituciones a nivel internacional.
             </p>
           </div>
@@ -43,7 +46,7 @@ export default function PartnersPage() {
                 height={400}
                 priority
                 sizes="(max-width: 768px) 100vw, 400px"
-                className="rounded-lg shadow-md"
+                className="rounded-sm"
               />
               </div>
               <div className="flex justify-center items-center">
@@ -308,37 +311,36 @@ export default function PartnersPage() {
       </section>
 
       <section className="py-16">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row">
+        <div className="container mx-auto px-4 flex items-center flex-col md:flex-row">
           {/* Left side - (empty or could be an image later) */}
           <div className="md:w-1/2 mb-8 md:mb-0">
-            {/* You can add an image here if needed */}
+            <Image
+              src="/partners/schools-for-partners.png"
+              alt={`Bandera de Chile`}
+              width={700}
+              height={700}
+              className="rounded-sm"
+            />
           </div>
 
           {/* Right side - Content */}
-          {/* <div className="md:w-1/2 space-y-6 text-right"> */}
           <div className="md:w-1/2 text-center md:text-right space-y-6">
-          {/* <div className="md:w-1/2 text-center md:text-left space-y-6 text-right"> */}
-
-            {/* Main Title */}
             <h2 className="text-4xl font-bold text-gray-800">
               ¿En qué escuela estudiar?
             </h2>
 
-            {/* Small description */}
             <p className="text-gray-500 text-lg font-bold">
-              Representamos más de 40 escuelas de inglés en más de 10 ciudades de Irlanda
+              Representamos más de 40 escuelas de inglés <br /> en más de 10 ciudades de Irlanda
             </p>
 
-            {/* Secondary Text */}
             <p className="text-gray-600">
-            A través de nuestro filtro inteligente, encuentra cuál es la escuela de inglés 
-            que más se acerca a tus requisitos y necesidades.
+              A través de nuestro filtro inteligente, encuentra <br /> cuál es la escuela de inglés 
+              que más se acerca a <br /> tus requisitos y necesidades.
             </p>
 
-            {/* Button */}
-            <button className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition">
+            <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
               Buscar escuela
-            </button>
+            </Button>
           </div>
         </div>
       </section>

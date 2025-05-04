@@ -13,7 +13,6 @@ const TestimonialsPage = () => {
       <HeroSection />
       <TestimonialHighlightSection />
       <CountryFlagsSection />
-      <CountryFlagsSection />
       <PersonalizedAdviceSection />
     </>
   )
