@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  List,
-  Star,
-  BadgePercent,
-} from "lucide-react";
+import { Grid, List, Star, BadgePercent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
 import { Switch } from "@/components/ui/switch";
@@ -24,12 +19,7 @@ interface SchoolListProps {
   isError: boolean;
 }
 
-const SchoolSearchList = ({
-  isFilterOpen,
-  schools,
-  isLoading,
-  isError,
-}: SchoolListProps) => {
+const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolListProps) => {
   const [viewType, setViewType] = useState<"grid" | "list">("list");
   const { ref } = useInView();
 
@@ -39,36 +29,32 @@ const SchoolSearchList = ({
 
   return (
     <div className={`flex-1 flex flex-col ${isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"}`}>
-       <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
+      <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
         <span className="text-sm text-gray-600 hidden md:inline">Vista</span>
         <div className="hidden md:flex items-center space-x-2">
           <Switch
             checked={viewType === "grid"}
-            onCheckedChange={(checked) =>
-              setViewType(checked ? "grid" : "list")
-            }
+            onCheckedChange={(checked) => setViewType(checked ? "grid" : "list")}
           />
           {viewType === "grid" ? (
             <Grid className="text-blue-500 w-4 h-4" />
           ) : (
             <List className="text-gray-500 w-4 h-4" />
           )}
-          <span className="text-sm text-gray-600">
-            {viewType === "grid" ? "Cuadrícula" : "Lista"}
-          </span>
+          <span className="text-sm text-gray-600">{viewType === "grid" ? "Cuadrícula" : "Lista"}</span>
         </div>
       </div>
 
       {viewType === "list" ? (
         <div className="space-y-6 mt-4">
-          {schools.map((school) => (
-            <SchoolCard key={school._id} school={school} viewType="list" />
+          {schools.map((school, index) => (
+            <SchoolCard key={`${school._id}-${index}`} school={school} viewType="list" />
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {schools.map((school) => (
-            <SchoolCard key={school._id} school={school} viewType="grid" />
+          {schools.map((school, index) => (
+            <SchoolCard key={`${school._id}-${index}`} school={school} viewType="grid" />
           ))}
         </div>
       )}
@@ -90,9 +76,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
     : null;
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
-  const priceOptions = (school.prices || []).filter(
-    (p) => typeof p.precio === "number" && p.precio > 0
-  );
+  const priceOptions = (school.prices || []).filter((p) => typeof p.precio === "number" && p.precio > 0);
 
   const selected = priceOptions[selectedOptionIndex] ?? null;
   const hasDiscount = selected?.oferta && selected.oferta < selected.precio;
@@ -100,12 +84,12 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  useEffect(() => {
+    setSelectedOptionIndex(0);
+  }, [school._id]);
+
   return (
-    <motion.div
-      className={`relative border bg-white shadow-sm hover:shadow-md transition-shadow rounded-lg p-4 ${
-        isGrid ? "flex flex-col h-full justify-between" : "flex flex-col sm:flex-row"
-      }`}
-    >
+    <motion.div className={`relative border bg-white shadow-sm hover:shadow-md transition-shadow rounded-lg p-4 ${isGrid ? "flex flex-col h-full justify-between" : "flex flex-col sm:flex-row"}`}>
       {hasDiscount && (
         <div className="absolute top-4 right-4 z-10 bg-yellow-400 text-yellow-900 text-sm font-extrabold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 animate-pulse">
           <BadgePercent className="w-4 h-4" />
@@ -132,9 +116,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 return (
                   <Star
                     key={i}
-                    className={`h-4 w-4 ${
-                      full ? "fill-yellow-400" : half ? "fill-yellow-200" : "fill-gray-200"
-                    }`}
+                    className={`h-4 w-4 ${full ? "fill-yellow-400" : half ? "fill-yellow-200" : "fill-gray-200"}`}
                   />
                 );
               })}
@@ -149,9 +131,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 {priceOptions.map((p, i) => (
                   <li
                     key={i}
-                    className={`italic cursor-pointer ${
-                      selectedOptionIndex === i ? "font-bold text-blue-600" : "hover:text-blue-600"
-                    }`}
+                    className={`italic cursor-pointer ${selectedOptionIndex === i ? "font-bold text-blue-600" : "hover:text-blue-600"}`}
                     onClick={() => setSelectedOptionIndex(i)}
                   >
                     {p.horarioEspecifico}
@@ -172,15 +152,15 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-        {!(isGrid && isMobile) && (
-    <Image
-      src={school.logo || "/placeholder.svg"}
-      alt="Logo"
-      width={120}
-      height={60}
-      className="object-contain"
-    />
-  )}
+          {!(isGrid && isMobile) && (
+            <Image
+              src={school.logo || "/placeholder.svg"}
+              alt="Logo"
+              width={120}
+              height={60}
+              className="object-contain"
+            />
+          )}
           <div className="text-right">
             <div className="text-2xl font-bold text-gray-800">
               {hasDiscount ? (
@@ -199,7 +179,9 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
               )}
             </div>
             <Link href={`/school-detail/${school._id}`} onMouseEnter={() => prefetchSchool(school._id)}>
-              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white">Ver escuela</Button>
+              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white">
+                Ver escuela
+              </Button>
             </Link>
           </div>
         </div>
@@ -207,6 +189,5 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
     </motion.div>
   );
 }
-
 
 export default SchoolSearchList;

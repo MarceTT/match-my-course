@@ -39,7 +39,14 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const schools = (data?.pages.flatMap((page) => page.schools) ?? []) as SchoolDetails[];
+  // 🔥 Evitar duplicados usando un Map basado en school._id
+  const schoolsMap = new Map<string, SchoolDetails>();
+  data?.pages.forEach((page) => {
+    page.schools.forEach((school: SchoolDetails) => {
+      schoolsMap.set(school._id, school);
+    });
+  });
+  const schools = Array.from(schoolsMap.values());
 
   if (isLoading && !isFetchingNextPage) {
     return <FullScreenLoader isLoading={true} />;
@@ -48,6 +55,7 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
   return (
     <div className="relative">
       <SchoolSearchList
+        key={filters.course?.[0] ?? "default"}
         isFilterOpen={isFilterOpen}
         schools={schools}
         isLoading={isLoading}

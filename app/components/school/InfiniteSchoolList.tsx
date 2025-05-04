@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useInfiniteSchools } from "@/hooks/useInfiniteSchools";
 import { SchoolDetails } from "@/app/types/index";
 import SchoolSearchList from "./SchoolSearchList";
@@ -10,7 +10,10 @@ interface InfiniteSchoolListProps {
   isFilterOpen: boolean;
 }
 
-const InfiniteSchoolList = ({ filters, isFilterOpen }: InfiniteSchoolListProps) => {
+const InfiniteSchoolList = ({
+  filters,
+  isFilterOpen,
+}: InfiniteSchoolListProps) => {
   const {
     data,
     fetchNextPage,
@@ -41,6 +44,15 @@ const InfiniteSchoolList = ({ filters, isFilterOpen }: InfiniteSchoolListProps) 
 
   const schools = (data?.pages.flatMap((page) => page.schools) ?? []) as SchoolDetails[];
 
+  const uniqueSchools = useMemo(() => {
+    const seen = new Set();
+    return schools.filter((school) => {
+      if (seen.has(school._id)) return false;
+      seen.add(school._id);
+      return true;
+    });
+  }, [schools]);
+
   if (isLoading && !isFetchingNextPage) {
     return <FullScreenLoader isLoading={true} />;
   }
@@ -48,14 +60,17 @@ const InfiniteSchoolList = ({ filters, isFilterOpen }: InfiniteSchoolListProps) 
   return (
     <div className="relative">
       <SchoolSearchList
+        key={filters.course?.[0] ?? "default"}
         isFilterOpen={isFilterOpen}
-        schools={schools}
+        schools={uniqueSchools}
         isLoading={false}
         isError={isError}
       />
 
       <div ref={observerRef} className="h-20 flex justify-center items-center">
-        {isFetchingNextPage && <Loader2 className="h-6 w-6 animate-spin text-gray-400" />}
+        {isFetchingNextPage && (
+          <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+        )}
       </div>
     </div>
   );
