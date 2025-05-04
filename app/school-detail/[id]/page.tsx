@@ -33,20 +33,15 @@ const SchoolHome = () => {
   const yearsOld =
     2025 - parseInt(school.description?.añoFundacion?.toString() || "N/A");
 
-  if (!school.nationalities?.continentes) return null; // o algún fallback
+  if (!school.nationalities?.continentes) return null;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="max-w-7xl mx-auto px-4">
         <SchoolDetail
           images={school.galleryImages || []}
-          name={school.name}
           city={school.city}
-          address={
-            school.description?.direccionEscuela || "Dirección no disponible"
-          }
-          founded={school.description?.añoFundacion?.toString() || "N/A"}
-          priceLevel={school.prices?.[0]?.horarios?.precio ? 3 : 1}
         />
         {/* <div className="mt-8">
           <SchoolStat
@@ -145,9 +140,11 @@ const SchoolHome = () => {
               averageAge={school.nationalities.edadPromedio}
               nationalityCount={school.nationalities.nacionalidadesAnio}
             />
-            <Certifications />
-            <Facilities />
-            <div className="mb-8">
+            {school.qualities && <Certifications school={school.qualities} />}
+            {school.installations && (
+              <Facilities installations={school.installations} />
+            )}
+            {/* <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4">Curso elegido</h3>
               <p className="text-gray-600">
                 El curso de inglés general de 25 semanas diseñado para mejorar
@@ -159,10 +156,16 @@ const SchoolHome = () => {
               </p>
             </div>
             <OptionsCertification />
-            <SchoolInclusion />
-            <Accommodation />
-            <Location />
-            <Testimonials />
+            <SchoolInclusion /> */}
+            {Array.isArray(school.accommodation) &&
+              school.accommodation.length > 0 && (
+                <Accommodation
+                  accommodations={school.accommodation}
+                  detailAccomodation={school.accomodationDetail || []}
+                />
+              )}
+            <Location schoolName={school.name} city={school.city} />
+            {/* <Testimonials /> */}
           </div>
           <div className="lg:col-span-1">
             <BookingPannel />

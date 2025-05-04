@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Footer from "../components/common/Footer";
 import Filter from "../components/features/Filter/Filter";
-import SchoolList from "../components/school/SchoolSearchList";
 import Header from "../components/common/Header";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
@@ -79,10 +78,10 @@ const SchoolSearch = () => {
   return (
     <div className="min-h-screen bg-gray-50 relative">
       <Header />
-      <div className="container mx-auto px-4 py-8 h-[calc(100vh-80px)]">
-        <div className="flex flex-col lg:flex-row gap-6 h-full">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-6">
           {!isOpen && (
-            <div className="hidden lg:block w-64 flex-shrink-0 sticky top-[100px] self-start h-fit z-10">
+            <div className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start min-h-[600px]">
               <Filter
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
@@ -99,14 +98,8 @@ const SchoolSearch = () => {
               setFilters={setFilters}
             />
           )}
-          <div
-            ref={listRef}
-            className="flex-1 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-300"
-          >
-            <InfiniteSchoolFiltered
-              filters={filters}
-              isFilterOpen={isOpen}
-            />
+          <div ref={listRef} className="flex-1 pr-1">
+            <InfiniteSchoolFiltered filters={filters} isFilterOpen={isOpen} />
           </div>
         </div>
       </div>

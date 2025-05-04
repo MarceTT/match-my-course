@@ -61,7 +61,7 @@ const filtersConfig: Record<string, FilterConfig> = {
 
   cities: {
     label: "Ciudad",
-    options: ["Dublín", "Cork", "Galway", "Limerick", "Todos"].map((label) => ({
+    options: ["Dublín", "Cork", "Galway", "Limerick"].map((label) => ({
       id: normalize(label),
       label,
     })),

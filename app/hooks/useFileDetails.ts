@@ -7,6 +7,6 @@ export const useFileDetails = <T,>(
   return useQuery({
     queryKey: ["fileDetails", selectedFileId],
     queryFn: () => fetchDetails(selectedFileId!),
-    enabled: !!selectedFileId, // Solo ejecuta la consulta si hay un fileId seleccionado
+    enabled: !!selectedFileId,
   });
 };

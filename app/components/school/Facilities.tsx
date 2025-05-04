@@ -1,46 +1,104 @@
-import React from 'react'
-import { GiBookmarklet } from "react-icons/gi";
-import { CiWifiOn } from "react-icons/ci";
-import { GiElevator } from "react-icons/gi";
-import { LiaSprayCanSolid } from "react-icons/lia";
-import { FaGamepad } from "react-icons/fa";
-import { SiCoffeescript } from "react-icons/si";
-import { GiPc } from "react-icons/gi";
+import { PiChairFill } from "react-icons/pi";
+import { Installations } from "@/app/types/index";
 import { BiAccessibility } from "react-icons/bi";
+import { FaGamepad } from "react-icons/fa";
+import { GiBookmarklet } from "react-icons/gi";
+import { FaUsersGear } from "react-icons/fa6";
 
-const Facilities = () => {
-
-    const facilities = [
-        [
-          { icon: <GiBookmarklet className="w-5 h-5" />, name: "Biblioteca" },
-          { icon: <CiWifiOn className="w-5 h-5" />, name: "Wifi" },
-          { icon: <GiElevator className="w-5 h-5" />, name: "Ascensor" },
-          { icon: <LiaSprayCanSolid className="w-5 h-5" />, name: "Dispensador" },
-        ],
-        [
-          { icon: <FaGamepad className="w-5 h-5" />, name: "Recreación" },
-          { icon: <SiCoffeescript className="w-5 h-5" />, name: "Café" },
-          { icon: <GiPc className="w-5 h-5" />, name: "PC" },
-          { icon: <BiAccessibility className="w-5 h-5" />, name: "Accesibilidad" },
-        ],
-      ]
-  return (
-    <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-4">Instalaciones principales</h3>
-      <div className="grid grid-cols-2 gap-x-12 gap-y-4">
-        {facilities.map((column, colIndex) => (
-          <div key={colIndex} className="space-y-4">
-            {column.map((facility, index) => (
-              <div key={index} className="flex items-center gap-3 text-gray-600">
-                {facility.icon}
-                <span className="text-sm">{facility.name}</span>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+interface FacilitiesProps {
+  installations: Installations;
 }
 
-export default Facilities
+const Facilities = ({ installations }: FacilitiesProps) => {
+  if (!installations) return null;
+
+  const groupedFacilities = [
+    {
+      title: "Área académica",
+      icon: <GiBookmarklet className="w-9 h-9" />,
+      items: [
+        installations.biblioteca && "Biblioteca",
+        installations.laboratorioInformatica && "Laboratorio digital",
+        installations.areasAutoaprendizaje && "Área de autoaprendizaje",
+      ],
+    },
+    {
+      title: "Servicios generales",
+      icon: <FaUsersGear className="w-9 h-9" />,
+      items: [
+        installations.microondas && "Microondas",
+        installations.nevera && "Nevera",
+        installations.maquinaExpendedora && "Máquina expendedora",
+        installations.dispensadorAgua && "Dispensador de agua",
+        installations.impresoraFotocopiadora && "Impresora/fotocopiadora",
+        installations.freeWifi && "Wifi",
+      ],
+    },
+    {
+      title: "Áreas comunes y recreativas",
+      icon: <FaGamepad className="w-9 h-9" />,
+      items: [
+        installations.cafeteria && "Cafetería",
+        installations.restaurante && "Restaurante",
+        installations.cocinaEstudiantes && "Cocina para estudiantes",
+        installations.salaJuegosRecreacion && "Sala de juegos/recreación",
+        installations.jardin && "Jardín",
+        installations.terrazaAzotea && "Terraza",
+        installations.salon && "Salón",
+      ],
+    },
+    {
+      title: "Equipamiento de las aulas",
+      icon: <PiChairFill className="w-9 h-9" />,
+      items: [
+        installations.pizarraDigital &&
+          `Pizarra digital: ${installations.pizarraDigital}`,
+        installations.tv && `Televisión: ${installations.tv}`,
+        installations.calefaccion &&
+          `Calefacción: ${installations.calefaccion}`,
+      ],
+    },
+    {
+      title: "Accesibilidad",
+      icon: <BiAccessibility className="w-9 h-9" />,
+      items: [
+        installations.accesoSillasRuedas && "Ingreso para discapacitados",
+        installations.wcMinusvalidos && "WC para minusválidos",
+        installations.elevators && "Ascensor",
+      ],
+    },
+  ];
+
+  return (
+    <section className="max-w-7xl mx-auto py-10 px-4">
+      <h2 className="text-2xl font-bold mb-8">
+        Instalaciones y servicios de la escuela
+      </h2>
+      <div className="grid md:grid-cols-2 gap-12">
+        {groupedFacilities.map(
+          ({ title, icon, items }) =>
+            items.filter(Boolean).length > 0 && (
+              <div
+                key={title}
+                className="flex flex-col items-start md:items-start"
+              >
+                <div className="flex items-center gap-2 mb-2 font-semibold underline">
+                  {icon}
+                  <h2 className="whitespace-nowrap">{title}</h2>
+                </div>
+                <ul className="list-disc pl-5 space-y-1 text-gray-700 font-medium italic text-sm">
+                  {items.filter(Boolean).map((item, idx) => (
+                    <li key={idx} className="leading-snug break-words">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+        )}
+      </div>
+    </section>
+  );
+};
+
+export default Facilities;

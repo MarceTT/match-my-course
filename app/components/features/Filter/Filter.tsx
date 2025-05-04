@@ -17,13 +17,24 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 
 const visaCities: string[] = [
-  "Dublín", "Bray", "Galway", "Schull", "Naas", "Tralee", "Cork",
-  "Ennis", "Donegal", "Drogheda", "Limerick", "Athlone", "Waterford",
-  "Killarney", "Sligo", "Cahersiveen", "Wexford",
+  "Dublín",
+  "Bray",
+  "Galway",
+  "Naas",
+  "Tralee",
+  "Cork",
+  "Donegal",
+  "Drogheda",
+  "Limerick",
+  "Athlone",
+  "Waterford",
+  "Killarney",
+  "Wexford",
 ];
 
 const normalize = (str: string) =>
-  str.normalize("NFD")
+  str
+    .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .replace(/\s+/g, "-")
@@ -32,6 +43,41 @@ const normalize = (str: string) =>
     .replace(/--+/g, "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
+
+const courseCitiesMap: Record<string, string[]> = {
+  "ingles-visa-de-trabajo": [
+    "Dublín",
+    "Bray",
+    "Galway",
+    "Naas",
+    "Tralee",
+    "Cork",
+    "Donegal",
+    "Drogheda",
+    "Limerick",
+    "Athlone",
+    "Waterford",
+    "Killarney",
+    "Wexford",
+  ],
+  "ingles-general": [
+    "Dublín",
+    "Cork",
+    "Galway",
+    "Limerick",
+    "Waterford",
+    "Bray",
+    "Schull",
+  ],
+  "ingles-general-mas-sesiones-individuales": [
+    "Dublín",
+    "Galway",
+    "Wexford",
+    "Schull",
+  ],
+  "ingles-general-intensivo": ["Dublín", "Galway", "Cork", "Limerick"],
+  "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
+};
 
 interface FilterProps {
   isOpen: boolean;
@@ -75,7 +121,6 @@ const Filter = ({
       };
     });
   }, [debouncedSearchParams, setFilters]);
-  
 
   const handleCheckboxChange = (category: string, value: string) => {
     setFilters((prev) => {
@@ -138,7 +183,8 @@ const Filter = ({
     setFilters(resetFilters);
 
     setTimeout(() => {
-      const slider = document.querySelector<HTMLInputElement>('[role="slider"]');
+      const slider =
+        document.querySelector<HTMLInputElement>('[role="slider"]');
       if (slider) {
         slider.value = String(filtersConfig.weeks.slider?.min || 1); // forzamos a "1"
       }
@@ -200,9 +246,9 @@ function FilterContent({
   isDefaultFilters,
 }: any) {
   const selectedCourse = filters.course || [];
-  const isVisaCourseSelected = selectedCourse.includes(
-    "ingles-visa-de-trabajo"
-  );
+  const selectedCourseName = selectedCourse[0]; // solo se permite uno
+  const isVisaCourseSelected = selectedCourseName === "ingles-visa-de-trabajo";
+  const customCities = courseCitiesMap[selectedCourseName] || [];
 
   return (
     <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
@@ -210,8 +256,8 @@ function FilterContent({
         if (key === "offers" && !isVisaCourseSelected) return null;
         const isCities = key === "cities";
         const options =
-          isCities && isVisaCourseSelected
-            ? visaCities.map((label) => ({ id: normalize(label), label }))
+          isCities && customCities.length
+            ? customCities.map((label) => ({ id: normalize(label), label }))
             : config.options;
 
         if (config.type === "slider" && config.slider) {
@@ -334,4 +380,3 @@ function SliderSection({ value, config, onChange, disabled }: any) {
     </div>
   );
 }
-

@@ -17,20 +17,12 @@ import React from "react";
 
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
-  name: string;
   city: string;
-  address: string;
-  founded: string;
-  priceLevel: number;
 }
 
 const SchoolDetail = ({
   images,
-  name,
   city,
-  address,
-  founded,
-  priceLevel,
 }: SchoolDetailProps) => {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);

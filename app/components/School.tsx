@@ -26,54 +26,56 @@ const School = ({
   lowestPrice,
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
-  const handlePrefetch = () => {
-    prefetchSchool(_id);
-  };
+  const handlePrefetch = () => prefetchSchool(_id);
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md flex flex-col h-full hover:shadow-lg transition-shadow">
-      <Link href={`/school-detail/${_id}`} onMouseEnter={handlePrefetch} onTouchStart={handlePrefetch}>
-        <div className="block">
-          <div className="relative">
-            <Image
-              src={image || "/placeholder.svg"}
-              alt={name}
-              width={1000}
-              height={1000}
-              className="w-full h-52 sm:h-64 object-cover"
-              loading={priority ? "eager" : "lazy"}
-              priority={priority}
-            />
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">
+      <Link
+        href={`/school-detail/${_id}`}
+        onMouseEnter={handlePrefetch}
+        onTouchStart={handlePrefetch}
+        className="flex flex-col h-full"
+      >
+        <div className="relative w-full h-52 sm:h-64">
+          <Image
+            src={image || "/placeholder.svg"}
+            alt={name}
+            fill
+            className="object-cover object-center"
+            loading={priority ? "eager" : "lazy"}
+            priority={priority}
+          />
+        </div>
+
+        <div className="flex flex-col flex-grow p-4 gap-2">
+          <h3 className="text-lg sm:text-xl font-semibold leading-tight line-clamp-2">
+            {name}
+          </h3>
+
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <span>Opiniones:</span>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold">{rating.toFixed(1)}</span>
+              <span className="text-yellow-400">★</span>
+            </div>
           </div>
 
-          <div className="p-4 sm:p-6 flex flex-col justify-between flex-grow gap-2">
-            <h3 className="font-semibold text-lg sm:text-xl">{name}</h3>
+          <p className="text-sm text-gray-500 line-clamp-1">Ciudad: {location}</p>
 
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <span>Opiniones:</span>
-              <div className="flex items-center gap-1">
-                <span className="font-semibold">
-                  {parseFloat(String(rating ?? 0)).toFixed(1)}
+          <div className="mt-auto">
+            {typeof lowestPrice === "number" && lowestPrice > 0 ? (
+              <div className="flex flex-wrap items-center gap-1 text-left">
+                <span className="text-sm text-gray-500 font-medium">Desde</span>
+                <span
+                  className={`${nunito.className} text-xl sm:text-2xl font-extrabold text-blue-600`}
+                >
+                  €{lowestPrice.toLocaleString()}
                 </span>
-                <span className="text-yellow-400">★</span>
+                <span className="text-sm text-gray-500">/ semana</span>
               </div>
-            </div>
-
-            <p className="text-sm text-gray-600">Ciudad: {location}</p>
-
-            <div className="mt-auto">
-              {typeof lowestPrice === "number" && lowestPrice > 0 ? (
-                <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-left">
-                  <span className="text-sm sm:text-base text-gray-500 font-medium">Desde</span>
-                  <span className={`${nunito.className} text-lg sm:text-2xl font-extrabold text-blue-600`}>
-                    €{lowestPrice.toLocaleString()}
-                  </span>
-                  <span className="text-sm sm:text-base text-gray-600">/ semana</span>
-                </div>
-              ) : (
-                <div className="text-gray-400 italic text-sm">Precio no disponible</div>
-              )}
-            </div>
+            ) : (
+              <div className="text-gray-400 italic text-sm">Precio no disponible</div>
+            )}
           </div>
         </div>
       </Link>
