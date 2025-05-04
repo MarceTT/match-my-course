@@ -41,10 +41,10 @@ const TestimonialHighlight = () => {
 
           {/* Testimonial */}
           <p className="text-gray-700 text-lg max-w-2xl mx-auto md:mx-0">
-            Cuando decidimos estudiar un curso de inglés en Nueva Zelanda, 
-            nos sentíamos nerviosos, abrumados y desorientados. 
+            Cuando decidimos estudiar un curso de inglés en Nueva Zelanda,
+            <b> nos sentíamos nerviosos, abrumados y desorientados. </b> 
             El apoyo brindado por la agencia nos ayudó a que nuestra 
-            experiencia fuera grata y que este proceso fuera más llevadero...
+            <b> experiencia fuera grata y que este proceso fuera más llevadero...</b>
           </p>
         </div>
       </div>
