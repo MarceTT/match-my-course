@@ -30,7 +30,7 @@ const TestimonialHighlight = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       handleNext()
-    }, 20000)
+    }, 7000)
     return () => clearInterval(timer)
   }, [index])
 
