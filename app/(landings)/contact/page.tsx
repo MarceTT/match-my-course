@@ -157,11 +157,12 @@ export default function ContactPage() {
           </form>
         )}
       </div>
-
-      <section className="py-12 bg-yellow-400">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 items-center">
+      
+      <section className="relative overflow-visible bg-yellow-400 mt-14">
+        <div className="container mx-auto px-4 grid md:grid-cols-2 items-center relative z-10">
+          
           {/* Left Column */}
-          <div className="space-y-4 text-center md:text-left">
+          <div className="space-y-4 text-center">
             <h2 className="text-3xl font-semibold text-black">¿Estás buscando una escuela de inglés en Irlanda?</h2>
             <p className="text-lg text-black">
               Encuentra la escuela de inglés que más se adecue a tus requisitos y necesidades 
@@ -176,13 +177,13 @@ export default function ContactPage() {
           </div>
 
           {/* Right Column */}
-          <div className="relative">
+          <div className="relative h-[400px] md:h-[500px] md:block">
             <Image 
-              src="https://images.unsplash.com/photo-1604718584790-d12e1de37979?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIxfHxnaXJsfGVufDB8fHx8fDE2NTg5NDEzMTY&ixlib=rb-1.2.1&q=80&w=400" 
-              alt="Girl" 
-              width={192} 
-              height={192} 
-              className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 object-cover rounded-full"
+              src="/landing-pages/Mujer página Contacto.png"
+              alt="Contáctanos"
+              width={600}
+              height={600}
+              className="absolute bottom-0 md:-top-25 right-0 object-contain z-20"
             />
           </div>
         </div>
