@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button'
 export default function PartnersPage() {
   return (
     <>
-      <section className="relative h-96 bg-cover bg-center" style={{ backgroundImage: "url('/images/2.png')" }}>
+      <section className="relative h-96 bg-cover bg-center"
+        style={{ backgroundImage: "url('/landing-pages/Escuelas socias.png')" }}
+      >
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <h1 className="text-white text-4xl md:text-5xl font-bold">
             Escuelas Socias
@@ -30,7 +32,6 @@ export default function PartnersPage() {
             </p>
           </div>
 
-          {/* Repeating Section */}
           <div className="space-y-6">
             <div className="text-left">
               <h3 className="text-2xl font-semibold">Irlanda</h3>
@@ -39,19 +40,19 @@ export default function PartnersPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
-              <Image
-                src="/schools/2.png"
-                alt="Cork English Academy"
-                width={400}
-                height={400}
-                priority
-                sizes="(max-width: 768px) 100vw, 400px"
-                className="rounded-sm"
-              />
+                <Image
+                  src="/partners/1.png"
+                  alt="Cork English Academy"
+                  width={400}
+                  height={400}
+                  priority
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="rounded-sm"
+                />
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/2.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -60,7 +61,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/3.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -69,7 +70,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/4.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -78,7 +79,142 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/5.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/6.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/7.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/8.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/9.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/10.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/11.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/12.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/13.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/14.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/14.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/15.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/16.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/17.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/18.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/19.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -97,7 +233,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/11.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -106,7 +242,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/7.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -115,7 +251,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/8.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -124,7 +260,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/9.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -133,7 +269,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/10.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -152,7 +288,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -161,7 +297,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -170,7 +306,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -179,7 +315,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -188,7 +324,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -207,7 +343,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -216,7 +352,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -225,7 +361,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -234,7 +370,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -243,7 +379,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -262,7 +398,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -271,7 +407,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -280,7 +416,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -289,7 +425,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -298,7 +434,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/LOGOS ESCUELAS - MATCHYOURCOURSE (5).png"
+                  src="/partners/6.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
