@@ -163,13 +163,13 @@ export default function ContactPage() {
           
           {/* Left Column */}
           <div className="space-y-4 text-center">
-            <h2 className="text-3xl font-semibold text-black">¿Estás buscando una escuela de inglés en Irlanda?</h2>
+            <h2 className="text-3xl font-semibold text-black">¿Estás buscando una escuela <br />de inglés en Irlanda?</h2>
             <p className="text-lg text-black">
               Encuentra la escuela de inglés que más se adecue a tus requisitos y necesidades 
               a través de nuestro filtro inteligente.
             </p>
             <a 
-              href="/search-school" 
+              href="/school-search?course=ingles-general" 
               className="inline-block px-6 py-3 bg-black text-white text-lg rounded-full"
             >
               Buscar escuela

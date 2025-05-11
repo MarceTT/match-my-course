@@ -169,15 +169,6 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/14.png"
-                  alt={`Bandera de Chile`}
-                  width={200}
-                  height={200}
-                  className="rounded-sm"
-                />
-              </div>
-              <div className="flex justify-center items-center">
-                <Image
                   src="/partners/15.png"
                   alt={`Bandera de Chile`}
                   width={200}
@@ -288,7 +279,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/11.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -297,7 +288,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/12.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -306,7 +297,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/13.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -315,7 +306,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/14.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -324,7 +315,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/15.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -343,7 +334,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/16.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -352,7 +343,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/17.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -361,7 +352,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/18.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -370,7 +361,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/19.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -379,7 +370,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/20.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -398,7 +389,7 @@ export default function PartnersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/21.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -407,7 +398,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/22.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -416,7 +407,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/23.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -425,7 +416,7 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/24.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
@@ -434,7 +425,223 @@ export default function PartnersPage() {
               </div>
               <div className="flex justify-center items-center">
                 <Image
-                  src="/partners/6.png"
+                  src="/partners/25.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/26.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/27.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/28.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/29.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/30.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/31.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/32.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/33.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/34.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/35.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/36.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/37.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/38.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/39.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/40.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/41.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/42.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/43.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/44.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/45.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/46.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/47.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/48.png"
+                  alt={`Bandera de Chile`}
+                  width={200}
+                  height={200}
+                  className="rounded-sm"
+                />
+              </div>
+              <div className="flex justify-center items-center">
+                <Image
+                  src="/partners/49.png"
                   alt={`Bandera de Chile`}
                   width={200}
                   height={200}
