@@ -1,19 +1,7 @@
 import React from 'react'
-import Image from 'next/image'
-import Picture from "../../../../public/images/placeholder_img.svg";
 import {raleway}from "../../../ui/fonts";
 
 const HeroVisa = () => {
-
-    const profiles = [
-        { src: Picture, alt: "Perfil estudiante 1" },
-        { src: Picture, alt: "Perfil estudiante 2" },
-        { src: Picture, alt: "Perfil estudiante 3" },
-        { src: Picture, alt: "Perfil estudiante 4" },
-        { src: Picture, alt: "Perfil estudiante 5" },
-        { src: Picture, alt: "Perfil estudiante 6" },
-      ]
-
   return (
     <div className="relative bg-gray-50 overflow-hidden py-16 lg:py-20">
       {/* Curved background shape */}
@@ -33,24 +21,6 @@ const HeroVisa = () => {
           <p className={`${raleway.className} text-xl lg:text-xl text-gray-900 mb-8 font-light`}>
             Verifica si la visa de estudio de inglés y trabajo es para ti y si cumples o no con los requisitos y lo que se vendrá en destino
           </p>
-          
-          {/* Profile images */}
-          <div className="hidden md:flex justify-center items-center space-x-4 overflow-hidden">
-            {profiles.map((profile, index) => (
-              <div 
-                key={index} 
-                className="w-16 h-16 md:w-40 md:h-36 rounded-md overflow-hidden border-2 border-white shadow-md"
-              >
-                <Image
-                  src={profile.src || "/placeholder.svg"}
-                  alt={profile.alt}
-                  width={100}
-                  height={100}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
