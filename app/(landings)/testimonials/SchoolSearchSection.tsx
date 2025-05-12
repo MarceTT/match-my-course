@@ -1,7 +1,14 @@
   import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 import React from 'react'
   
   const SchoolSearchSection = () => {
+    const router = useRouter()
+    
+    const goSearchSchool = () => {
+      router.push('/school-search?course=ingles-general')
+    }
+
     return (
       <section className="py-16">
         <div className="container mx-auto px-4 flex flex-col md:flex-row">
@@ -30,7 +37,7 @@ import React from 'react'
             A través de nuestro filtro inteligente, encuentra cuál es la escuela de inglés 
             que más se acerca a tus requisitos y necesidades.
             </p>
-            <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
+            <Button onClick={goSearchSchool} className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold" size="lg">
               Buscar escuela
             </Button>
           </div>
