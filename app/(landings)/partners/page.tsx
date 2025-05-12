@@ -118,7 +118,7 @@ export default function PartnersPage() {
           {/* Left side - (empty or could be an image later) */}
           <div className="md:w-1/2 mb-8 md:mb-0">
             <Image
-              src="/partners/schools-for-partners.png"
+              src="/images/schools-for-partners.png"
               alt={`Bandera de Chile`}
               width={700}
               height={700}
