@@ -11,6 +11,7 @@ export default function TermsPage() {
           Términos y condiciones
         </h1>
         <p className="mb-4">
+          Última actualización: 21 de enero del 2025<br /><br />
           MatchMyCourse es una plataforma operada por Abroad Experience, que ofrece una 
           plataforma estilo Marketplace de escuela con el detalle más actualizado de las 
           escuelas de inglés de Irlanda, que tiene por objetivo maximizar la afinidad en 
@@ -32,7 +33,8 @@ export default function TermsPage() {
           y que el proceso de inserción en el extranjero sea un éxito.
         </p>
         <p className="mb-4">
-          Este sitio está destinado a brindar información general. Nos reservamos el derecho de modificar estos términos en cualquier momento sin previo aviso.
+          Este sitio está destinado a brindar información general. Nos reservamos el derecho 
+          de modificar estos términos en cualquier momento sin previo aviso.
         </p>
         <h2 className="text-2xl font-bold mb-2">
           Aceptación de los Términos de Uso
@@ -238,7 +240,12 @@ export default function TermsPage() {
         </p>
         <p>
           Independientemente de quién reciba el pago del curso, el estudiante acepta que las políticas 
-          y criterios de la escuela son los que prevalecen para todo lo relacionado con cambios, reembolsos, aplazamientos o cancelaciones del programa académico. MatchMyCourse no es responsable por las decisiones, plazos, condiciones internas o políticas de reembolso establecidas por la escuela, ni por las pérdidas asociadas a los procesos de devolución, incluyendo pero no limitado a: Diferencias por tipo de cambio de divisas, comisiones bancarias o gastos administrativos, costos de transferencias internacionales.
+          y criterios de la escuela son los que prevalecen para todo lo relacionado con cambios, reembolsos, 
+          aplazamientos o cancelaciones del programa académico. MatchMyCourse no es responsable por 
+          las decisiones, plazos, condiciones internas o políticas de reembolso establecidas por la escuela, 
+          ni por las pérdidas asociadas a los procesos de devolución, incluyendo pero no limitado a: 
+          Diferencias por tipo de cambio de divisas, comisiones bancarias o gastos administrativos, 
+          costos de transferencias internacionales.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           5. Confidencialidad y no divulgación de la información
@@ -247,7 +254,17 @@ export default function TermsPage() {
           Durante la prestación de los servicios, el estudiante (Cliente) podrá acceder a información 
           confidencial proporcionada por MatchMyCourse, que incluye, pero no se limita a: Modelos de 
           cartas de aceptación, formularios, currículums y documentos de aplicación. Materiales de asesoría, 
-          cronogramas, guías internas, presentaciones y estrategias de preparación para el viaje y la inserción en Irlanda. Información exclusiva sobre alojamientos, procesos migratorios, o beneficios incluidos en los programas de MatchMyCourse. Toda esta información es propiedad intelectual de MatchMyCourse y se proporciona únicamente con fines personales para facilitar el proceso del estudiante. El Cliente se compromete a no divulgar, compartir ni reproducir dicha información por ningún medio, ni a utilizarla con fines comerciales o fuera del marco del servicio contratado. Las obligaciones de confidencialidad permanecerán vigentes incluso después de finalizado el curso o del término de la relación contractual, por un período adicional de tres años. El incumplimiento de esta cláusula por parte del Cliente podrá dar lugar a acciones legales y a la exigencia de indemnización por los daños, perjuicios o pérdida de oportunidades ocasionadas a MatchMyCourse.
+          cronogramas, guías internas, presentaciones y estrategias de preparación para el viaje y 
+          la inserción en Irlanda. Información exclusiva sobre alojamientos, procesos migratorios, 
+          o beneficios incluidos en los programas de MatchMyCourse. Toda esta información es propiedad 
+          intelectual de MatchMyCourse y se proporciona únicamente con fines personales para facilitar 
+          el proceso del estudiante. El Cliente se compromete a no divulgar, compartir ni reproducir 
+          dicha información por ningún medio, ni a utilizarla con fines comerciales o fuera del marco 
+          del servicio contratado. Las obligaciones de confidencialidad permanecerán vigentes incluso 
+          después de finalizado el curso o del término de la relación contractual, por un período adicional 
+          de tres años. El incumplimiento de esta cláusula por parte del Cliente podrá dar lugar a acciones 
+          legales y a la exigencia de indemnización por los daños, perjuicios o pérdida de oportunidades 
+          ocasionadas a MatchMyCourse.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           6. Cancelación o modificación del curso por parte del proveedor educativo
@@ -277,7 +294,11 @@ export default function TermsPage() {
         </ul>
         <p>
           En todos los casos, el reembolso se ajustará a las condiciones y tiempos establecidos
-          por la institución educativa. MatchMyCourse no fija tipos de cambio, ni se responsabiliza por comisiones bancarias, gastos de transferencia o pérdidas asociadas a conversiones de divisa. Los reembolsos se realizarán únicamente al medio de pago original. Las opciones mencionadas no aplican a cambios menores, tales como ajustes internos del proveedor que no afectan el desarrollo general del curso o su calendario principal.
+          por la institución educativa. MatchMyCourse no fija tipos de cambio, ni se responsabiliza 
+          por comisiones bancarias, gastos de transferencia o pérdidas asociadas a conversiones de 
+          divisa. Los reembolsos se realizarán únicamente al medio de pago original. Las opciones 
+          mencionadas no aplican a cambios menores, tales como ajustes internos del proveedor que 
+          no afectan el desarrollo general del curso o su calendario principal.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           7. Cancelación después del inicio del curso
@@ -336,25 +357,39 @@ export default function TermsPage() {
             Errores u omisiones por parte del estudiante.
           </li>
           <li>
-            Incumplimiento por parte del estudiante de los presentes términos y condiciones. Cualquier acción u omisión de terceros fuera del control de MatchMyCourse.
+            Incumplimiento por parte del estudiante de los presentes términos y condiciones. Cualquier 
+            acción u omisión de terceros fuera del control de MatchMyCourse.
           </li>
           <li>
-            Salvo lo establecido por ley, MatchMyCourse no será responsable en ningún caso por daños indirectos o consecuentes. En caso de que se determine responsabilidad por parte de MatchMyCourse, esta no excederá el valor del servicio efectivamente pagado por el estudiante.
+            Salvo lo establecido por ley, MatchMyCourse no será responsable en ningún caso por daños 
+            indirectos o consecuentes. En caso de que se determine responsabilidad por parte de 
+            MatchMyCourse, esta no excederá el valor del servicio efectivamente pagado por el estudiante.
           </li>
           <li>
-            MatchMyCourse no garantiza que el sitio web o cualquier contenido (incluyendo textos, imágenes, videos, gráficos, logos, códigos, etc.) esté libre de errores, interrupciones, o que su uso produzca resultados específicos. El sitio y su contenido son de carácter meramente informativo y pueden cambiar sin previo aviso.
+            MatchMyCourse no garantiza que el sitio web o cualquier contenido (incluyendo textos, 
+            imágenes, videos, gráficos, logos, códigos, etc.) esté libre de errores, interrupciones, 
+            o que su uso produzca resultados específicos. El sitio y su contenido son de carácter 
+            meramente informativo y pueden cambiar sin previo aviso.
           </li>
           <li>
-            No se garantiza que los archivos o datos descargados del sitio web estén libres de virus o elementos dañinos. El estudiante es responsable de contar con medidas de seguridad adecuadas en sus dispositivos.
+            No se garantiza que los archivos o datos descargados del sitio web estén libres de virus o 
+            elementos dañinos. El estudiante es responsable de contar con medidas de seguridad adecuadas 
+            en sus dispositivos.
           </li>
           <li>
-            MatchMyCourse no será responsable por acciones, omisiones o comportamientos de terceros relacionados con el uso del sitio web o de sus servicios. Si el estudiante no está conforme con el sitio web, debe cesar su uso.
+            MatchMyCourse no será responsable por acciones, omisiones o comportamientos de terceros 
+            relacionados con el uso del sitio web o de sus servicios. Si el estudiante no está conforme 
+            con el sitio web, debe cesar su uso.
           </li>
           <li>
-            Las limitaciones anteriores se aplican a cualquier tipo de daño causado por fallos técnicos, errores de software, virus, interrupciones de red, accesos no autorizados o cualquier otra causa.
+            Las limitaciones anteriores se aplican a cualquier tipo de daño causado por fallos técnicos, 
+            errores de software, virus, interrupciones de red, accesos no autorizados o cualquier otra causa.
           </li>
           <li>
-            MatchMyCourse se reserva el derecho a: Modificar, suspender o finalizar el funcionamiento del sitio web, total o parcialmente, por cualquier motivo y sin previo aviso. Realizar cambios en el contenido, términos, condiciones o políticas del sitio web. Interrumpir temporalmente el sitio por razones técnicas, mantenimiento o actualización.
+            MatchMyCourse se reserva el derecho a: Modificar, suspender o finalizar el funcionamiento del 
+            sitio web, total o parcialmente, por cualquier motivo y sin previo aviso. Realizar cambios en el 
+            contenido, términos, condiciones o políticas del sitio web. Interrumpir temporalmente el sitio 
+            por razones técnicas, mantenimiento o actualización.
           </li>
         </ul>
         <h3 className="text-xl font-semibold mt-4 mb-2">
@@ -365,50 +400,83 @@ export default function TermsPage() {
         </p>
         <ul>
           <li>
-            No utilizar enlaces profundos, scrapers, robots, spiders u otros procesos automáticos o manuales para acceder, copiar o monitorear cualquier parte del sitio web o su contenido sin autorización expresa de MatchMyCourse.
+            No utilizar enlaces profundos, scrapers, robots, spiders u otros procesos automáticos o manuales 
+            para acceder, copiar o monitorear cualquier parte del sitio web o su contenido sin autorización 
+            expresa de MatchMyCourse.
           </li>
           <li>
-            No intentar acceder sin autorización a ninguna sección restringida del sitio web ni a sistemas, redes o servidores conectados a MatchMyCourse mediante hackeo, falsificación de contraseñas u otros medios ilícitos.
+            No intentar acceder sin autorización a ninguna sección restringida del sitio web ni a sistemas, 
+            redes o servidores conectados a MatchMyCourse mediante hackeo, falsificación de contraseñas u 
+            otros medios ilícitos.
           </li>
           <li>
-            No explorar, escanear o probar vulnerabilidades del sitio web ni violar medidas de autenticación o seguridad.
+            No explorar, escanear o probar vulnerabilidades del sitio web ni violar medidas de autenticación 
+            o seguridad.
           </li>
           <li>
-            No rastrear ni intentar rastrear información de otros usuarios, ni acceder a datos personales que no le pertenezcan.
+            No rastrear ni intentar rastrear información de otros usuarios, ni acceder a datos personales 
+            que no le pertenezcan.
           </li>
           <li>
-            No realizar acciones que sobrecarguen la infraestructura del sitio o de los sistemas relacionados.
+            No realizar acciones que sobrecarguen la infraestructura del sitio o de los sistemas 
+            relacionados.
           </li>
           <li>
-            No interferir con el funcionamiento adecuado del sitio web o de sus transacciones, ni afectar su uso por parte de otros usuarios.
+            No interferir con el funcionamiento adecuado del sitio web o de sus transacciones, ni 
+            afectar su uso por parte de otros usuarios.
           </li>
           <li>
-            No falsificar encabezados ni manipular identificadores con el fin de ocultar el origen de información enviada al sitio, ni suplantar identidades de personas u organizaciones.
+            No falsificar encabezados ni manipular identificadores con el fin de ocultar el origen de 
+            información enviada al sitio, ni suplantar identidades de personas u organizaciones.
           </li>
           <li>
-            No utilizar el sitio web ni su contenido con fines ilícitos o prohibidos por estos términos.
+            No utilizar el sitio web ni su contenido con fines ilícitos o prohibidos 
+            por estos términos.
           </li>
           <li>
-            No reproducir ni distribuir contenido del sitio con fines comerciales sin autorización previa de MatchMyCourse.
+            No reproducir ni distribuir contenido del sitio con fines comerciales sin 
+            autorización previa de MatchMyCourse.
           </li>
         </ul>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           11. Derechos de propiedad intelectual
         </h3>
         <p>
-          Todo el contenido del sitio web de MatchMyCourse, incluyendo pero no limitado a su diseño, estructura, organización, código fuente, textos, imágenes, gráficos, videos, logotipos, marcas comerciales, interfaces visuales y cualquier otra información o elemento disponible en el sitio ("Contenido"), constituye propiedad intelectual de MatchMyCourse o sus entidades afiliadas y está protegido por las leyes de derechos de autor, propiedad industrial y otras normativas nacionales e internacionales vigentes. Todos los derechos relacionados con el contenido del sitio están reservados. Queda estrictamente prohibido copiar, reproducir, modificar, distribuir, transmitir, publicar, ceder o explotar comercialmente cualquier parte del sitio web o su contenido sin autorización expresa y por escrito de MatchMyCourse. El uso del sitio web no implica la concesión de ninguna licencia o derecho sobre la propiedad intelectual del mismo, salvo los usos expresamente autorizados en estos términos y condiciones. En caso de infracción de los derechos de propiedad intelectual de MatchMyCourse, el estudiante deberá indemnizar a la empresa por los daños ocasionados, incluyendo las pérdidas económicas y el lucro cesante.
+          Todo el contenido del sitio web de MatchMyCourse, incluyendo pero no limitado a 
+          su diseño, estructura, organización, código fuente, textos, imágenes, gráficos, 
+          videos, logotipos, marcas comerciales, interfaces visuales y cualquier otra información 
+          o elemento disponible en el sitio (&quot;Contenido&quot;), constituye propiedad intelectual 
+          de MatchMyCourse o sus entidades afiliadas y está protegido por las leyes de derechos de autor, 
+          propiedad industrial y otras normativas nacionales e internacionales vigentes. Todos los derechos 
+          relacionados con el contenido del sitio están reservados. Queda estrictamente prohibido copiar, 
+          reproducir, modificar, distribuir, transmitir, publicar, ceder o explotar comercialmente cualquier 
+          parte del sitio web o su contenido sin autorización expresa y por escrito de MatchMyCourse. El uso 
+          del sitio web no implica la concesión de ninguna licencia o derecho sobre la propiedad intelectual 
+          del mismo, salvo los usos expresamente autorizados en estos términos y condiciones. En caso de 
+          infracción de los derechos de propiedad intelectual de MatchMyCourse, el estudiante deberá 
+          indemnizar a la empresa por los daños ocasionados, incluyendo las pérdidas económicas y el 
+          lucro cesante.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           12. Procedimiento de resolución de disputas
         </h3>
         <p>
-          Todas las controversias o reclamaciones derivadas del presente acuerdo entre el estudiante y MatchMyCourse deberán resolverse, en primera instancia, mediante negociaciones de buena fe entre las partes. En caso de no alcanzar un acuerdo mediante negociación directa, ambas partes acuerdan someterse a la jurisdicción de los tribunales competentes del domicilio legal de MatchMyCourse, renunciando a cualquier otro fuero que pudiera corresponderles.
+          Todas las controversias o reclamaciones derivadas del presente acuerdo entre el 
+          estudiante y MatchMyCourse deberán resolverse, en primera instancia, mediante negociaciones 
+          de buena fe entre las partes. En caso de no alcanzar un acuerdo mediante negociación directa, 
+          ambas partes acuerdan someterse a la jurisdicción de los tribunales competentes del domicilio 
+          legal de MatchMyCourse, renunciando a cualquier otro fuero que pudiera corresponderles.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           13. Condiciones generales para reembolsos
         </h3>
         <p>
-          MatchMyCourse procesará las solicitudes de reembolso dentro de un plazo máximo de treinta días corridos a partir de la recepción formal de la solicitud por parte del estudiante. El tiempo estimado para que los fondos se reflejen en la cuenta bancaria del estudiante puede variar entre cinco y treinta días hábiles, dependiendo de las entidades bancarias involucradas. Los reembolsos se realizarán al mismo medio de pago utilizado por el estudiante, salvo acuerdo expreso por escrito entre ambas partes.
+          MatchMyCourse procesará las solicitudes de reembolso dentro de un plazo máximo de 
+          treinta días corridos a partir de la recepción formal de la solicitud por parte 
+          del estudiante. El tiempo estimado para que los fondos se reflejen en la cuenta 
+          bancaria del estudiante puede variar entre cinco y treinta días hábiles, dependiendo 
+          de las entidades bancarias involucradas. Los reembolsos se realizarán al mismo medio 
+          de pago utilizado por el estudiante, salvo acuerdo expreso por escrito entre ambas partes.
         </p>
         <h3 className="text-xl font-semibold mt-4 mb-2">
           14. Circunstancias de fuerza mayor
