@@ -13,6 +13,10 @@ interface Props {
   params: { slug: string }
 }
 
+interface Props {
+  params: { slug: string }
+}
+
 export async function generateStaticParams() {
   const services = await getAllServices()
 
@@ -21,15 +25,15 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function ServiceDetail({ params }: Props) {
-  const { slug } = params
+export default async function ServiceDetail(props: Props) {
+  const slug = props.params.slug
   const services = await getAllServices()
-  const servicio = services.find((s: { slug: string }) => s.slug === params.slug)
+  const servicio = services.find((s: { slug: string }) => s.slug === slug)
 
   if (!servicio) {
     notFound()
   }
-
+  
   return (
     <>
       <Header />
