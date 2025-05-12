@@ -9,24 +9,20 @@ import { getAllServices } from "@/app/lib/services/getAllServices"
 import { notFound } from "next/navigation"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
 
-interface Props {
-  params: { slug: string }
-}
-
-interface Props {
-  params: { slug: string }
-}
+// export const dynamic = "force-dynamic"; 
 
 export async function generateStaticParams() {
   const services = await getAllServices()
-
+  
   return services.map((service) => ({
     slug: service.slug,
   }))
 }
 
-export default async function ServiceDetail({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function ServiceDetail({ params }: { 
+  params: Promise<{ slug: string }>
+}) {
+  const slug = (await params).slug
 
   const services = await getAllServices();
   const servicio = services.find((s) => s.slug === slug);
