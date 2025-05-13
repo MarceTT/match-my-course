@@ -1,68 +1,69 @@
 import React from 'react'
-import Image from "next/image"
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { TbMessageUser } from "react-icons/tb";
+import { MdOutlineLaptopMac } from "react-icons/md";
+import { TbHeartRateMonitor } from "react-icons/tb";
+import { LuTicketsPlane } from "react-icons/lu";
+import { FaWhatsapp } from "react-icons/fa";
+import { GiSmartphone } from "react-icons/gi";
 
 const SchoolInclusion = () => {
 
-    const basicInclusions = ["Matrícula", "Materiales", "Seguro médico", "Seguro PEL", "Examen obligatorio de salida"]
-
-  const additionalInclusions = [
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "Asesoría personalizada con experto",
-    },
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "Curso de inserción en Irlanda",
-    },
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "Acceso a plataforma del estudiante",
-    },
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "Traslado Dublin a destino",
-    },
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "Acceso a la comunidad",
-    },
-    {
-      icon: "/images/placeholder_img.svg",
-      title: "SIM para móviles con Airalo",
-    },
-  ]
+    const servicios = [
+      {
+        icon: (
+          <TbMessageUser className="w-full h-full text-black" />
+        ),
+        title: "Asesoría personalizada con experto",
+      },
+      {
+        icon: (
+          <MdOutlineLaptopMac className="w-full h-full text-black" />
+        ),
+        title: "Curso de inserción en Irlanda",
+      },
+      {
+        icon: (
+          <TbHeartRateMonitor className="w-full h-full text-black" />
+        ),
+        title: "Acceso a plataforma del estudiante",
+      },
+      {
+        icon: (
+          <LuTicketsPlane className="w-full h-full text-black" />
+        ),
+        title: "Pasaje de Dublin a destino",
+      },
+      {
+        icon: (
+          <FaWhatsapp className="w-full h-full text-black" />
+        ),
+        title: "Acceso a la comunidad",
+      },
+      {
+        icon: (
+          <GiSmartphone className="w-full h-full text-black" />
+        ),
+        title: "3GB datos móviles con Airalo",
+      },
+    ]
   return (
     <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center">
-          El curso incluye
-          <span className="ml-2 text-gray-400 text-sm">(i)</span>
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          {basicInclusions.map((item, index) => (
-            <div key={index} className="flex items-center gap-2">
-              <IoMdCheckmarkCircleOutline className="w-4 h-4 text-green-500" />
-              <span className="text-sm text-gray-600">{item}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+     <div className="w-full py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold text-black mb-16">
+          ¿Qué servicios adicionales incluye tu reserva?
+        </h2>
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Además tendrás incluido</h3>
-        <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
-          {additionalInclusions.map((item, index) => (
-            <div key={index} className="text-center">
-              <div className="relative w-16 h-16 mx-auto mb-2">
-                <Image src={item.icon || "/placeholder.svg"} alt={item.title} fill className="object-contain" />
-              </div>
-              <p className="text-xs text-gray-600">{item.title}</p>
-              <span className="text-gray-400 text-xs">(i)</span>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {servicios.map((servicio, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className="w-16 h-16 mb-4">{servicio.icon}</div>
+              <p className="text-center text-sm md:text-base">{servicio.title}</p>
             </div>
           ))}
         </div>
       </div>
+    </div>
     </div>
   )
 }

@@ -27,7 +27,7 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="w-full py-8 px-6 bg-white sticky top-0 z-50 lg:bg-opacity-40 lg:backdrop-blur-md">
+    <header className="w-full py-8 px-6 bg-white ">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-6">
           <Link
@@ -85,9 +85,9 @@ const Header = () => {
             )}
           </button>
 
-          <button className="hidden md:block">
+          {/* <button className="hidden md:block">
             <PiUserCircleFill className="h-8 w-8 text-black" />
-          </button>
+          </button> */}
         </div>
       </div>
       {/* Mobile menu */}

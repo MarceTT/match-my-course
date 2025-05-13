@@ -71,7 +71,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
 
   return (
     <section className="max-w-7xl mx-auto py-10 px-4">
-      <h2 className="text-2xl font-bold mb-8">
+      <h2 className="text-2xl font-bold mb-8 text-black">
         Instalaciones y servicios de la escuela
       </h2>
       <div className="grid md:grid-cols-2 gap-12">

@@ -15,16 +15,16 @@ interface CertificationsProps {
 
 const logoMap: Record<string, string> = {
   ACELS:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ACELS.svg",
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ACELS.png",
   Eaquals:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Eaquals.svg",
-  EEI: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/EEI.svg",
-  IALC: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/IALC.svg",
-  ILEP: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ILEP.svg",
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Eaquals.png",
+  EEI: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/EEI.png",
+  IALC: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/IALC.png",
+  ILEP: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ILEP.png",
   QualityEnglish:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Quality+English.svg",
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Quality+English.png",
   SelectIreland:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Select+Ireland.svg",
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Select+Ireland.png",
 };
 
 const Certifications = ({ school }: CertificationsProps) => {
@@ -32,7 +32,7 @@ const Certifications = ({ school }: CertificationsProps) => {
   if (!school?.certifications || !school.accreditations) return null;
 
   return (
-    <div className="mb-8">
+
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center mb-8">
           <h1 className="text-2xl font-bold text-black">
@@ -127,7 +127,7 @@ const Certifications = ({ school }: CertificationsProps) => {
           </div>
         </div>
       </div>
-    </div>
+   
   );
 };
 

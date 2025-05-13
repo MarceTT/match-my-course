@@ -124,7 +124,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
             </div>
           </div>
 
-          {!isGrid && priceOptions.length > 0 && (
+          {!isGrid && !isMobile && priceOptions.length > 0 && (
             <div className={`text-xs text-gray-700 text-right ${hasDiscount ? "mt-9" : ""}`}>
               <p className="font-semibold text-gray-800 underline mb-1">Opciones:</p>
               <ul className="space-y-1">
@@ -152,7 +152,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          {!(isGrid && isMobile) && (
+          {!isMobile ? (
             <Image
               src={school.logo || "/placeholder.svg"}
               alt="Logo"
@@ -160,28 +160,38 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
               height={60}
               className="object-contain"
             />
+          ) : (
+            priceOptions.length > 0 && (
+              <div className="text-xs text-gray-700">
+                <p className="font-semibold text-gray-800 underline mb-1">Opciones:</p>
+                <ul className="space-y-1">
+                  {priceOptions.map((p, i) => (
+                    <li
+                      key={i}
+                      className={`italic cursor-pointer ${selectedOptionIndex === i ? "font-bold text-blue-600" : "hover:text-blue-600"}`}
+                      onClick={() => setSelectedOptionIndex(i)}
+                    >
+                      {p.horarioEspecifico}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
           )}
+
           <div className="text-right">
             <div className="text-2xl font-bold text-gray-800">
               {hasDiscount ? (
                 <>
-                  <div className="line-through text-sm text-gray-500">
-                    €{selected?.precio?.toLocaleString()}
-                  </div>
-                  <div className="text-green-600 text-3xl font-extrabold">
-                    €{selected?.oferta?.toLocaleString()}
-                  </div>
+                  <div className="line-through text-sm text-gray-500">€{selected?.precio?.toLocaleString()}</div>
+                  <div className="text-green-600 text-3xl font-extrabold">€{selected?.oferta?.toLocaleString()}</div>
                 </>
               ) : (
-                <span className="text-blue-600 text-4xl font-extrabold">
-                  €{selected?.precio?.toLocaleString()}
-                </span>
+                <span className="text-blue-600 text-4xl font-extrabold">€{selected?.precio?.toLocaleString()}</span>
               )}
             </div>
             <Link href={`/school-detail/${school._id}`} onMouseEnter={() => prefetchSchool(school._id)}>
-              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white">
-                Ver escuela
-              </Button>
+              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white">Ver escuela</Button>
             </Link>
           </div>
         </div>

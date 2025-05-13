@@ -22,21 +22,16 @@ const Accommodation = ({ accommodations, detailAccomodation }: AccommodationProp
         />
         <div className="flex items-center gap-2">
           <IoMdCheckmarkCircleOutline className="w-6 h-6 text-black rounded-full bg-white" />
-          <h3 className="text-xl font-bold">{type}</h3>
+          <h3 className="text-lg font-bold">{type}</h3>
         </div>
       </div>
-      <p className="text-base mb-3">{detail}</p>
-      <div className="mt-auto">
-        <span className="text-2xl font-bold">$$$</span>
-        <span className="text-2xl font-bold text-gray-300">$</span>
-      </div>
+      <p className="text-sm mb-3">{detail}</p>
     </div>
   );
 
   return (
-    <div className="mb-8">
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-12">
+        <h1 className="text-2xl font-bold mb-12 text-black">
           ¿Qué alojamiento te ofrece la escuela?
         </h1>
 
@@ -67,7 +62,6 @@ const Accommodation = ({ accommodations, detailAccomodation }: AccommodationProp
           ))}
         </div>
       </div>
-    </div>
   );
 };
 

@@ -350,28 +350,54 @@ function SliderSection({ value, config, onChange, disabled }: any) {
   const [localValue, setLocalValue] = useState<number>(config.min);
 
   useEffect(() => {
-    if (Array.isArray(value) && value.length > 0) {
+    if (disabled) {
+      // Fijamos 25 semanas solo visualmente si está deshabilitado
+      setLocalValue(25);
+    } else if (Array.isArray(value) && value.length > 0) {
       setLocalValue(value[0]);
     } else {
       setLocalValue(config.min);
     }
-  }, [value, config.min]); // 👈 escucha cambios en `value`
+  }, [value, config.min, disabled]);
 
   return (
     <div className="px-2">
-      <Slider
-        value={[localValue]}
-        min={config.min}
-        max={config.max}
-        step={config.step}
-        onValueChange={(val) => {
-          const newMin = val[0];
-          setLocalValue(newMin);
-          onChange([newMin]);
-        }}
-        className="w-full"
-        disabled={disabled}
-      />
+      <TooltipProvider>
+        {disabled ? (
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <div>
+                <Slider
+                  value={[localValue]}
+                  min={config.min}
+                  max={config.max}
+                  step={config.step}
+                  onValueChange={() => {}}
+                  className="w-full"
+                  disabled
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Este curso requiere una duración fija de 25 semanas.</p>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <Slider
+            value={[localValue]}
+            min={config.min}
+            max={config.max}
+            step={config.step}
+            onValueChange={(val) => {
+              const newMin = val[0];
+              setLocalValue(newMin);
+              onChange([newMin]);
+            }}
+            className="w-full"
+          />
+        )}
+      </TooltipProvider>
+  
       <div className="flex justify-between mt-2 text-xs text-muted-foreground">
         <div className="bg-primary text-white px-2 py-1 rounded shadow">
           {localValue} semanas
@@ -380,3 +406,4 @@ function SliderSection({ value, config, onChange, disabled }: any) {
     </div>
   );
 }
+
