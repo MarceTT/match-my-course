@@ -1,5 +1,5 @@
 
-export interface Services {
+export interface Service {
   id: string;
   rating: number;
   slug: string;
@@ -7,7 +7,7 @@ export interface Services {
   title: string;
 }
 
-export const services: Services[] = [
+export const services: Service[] = [
   {
     id: "1",
     rating: 4.6,

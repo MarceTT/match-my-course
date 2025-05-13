@@ -3,8 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-// import { videos } from "@/lib/videos"; // TODO: doesn't work
-import { services } from "../lib/services";
+import { Service, services } from "../lib/services";
 
 function getYouTubeVideoId(url: string): string | null {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*shorts\/))([^?&/]+)/);
@@ -12,7 +11,6 @@ function getYouTubeVideoId(url: string): string | null {
 }
 
 function VideoCard({ service }: { service: Service }) {
-  console.log('service: ', service)
   const videoId = getYouTubeVideoId(service.thumbnail);
   const [imageError, setImageError] = useState(false);
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "/placeholder.svg";
