@@ -1,29 +1,30 @@
 'use client'
 
-import { getAllTestimonials } from '@/app/lib/services/testimonial'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import React, { useState, useEffect } from 'react'
+import { getAllTestimonials } from '@/app/lib/services/testimonial'
+import { Testimonial } from '@/app/lib/testimonials'
 
 const TestimonialHighlight = () => {
   const [index, setIndex] = useState(0)
-  const [_, setFade] = useState(true)
+  const setFade = useState(true)[1]
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
 
-  const handleChange = (nextIndex: number) => {
+  const handleChange = useCallback((nextIndex: number) => {
     setFade(false)
     setTimeout(() => {
       setIndex(nextIndex)
       setFade(true)
     }, 200) // Timing for fade-out before switching
-  }
+  }, [setFade])
 
   const handlePrev = () => {
     handleChange(index === 0 ? testimonials.length - 1 : index - 1)
   }
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     handleChange(index === testimonials.length - 1 ? 0 : index + 1)
-  }
+  }, [index, testimonials.length, handleChange])
 
   const testimonial = testimonials[index]
 
@@ -32,7 +33,7 @@ const TestimonialHighlight = () => {
       handleNext()
     }, 7000)
     return () => clearInterval(timer)
-  }, [index])
+  }, [index, handleNext])
 
   useEffect(() => {
     async function fetchTestimonials() {
