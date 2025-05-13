@@ -50,13 +50,10 @@ export const testimonials: Testimonial[] = [
     image: '/testimonials/cesar-menegatis.png',
     text: (
       <>
-        Siempre tuve de ustedes una grata asesoría y coordinada con reuniones virtuales para conocerlos más profundo 
-        lo que me dio más garantías de confiar en tu agencia, siento que fue muy completa la información y apoyo al 
-        llegar también a NZ. Mi experiencia con ustedes es recomendable ya que <b>cualquier duda me la despejadan con 
-        conocimientos previos de lo que ofrecen y de como será el llegar a un país que uno desconoce,</b> la cultura, y 
-        otros factores para buscar arriendo o poder movilizarme y hasta páginas de empleo que ustedes me asesoraron 
-        dieron una rápida acogida cuando llegue. El instituto recomendado por ustedes fue uno de los mejores y siento 
-        que aprendí mucho de esta maravillosa experiencia.
+        Mi experiencia con ustedes es recomendable ya que <b>cualquir duda me la despejadas con conocimientos 
+        previos de lo que ofrecen y de como será el llegar a un país que uno desconoce</b>, la cultura, y otros 
+        factores para buscar arriendo o poder movilizarme y hasta páginas de empleo que ustedes me asesoraron 
+        dieron una rápida acogida cuando llegue.
       </>
     ),
   },
@@ -77,7 +74,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     name: 'Camila Cisternas Ramírez',
-    flag: 'https://flagcdn.com/w40/ar.png',
+    flag: 'https://flagcdn.com/w40/cl.png',
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
