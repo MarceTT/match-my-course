@@ -1,4 +1,4 @@
-// app/contact/page.tsx
+// Ajustado para enviar datos correctamente al backend y mandar 2 correos desde /api/contact
 "use client"
 
 import { useForm } from "react-hook-form"
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import Image from "next/image"
 
-type ContactFormData = {
+export type ContactFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -23,23 +23,43 @@ export default function ContactPage() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ContactFormData>()
 
   const [submitted, setSubmitted] = useState(false)
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log("Form Data:", data)
-    setSubmitted(true)
-  };
+  const onSubmit = async (formData: ContactFormData) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const result = await res.json()
+      console.log('result', result)
+      if (result.success) {
+        setSubmitted(true)
+        reset()
+      } else {
+        alert('Hubo un error al enviar el formulario')
+      }
+    } catch (error) {
+      alert('Error al enviar el formulario')
+      console.error(error)
+    }
+  }
 
   return (
     <>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Contáctanos</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          Contáctanos
+        </h1>
         {submitted ? (
-          <p className="text-green-600 text-lg">¡Gracias por tu mensaje!</p>
+          <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg space-y-6 border-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg border-2">
             <h3 className="font-bold mb-6 text-center">Escríbenos y te responderemos en un plazo de 48 horas</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -101,49 +121,19 @@ export default function ContactPage() {
               {errors.details && <p className="text-red-600 text-sm">{errors.details.message}</p>}
             </div>
 
-            {/* <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                {...register("acceptTerms", { required: "Debes aceptar los términos" })}
-                className="mt-1"
-              />
-              <label className="text-sm">
-                Acepto los términos y condiciones (texto dummy).
-              </label>
+            <div className="flex items-center space-x-2">
+              <Checkbox id="terms" {...register("acceptTerms", { required: "Debes aceptar los términos" })} />
+              <label htmlFor="terms" className="text-sm">Acepto los términos y condiciones.</label>
             </div>
             {errors.acceptTerms && <p className="text-red-600 text-sm">{errors.acceptTerms.message}</p>}
 
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                {...register("acceptPolicy", { required: "Debes aceptar la política de privacidad" })}
-                className="mt-2"
-              />
-              <label className="text-sm">
-                Doy mi consentimiento para el tratamiento de mis datos personales asociados al curso tomado de acuerdo con los términos de la Política de Provacidad.
-              </label>
-            </div>
-            {errors.acceptPolicy && <p className="text-red-600 text-sm">{errors.acceptPolicy.message}</p>} */}
-
             <div className="flex items-center space-x-2">
-              <Checkbox id="terms" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Acepto los términos y condiciones.
+              <Checkbox id="policy" {...register("acceptPolicy", { required: "Debes aceptar la política" })} />
+              <label htmlFor="policy" className="text-sm">
+                Doy mi consentimiento para el tratamiento de mis datos personales de acuerdo con la Política de Privacidad.
               </label>
             </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox id="consent" />
-              <label
-                htmlFor="consent"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Doy mi consentimiento para el tratamiento de mis datos personales asociados al curso tomado de acuerdo con los términos de la Política de Provacidad.
-              </label>
-            </div>
+            {errors.acceptPolicy && <p className="text-red-600 text-sm">{errors.acceptPolicy.message}</p>}
 
             <div className="flex justify-center">
               <Button
@@ -157,7 +147,7 @@ export default function ContactPage() {
           </form>
         )}
       </div>
-      
+        
       <section className="relative overflow-visible bg-yellow-400 mt-14">
         <div className="container mx-auto grid lg:grid-cols-2 items-center relative z-10">
           <div className="space-y-4 text-center py-4">
