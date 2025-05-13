@@ -159,11 +159,11 @@ export default function ContactPage() {
       </div>
       
       <section className="relative overflow-visible bg-yellow-400 mt-14">
-        <div className="container mx-auto px-4 grid md:grid-cols-2 items-center relative z-10">
-          
-          {/* Left Column */}
-          <div className="space-y-4 text-center">
-            <h2 className="text-3xl font-semibold text-black">¿Estás buscando una escuela <br />de inglés en Irlanda?</h2>
+        <div className="container mx-auto grid lg:grid-cols-2 items-center relative z-10">
+          <div className="space-y-4 text-center py-4">
+            <h2 className="text-3xl font-semibold text-black">
+              ¿Estás buscando una escuela <br />de inglés en Irlanda?
+            </h2>
             <p className="text-lg text-black">
               Encuentra la escuela de inglés que más se adecue a tus requisitos y necesidades 
               a través de nuestro filtro inteligente.
@@ -175,9 +175,7 @@ export default function ContactPage() {
               Buscar escuela
             </a>
           </div>
-
-          {/* Right Column */}
-          <div className="relative h-[400px] md:h-[500px] md:block">
+          <div className="relative h-[400px] md:h-[500px] hidden lg:block">
             <Image 
               src="/landing-pages/Mujer página Contacto.png"
               alt="Contáctanos"
