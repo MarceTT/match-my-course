@@ -177,7 +177,7 @@ export default function ContactPage() {
           </div>
           <div className="relative h-[400px] md:h-[500px] hidden lg:block">
             <Image 
-              src="/landing-pages/Mujer página Contacto.png"
+              src="/landing-pages/mujer-pagina-contacto.png"
               alt="Contáctanos"
               width={600}
               height={600}

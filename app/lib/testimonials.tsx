@@ -17,7 +17,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Malta',
     destinationCity: 'St. Julians',
-    image: '/testimonials/Carla Carrasco Díaz.png',
+    image: '/testimonials/carla-carrasco-diaz.png',
     text: (
       <>
         Quedé muy conforme con la asesoría, <b>la orientación fue clara</b>, se consideraron varias opciones, 
@@ -32,7 +32,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Galway',
-    image: '/testimonials/Fabiola Cabezas.png',
+    image: '/testimonials/fabiola-cabezas.png',
     text: (
       <>
         Estoy muy agradecida del apoyo que me ha brindado la agencia, ellos también son viajeros y han 
@@ -47,7 +47,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/Cesar Menegatis.png',
+    image: '/testimonials/cesar-menegatis.png',
     text: (
       <>
         Siempre tuve de ustedes una grata asesoría y coordinada con reuniones virtuales para conocerlos más profundo 
@@ -66,7 +66,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Argentina',
     destinationCountry: 'Irlanda',
     destinationCity: 'Dublín',
-    image: '/testimonials/Martina Beas.png',
+    image: '/testimonials/martina-beas.png',
     text: (
       <>
         Desde el momento cero me ayudaron a clarificar a dónde quería ir a estudiar y cómo concretarlo. El proceso de 
@@ -81,7 +81,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/Camila Cisternas Ramírez.png',
+    image: '/testimonials/camila-cisternas-ramirez.png',
     text: (
       <>
         con ellos me sentí muy confiada gracias a la <b>amabilidad y profesionalismo</b>, quienes resolvieron todas mis dudas 
@@ -97,7 +97,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Galway',
-    image: '/testimonials/Paulina Allel.png',
+    image: '/testimonials/paulina-allel.png',
     text: (
       <>
         con ellos me sentí muy confiada gracias a la <b>amabilidad y profesionalismo</b>, quienes resolvieron todas mis dudas 
@@ -113,7 +113,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/Jennifer Beroiza.png',
+    image: '/testimonials/jennifer-beroiza.png',
     text: (
       <>
         Quiero expresar mi más sincero agradecimiento por el excelente servicio y apoyo durante todo el proceso. Gracias a 
@@ -127,7 +127,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Cork',
-    image: '/testimonials/Jennifer Beroiza.png',
+    image: '/testimonials/jennifer-beroiza.png',
     text: (
       <>
         Escogí Abroad Experience porque me transmitieron más confianza, conocimiento y profesionalismo. Las reuniones 
@@ -142,7 +142,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/Angela Cimma.png',
+    image: '/testimonials/angela-cimma.png',
     text: (
       <>
         Una de las mejores cosas fue el apoyo brindado por la agencia. El proceso fue fluido y bien organizado. 
@@ -158,7 +158,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Argentina',
     destinationCountry: 'Irlanda',
     destinationCity: 'Cork',
-    image: '/testimonials/María Belén Echeverría.png',
+    image: '/testimonials/maria-belen-echeverria.png',
     text: (
       <>
         Cada pequeña duda que tenía, podía conversar con ellos y así me guiaron durante todo el proceso. Incluso 
@@ -174,7 +174,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/María Belén Echeverría.png',
+    image: '/testimonials/jennifer-beroiza.png',
     text: (
       <>
         ...el proceso de obtención de mi visa fue rápido y sin complicaciones. Lo que más destaco es el acompañamiento 
@@ -189,7 +189,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Nueva Zelanda',
     destinationCity: 'Auckland',
-    image: '/testimonials/Catalina Escobar.png',
+    image: '/testimonials/catalina-escobar.png',
     text: (
       <>
         ...excelente servicio durante todo el proceso de planificación, preparación de mi viaje y visa de estudio... 
@@ -203,7 +203,7 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Dublin',
-    image: '/testimonials/María Prieto.png',
+    image: '/testimonials/maria-prieto.png',
     text: (
       <>
         Excelente servicio, sobre todo en la preparación e inserción en Irlanda, me ayudaron en todo, desde comprar el 
