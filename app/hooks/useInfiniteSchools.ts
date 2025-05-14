@@ -9,6 +9,7 @@ const fetchPaginatedSchools = async ({ pageParam = 1 }) => {
     schools: res.data.data.schools,
     currentPage: res.data.data.currentPage,
     totalPages: res.data.data.totalPages,
+    hasMore: res.data.data.hasMore
   };
 };
 
@@ -18,10 +19,7 @@ export const useInfiniteSchools = () => {
     queryFn: fetchPaginatedSchools,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (lastPage.currentPage < lastPage.totalPages) {
-        return lastPage.currentPage + 1;
-      }
-      return undefined;
-    },
+      return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
+    }
   });
 };

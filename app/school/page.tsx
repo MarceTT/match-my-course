@@ -8,7 +8,6 @@ import { useInView } from "react-intersection-observer";
 import { SchoolDetails } from "@/app/types";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 
-
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
     <Skeleton className="h-48 w-full" />
@@ -43,8 +42,8 @@ const SchoolPage = () => {
   // Preload only new images
   useEffect(() => {
     const newSchools = schools.filter((school) => !loadedIds.has(school._id));
-    if (newSchools.length === 0){
-      setFirstLoad(false); 
+    if (newSchools.length === 0) {
+      setFirstLoad(false);
       return;
     }
 
@@ -133,20 +132,20 @@ const SchoolPage = () => {
       </div>
 
       {hasNextPage && (
-  <>
-    {isFetchingNextPage ? (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-10">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <SkeletonCard key={`loading-skeleton-${i}`} />
-        ))}
-      </div>
-    ) : (
-      <div ref={ref} className="flex justify-center mt-10 animate-bounce">
-        <InfiniteLoaderScroll />
-      </div>
-    )}
-  </>
-)}
+        <>
+          {isFetchingNextPage ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-10">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <SkeletonCard key={`loading-skeleton-${i}`} />
+              ))}
+            </div>
+          ) : (
+            <div ref={ref} className="flex justify-center mt-10 animate-bounce">
+              <InfiniteLoaderScroll />
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 };
