@@ -8,8 +8,21 @@ import { useInView } from "react-intersection-observer";
 import { SchoolDetails } from "@/app/types";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 
+
+const SkeletonCard = () => (
+  <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
+    <Skeleton className="h-48 w-full" />
+    <div className="p-4 space-y-3">
+      <Skeleton className="h-5 w-3/4" />
+      <Skeleton className="h-4 w-1/2" />
+      <Skeleton className="h-4 w-full" />
+    </div>
+  </div>
+);
+
 const SchoolPage = () => {
   const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
+  const [firstLoad, setFirstLoad] = useState(true);
   const { ref, inView } = useInView();
   const pendingImages = useRef<Set<string>>(new Set());
 
@@ -30,7 +43,10 @@ const SchoolPage = () => {
   // Preload only new images
   useEffect(() => {
     const newSchools = schools.filter((school) => !loadedIds.has(school._id));
-    if (newSchools.length === 0) return;
+    if (newSchools.length === 0){
+      setFirstLoad(false); 
+      return;
+    }
 
     newSchools.forEach((school) => pendingImages.current.add(school._id));
 
@@ -51,6 +67,8 @@ const SchoolPage = () => {
         newSchools.forEach((s) => newSet.add(s._id));
         return newSet;
       });
+
+      setFirstLoad(false);
     };
 
     preload();
@@ -66,17 +84,7 @@ const SchoolPage = () => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex flex-col rounded-lg shadow-md overflow-hidden animate-pulse bg-white"
-          >
-            <Skeleton className="h-48 w-full" />
-            <div className="p-4 space-y-3">
-              <Skeleton className="h-5 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-4 w-full" />
-            </div>
-          </div>
+          <SkeletonCard key={i} />
         ))}
       </div>
     );
@@ -100,13 +108,15 @@ const SchoolPage = () => {
           return (
             <div
               key={school._id}
-              className={`transition-all duration-700 ease-in-out transform ${
+              className={`transition-all duration-700 ease-in-out transform min-h-[320px] ${
                 isLoaded
                   ? "opacity-100 scale-100 blur-0"
                   : "opacity-0 scale-95 blur-sm"
               }`}
             >
-              {isLoaded ? (
+              {firstLoad || !isLoaded ? (
+                <SkeletonCard />
+              ) : (
                 <School
                   _id={school._id}
                   name={school.name}
@@ -116,15 +126,6 @@ const SchoolPage = () => {
                   price={price}
                   lowestPrice={school.lowestPrice}
                 />
-              ) : (
-                <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse">
-                  <Skeleton className="h-48 w-full" />
-                  <div className="p-4 space-y-3">
-                    <Skeleton className="h-5 w-3/4" />
-                    <Skeleton className="h-4 w-1/2" />
-                    <Skeleton className="h-4 w-full" />
-                  </div>
-                </div>
               )}
             </div>
           );
@@ -132,10 +133,20 @@ const SchoolPage = () => {
       </div>
 
       {hasNextPage && (
-        <div ref={ref} className="flex justify-center mt-10 animate-bounce">
-          <InfiniteLoaderScroll />
-        </div>
-      )}
+  <>
+    {isFetchingNextPage ? (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-10">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <SkeletonCard key={`loading-skeleton-${i}`} />
+        ))}
+      </div>
+    ) : (
+      <div ref={ref} className="flex justify-center mt-10 animate-bounce">
+        <InfiniteLoaderScroll />
+      </div>
+    )}
+  </>
+)}
     </>
   );
 };
