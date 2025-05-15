@@ -84,6 +84,13 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  const CDN_BASE = "https://d2wv8pxed72bi5.cloudfront.net/";
+
+  const rewriteToCDN = (url?: string | null): string =>
+    url?.startsWith("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/")
+      ? url.replace("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/", CDN_BASE)
+      : url || "/placeholder.svg";
+
   useEffect(() => {
     setSelectedOptionIndex(0);
   }, [school._id]);
@@ -98,10 +105,14 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       )}
 
       <div className={`${isGrid ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"} overflow-hidden rounded-lg`}>
-        <img
-          src={school.mainImage || "/placeholder.svg"}
+      <Image
+          src={rewriteToCDN(school.mainImage)}
           alt={school.name}
+          width={500}
+          height={300}
           className="h-full w-full object-cover"
+          loading="lazy"
+          placeholder="empty"
         />
       </div>
 
@@ -154,11 +165,13 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         <div className="mt-4 flex items-center justify-between">
           {!isMobile ? (
             <Image
-              src={school.logo || "/placeholder.svg"}
+              src={rewriteToCDN(school.logo)}
               alt="Logo"
               width={120}
               height={60}
               className="object-contain"
+              loading="lazy"
+              placeholder="empty"
             />
           ) : (
             priceOptions.length > 0 && (

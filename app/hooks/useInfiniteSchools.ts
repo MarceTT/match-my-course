@@ -3,6 +3,7 @@ import axios from "@/app/utils/axiosInterceptor";
 
 const LIMIT = 8;
 
+
 const fetchPaginatedSchools = async ({ pageParam = 1 }) => {
   const res = await axios.get(`/front/schools?page=${pageParam}&limit=${LIMIT}`);
   return {
@@ -20,6 +21,16 @@ export const useInfiniteSchools = () => {
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
-    }
+    },
+    select: (data) => {
+      // Combina correctamente todas las páginas
+      return {
+        ...data,
+        pages: data.pages.map((page) => ({
+          ...page,
+          schools: page.schools,
+        })),
+      };
+    },
   });
 };

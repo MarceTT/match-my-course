@@ -4,9 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import School from "../components/School";
 import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
-import { useInView } from "react-intersection-observer";
 import { SchoolDetails } from "@/app/types";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
+import { useInView } from "react-intersection-observer";
 
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
@@ -22,8 +22,9 @@ const SkeletonCard = () => (
 const SchoolPage = () => {
   const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
   const [firstLoad, setFirstLoad] = useState(true);
-  const { ref, inView } = useInView();
   const pendingImages = useRef<Set<string>>(new Set());
+
+  const { ref: loaderRef, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: false });
 
   const {
     data,
@@ -35,11 +36,20 @@ const SchoolPage = () => {
   } = useInfiniteSchools();
 
   const schools =
-    data?.pages
-      .flatMap((page) => page.schools)
-      .filter((s): s is SchoolDetails => !!s && !!s._id && !!s.name) || [];
+    Array.from(
+      new Map(
+        data?.pages
+          .flatMap((page) => page.schools)
+          .map((s) => [s._id, s])
+      ).values()
+    ) || [];
 
-  // Preload only new images
+  useEffect(() => {
+    if (isInView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   useEffect(() => {
     const newSchools = schools.filter((school) => !loadedIds.has(school._id));
     if (newSchools.length === 0) {
@@ -72,12 +82,6 @@ const SchoolPage = () => {
 
     preload();
   }, [schools]);
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
     return (
@@ -140,7 +144,7 @@ const SchoolPage = () => {
               ))}
             </div>
           ) : (
-            <div ref={ref} className="flex justify-center mt-10 animate-bounce">
+            <div ref={loaderRef} className="flex justify-center mt-10 animate-bounce">
               <InfiniteLoaderScroll />
             </div>
           )}

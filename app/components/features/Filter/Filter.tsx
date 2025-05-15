@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
-import FilterDrawer from "./FilterDrawer";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import {
@@ -15,6 +14,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import dynamic from "next/dynamic";
+
+const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
+  ssr: false,
+});
 
 const visaCities: string[] = [
   "Dublín",

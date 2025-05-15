@@ -15,16 +15,16 @@ interface CertificationsProps {
 
 const logoMap: Record<string, string> = {
   ACELS:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ACELS.png",
+    "https://d2wv8pxed72bi5.cloudfront.net/ACELS.png",
   Eaquals:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Eaquals.png",
-  EEI: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/EEI.png",
-  IALC: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/IALC.png",
-  ILEP: "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/ILEP.png",
+    "https://d2wv8pxed72bi5.cloudfront.net/Eaquals.png",
+  EEI: "https://d2wv8pxed72bi5.cloudfront.net/EEI.png",
+  IALC: "https://d2wv8pxed72bi5.cloudfront.net/IALC.png",
+  ILEP: "https://d2wv8pxed72bi5.cloudfront.net/ILEP.png",
   QualityEnglish:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Quality+English.png",
+    "https://d2wv8pxed72bi5.cloudfront.net/Quality+English.png",
   SelectIreland:
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Select+Ireland.png",
+    "https://d2wv8pxed72bi5.cloudfront.net/Select+Ireland.png",
 };
 
 const Certifications = ({ school }: CertificationsProps) => {
@@ -51,6 +51,8 @@ const Certifications = ({ school }: CertificationsProps) => {
                 width={150}
                 height={100}
                 className="h-auto"
+                loading="lazy"
+                fetchPriority="high"
               />
             </div>
             <div>

@@ -15,11 +15,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'task-manager-bucket-prueba-marcelo.s3.us-east-1.amazonaws.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com',
         pathname: '/**',
       },
@@ -29,6 +24,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    domains: ['match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com', 'd2wv8pxed72bi5.cloudfront.net'],
   },
   async rewrites() {
     return [
