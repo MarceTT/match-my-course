@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { toggleSchoolStatus } from "../actions/school";
 import React from "react";
 import LoadingImage from "../components/LoadTableImage";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 export const columns: ColumnDef<School>[] = [
   {
@@ -43,7 +44,10 @@ export const columns: ColumnDef<School>[] = [
     accessorKey: "logo",
     header: "Logo",
     cell: ({ row }) => (
-      <LoadingImage src={row.original.logo} alt={row.original.name} />
+      <LoadingImage
+      src={rewriteToCDN(row.original.logo)}
+      alt={row.original.name}
+    />
     ),
   },
   {

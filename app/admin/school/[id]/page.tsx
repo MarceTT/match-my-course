@@ -37,6 +37,7 @@ import axiosInstance from "@/app/utils/axiosInterceptor";
 import { useSchoolById } from "@/app/hooks/useSchoolById";
 import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
 import { deleteSchoolImage } from "@/app/lib/api/schools";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 const MAX_GALLERY_IMAGES = 5;
 
@@ -50,11 +51,12 @@ type GalleryImage = {
 const customResolver: Resolver<SchoolEditValues> = async (values) => {
   const transformedValues = {
     ...values,
-    galleryImages: values.galleryImages?.map((img: any) => {
-      if (img instanceof File) return img;
-      if (img?.file && img?.isNew) return img.file;
-      return img; // Mantener la URL si es string de imagen existente
-    }) || [],
+    galleryImages:
+      values.galleryImages?.map((img: any) => {
+        if (img instanceof File) return img;
+        if (img?.file && img?.isNew) return img.file;
+        return img; // Mantener la URL si es string de imagen existente
+      }) || [],
   };
 
   try {
@@ -200,47 +202,50 @@ const EditSchoolPage = () => {
     field: any
   ) => {
     if (!e.target.files || e.target.files.length === 0) return;
-  
+
     try {
       setLoadingGallery(true);
       setUploadProgress(0);
-  
+
       const files = Array.from(e.target.files);
       const currentImages = form.getValues("galleryImages") || [];
       const availableSlots = MAX_GALLERY_IMAGES - currentImages.length;
-  
+
       if (availableSlots <= 0) {
         toast.warning(`Solo puedes subir hasta ${MAX_GALLERY_IMAGES} imágenes`);
         return;
       }
-  
+
       const validFiles = files.slice(0, availableSlots);
       const newImages: GalleryImage[] = [];
       let processedCount = 0;
-  
+
       for (const file of validFiles) {
         console.log("🟡 Imagen seleccionada:", {
           name: file.name,
           type: file.type,
           size: file.size,
         });
-  
+
         try {
           processedCount++;
           setUploadProgress((processedCount / validFiles.length) * 80);
-  
+
           const originalSizeMB = file.size / (1024 * 1024);
           toast.info(`Procesando imagen (${originalSizeMB.toFixed(2)}MB)`);
-  
+
           const compressedFile = await compressImage(file);
           const compressedSizeMB = compressedFile.size / (1024 * 1024);
-  
-          toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
-            description: `Reducción de ${(
-              originalSizeMB - compressedSizeMB
-            ).toFixed(2)}MB`,
-          });
-  
+
+          toast.success(
+            `Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`,
+            {
+              description: `Reducción de ${(
+                originalSizeMB - compressedSizeMB
+              ).toFixed(2)}MB`,
+            }
+          );
+
           newImages.push({
             file: compressedFile,
             url: URL.createObjectURL(compressedFile),
@@ -255,15 +260,14 @@ const EditSchoolPage = () => {
           setUploadProgress((processedCount / validFiles.length) * 100);
         }
       }
-  
+
       const updatedGallery = [...currentImages, ...newImages].slice(
         0,
         MAX_GALLERY_IMAGES
       );
-  
+
       form.setValue("galleryImages", updatedGallery);
       await form.trigger("galleryImages"); // fuerza validación si estás usando Zod
-  
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al procesar las imágenes");
@@ -273,7 +277,6 @@ const EditSchoolPage = () => {
       e.target.value = "";
     }
   };
-  
 
   const handleRemoveImage = async (
     imageType: "logo" | "mainImage" | "galleryImages",
@@ -355,7 +358,11 @@ const EditSchoolPage = () => {
         return (
           <div key={imageObj.url} className="relative aspect-square group">
             <Image
-              src={imageObj.url}
+              src={
+                imageObj.url.startsWith("blob:")
+                  ? imageObj.url
+                  : rewriteToCDN(imageObj.url)
+              }
               alt={`Imagen ${index + 1}`}
               fill
               className="object-cover rounded-lg"
@@ -494,7 +501,7 @@ const EditSchoolPage = () => {
                               <Image
                                 src={
                                   typeof field.value === "string"
-                                    ? field.value
+                                    ? rewriteToCDN(field.value)
                                     : URL.createObjectURL(field.value)
                                 }
                                 alt="Logo preview"
@@ -585,7 +592,7 @@ const EditSchoolPage = () => {
                               <Image
                                 src={
                                   typeof field.value === "string"
-                                    ? field.value
+                                    ? rewriteToCDN(field.value)
                                     : URL.createObjectURL(field.value)
                                 }
                                 alt="Imagen principal"
