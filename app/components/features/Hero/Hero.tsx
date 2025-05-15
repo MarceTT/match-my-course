@@ -5,6 +5,7 @@ import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN"; // ✅ Asegúrate de importar esta función
 
 const courseLabelToIdMap: Record<string, string> = {
   "Inglés general": "ingles-general",
@@ -36,7 +37,7 @@ const Hero = () => {
   return (
     <div className="relative w-full h-[70vh] md:h-[50vh] lg:h-[80vh] xl:h-[90vh] flex items-center justify-center overflow-hidden">
       <Image
-        src="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina+inicial.png"
+        src={rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina+inicial.png") || "/placeholder.svg"}
         alt="Hero background"
         fill
         priority
@@ -68,11 +69,11 @@ const Hero = () => {
                 onChange={(e) => setCourseType(e.target.value)}
               >
                 <option>Tipo de curso de inglés</option>
-                <option value="Inglés general">Inglés general</option>
-                <option value="Inglés general más sesiones individuales">Inglés general más sesiones individuales</option>
-                <option value="Inglés general intensivo">Inglés general intensivo</option>
-                <option value="Inglés general orientado a negocios">Inglés general orientado a negocios</option>
-                <option value="Inglés general más trabajo(6 meses)">Inglés general más trabajo(6 meses)</option>
+                {Object.keys(courseLabelToIdMap).map((label) => (
+                  <option key={label} value={label}>
+                    {label}
+                  </option>
+                ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

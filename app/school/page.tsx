@@ -4,9 +4,9 @@ import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import School from "../components/School";
 import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
-import { SchoolDetails } from "@/app/types";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 import { useInView } from "react-intersection-observer";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
@@ -65,7 +65,7 @@ const SchoolPage = () => {
           if (!school.mainImage) return Promise.resolve();
           return new Promise<void>((resolve) => {
             const img = new Image();
-            img.src = school.mainImage || "/placeholder.svg";
+            img.src = rewriteToCDN(school.mainImage) || "/placeholder.svg";
             img.onload = () => resolve();
             img.onerror = () => resolve();
           });
@@ -124,7 +124,7 @@ const SchoolPage = () => {
                   _id={school._id}
                   name={school.name}
                   location={school.city}
-                  image={school.mainImage || "/placeholder.svg"}
+                  image={rewriteToCDN(school.mainImage) || "/placeholder.svg"}
                   rating={parseFloat(String(school.ponderado ?? 0))}
                   price={price}
                   lowestPrice={school.lowestPrice}
