@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { LuHeart } from "react-icons/lu";
 import { IoShareOutline } from "react-icons/io5";
-import type { StaticImageData } from "next/image";
 import {
   Tooltip,
   TooltipContent,
@@ -13,26 +13,33 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import React from "react";
+import { PhotoSlider } from "react-photo-view";
+import type { StaticImageData } from "next/image";
+import "react-photo-view/dist/react-photo-view.css";
 
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
   city: string;
 }
 
-const SchoolDetail = ({
-  images,
-  city,
-}: SchoolDetailProps) => {
+const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
+  const [visible, setVisible] = useState(false);
+  const [index, setIndex] = useState(0);
+
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success("¡Enlace copiado al portapapeles!");
   };
 
+  const openSlider = (i: number) => {
+    setIndex(i);
+    setVisible(true);
+  };
+
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-3">
-        {/* Ciudad + Botones */}
+        {/* Header */}
         <TooltipProvider delayDuration={0}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
             <h1 className="text-3xl font-black">{city}, Irlanda</h1>
@@ -67,35 +74,58 @@ const SchoolDetail = ({
           </div>
         </TooltipProvider>
 
-        {/* Imágenes */}
+        {/* Galería */}
         <div className="grid grid-cols-6 grid-rows-2 gap-2">
-          {images.slice(0, 5).map((src, index) => {
-            const [loaded, setLoaded] = React.useState(false);
+          {images.slice(0, 5).map((src, i) => {
+            const url = typeof src === "string" ? src : src.src;
+            const [loaded, setLoaded] = useState(false);
+            const remaining = images.length - 5;
 
             return (
               <div
-                key={index}
-                className={`relative aspect-[3/2] w-full ${
-                  index < 2 ? "col-span-3" : "col-span-2"
-                } row-span-1`}
+                key={i}
+                onClick={() => openSlider(i)}
+                className={`relative aspect-[3/2] w-full cursor-zoom-in group ${
+                  i < 2 ? "col-span-3" : "col-span-2"
+                } row-span-1 transition hover:brightness-90`}
               >
                 {!loaded && (
                   <Skeleton className="absolute inset-0 h-full w-full rounded-lg z-0" />
                 )}
                 <Image
-                  src={src || "/placeholder.svg"}
-                  alt={`School image ${index + 1}`}
+                  src={url}
+                  alt={`Image ${i + 1}`}
                   fill
                   className={`object-cover rounded-lg transition-opacity duration-500 ${
                     loaded ? "opacity-100" : "opacity-0"
                   }`}
                   onLoad={() => setLoaded(true)}
-                  onError={() => setLoaded(true)} // fallback si falla
+                  onError={() => setLoaded(true)}
                 />
+
+                {i === 4 && remaining > 0 && (
+                  <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center pointer-events-none">
+                    <span className="text-white text-lg font-bold">
+                      +{remaining} imágenes
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
+
+        {/* Visor */}
+        <PhotoSlider
+          images={images.map((src, index) => ({
+            key: `img-${index}`,
+            src: typeof src === "string" ? src : src.src,
+          }))}
+          visible={visible}
+          index={index}
+          onClose={() => setVisible(false)}
+          onIndexChange={setIndex}
+        />
       </div>
     </div>
   );
