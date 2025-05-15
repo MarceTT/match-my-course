@@ -50,9 +50,9 @@ const SchoolInclusion = () => {
     <div className="space-y-8">
      <div className="w-full py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-black mb-16">
+        <h1 className="text-2xl font-bold text-center md:text-left text-black mb-16">
           ¿Qué servicios adicionales incluye tu reserva?
-        </h2>
+        </h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {servicios.map((servicio, index) => (

@@ -23,7 +23,7 @@ const Location = ({ schoolName, city, minutesToCenter }: LocationProps) => {
 
   return (
     <div className="mb-8 lg:mb-16 xl:mb-16">
-      <h3 className="text-2xl font-bold mb-4 text-black">Ubicación</h3>
+      <h1 className="text-2xl font-bold mb-4 text-center md:text-left text-black">Ubicación</h1>
       <div className="space-y-4">
         <div className="flex items-center gap-2 text-gray-600">
           <BsPersonWalking className="w-5 h-5" />

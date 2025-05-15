@@ -71,9 +71,9 @@ const Facilities = ({ installations }: FacilitiesProps) => {
 
   return (
     <section className="max-w-7xl mx-auto py-10 px-4">
-      <h2 className="text-2xl font-bold mb-8 text-black">
+      <h1 className="text-2xl font-bold mb-8 text-center md:text-left text-black">
         Instalaciones y servicios de la escuela
-      </h2>
+      </h1>
       <div className="grid md:grid-cols-2 gap-12">
         {groupedFacilities.map(
           ({ title, icon, items }) =>
