@@ -75,7 +75,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
         </TooltipProvider>
 
         {/* Galería */}
-        <div className="grid grid-cols-6 grid-rows-2 gap-2">
+        <div className="grid grid-cols-6 grid-rows-1 gap-2">
           {images.slice(0, 5).map((src, i) => {
             const url = typeof src === "string" ? src : src.src;
             const [loaded, setLoaded] = useState(false);

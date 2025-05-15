@@ -20,15 +20,7 @@ import SchoolStat from "@/app/components/school/SchoolStat";
 import { FaWalking } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const cdnUrl = "https://d2wv8pxed72bi5.cloudfront.net/"; // 🔁 Reemplaza por tu dominio real
-
-const rewriteToCDN = (url: string) => {
-  return url.replace(
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/",
-    cdnUrl
-  );
-};
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 const SchoolHome = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,13 +74,13 @@ const SchoolHome = () => {
           images={(school.galleryImages || []).map(rewriteToCDN)}
           city={school.city || ""}
         />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           <div className="lg:col-span-2">
             <div className="flex items-start gap-6 mb-4">
               <div className="w-40 h-auto">
                 {school.logo && (
                   <Image
-                  src={rewriteToCDN(school.logo)}
+                    src={rewriteToCDN(school.logo)}
                     alt="School logo"
                     width={160}
                     height={120}
@@ -143,11 +135,11 @@ const SchoolHome = () => {
                   )}
                   {school.description?.minutosAlCentro && (
                     <div className="flex items-center gap-1 ml-auto">
+                      <FaWalking className="text-xl" />
                       <span className="text-sm">
                         a {school.description.minutosAlCentro} minutos del
                         centro
                       </span>
-                      <FaWalking className="text-xl" />
                     </div>
                   )}
                 </div>
