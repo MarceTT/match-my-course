@@ -39,7 +39,7 @@ import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
 import { deleteSchoolImage } from "@/app/lib/api/schools";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
-const MAX_GALLERY_IMAGES = 5;
+const MAX_GALLERY_IMAGES = 15;
 
 type GalleryImage = {
   id?: string;
