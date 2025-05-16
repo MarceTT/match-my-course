@@ -19,11 +19,11 @@ export default function PartnerSection({ partners }: Props) {
             más de 50 instituciones a nivel internacional.
           </p>
         </div>
-        <CountrySection name="Irlanda" partners={partners} />
-        <CountrySection name="Nueva Zelanda" partners={partners} />
-        <CountrySection name="Canadá" partners={partners} />
-        <CountrySection name="Malta" partners={partners} />
-        <CountrySection name="Gran Bretaña" partners={partners} />
+        <CountrySection countryKey="irlanda" name="Irlanda" partners={partners} />
+        <CountrySection countryKey="nueva-zelanda" name="Nueva Zelanda" partners={partners} />
+        <CountrySection countryKey="canada" name="Canadá" partners={partners} />
+        <CountrySection countryKey="malta" name="Malta" partners={partners} />
+        <CountrySection countryKey="gran-bretana" name="Gran Bretaña" partners={partners} />
       </div>
     </section>
   )

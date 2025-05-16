@@ -1,6 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
-import Picture from "@/public/images/placeholder_img.svg"
 import DialogSection from '@/app/components/servicios/DialogSection'
 
 const PersonalizedAdviceSection = () => {
@@ -23,27 +21,13 @@ const PersonalizedAdviceSection = () => {
           </div>
         </div>
         <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-          <div className="absolute inset-0">
-            <Image
-              src={Picture}
-              alt="Video call interface"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="absolute right-4 top-4 space-y-2 w-32">
-            {[1, 2, 3].map((index) => (
-              <div
-                key={index}
-                className="aspect-video bg-gray-800 rounded overflow-hidden"
-              >
-                <Image
-                  src={Picture}
-                  alt={`Participant ${index}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
+          <iframe
+            className="w-full h-full rounded-xl"
+            src="https://www.youtube.com/embed/d8kdb8MdYVo"
+            title="Asesoría personalizada para estudiar y trabajar en Irlanda - Matchmycourse"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
     </section>
