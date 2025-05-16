@@ -99,7 +99,7 @@ const Footer = () => {
                 <Link href="/programas">Programas</Link>
               </li>
               <li>
-                <Link href="/escuelas">Escuelas</Link>
+                <Link href="/escuelas-socias">Escuelas</Link>
               </li>
               <li>
                 <Link href="/clases">Clases de inglés online</Link>
@@ -108,7 +108,13 @@ const Footer = () => {
                 <Link href="/contacto">Contacto</Link>
               </li>
               <li>
-                <Link href="/faq">Preguntas Frecuentes</Link>
+                <Link href="/testimonios">Tesimonios</Link>
+              </li>
+              <li>
+                <Link href="/terminos-y-condiciones">Términos y Condiciones</Link>
+              </li>
+              <li>
+                <Link href="/politica-de-privacidad">Política de Privacidad</Link>
               </li>
             </ul>
           </div>
