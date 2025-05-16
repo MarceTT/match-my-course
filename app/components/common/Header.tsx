@@ -38,13 +38,19 @@ const Header = () => {
               <Image
                 src={Logo}
                 alt="Logo de MatchMyCourse"
-                className="h-8 w-auto mr-2"
+                className="h-12 w-auto mr-2"
+                width={200}
+                height={60}
+                priority
               />
             ) : (
               <Image
                 src={Logo}
                 alt="Logo de MatchMyCourse"
                 className="h-12 w-auto mr-2"
+                width={200}
+                height={60}
+                priority
               />
             )}
           </Link>

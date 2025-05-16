@@ -39,6 +39,7 @@ const Features = () => {
                 width={48}
                 height={48}
                 alt={feature.text}
+                loading="lazy"
               />
             </div>
             <p className="text-md text-gray-700 lg:mt-2"><a href={feature.url}>{feature.text}</a></p>

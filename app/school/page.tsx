@@ -7,6 +7,8 @@ import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 import { useInView } from "react-intersection-observer";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { ArrowUp } from "lucide-react";
+import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
@@ -23,6 +25,7 @@ const SchoolPage = () => {
   const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
   const [firstLoad, setFirstLoad] = useState(true);
   const pendingImages = useRef<Set<string>>(new Set());
+  const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
 
   const { ref: loaderRef, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: false });
 
@@ -82,6 +85,7 @@ const SchoolPage = () => {
 
     preload();
   }, [schools]);
+
 
   if (isLoading) {
     return (
@@ -149,6 +153,16 @@ const SchoolPage = () => {
             </div>
           )}
         </>
+      )}
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all"
+          aria-label="Volver al inicio"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
       )}
     </>
   );

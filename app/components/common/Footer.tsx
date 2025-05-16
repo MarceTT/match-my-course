@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import Logo from "@/public/logos/final-logo.png";
-import { motion, useAnimation } from "framer-motion";
+import { useAnimation } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const Footer = () => {
@@ -40,11 +43,14 @@ const Footer = () => {
               href="/"
               className="flex items-center text-2xl font-bold mb-6 lg:items-center"
             >
-              <Image
-                src={Logo}
-                alt="Logo de MatchMyCourse"
-                className="h-12 w-auto"
-              />
+              <div className="relative w-[400px] h-[50px]">
+                <Image
+                  src={Logo}
+                  alt="Logo de MatchMyCourse"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
             <div className="flex items-center justify-center gap-2">
               <div className="flex items-center justify-center gap-2">
@@ -108,7 +114,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <motion.div
+      {/* <motion.div
         className="fixed bottom-8 right-8 z-50"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -129,7 +135,7 @@ const Footer = () => {
             </button>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </motion.div> */}
     </footer>
   );
 };

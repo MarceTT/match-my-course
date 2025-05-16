@@ -3,28 +3,35 @@
 import React from "react";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
-import SchoolDetail from "../../components/school/SchoolDetail";
-import BookingPannel from "../../components/common/BookingPannel";
-import Certifications from "../../components/school/Certifications";
-import Facilities from "../../components/school/Facilities";
-import SchoolInclusion from "../../components/school/SchoolInclusion";
-import Accommodation from "../../components/school/Accommodation";
-import Location from "../../components/school/Location";
 import { notFound, useParams } from "next/navigation";
 import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import Image from "next/image";
 import { raleway } from "@/app/ui/fonts";
-import { Star } from "lucide-react";
-import SchoolStat from "@/app/components/school/SchoolStat";
+import { ArrowUp, Star } from "lucide-react";
 import { FaWalking } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { useScrollTopButton } from "@/hooks/useScrollTopButton";
+import dynamic from "next/dynamic";
+
+
+
+const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
+const BookingPannel = dynamic(() => import("../../components/common/BookingPannel"), { ssr: false });
+const Certifications = dynamic(() => import("../../components/school/Certifications"), { ssr: false });
+const Facilities = dynamic(() => import("../../components/school/Facilities"), { ssr: false });
+const SchoolInclusion = dynamic(() => import("../../components/school/SchoolInclusion"), { ssr: false });
+const Accommodation = dynamic(() => import("../../components/school/Accommodation"), { ssr: false });
+const Location = dynamic(() => import("../../components/school/Location"), { ssr: false });
+const SchoolStat = dynamic(() => import("@/app/components/school/SchoolStat"), { ssr: false });
 
 const SchoolHome = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useSchoolDetails(id);
+
+  const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
 
   if (isLoading) {
     return (
@@ -206,6 +213,16 @@ const SchoolHome = () => {
           </div>
         </div>
       </div>
+      {/* Botón flotante "Volver arriba" */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all"
+          aria-label="Volver al inicio"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
       <Footer />
     </div>
   );

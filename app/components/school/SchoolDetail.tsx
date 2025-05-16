@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PhotoSlider } from "react-photo-view";
 import type { StaticImageData } from "next/image";
 import "react-photo-view/dist/react-photo-view.css";
+import { FiZoomIn } from "react-icons/fi";
 
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
@@ -53,7 +54,9 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   </TooltipTrigger>
                   <TooltipContent>Guardar</TooltipContent>
                 </Tooltip>
-                <span className="text-sm text-gray-600 font-semibold">Guardar</span>
+                <span className="text-sm text-gray-600 font-semibold">
+                  Guardar
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Tooltip>
@@ -68,7 +71,9 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   </TooltipTrigger>
                   <TooltipContent>Compartir</TooltipContent>
                 </Tooltip>
-                <span className="text-sm text-gray-600 font-semibold">Compartir</span>
+                <span className="text-sm text-gray-600 font-semibold">
+                  Compartir
+                </span>
               </div>
             </div>
           </div>
@@ -102,6 +107,10 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   onLoad={() => setLoaded(true)}
                   onError={() => setLoaded(true)}
                 />
+
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition">
+                  <FiZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
 
                 {i === 4 && remaining > 0 && (
                   <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center pointer-events-none">

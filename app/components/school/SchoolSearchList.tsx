@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Grid, List, Star, BadgePercent } from "lucide-react";
+import { Grid, List, Star, BadgePercent, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SchoolDetails } from "@/app/types/index";
 import { Switch } from "@/components/ui/switch";
@@ -11,6 +11,8 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 
 interface SchoolListProps {
   isFilterOpen: boolean;
@@ -22,6 +24,7 @@ interface SchoolListProps {
 const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolListProps) => {
   const [viewType, setViewType] = useState<"grid" | "list">("list");
   const { ref } = useInView();
+  const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
 
   if (isLoading) return <FullScreenLoader isLoading />;
   if (isError) return <p className="text-red-500 text-sm p-4">Error al cargar las escuelas.</p>;
@@ -59,6 +62,16 @@ const SchoolSearchList = ({ isFilterOpen, schools, isLoading, isError }: SchoolL
         </div>
       )}
       <div ref={ref} className="flex justify-center items-center mt-10" />
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg"
+          aria-label="Volver arriba"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </div>
   );
 };
@@ -83,13 +96,6 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
 
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
-
-  const CDN_BASE = "https://d2wv8pxed72bi5.cloudfront.net/";
-
-  const rewriteToCDN = (url?: string | null): string =>
-    url?.startsWith("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/")
-      ? url.replace("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/", CDN_BASE)
-      : url || "/placeholder.svg";
 
   useEffect(() => {
     setSelectedOptionIndex(0);
