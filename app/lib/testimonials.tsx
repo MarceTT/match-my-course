@@ -50,7 +50,7 @@ export const testimonials: Testimonial[] = [
     image: '/testimonials/cesar-menegatis.png',
     text: (
       <>
-        Mi experiencia con ustedes es recomendable ya que <b>cualquir duda me la despejadas con conocimientos 
+        Mi experiencia con ustedes es recomendable ya que <b>cualquir duda me la despejaron con conocimientos 
         previos de lo que ofrecen y de como será el llegar a un país que uno desconoce</b>, la cultura, y otros 
         factores para buscar arriendo o poder movilizarme y hasta páginas de empleo que ustedes me asesoraron 
         dieron una rápida acogida cuando llegue.
@@ -66,8 +66,8 @@ export const testimonials: Testimonial[] = [
     image: '/testimonials/martina-beas.png',
     text: (
       <>
-        Desde el momento cero me ayudaron a clarificar a dónde quería ir a estudiar y cómo concretarlo. El proceso de 
-        la visa fue muy sencillo ya que la agencia se ocupo del trámite y también de que la escuela que elegi se 
+        Desde el momento cero <b>me ayudaron a clarificar a dónde quería ir a estudiar y cómo concretarlo. El proceso de 
+        la visa fue muy sencillo</b> ya que la agencia se ocupo del trámite y también de que la escuela que elegi se 
         contactara conmigo.
       </>
     ),
@@ -90,17 +90,17 @@ export const testimonials: Testimonial[] = [
   },
   {
     name: 'Paulina Allel',
-    flag: 'https://flagcdn.com/w40/ar.png',
+    flag: 'https://flagcdn.com/w40/cl.png',
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Galway',
     image: '/testimonials/paulina-allel.png',
     text: (
       <>
-        con ellos me sentí muy confiada gracias a la <b>amabilidad y profesionalismo</b>, quienes resolvieron todas mis dudas 
-        y fueron sinceros desde el comienzo sobre la situación actual acerca del trabajo para estudiantes en Nueza Zelanda, 
-        <b> apenas tomé la decisión fue todo muy rápido, ellos se encargaron de todo el proceso, yo solo debí enviar mi 
-        documentación.</b>
+        Mi experiencia con Abroad Experience es totalmente grata...siempre 
+        se mostraron muy profesionales y dispuestos a ayudarme. Gracias a 
+        ellos he vivido una experiencia que me ayudó a aprender, crecer y 
+        cambiar mi vida.
       </>
     ),
   },
@@ -113,8 +113,10 @@ export const testimonials: Testimonial[] = [
     image: '/testimonials/jennifer-beroiza.png',
     text: (
       <>
-        Quiero expresar mi más sincero agradecimiento por el excelente servicio y apoyo durante todo el proceso. Gracias a 
-        ellos, pude familiarizarme con la ciudad y los lugares importantes antes de mi llegada.
+        Quiero expresar mi más sincero agradecimiento por el excelente 
+        servicio y apoyo durante todo el proceso. Gracias a ellos, pude 
+        familiarizarme con la ciudad y los lugares importantes antes de 
+        mi llegada.
       </>
     ),
   },
@@ -124,12 +126,13 @@ export const testimonials: Testimonial[] = [
     originCountry: 'Chile',
     destinationCountry: 'Irlanda',
     destinationCity: 'Cork',
-    image: '/testimonials/jennifer-beroiza.png',
+    image: '/testimonials/cristina-moncada.png',
     text: (
       <>
-        Escogí Abroad Experience porque me transmitieron más confianza, conocimiento y profesionalismo. Las reuniones 
-        previas a mi viaje fueron de mucha ayuda. Mi experiencia en general ha sido muy muy buena, por lo tanto 5 
-        estrellas para Abroad Experience.
+        Escogí Abroad Experience porque me transmitieron más confianza, 
+        conocimiento y profesionalismo. Las reuniones previas a mi viaje 
+        fueron de mucha ayuda. Mi experiencia en general ha sido muy 
+        buena, por lo tanto 5 estrellas para Abroad Experience.
       </>
     ),
   },
@@ -161,7 +164,7 @@ export const testimonials: Testimonial[] = [
         Cada pequeña duda que tenía, podía conversar con ellos y así me guiaron durante todo el proceso. Incluso 
         cuando llegué a Irlanda, si bien su trabajo, técnicamente había terminado, siempre se preocuparon en saber
         cómo seguía, si había conseguido un nuevo alojamiento, trabajo, etc. En todo lo que pudieron siempre me 
-        apoyaron y acompañaron.\nLos recomiendo al 100%!!!
+        apoyaron y acompañaron. Los recomiendo al 100%!!!
       </>
     ),
   },
@@ -204,7 +207,7 @@ export const testimonials: Testimonial[] = [
     text: (
       <>
         Excelente servicio, sobre todo en la preparación e inserción en Irlanda, me ayudaron en todo, desde comprar el 
-        pasaje hasta la obtención de mi permiso de residencia, mil gracias
+        pasaje hasta la obtención de mi permiso de residencia, mil gracias.
       </>
     ),
   }
