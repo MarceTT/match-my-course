@@ -1,15 +1,11 @@
 import { raleway } from "@/app/ui/fonts"
-import Header from "@/app/components/common/Header"
 import React from "react"
 import Carousel from "@/app/components/features/Carousel/Carousel"
-import Footer from "@/app/components/common/Footer"
 import Testimonials from "@/app/components/servicios/Testimonials"
 import RandomConsultations from "@/app/components/common/RandomConsultations"
-import { getAllServices } from "@/app/lib/services/getAllServices"
+import { getAllServices } from "@/app/lib/api/services"
 import { notFound } from "next/navigation"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
-
-// export const dynamic = "force-dynamic"; 
 
 export async function generateStaticParams() {
   const services = await getAllServices()
@@ -25,15 +21,14 @@ export default async function ServiceDetail({ params }: {
   const slug = (await params).slug
 
   const services = await getAllServices();
-  const servicio = services.find((s) => s.slug === slug);
+  const service = services.find((s) => s.slug === slug);
 
-  if (!servicio) {
+  if (!service) {
     notFound()
   }
   
   return (
     <>
-      <Header />
       <div className="relative bg-gray-50 overflow-hidden py-16 lg:py-20">
         <div
           className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200"
@@ -47,9 +42,9 @@ export default async function ServiceDetail({ params }: {
             <h2
               className={`${raleway.className} text-4xl lg:text-5xl font-black text-gray-800 mb-4`}
             >
-              Asesoría gratuita
+              {service.title}
             </h2>
-            <div
+            {/* <div
               className={`${raleway.className} text-4xl lg:text-4xl text-gray-800 mb-4`}
             >
               visa Study&Work de <span className="font-black">Irlanda</span>
@@ -59,8 +54,7 @@ export default async function ServiceDetail({ params }: {
             >
               Averigua si cumples con los requisitos antes de tomar una
               decisi&oacute;n
-            </p>
-            <div>ServiceDetail {slug}</div>
+            </p> */}
           </div>
         </div>
       </div>
@@ -69,7 +63,7 @@ export default async function ServiceDetail({ params }: {
           <div className="relative w-full aspect-video">
             <iframe
               className="w-full h-full rounded-xl"
-              src="https://www.youtube.com/embed/TU_ID_DEL_VIDEO"
+              src={service.embed}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -81,7 +75,6 @@ export default async function ServiceDetail({ params }: {
       <PersonalizedAdviceSection />
       <Testimonials text="Testimonio Asesorías" />
       <RandomConsultations />
-      <Footer />
     </>
   );
 };

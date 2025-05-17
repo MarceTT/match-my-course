@@ -1,6 +1,6 @@
 // hooks/useSchoolDetails.ts
 import { useQuery } from "@tanstack/react-query";
-import { SchoolDetailsResponse } from "@/app/types/index";
+import { SchoolDetailsResponse } from "@/app/lib/types";
 import axios from "axios";
 
 export const fetchSchoolById = async (id: string): Promise<SchoolDetailsResponse> => {

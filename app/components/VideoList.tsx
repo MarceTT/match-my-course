@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import { Service, services } from "../lib/services";
+import { services } from "../lib/data/services";
+import { Service } from "../lib/types";
 
 function getYouTubeVideoId(url: string): string | null {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/|.*shorts\/))([^?&/]+)/);

@@ -1,9 +1,4 @@
-
-export interface Partner {
-  key: string;
-  src: string;
-  alt: string;
-}
+import { Partner } from "../types";
 
 export const partners: Partner[] = [
   {

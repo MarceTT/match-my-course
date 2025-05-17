@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Qualities } from "@/app/types/index";
+import { Qualities } from "@/app/lib/types";
 import { Info } from "lucide-react";
 import {
   Tooltip,

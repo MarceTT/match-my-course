@@ -1,5 +1,5 @@
 import { PiChairFill } from "react-icons/pi";
-import { Installations } from "@/app/types/index";
+import { Installations } from "@/app/lib/types";
 import { BiAccessibility } from "react-icons/bi";
 import { FaGamepad } from "react-icons/fa";
 import { GiBookmarklet } from "react-icons/gi";

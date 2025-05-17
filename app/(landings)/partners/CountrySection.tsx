@@ -1,5 +1,5 @@
-import { Partner } from "@/app/lib/partners";
 import Image from "next/image";
+import { Partner } from "@/app/lib/types";
 
 interface Props {
   countryKey: string;
