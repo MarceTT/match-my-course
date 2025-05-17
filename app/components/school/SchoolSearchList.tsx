@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Grid, List, Star, BadgePercent, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SchoolDetails } from "@/app/types/index";
+import { SchoolDetails } from "@/app/lib/types";
 import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +13,7 @@ import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
+import { useRouter } from "next/navigation";
 
 interface SchoolListProps {
   isFilterOpen: boolean;
@@ -82,6 +83,7 @@ interface SchoolCardProps {
 }
 
 function SchoolCard({ school, viewType }: SchoolCardProps) {
+  const router = useRouter()
   const prefetchSchool = usePrefetchSchoolDetails();
   const rating = Number(school.qualities?.ponderado ?? 0);
   const antiguedad = school.description?.añoFundacion
@@ -96,6 +98,13 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
 
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
+
+  const handleShowSchool = () => {
+    console.log('clic')
+    router.push(`/school-detail/${school._id}`)
+
+    
+  }
 
   useEffect(() => {
     setSelectedOptionIndex(0);
@@ -209,9 +218,9 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                 <span className="text-blue-600 text-4xl font-extrabold">€{selected?.precio?.toLocaleString()}</span>
               )}
             </div>
-            <Link href={`/school-detail/${school._id}`} onMouseEnter={() => prefetchSchool(school._id)}>
-              <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white">Ver escuela</Button>
-            </Link>
+            {/* <Link  href={`/school-detail/${school._id}`} onMouseEnter={() => prefetchSchool(school._id)}> */}
+            <Button className="mt-2 bg-[#5371FF] hover:bg-[#4257FF] text-white" onClick={handleShowSchool}>Ver escuela</Button>
+            {/* </Link> */}
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 "use server";
 
-import { SchoolDetailsResponse } from "@/app/types/index";
-
+import { SchoolDetailsResponse } from "@/app/lib/types";
 
 export async function fetchSchoolsWithDetails() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools`, { cache: "no-store" });
@@ -20,7 +19,6 @@ export async function fetchSchoolsWithDetails() {
     return json.data;
   };
 
-
   export async function fetchSchools(courseType: string): Promise<SchoolDetailsResponse> {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-by-type?course=${courseType}`;
     console.log("FETCH URL:", url);
@@ -38,3 +36,4 @@ export async function fetchSchoolsWithDetails() {
   
     return json;
   }
+  

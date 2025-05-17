@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import { ReactNode } from "react";
 
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
@@ -258,4 +258,29 @@ declare module "next-auth" {
     accessToken: string;
     refreshToken: string;
   }
+}
+
+export interface Testimonial {
+  name: string;
+  flag: string;
+  originCountry: string,
+  destinationCountry: string,
+  destinationCity: string,
+  image: string,
+  text: ReactNode,
+}
+
+export interface Partner {
+  key: string;
+  src: string;
+  alt: string;
+}
+
+export interface Service {
+  id: string;
+  rating: number;
+  slug: string;
+  embed: string;
+  thumbnail: string;
+  title: string;
 }

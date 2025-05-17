@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { raleway } from "../ui/fonts";
+import Header from "../components/common/Header";
+import Footer from "../components/common/Footer";
 
 
 const geistMono = Geist_Mono({
@@ -20,10 +22,12 @@ export default function ServiciosLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <div
-        className={`${raleway.className} ${geistMono.variable} antialiased`}
-      >
+    <>
+      <Header />
+      <div className={`${raleway.className} ${geistMono.variable} antialiased`}>
         {children}
       </div>
+      <Footer />
+    </>
   );
 }

@@ -1,12 +1,12 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { getAllPartners } from '@/app/lib/services/partners'
-import { Partner } from '@/app/lib/partners'
-
+import { Partner } from '@/app/lib/types'
+import { getAllPartners } from '@/app/lib/api/partners'
 import HeaderSection from './HeaderSection'
 import PartnerSection from './PartnerSection'
 import SchoolOptionsSection from './SchoolOptions'
+
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([])

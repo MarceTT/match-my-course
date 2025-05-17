@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { SchoolAccommodation, AccomodationDetail } from '../../types/index';
+import { SchoolAccommodation, AccomodationDetail } from '../../lib/types';
 
 interface AccommodationProps {
   accommodations: SchoolAccommodation[];

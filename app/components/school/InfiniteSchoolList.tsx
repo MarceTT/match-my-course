@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import { useInfiniteSchools } from "@/hooks/useInfiniteSchools";
-import { SchoolDetails } from "@/app/types/index";
+import { SchoolDetails } from "@/app/lib/types";
 import SchoolSearchList from "./SchoolSearchList";
 import { Loader2 } from "lucide-react";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";

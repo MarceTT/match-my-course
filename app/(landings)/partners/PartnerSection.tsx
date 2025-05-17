@@ -1,4 +1,4 @@
-import { Partner } from '@/app/lib/partners'
+import { Partner } from '@/app/lib/types'
 import CountrySection from './CountrySection'
 
 interface Props {
