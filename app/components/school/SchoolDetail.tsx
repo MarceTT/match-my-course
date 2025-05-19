@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-// import { PhotoSlider } from "react-photo-view";
+import { PhotoSlider } from "react-photo-view";
 import type { StaticImageData } from "next/image";
 import "react-photo-view/dist/react-photo-view.css";
 import { FiZoomIn } from "react-icons/fi";
@@ -125,7 +125,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
         </div>
 
         {/* Visor */}
-        {/* <PhotoSlider
+        <PhotoSlider
           images={images.map((src, index) => ({
             key: `img-${index}`,
             src: typeof src === "string" ? src : src.src,
@@ -134,7 +134,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           index={index}
           onClose={() => setVisible(false)}
           onIndexChange={setIndex}
-        /> */}
+        />
       </div>
     </div>
   );
