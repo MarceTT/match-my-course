@@ -1,11 +1,10 @@
-import { raleway } from "@/app/ui/fonts"
 import React from "react"
+import { notFound } from "next/navigation"
 import Carousel from "@/app/components/features/Carousel/Carousel"
-import Testimonials from "@/app/components/servicios/Testimonials"
 import RandomConsultations from "@/app/components/common/RandomConsultations"
 import { getAllServices } from "@/app/lib/api/services"
-import { notFound } from "next/navigation"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
+import TestimonialHighlightSection from "@/app/(landings)/testimonials/TestimonialHighlightSection"
 
 export async function generateStaticParams() {
   const services = await getAllServices()
@@ -29,7 +28,7 @@ export default async function ServiceDetail({ params }: {
   
   return (
     <>
-      <div className="relative bg-gray-50 overflow-hidden py-16 lg:py-20">
+      {/* <div className="relative bg-gray-50 overflow-hidden py-16 lg:py-20">
         <div
           className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200"
           style={{
@@ -44,7 +43,7 @@ export default async function ServiceDetail({ params }: {
             >
               {service.title}
             </h2>
-            {/* <div
+            <div
               className={`${raleway.className} text-4xl lg:text-4xl text-gray-800 mb-4`}
             >
               visa Study&Work de <span className="font-black">Irlanda</span>
@@ -54,10 +53,10 @@ export default async function ServiceDetail({ params }: {
             >
               Averigua si cumples con los requisitos antes de tomar una
               decisi&oacute;n
-            </p> */}
+            </p>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="py-8 bg-white">
         <div className="container mx-auto px-4">
           <div className="relative w-full aspect-video">
@@ -73,7 +72,7 @@ export default async function ServiceDetail({ params }: {
       </div>
       <Carousel />
       <PersonalizedAdviceSection />
-      <Testimonials text="Testimonio Asesorías" />
+      <TestimonialHighlightSection />
       <RandomConsultations />
     </>
   );
