@@ -42,8 +42,6 @@ export default function RootLayout({
           rel="preload"
           as="image"
           href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina%2Binicial.webp"
-          imageSrcSet="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina%2Binicial.webp"
-          imageSizes="100vw"
         />
         <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="Match My Course" />

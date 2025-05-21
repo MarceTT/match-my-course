@@ -41,6 +41,7 @@ const School = ({
             src={image || "/placeholder.svg"}
             alt={name}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
             className="object-cover object-center"
             {...(!priority && { loading: "lazy" })}
             quality={75}

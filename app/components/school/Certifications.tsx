@@ -24,7 +24,6 @@ const logoMap: Record<string, string> = {
 };
 
 const Certifications = ({ school }: CertificationsProps) => {
-  console.log(school);
   if (!school?.certifications || !school.accreditations) return null;
 
   return (

@@ -56,7 +56,7 @@ const Carousel = () => {
                   <Image
                     src={src || "/placeholder.svg"}
                     alt={`Escuela asociada ${index + 1}`}
-                    width={180}
+                    width={200}
                     height={120}
                     className="rounded-lg shadow-md object-cover"
                     loading="lazy"

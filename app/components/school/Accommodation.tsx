@@ -9,7 +9,6 @@ interface AccommodationProps {
 }
 
 const Accommodation = ({ accommodations, detailAccomodation }: AccommodationProps) => {
-  console.log(detailAccomodation);
   const renderOption = (type: string, detail: string, imageSrc: string) => (
     <div key={type} className="flex flex-col">
       <div className="flex items-start gap-4 mb-3">

@@ -48,6 +48,7 @@ const Footer = () => {
                   src={Logo}
                   alt="Logo de MatchMyCourse"
                   fill
+                  sizes="(max-width: 768px) 200px, 400px"
                   className="object-contain"
                 />
               </div>
