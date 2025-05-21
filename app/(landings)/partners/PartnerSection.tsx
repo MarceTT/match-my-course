@@ -24,6 +24,7 @@ export default function PartnerSection({ partners }: Props) {
         <CountrySection countryKey="canada" name="Canadá" partners={partners} />
         <CountrySection countryKey="malta" name="Malta" partners={partners} />
         <CountrySection countryKey="gran-bretana" name="Gran Bretaña" partners={partners} />
+        <CountrySection countryKey="escocia" name="Escocia" partners={partners} />
       </div>
     </section>
   )

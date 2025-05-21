@@ -68,8 +68,8 @@ export const partners: Partner[] = [
   },
   {
     key: 'irlanda',
-    src: '/partners/3.png',
-    alt: 'Cork English World',
+    src: '/partners/22.png',
+    alt: 'University of Limerick',
   },
   {
     key: 'irlanda',
@@ -158,8 +158,8 @@ export const partners: Partner[] = [
   },
   {
     key: 'irlanda',
-    src: '/partners/22.png',
-    alt: 'University of Limerick',
+    src: '/partners/3.png',
+    alt: 'Cork English World',
   },
   {
     key: 'irlanda',
@@ -238,11 +238,6 @@ export const partners: Partner[] = [
   },
   {
     key: 'irlanda',
-    src: '/partners/38.png',
-    alt: 'Student Campus English School',
-  },
-  {
-    key: 'irlanda',
     src: '/partners/39.png',
     alt: 'SEDA College',
   },
@@ -250,5 +245,15 @@ export const partners: Partner[] = [
     key: 'irlanda',
     src: '/partners/40.png',
     alt: 'Killarney School of English',
+  },
+  {
+    key: 'gran-bretana',
+    src: '/partners/4.png',
+    alt: 'Centre of English',
+  },
+  {
+    key: 'escocia',
+    src: '/partners/4.png',
+    alt: 'Centre of English',
   },
 ]
