@@ -38,7 +38,7 @@ const Header = () => {
               <Image
                 src={Logo}
                 alt="Logo de MatchMyCourse"
-                className="h-12 w-auto mr-2"
+                className="h-8 w-auto mr-2"
                 width={200}
                 height={60}
                 priority
@@ -63,6 +63,12 @@ const Header = () => {
               className="text-gray-600 hover:text-gray-900"
             >
               Servicios
+            </Link>
+            <Link
+              href="/school-search?course=ingles-visa-de-trabajo&offers=verpromociones"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              Promociones
             </Link>
           </nav>
         </div>
@@ -122,6 +128,13 @@ const Header = () => {
             onClick={() => setIsMenuOpen(false)}
           >
             Servicios
+          </Link>
+          <Link
+            href="/school-search?course=ingles-visa-de-trabajo&offers=verpromociones"
+            className="text-2xl text-gray-600 hover:text-gray-900"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Promociones
           </Link>
         </nav>
       </div>

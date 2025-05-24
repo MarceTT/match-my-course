@@ -1,9 +1,7 @@
-import { PiChairFill } from "react-icons/pi";
 import { Installations } from "@/app/lib/types";
-import { BiAccessibility } from "react-icons/bi";
-import { FaGamepad } from "react-icons/fa";
-import { GiBookmarklet } from "react-icons/gi";
-import { FaUsersGear } from "react-icons/fa6";
+import Image from "next/image";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { motion } from "framer-motion";
 
 interface FacilitiesProps {
   installations: Installations;
@@ -15,7 +13,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
   const groupedFacilities = [
     {
       title: "Área académica",
-      icon: <GiBookmarklet className="w-9 h-9" />,
+      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/a%CC%81rea+de+estudio.svg"),
       items: [
         installations.biblioteca && "Biblioteca",
         installations.laboratorioInformatica && "Laboratorio digital",
@@ -24,7 +22,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
     },
     {
       title: "Servicios generales",
-      icon: <FaUsersGear className="w-9 h-9" />,
+      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/APOYO+ESTUDIANNTE.svg"),
       items: [
         installations.microondas && "Microondas",
         installations.nevera && "Nevera",
@@ -36,7 +34,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
     },
     {
       title: "Áreas comunes y recreativas",
-      icon: <FaGamepad className="w-9 h-9" />,
+      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/RECREACIO%CC%81N.svg"),
       items: [
         installations.cafeteria && "Cafetería",
         installations.restaurante && "Restaurante",
@@ -49,18 +47,16 @@ const Facilities = ({ installations }: FacilitiesProps) => {
     },
     {
       title: "Equipamiento de las aulas",
-      icon: <PiChairFill className="w-9 h-9" />,
+      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/computer.svg"),
       items: [
-        installations.pizarraDigital &&
-          `Pizarra digital: ${installations.pizarraDigital}`,
+        installations.pizarraDigital && `Pizarra digital: ${installations.pizarraDigital}`,
         installations.tv && `Televisión: ${installations.tv}`,
-        installations.calefaccion &&
-          `Calefacción: ${installations.calefaccion}`,
+        installations.calefaccion && `Calefacción: ${installations.calefaccion}`,
       ],
     },
     {
       title: "Accesibilidad",
-      icon: <BiAccessibility className="w-9 h-9" />,
+      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/silla+ruedas.svg"),
       items: [
         installations.accesoSillasRuedas && "Ingreso para discapacitados",
         installations.wcMinusvalidos && "WC para minusválidos",
@@ -70,30 +66,39 @@ const Facilities = ({ installations }: FacilitiesProps) => {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto py-10 px-4">
+    <section className="max-w-7xl mx-auto py-10 px-4 lg:px-0 xl:px-0">
       <h1 className="text-2xl font-bold mb-8 text-center md:text-left text-black">
         Instalaciones y servicios de la escuela
       </h1>
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {groupedFacilities.map(
-          ({ title, icon, items }) =>
+          ({ title, image, items }, i) =>
             items.filter(Boolean).length > 0 && (
-              <div
+              <motion.div
                 key={title}
-                className="flex flex-col items-start md:items-start"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="flex flex-col items-center md:items-start text-center md:text-left p-6 bg-white rounded-2xl shadow-md"
               >
-                <div className="flex items-center gap-2 mb-2 font-semibold underline">
-                  {icon}
-                  <h2 className="whitespace-nowrap">{title}</h2>
+                <div className="flex flex-col items-center md:flex-row md:items-center gap-2 mb-4">
+                  <Image
+                    src={image}
+                    alt={title}
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                  />
+                  <h2 className="text-lg font-semibold underline mt-2 md:mt-0">{title}</h2>
                 </div>
-                <ul className="list-disc pl-5 space-y-1 text-gray-700 font-medium italic text-sm">
+                <ul className="list-disc pl-5 space-y-1 text-gray-700 font-medium italic text-sm max-w-xs md:max-w-none">
                   {items.filter(Boolean).map((item, idx) => (
                     <li key={idx} className="leading-snug break-words">
                       {item}
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             )
         )}
       </div>

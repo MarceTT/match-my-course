@@ -355,7 +355,6 @@ function SliderSection({ value, config, onChange, disabled }: any) {
 
   useEffect(() => {
     if (disabled) {
-      // Fijamos 25 semanas solo visualmente si está deshabilitado
       setLocalValue(25);
     } else if (Array.isArray(value) && value.length > 0) {
       setLocalValue(value[0]);

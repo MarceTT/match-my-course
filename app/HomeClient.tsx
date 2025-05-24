@@ -18,8 +18,8 @@ export default function HomeClient() {
       <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
         <Hero />
       </Suspense>
-      <Carousel />
-      <Features />
+      {/* <Carousel />
+      <Features /> */}
       <div className="container mx-auto px-6 py-16">
         <SchoolPage />
       </div>

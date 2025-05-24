@@ -1,8 +1,14 @@
 "use client";
 
-import { PieChart, Pie, Cell, Tooltip as RechartTooltip, ResponsiveContainer } from "recharts";
-import { FaFlag } from "react-icons/fa";
-import { LuBadgeInfo } from "react-icons/lu";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip as RechartTooltip,
+  ResponsiveContainer,
+} from "recharts";
+import Image from "next/image";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 interface ChartEntry {
   name: string;
@@ -28,10 +34,14 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-const SchoolStat = ({ data, averageAge, nationalityCount }: SchoolStatProps) => {
+const SchoolStat = ({
+  data,
+  averageAge,
+  nationalityCount,
+}: SchoolStatProps) => {
   return (
-    <div className="max-w-4xl mx-auto px-4 mt-12 mb-12">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="max-w-4xl mx-auto mt-12 mb-10 lg:mb-0 xl:mb-0">
+      <h1 className="text-2xl font-bold mb-6 text-center md:text-left lg:text-left xl:text-left">
         Estudiantes por continente (2024)
       </h1>
 
@@ -48,7 +58,10 @@ const SchoolStat = ({ data, averageAge, nationalityCount }: SchoolStatProps) => 
                 dataKey="value"
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
                 ))}
               </Pie>
               <RechartTooltip content={<CustomTooltip />} />
@@ -65,7 +78,9 @@ const SchoolStat = ({ data, averageAge, nationalityCount }: SchoolStatProps) => 
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
               <div>
-                <span className="font-bold text-md">{entry.value.toFixed(1)}%</span>
+                <span className="font-bold text-md">
+                  {entry.value.toFixed(1)}%
+                </span>
                 <span className="ml-2 text-gray-700">{entry.name}</span>
               </div>
             </div>
@@ -75,14 +90,38 @@ const SchoolStat = ({ data, averageAge, nationalityCount }: SchoolStatProps) => 
         {/* Estadísticas adicionales */}
         <div className="flex flex-col items-center gap-8 text-center">
           <div>
-            <LuBadgeInfo className="w-10 h-10 text-gray-700 mx-auto" />
+            <div className="w-10 h-10 relative mx-auto">
+              <Image
+                src={rewriteToCDN(
+                  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/EDAD.svg"
+                )}
+                alt="Edad promedio"
+                fill
+                className="object-contain"
+                loading="lazy"
+              />
+            </div>
             <div className="text-2xl font-semibold mt-2">{averageAge} años</div>
             <div className="text-sm text-gray-500">Edad promedio</div>
           </div>
           <div>
-            <FaFlag className="w-10 h-10 text-gray-700 mx-auto" />
-            <div className="text-2xl font-semibold mt-2">{nationalityCount}</div>
-            <div className="text-sm text-gray-500">Nacionalidades distintas</div>
+            <div className="w-10 h-10 relative mx-auto">
+              <Image
+                src={rewriteToCDN(
+                  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/NACIONALIDAD+GRAFICO.svg"
+                )}
+                alt="Número de nacionalidades"
+                fill
+                className="object-contain"
+                loading="lazy"
+              />
+            </div>
+            <div className="text-2xl font-semibold mt-2">
+              {nationalityCount}
+            </div>
+            <div className="text-sm text-gray-500">
+              Número de nacionalidades
+            </div>
           </div>
         </div>
       </div>

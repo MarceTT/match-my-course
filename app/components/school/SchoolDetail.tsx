@@ -45,7 +45,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
             <h1 className="text-3xl font-black">{city}, Irlanda</h1>
             <div className="flex flex-wrap items-center gap-4 mt-2 sm:mt-0">
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button className="bg-[#F15368] hover:bg-[#F15368]/90 rounded-full w-8 h-8 p-0">
@@ -57,7 +57,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                 <span className="text-sm text-gray-600 font-semibold">
                   Guardar
                 </span>
-              </div>
+              </div> */}
               <div className="flex items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>

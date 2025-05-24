@@ -228,6 +228,7 @@ export interface SchoolPriceOption {
   horario: "AM" | "PM";
   precio: number;
   horarioEspecifico: string;
+  horasSemana: number;
   horasDeClase: number;
   oferta?: number;
 }

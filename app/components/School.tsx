@@ -1,4 +1,4 @@
-import { LuHeart } from "react-icons/lu";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import { nunito } from "../ui/fonts";
@@ -57,14 +57,16 @@ const School = ({
           </h3>
 
           <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>Opiniones:</span>
+            <span>Calificaciones:</span>
             <div className="flex items-center gap-1">
               <span className="font-semibold">{rating.toFixed(1)}</span>
-              <span className="text-yellow-400">★</span>
+                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
             </div>
           </div>
 
-          <p className="text-sm text-gray-500 line-clamp-1">Ciudad: {location}</p>
+          <p className="text-sm text-gray-900 line-clamp-1 font-semibold">
+            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md">{location}</span>
+          </p>
 
           <div className="mt-auto">
             {typeof lowestPrice === "number" && lowestPrice > 0 ? (

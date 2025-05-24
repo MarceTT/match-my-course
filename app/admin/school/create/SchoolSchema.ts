@@ -52,7 +52,7 @@ export const schoolFormSchema = z.object({
         files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type)),
       "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg"
     )
-    .refine((files) => files.length <= 5, "No puedes subir más de 5 imágenes")
+    .refine((files) => files.length <= 15, "No puedes subir más de 15 imágenes")
     .optional()
     .default([]),
 });

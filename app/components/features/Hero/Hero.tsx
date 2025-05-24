@@ -12,7 +12,7 @@ const courseLabelToIdMap: Record<string, string> = {
   "Inglés general más sesiones individuales": "ingles-general-mas-sesiones-individuales",
   "Inglés general intensivo": "ingles-general-intensivo",
   "Inglés general orientado a negocios": "ingles-general-orientado-a-negocios",
-  "Inglés general más trabajo(6 meses)": "ingles-visa-de-trabajo",
+  "Programa de estudio y trabajo (25 semanas)": "ingles-visa-de-trabajo",
 };
 
 const Hero = () => {

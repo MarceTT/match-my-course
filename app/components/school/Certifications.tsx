@@ -27,8 +27,8 @@ const Certifications = ({ school }: CertificationsProps) => {
   if (!school?.certifications || !school.accreditations) return null;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex flex-col items-center text-center mb-8 lg:flex-row lg:items-center lg:text-left">
+    <div className="max-w-4xl mx-auto py-8">
+      <div className="flex flex-col items-center text-center mb-8 md:text-left lg:flex-row lg:items-center lg:text-left">
         <h1 className="text-2xl font-bold text-black">
           Acreditaciones y certificaciones de calidad
         </h1>
@@ -37,7 +37,7 @@ const Certifications = ({ school }: CertificationsProps) => {
 
       <div className="space-y-10">
         {/* Eaquals */}
-        <div className="flex flex-col items-center text-center md:items-start md:text-left md:flex-row gap-6">
+        <div className="flex flex-col items-center text-center justify-center md:justify-start md:items-start md:text-left md:flex-row gap-6">
           <div className="flex-shrink-0 w-48">
             <Image
               src={logoMap["Eaquals"]}
