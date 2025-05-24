@@ -101,9 +101,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 async function refreshAccessToken(token: any) {
   try {
-    console.log("[NextAuth] Intentando refrescar token...");
-    console.log("[NextAuth] Refresh token usado:", token.refreshToken);
-
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`,
       {
@@ -116,7 +113,6 @@ async function refreshAccessToken(token: any) {
     );
 
     const result = await response.json();
-    console.log("[NextAuth] Respuesta del backend:", result);
 
     if (!response.ok) {
       throw new Error(result.message || `Error ${response.status}`);
@@ -132,8 +128,6 @@ async function refreshAccessToken(token: any) {
       throw new Error("El backend no devolvió un accessToken válido");
     }
 
-    console.log("[NextAuth] Nuevo token obtenido con éxito:", newAccessToken);
-
     return {
       ...token,
       accessToken: newAccessToken,
@@ -144,7 +138,6 @@ async function refreshAccessToken(token: any) {
       role: token.role,
     };
   } catch (error) {
-    console.error("[RefreshToken] Error al refrescar token:", error);
     return {
       ...token,
       error: "RefreshAccessTokenError",
