@@ -9,7 +9,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        if (!credentials) {
+        const { email, password } = credentials ?? {};
+        if (!email || !password) {
           return null;
         }
         const res = await fetch(
@@ -17,7 +18,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials),
+            body: JSON.stringify({ email, password }),
           }
         );
         const json = await res.json();
