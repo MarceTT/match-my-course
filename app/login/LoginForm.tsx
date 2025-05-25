@@ -43,7 +43,6 @@ const LoginForm = () => {
         password: values.password,
         redirect: false,
         callbackUrl: "/admin/dashboard",
-        json: true,
       });
   
       if (!res || res.error) {
@@ -53,6 +52,7 @@ const LoginForm = () => {
   
       toast.success("Inicio de sesión exitoso 🎉");
   
+      // ⏳ Esperar brevemente para asegurar que las cookies se apliquen correctamente
       setTimeout(() => {
         window.location.href = res.url!; // 🔁 Redirección manual
       }, 100);
