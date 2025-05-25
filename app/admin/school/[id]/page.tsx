@@ -51,12 +51,21 @@ type GalleryImage = {
 const customResolver: Resolver<SchoolEditValues> = async (values) => {
   const transformedValues = {
     ...values,
-    galleryImages:
-      values.galleryImages?.map((img: any) => {
-        if (img instanceof File) return img;
-        if (img?.file && img?.isNew) return img.file;
-        return img; // Mantener la URL si es string de imagen existente
-      }) || [],
+    logo:
+      values.logo && typeof values.logo === "object" && values.logo.file
+        ? values.logo.file
+        : values.logo,
+    mainImage:
+      values.mainImage && typeof values.mainImage === "object" && values.mainImage.file
+        ? values.mainImage.file
+        : values.mainImage,
+    galleryImages: Array.isArray(values.galleryImages)
+      ? values.galleryImages.map((img: any) => {
+          if (img instanceof File) return img;
+          if (img?.file && img?.isNew) return img.file;
+          return img;
+        })
+      : [],
   };
 
   try {
