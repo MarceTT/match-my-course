@@ -7,33 +7,34 @@ import { FaInstagram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import Logo from "@/public/logos/final-logo.png";
-import { useAnimation } from "framer-motion";
-import { useState, useEffect } from "react";
+// import { useAnimation } from "framer-motion";
+// import { useState, useEffect } from "react";
 
 const Footer = () => {
-  const [isHovered, setIsHovered] = useState(false);
-  const controls = useAnimation();
+  // const [isHovered, setIsHovered] = useState(false);
+  // const controls = useAnimation();
 
-  useEffect(() => {
-    if (isHovered) {
-      controls.start({
-        scale: [1, 1.2, 1],
-        rotate: [0, -10, 10, -10, 10, 0],
-        transition: { duration: 0.5 },
-      });
-    } else {
-      controls.start({ scale: 1, rotate: 0 });
-    }
-  }, [isHovered, controls]);
+  // useEffect(() => {
+  //   if (isHovered) {
+  //     controls.start({
+  //       scale: [1, 1.2, 1],
+  //       rotate: [0, -10, 10, -10, 10, 0],
+  //       transition: { duration: 0.5 },
+  //     });
+  //   } else {
+  //     controls.start({ scale: 1, rotate: 0 });
+  //   }
+  // }, [isHovered, controls]);
 
-  const bounceAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 1,
-      repeat: Infinity,
-      repeatType: "reverse" as const,
-    },
-  };
+  // const bounceAnimation = {
+  //   y: [0, -10, 0],
+  //   transition: {
+  //     duration: 1,
+  //     repeat: Infinity,
+  //     repeatType: "reverse" as const,
+  //   },
+  // };
+
   return (
     <footer className="bg-[#3D3D3D] text-white py-12">
       <div className="container mx-auto px-4 max-w-5xl">
@@ -74,28 +75,40 @@ const Footer = () => {
             <h3 className="font-semibold mb-4">DESTINOS</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/canada">Canadá</Link>
+                <a
+                  href="https://www.matchmycourse.com/school-search?course=ingles-general"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Irlanda
+                </a>
               </li>
               <li>
-                <Link href="/irlanda">Irlanda</Link>
+                <a
+                  href="https://abroad.cl/programas/estudiar-italiano-italia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Italia
+                </a>
               </li>
               <li>
-                <Link href="/italia">Italia</Link>
-              </li>
-              <li>
-                <Link href="/malta">Malta</Link>
-              </li>
-              <li>
-                <Link href="/nueva-zelanda">Nueva Zelanda</Link>
+                <a
+                  href="https://abroad.cl/programas/estudiar-trabajar-nueva-zelanda"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Nueva Zelanda
+                </a>
               </li>
             </ul>
           </div>
           <div className="w-full md:w-auto">
             <h3 className="font-semibold mb-4">ABROAD</h3>
             <ul className="space-y-2">
-              <li>
+              {/* <li>
                 <Link href="/quienes-somos">Quiénes somos</Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/programas">Programas</Link>
               </li>
