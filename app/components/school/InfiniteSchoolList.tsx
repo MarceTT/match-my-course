@@ -21,6 +21,7 @@ const InfiniteSchoolList = ({
     isFetchingNextPage,
     isLoading,
     isError,
+    isFetching,
   } = useInfiniteSchools({ filters });
 
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -65,6 +66,8 @@ const InfiniteSchoolList = ({
         schools={uniqueSchools}
         isLoading={false}
         isError={isError}
+        isFetching={isFetching}
+        course={filters.course?.[0] ?? ""}
       />
 
       <div ref={observerRef} className="h-20 flex justify-center items-center">
