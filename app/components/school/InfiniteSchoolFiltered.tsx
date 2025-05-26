@@ -18,6 +18,7 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
     isFetchingNextPage,
     isLoading,
     isError,
+    isFetching,
   } = useInfiniteFilteredSchools(filters);
 
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -55,11 +56,12 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
   return (
     <div className="relative">
       <SchoolSearchList
-        key={filters.course?.[0] ?? "default"}
-        isFilterOpen={isFilterOpen}
-        schools={schools}
-        isLoading={isLoading}
-        isError={isError}
+       isFilterOpen={isFilterOpen}
+       schools={schools}
+       isLoading={isLoading}
+       isError={isError}
+       isFetching={isFetching}
+       course={filters.course?.[0] ?? ""}
       />
 
       <div ref={observerRef} className="h-20 flex justify-center items-center">
