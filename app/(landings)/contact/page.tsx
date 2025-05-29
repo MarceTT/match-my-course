@@ -1,7 +1,6 @@
-// Ajustado para enviar datos correctamente al backend y mandar 2 correos desde /api/contact
 "use client"
 
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -20,6 +19,7 @@ export type ContactFormData = {
 
 export default function ContactPage() {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -121,19 +121,53 @@ export default function ContactPage() {
               {errors.details && <p className="text-red-600 text-sm">{errors.details.message}</p>}
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" {...register("acceptTerms", { required: "Debes aceptar los términos" })} />
-              <label htmlFor="terms" className="text-sm">Acepto los términos y condiciones.</label>
-            </div>
-            {errors.acceptTerms && <p className="text-red-600 text-sm">{errors.acceptTerms.message}</p>}
+            <Controller
+              name="acceptTerms"
+              control={control}
+              rules={{ required: "Debes aceptar los términos y condiciones" }}
+              render={({ field }) => (
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <label htmlFor="terms" className="text-sm">
+                    Acepto los términos y condiciones.
+                  </label>
+                </div>
+              )}
+            />
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="policy" {...register("acceptPolicy", { required: "Debes aceptar la política" })} />
-              <label htmlFor="policy" className="text-sm">
-                Doy mi consentimiento para el tratamiento de mis datos personales de acuerdo con la Política de Privacidad.
-              </label>
-            </div>
-            {errors.acceptPolicy && <p className="text-red-600 text-sm">{errors.acceptPolicy.message}</p>}
+            {errors.acceptTerms && (
+              <p className="text-red-600 text-sm">
+                {errors.acceptTerms.message}
+              </p>
+            )}
+
+            <Controller
+              name="acceptPolicy"
+              control={control}
+              rules={{ required: "Debes aceptar la política de consentimiento" }}
+              render={({ field }) => (
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="policy"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <label htmlFor="policy" className="text-sm">
+                    Doy mi consentimiento para el tratamiento de mis datos personales de acuerdo con la Política de Privacidad.
+                  </label>
+                </div>
+              )}
+            />
+
+            {errors.acceptPolicy && (
+              <p className="text-red-600 text-sm">
+                {errors.acceptPolicy.message}
+              </p>
+            )}
 
             <div className="flex justify-center">
               <Button

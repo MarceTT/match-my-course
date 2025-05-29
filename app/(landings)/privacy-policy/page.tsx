@@ -114,46 +114,22 @@ export default function PrivacyPolicyPage() {
         </h2>
         <p>
           El tratamiento de los datos personales por parte de MatchMyCourse se fundamenta 
-          en las siguientes bases legales:
+          en las siguientes bases legales: El consentimiento libre, específico, informado 
+          e inequívoco del estudiante. La necesidad de ejecutar el contrato de servicios 
+          firmado entre el estudiante y MatchMyCourse. El cumplimiento de obligaciones 
+          legales aplicables a la empresa, como la emisión de facturas o la gestión de seguros.
         </p>
-        <ul>
-          <li>
-            El consentimiento libre, específico, informado e inequívoco del estudiante.
-          </li>
-          <li>
-            La necesidad de ejecutar el contrato de servicios firmado entre el estudiante 
-            y MatchMyCourse.
-          </li>
-          <li>
-            El cumplimiento de obligaciones legales aplicables a la empresa, como la emisión 
-            de facturas o la gestión de seguros.
-          </li>
-        </ul>
         <h2 className="text-2xl font-bold">
           6. Compartición de datos con terceros
         </h2>
         <p>
           Con el objetivo de prestar un servicio integral, MatchMyCourse podrá compartir los datos 
           personales del estudiante con terceros cuando sea necesario. Estos terceros pueden incluir:
-        </p>
-        <ul>
-          <li>
-            Escuelas de inglés asociadas para efectuar la matrícula.
-          </li>
-          <li>
-            Compañías de seguros para gestionar coberturas médicas.
-          </li>
-          <li>
-            Plataformas de pago, bancos u otras entidades financieras para procesar transacciones.
-          </li>
-          <li>
-            Proveedores de alojamiento, si el estudiante opta por contratar este servicio a través 
-            de nuestra plataforma.
-          </li>
-        </ul>
-        <p>
-          En todos los casos, MatchMyCourse se asegura de que los terceros cumplan con estándares 
-          adecuados de protección de datos.
+          Escuelas de inglés asociadas para efectuar la matrícula. Compañías de seguros para gestionar 
+          coberturas médicas. Plataformas de pago, bancos u otras entidades financieras para procesar transacciones.
+          Proveedores de alojamiento, si el estudiante opta por contratar este servicio a través 
+          de nuestra plataforma. En todos los casos, MatchMyCourse se asegura de que los terceros 
+          cumplan con estándares adecuados de protección de datos.
         </p>
         <h2 className="text-2xl font-bold">
           7. Tiempo de conservación de los datos
@@ -169,24 +145,11 @@ export default function PrivacyPolicyPage() {
         </h2>
         <p>
           En conformidad con las normativas vigentes en materia de protección de datos, el estudiante 
-          tiene derecho a:
-        </p>
-        <ul>
-          <li>
-            Solicitar acceso a sus datos personales para conocer qué información conservamos.
-          </li>
-          <li>
-            Rectificar datos que sean inexactos, incompletos o desactualizados.
-          </li>
-          <li>
-            Solicitar la eliminación de sus datos cuando ya no sean necesarios para los fines para 
-            los cuales fueron recopilados.
-          </li>
-          <li>
-            Limitar el tratamiento de sus datos o revocar su consentimiento en cualquier momento.
-          </li>
-        </ul>
-        <p>
+          tiene derecho a: Solicitar acceso a sus datos personales para conocer qué información conservamos.
+          Rectificar datos que sean inexactos, incompletos o desactualizados.
+          Solicitar la eliminación de sus datos cuando ya no sean necesarios para los fines para 
+          los cuales fueron recopilados.
+          Limitar el tratamiento de sus datos o revocar su consentimiento en cualquier momento.
           Para ejercer cualquiera de estos derechos, el estudiante puede enviar una solicitud 
           escrita al correo: <strong>info@matchmycourse.com.</strong>
         </p>

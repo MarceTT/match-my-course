@@ -47,7 +47,7 @@ const TestimonialHighlight = () => {
   if (testimonials.length === 0) return null
 
   return (
-    <section className="py-16">
+    <section className="bg-gray-50 py-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-[auto_1fr_auto] items-center gap-10">
 
