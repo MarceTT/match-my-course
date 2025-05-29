@@ -285,3 +285,17 @@ export interface Service {
   thumbnail: string;
   title: string;
 }
+
+export type BookingPannelProps = {
+  data: Reservation | null;
+  error: string;
+  loading: boolean;
+};
+
+export interface Reservation {
+  school: string;
+  course: string;
+  weeks: number;
+  schedule: string;
+  price: number;
+};
