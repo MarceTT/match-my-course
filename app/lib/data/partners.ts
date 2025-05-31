@@ -138,11 +138,6 @@ export const partners: Partner[] = [
   },
   {
     key: 'irlanda',
-    src: '/partners/17.png',
-    alt: 'Erin College',
-  },
-  {
-    key: 'irlanda',
     src: '/partners/19.png',
     alt: 'Donegal English Language School',
   },
