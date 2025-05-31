@@ -1,11 +1,12 @@
 import React from "react"
 import { notFound } from "next/navigation"
 import Carousel from "@/app/components/features/Carousel/Carousel"
-import RandomConsultations from "@/app/components/common/RandomConsultations"
 import { getAllServices } from "@/app/lib/api/services"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
 import TestimonialHighlightSection from "@/app/(landings)/testimonials/TestimonialHighlightSection"
 import { VideoPlayer } from "@/app/components"
+import Consultances from "@/app/components/servicios/Consultances"
+import { raleway } from "@/app/ui/fonts"
 
 export async function generateStaticParams() {
   const services = await getAllServices()
@@ -39,7 +40,10 @@ export default async function ServiceDetail({ params }: {
       <Carousel />
       <PersonalizedAdviceSection />
       <TestimonialHighlightSection />
-      <RandomConsultations />
+      <h2 className={`text-5xl font-black text-center mb-12 mt-10 ${raleway.className}`}>
+        Otras asesorías
+      </h2>
+      <Consultances />
     </>
   );
 };
