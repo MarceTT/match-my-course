@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { Partner } from '@/app/lib/types'
+import { Partner } from '@/types'
 import { getAllPartners } from '@/app/lib/api/partners'
 import HeaderSection from './HeaderSection'
 import PartnerSection from './PartnerSection'
