@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { Reservation } from "@/types";
 
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
@@ -261,41 +261,8 @@ declare module "next-auth" {
   }
 }
 
-export interface Testimonial {
-  name: string;
-  flag: string;
-  originCountry: string,
-  destinationCountry: string,
-  destinationCity: string,
-  image: string,
-  text: ReactNode,
-}
-
-export interface Partner {
-  key: string;
-  src: string;
-  alt: string;
-}
-
-export interface Service {
-  id: string;
-  rating: number;
-  slug: string;
-  embed: string;
-  thumbnail: string;
-  title: string;
-}
-
 export type BookingPannelProps = {
   data: Reservation | null;
   error: string;
   loading: boolean;
-};
-
-export interface Reservation {
-  school: string;
-  course: string;
-  weeks: number;
-  schedule: string;
-  price: number;
 };
