@@ -24,7 +24,39 @@ const logoMap: Record<string, string> = {
 };
 
 const Certifications = ({ school }: CertificationsProps) => {
-  if (!school?.certifications || !school.accreditations) return null;
+  if (!school?.certifications) return null;
+
+  const staticCertifications = [
+    {
+      key: "Eaquals",
+      description:
+        "acreditación internacional que garantiza la excelencia en la enseñanza de idiomas, evaluando aspectos como la calidad de la enseñanza, el currículo de los profesores, la gestión institucional, el bienestar del estudiante, la infraestructura y la evaluación del aprendizaje",
+    },
+    {
+      key: "IALC",
+      description:
+        "acreditación que certifica escuelas independientes de alta calidad en la enseñanza de idiomas. Se enfoca en garantizar programas bien estructurados, enseñanza personalizada, atención al estudiante y una experiencia inmersiva en el idioma y la cultura local",
+    },
+  ];
+
+  const dynamicCertifications = Object.entries(school.certifications)
+    .filter(([key, value]) => value && !["Eaquals", "IALC"].includes(key))
+    .map(([key]) => ({
+      key,
+      description: school.accreditations?.[key] ?? "",
+    }));
+
+  const allCertifications = [...staticCertifications, ...dynamicCertifications];
+
+  const sortedCertifications = allCertifications.sort((a, b) => {
+    const order = ["Eaquals", "IALC", "ACELS"];
+    const aIndex = order.indexOf(a.key);
+    const bIndex = order.indexOf(b.key);
+    if (aIndex === -1 && bIndex === -1) return a.key.localeCompare(b.key);
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    return aIndex - bIndex;
+  });
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -35,90 +67,31 @@ const Certifications = ({ school }: CertificationsProps) => {
         <Info className="mt-2 lg:mt-0 lg:ml-2 h-5 w-5 text-gray-400" />
       </div>
 
-      <div className="space-y-10">
-        {/* Eaquals */}
-        <div className="flex flex-col items-center text-center justify-center md:justify-start md:items-start md:text-left md:flex-row gap-6">
-          <div className="flex-shrink-0 w-48">
-            <Image
-              src={logoMap["Eaquals"]}
-              alt="Eaquals"
-              width={150}
-              height={100}
-              className="h-auto"
-              loading="lazy"
-              fetchPriority="high"
-            />
-          </div>
-          <div>
-            <p className="text-justify">
-              acreditación internacional que{" "}
-              <span className="italic underline">
-                garantiza la excelencia en la enseñanza de idiomas
-              </span>
-              , evaluando aspectos como la calidad de la enseñanza, el currículo
-              de los profesores, la gestión institucional, el bienestar del
-              estudiante, la infraestructura y la evaluación del aprendizaje
-            </p>
-          </div>
-        </div>
+      <div className="flex flex-wrap justify-center md:justify-start gap-6">
+        {sortedCertifications.map(({ key, description }) => {
+          const logoSrc = logoMap[key];
+          if (!logoSrc) return null;
 
-        {/* IALC */}
-        <div className="flex flex-col items-center text-center md:items-start md:text-left md:flex-row gap-6">
-          <div className="flex-shrink-0 w-48">
-            <Image
-              src={logoMap["IALC"]}
-              alt="IALC"
-              width={150}
-              height={100}
-              className="h-auto"
-            />
-          </div>
-          <div>
-            <p className="text-justify">
-              acreditación que certifica escuelas independientes de alta calidad
-              en la enseñanza de idiomas. Se enfoca en{" "}
-              <span className="italic underline">
-                garantizar programas bien estructurados, enseñanza personalizada
-              </span>
-              , atención al estudiante y una experiencia inmersiva en el idioma
-              y la cultura local
-            </p>
-          </div>
-        </div>
-
-        {/* Certificaciones */}
-        <div className="mt-8">
-          <div className="flex flex-col items-center md:items-start gap-4">
-            <p className="font-medium">Certificaciones:</p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
-              {Object.entries(school.certifications).map(([key, value]) => {
-                if (!value || !logoMap[key]) return null;
-                return (
-                  <TooltipProvider key={key} delayDuration={100}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Image
-                          src={logoMap[key]}
-                          alt={key}
-                          width={100}
-                          height={30}
-                          className="h-auto cursor-pointer"
-                        />
-                      </TooltipTrigger>
-                      {school.accreditations?.[key] && (
-                        <TooltipContent className="max-w-xs bg-[#5271FF]">
-                          <p className="text-sm text-white">
-                            {school.accreditations[key]}
-                          </p>
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </TooltipProvider>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+          return (
+            <TooltipProvider key={key} delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Image
+                    src={logoSrc}
+                    alt={key}
+                    width={140}
+                    height={80}
+                    className="h-auto w-auto max-h-16 md:max-h-20 lg:max-h-24 cursor-pointer"
+                    loading="lazy"
+                  />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs bg-[#5271FF]">
+                  <p className="text-sm text-white">{description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          );
+        })}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw , GraduationCap} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -15,6 +15,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import dynamic from "next/dynamic";
+import CircularSlider from "@fseehawer/react-circular-slider";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
@@ -329,7 +330,7 @@ function FilterSection({
   return (
     <div>
       <h3 className="mb-2 text-sm font-medium">{title}</h3>
-      <div className="space-y-2">{children}</div>
+      <div className="space-y-2 lg:mt-4 xl:mt-4">{children}</div>
     </div>
   );
 }
@@ -363,48 +364,55 @@ function SliderSection({ value, config, onChange, disabled }: any) {
     }
   }, [value, config.min, disabled]);
 
+  const weeksRange = Array.from(
+    { length: config.max - config.min + 1 },
+    (_, i) => config.min + i
+  );
+
+  const displayIndex = Math.max(0, (disabled ? 25 : localValue) - config.min);
+
   return (
-    <div className="px-2">
+    <div className="flex flex-col items-center justify-center px-2">
       <TooltipProvider>
-        {disabled ? (
-          <Tooltip delayDuration={200}>
-            <TooltipTrigger asChild>
-              <div>
-                <Slider
-                  value={[localValue]}
-                  min={config.min}
-                  max={config.max}
-                  step={config.step}
-                  onValueChange={() => {}}
-                  className="w-full"
-                  disabled
-                />
-              </div>
-            </TooltipTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={disabled ? "cursor-not-allowed opacity-70" : ""}>
+              <CircularSlider
+                width={180}
+                data={weeksRange}
+                dataIndex={displayIndex}
+                knobColor={disabled ? "#A3A3A3" : "#5271FF"}
+                progressColorFrom={disabled ? "#D1D5DB" : "#5271FF"}
+                progressColorTo={disabled ? "#D1D5DB" : "#5271FF"}
+                trackColor="#E5E7EB"
+                label="Semanas"
+                labelColor="#4B5563"
+                valueFontSize="1.8rem"
+                verticalOffset="1.5rem"
+                progressSize={6}
+                trackSize={3}
+                onChange={(val) => {
+                  if (!disabled) {
+                    const num = Number(val);
+                    setLocalValue(num);
+                    onChange([num]);
+                  }
+                }}
+              >
+                <GraduationCap className="text-white" x="9" y="9" width="18px" height="18px" />
+              </CircularSlider>
+            </div>
+          </TooltipTrigger>
+          {disabled && (
             <TooltipContent side="right">
               <p>Este curso requiere una duración fija de 25 semanas.</p>
             </TooltipContent>
-          </Tooltip>
-        ) : (
-          <Slider
-            value={[localValue]}
-            min={config.min}
-            max={config.max}
-            step={config.step}
-            onValueChange={(val) => {
-              const newMin = val[0];
-              setLocalValue(newMin);
-              onChange([newMin]);
-            }}
-            className="w-full"
-          />
-        )}
+          )}
+        </Tooltip>
       </TooltipProvider>
-  
-      <div className="flex justify-between mt-2 text-xs text-muted-foreground">
-        <div className="bg-primary text-white px-2 py-1 rounded shadow">
-          {localValue} semanas
-        </div>
+
+      <div className="mt-2 text-sm text-primary font-semibold">
+        {disabled ? "25 semanas (fijo)" : `${localValue} semanas`}
       </div>
     </div>
   );

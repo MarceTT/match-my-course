@@ -211,9 +211,8 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -4 }}
-      onClick={handleShowSchool}
       onMouseEnter={() => prefetchSchool(`${school._id}`)}
-      className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 cursor-pointer group ${
+      className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 group ${
         isGrid ? "flex flex-col h-full justify-between" : "flex flex-col sm:flex-row"
       }`}
     >
@@ -233,9 +232,10 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           alt={school.name}
           width={500}
           height={300}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover cursor-pointer"
           loading="lazy"
           placeholder="empty"
+          onClick={handleShowSchool}
         />
       </div>
 
@@ -246,7 +246,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       >
         <div className="flex justify-between items-start">
           <div className="flex flex-col">
-            <h1 className="mt-2 text-md font-semibold lg:mt-0 lg:text-2xl">
+            <h1 className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl cursor-pointer" onClick={handleShowSchool}>
               {school.name}
             </h1>
             <div className="flex items-center mt-1">
@@ -323,7 +323,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           </div>
         )}
 
-        <div className="text-sm mt-4 flex flex-row sm:flex-col sm:items-start sm:space-y-1 justify-between w-full">
+        <div className="text-sm mt-4 flex flex-row sm:flex-col sm:items-start sm:space-y-1 justify-between w-full lg:mt-0 xl:mt-0">
           <p className="font-semibold text-base sm:text-lg text-gray-700">
             Ciudad: <span className="text-gray-900">{school.city}</span>
           </p>
@@ -336,16 +336,17 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex items-center justify-between lg:mt-0 xl:mt-0">
           {!isMobile ? (
             <Image
               src={rewriteToCDN(school.logo)}
               alt="Logo"
               width={120}
               height={60}
-              className="object-contain"
+              className="object-contain cursor-pointer"
               loading="lazy"
               placeholder="empty"
+              onClick={handleShowSchool}
             />
           ) : null}
 
