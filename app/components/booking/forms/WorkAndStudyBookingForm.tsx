@@ -101,10 +101,10 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
               <SelectValue placeholder="elegir" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="next-monday">Martes 3 de Junio</SelectItem>
-              <SelectItem value="next-month">Lunes 9 de Junio</SelectItem>
-              <SelectItem value="next-monday">Lunes 16 de Junio</SelectItem>
-              <SelectItem value="next-month">Lunes 23 de Junio</SelectItem>
+              <SelectItem value="0">Martes 3 de Junio</SelectItem>
+              <SelectItem value="1">Lunes 9 de Junio</SelectItem>
+              <SelectItem value="2">Lunes 16 de Junio</SelectItem>
+              <SelectItem value="3">Lunes 23 de Junio</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -138,9 +138,9 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
               <label className="block text-sm text-gray-600 mb-1">
                 Alojamiento de la escuela para tus primeras semanas.
               </label>
-              <div className="text-sm text-gray-900 mb-2 align-end font-semibold">
+              {/* <div className="text-sm text-gray-900 mb-2 align-end font-semibold">
                 €200
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-2">
               <Select value={accomodationType} onValueChange={setAccomodationType}>

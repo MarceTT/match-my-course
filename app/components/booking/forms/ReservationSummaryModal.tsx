@@ -77,7 +77,7 @@ export default function ReservationSummaryModal({
             <p><strong>Ciudad:</strong> Dublin</p>
             <p><strong>Curso:</strong> {reservation.course}</p>
             <p><strong>Modalidad:</strong> {reservation.schedule}</p>
-            <p><strong>Semanas de estudio:</strong> {reservation.schedule}</p>
+            <p><strong>Semanas de estudio:</strong> {reservation.weeks}</p>
             <p><strong>Inicio:</strong> {reservation.starDate}</p>
             {reservation.price !== undefined && (
               <p><strong>Precio final:</strong> €{reservation.price.toLocaleString()}</p>

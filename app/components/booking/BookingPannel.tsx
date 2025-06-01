@@ -11,6 +11,7 @@ import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 
 const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
+  // const [currentReservation, setCurrentReservation] = useState(reservation);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const handleOpenModal = () => setIsModalOpen(true);
