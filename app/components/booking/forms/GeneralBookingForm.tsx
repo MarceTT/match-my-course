@@ -1,7 +1,7 @@
 // components/booking/forms/GeneralBookingForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -10,23 +10,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import GenericSelect from "../../../ui/GenericSelect";
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
+import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
+import { isValidCourse } from "@/lib/helpers/courseHelper";
 
 type Props = {
   reservation: Reservation;
 };
 
 export default function GeneralBookingForm({ reservation }: Props) {
-  const [courseType, setCourseType] = useState("general");
+  const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   const [startDate, setStartDate] = useState("");
   const [schedule, setSchedule] = useState("pm");
   const [studyDuration, setStudyDuration] = useState("");
-  // const [examType, setExamType] = useState("");
-  // const [hostType, setHostType] = useState("");
 
   console.log('GeneralBookingForm --> reservation: ', reservation)
+
   const { price } = reservation;
+
+  useEffect(() => {
+    if (reservation.course && isValidCourse(reservation.course)) {
+      setCourseType(reservation.course);
+    }
+  }, [reservation.course]);
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -45,16 +53,12 @@ export default function GeneralBookingForm({ reservation }: Props) {
             <label className="block text-sm text-gray-600 mb-1">Curso</label>
             <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{price}</div>
           </div>
-          <Select value={courseType} onValueChange={setCourseType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Inglés general" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="general">Inglés general</SelectItem>
-              <SelectItem value="intensive">Inglés intensivo</SelectItem>
-              <SelectItem value="business">Inglés de negocios</SelectItem>
-            </SelectContent>
-          </Select>
+          <GenericSelect<Course>
+            options={courseLabelToIdMap}
+            value={courseType}
+            onChange={(id) => setCourseType(id)}
+            placeholder="Seleccionar curso"
+          />
           <p className="text-xs text-gray-500 mt-1">
             Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo
           </p>

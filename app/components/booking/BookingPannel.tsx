@@ -5,33 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BookingPannelProps } from "@/app/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
+import { Course } from "@/lib/constants/courses";
 
 const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
-  // const [courseType, setCourseType] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [duration, setDuration] = useState("");
-
-  // "Inglés general": "ingles-general",
-  // "Inglés general más sesiones individuales": "ingles-general-mas-sesiones-individuales",
-  // "Inglés general intensivo": "ingles-general-intensivo",
-  // "Inglés general orientado a negocios": "ingles-general-orientado-a-negocios",
-  // "Inglés general más trabajo (6 meses)": "ingles-visa-de-trabajo",
-
-  // const reservationMock = {
-  //   // "course": "ingles-general",
-  //   // "course": "ingles-general-intensivo",
-  //   "course": "ingles-general-mas-sesiones-individuales",
-  //   // "course": "ingles-general-orientado-a-negocios",
-  //   // "course": "ingles-general-orientado-a-negocios",
-  //   // "course": "ingles-visa-de-trabajo",
-  //   "school": "Centre of English Studies (CES)",
-  //   "schedule": "AM",
-  //   "price": 4150,
-  //   "weeks": 25
-  // }
-
   console.log('BookingPannel --> reservation', reservation)
-  // console.log('BookingPannel --> reservationMock', reservationMock)
 
   if (loading) {
     return (
@@ -52,7 +29,6 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
     );
   }
 
-  // if (!reservationMock) {
   if (!reservation) {
     return (
       <Card className="p-4">
@@ -62,12 +38,14 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
   }
 
   switch (reservation.course) {
-    // case "ingles-general":
-    // case "ingles-general-intensivo":
-    // case "ingles-general-mas-sesiones-individuales":
-    //   return <GeneralBookingForm reservation={reservation} />;
-    case "ingles-general-mas-trabajo":
+    case Course.GENERAL:
+    case Course.INTENSIVE:
+    case Course.GENERAL_PLUS:
+      return <GeneralBookingForm reservation={reservation} />;
+
+    case Course.WORK_AND_STUDY:
       return <WorkAndStudyBookingForm reservation={reservation} />;
+
     default:
       return <GeneralBookingForm reservation={reservation} />;
   }
