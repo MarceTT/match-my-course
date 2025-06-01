@@ -37,7 +37,7 @@ export default function ContactPage() {
       })
 
       const result = await res.json()
-      console.log('result', result)
+
       if (result.success) {
         setSubmitted(true)
         reset()
