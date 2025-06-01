@@ -5,4 +5,5 @@ export interface Reservation {
   weeks: number;
   schedule: string;
   price?: number;
+  starDate?: string;
 };

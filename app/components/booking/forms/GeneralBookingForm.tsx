@@ -16,11 +16,12 @@ import { Reservation } from "@/types";
 import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import { isValidCourse } from "@/lib/helpers/courseHelper";
 
-type Props = {
+interface FormProps {
   reservation: Reservation;
-};
+  onReserve: () => void;
+}
 
-export default function GeneralBookingForm({ reservation }: Props) {
+export default function GeneralBookingForm({ reservation, onReserve }: FormProps) {
   const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   const [startDate, setStartDate] = useState("");
   const [schedule, setSchedule] = useState("pm");
@@ -175,7 +176,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
           <p className="text-xs text-gray-500 mb-4">
             Es parte del valor total que pagaras.
           </p>
-          <Button className="w-full bg-red-500 hover:bg-red-600">
+          <Button className="w-full bg-red-500 hover:bg-red-600" onClick={onReserve}>
             Reservar
           </Button>
         </div>
