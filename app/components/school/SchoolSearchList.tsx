@@ -10,7 +10,9 @@ import { useInView } from "react-intersection-observer";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { buildReservationQuery } from "@/lib/reservation";
+import { Reservation } from "@/types";
 import {
   Select,
   SelectContent,
@@ -180,9 +182,10 @@ interface SchoolCardProps {
   school: SchoolDetails;
   viewType: "grid" | "list";
 }
-function SchoolCard({ school, viewType }: SchoolCardProps) {
-  const router = useRouter();
-  const prefetchSchool = usePrefetchSchoolDetails();
+
+const SchoolCard = ({ school, viewType }: SchoolCardProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter()
   const rating = Number(school.qualities?.ponderado ?? 0);
   const antiguedad = school.description?.añoFundacion
     ? new Date().getFullYear() - school.description.añoFundacion
@@ -200,9 +203,16 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleShowSchool = () => {
-    prefetchSchool(`${school._id}`);
-    setTimeout(() => router.push(`school-detail/${school._id}`), 50);
-  };
+    const reservation: Reservation = {
+      schoolId: school._id.toString(),
+      course: searchParams.get("course")?.toString() ?? "",
+      weeks: 25, // TODO: WIP
+      schedule: "AM", // TODO: WIP
+    };
+
+    const query = buildReservationQuery(reservation);
+    router.push(`/school-detail/${reservation.schoolId}?${query}`)
+  }
 
   useEffect(() => {
     setSelectedOptionIndex(0);
