@@ -1,44 +1,64 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Reservation } from "@/app/lib/types";
+import { Reservation } from "@/types";
+import {
+  buildReservationQuery,
+  createReservationFromApiResponse,
+} from "@/lib/reservation";
 
-export function useReservation({ schoolId, course, weeks, schedule}: {
+type UseReservationParams = {
   schoolId: string;
   course: string | null;
   weeks: string | null;
   schedule: string | null;
-}) {
+};
+
+export function useReservation({ schoolId, course, weeks, schedule }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log('useEffect')
-
     const fetchReservation = async () => {
-      if (!schoolId || !course || !weeks || !schedule) return;
+      const parsedWeeks = parseInt(weeks ?? "", 10);
+
+      // Validación de parámetros
+      if (!schoolId || !course || !schedule || isNaN(parsedWeeks)) {
+        setReservation(null);
+        setError("Parámetros incompletos o inválidos");
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
 
-        const query = new URLSearchParams({ schoolId, curso: course, semanas: weeks, horario: schedule }).toString();
+        const query = buildReservationQuery({
+          schoolId,
+          course,
+          weeks: parsedWeeks,
+          schedule,
+        });
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-calculo-reserva/${schoolId}?${query}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-calculo-reserva/${schoolId}?${query}`
+        );
 
-        const data = await res.json();
+        const json = await res.json();
 
         if (res.ok) {
-          setReservation(data.data);
+          const reservation = createReservationFromApiResponse(json.data);
+          setReservation(reservation);
           setError("");
         } else {
-          setError(data.message || "Error al calcular reserva");
           setReservation(null);
+          setError(json.message || "Error al calcular reserva");
         }
       } catch (err) {
         console.error(err);
-        setError("Error al conectar con el servidor");
         setReservation(null);
+        setError("Error al conectar con el servidor");
       } finally {
         setLoading(false);
       }
