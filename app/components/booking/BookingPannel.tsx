@@ -6,9 +6,22 @@ import { BookingPannelProps } from "@/app/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
 import { Course } from "@/lib/constants/courses";
+import { useState } from "react";
+import ReservationSummaryModal from "./forms/ReservationSummaryModal";
+import { ReservationFormData } from "@/types/reservationForm";
 
 const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+  
   console.log('BookingPannel --> reservation', reservation)
+
+  const handleSubmitContact = (data: ReservationFormData) => {
+    console.log("Datos de contacto enviados:", data);
+    // Aquí lógica adicional (fetch, etc)
+  };
 
   if (loading) {
     return (
@@ -37,18 +50,44 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
     );
   }
 
-  switch (reservation.course) {
-    case Course.GENERAL:
-    case Course.INTENSIVE:
-    case Course.GENERAL_PLUS:
-      return <GeneralBookingForm reservation={reservation} />;
+  return (
+    <>
+      {(() => {
+        switch (reservation.course) {
+          case Course.GENERAL:
+          case Course.INTENSIVE:
+          case Course.GENERAL_PLUS:
+            return (
+              <GeneralBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+          case Course.WORK_AND_STUDY:
+            return (
+              <WorkAndStudyBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+          default:
+            return (
+              <GeneralBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+        }
+      })()}
 
-    case Course.WORK_AND_STUDY:
-      return <WorkAndStudyBookingForm reservation={reservation} />;
-
-    default:
-      return <GeneralBookingForm reservation={reservation} />;
-  }
+      <ReservationSummaryModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        reservation={reservation}
+        onSubmitContact={handleSubmitContact}
+      />
+    </>
+  );
 }
 
 export default BookingPannel;

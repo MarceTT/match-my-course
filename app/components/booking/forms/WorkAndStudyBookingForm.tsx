@@ -13,11 +13,12 @@ import {
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
 
-type Props = {
+interface FormProps {
   reservation: Reservation;
-};
+  onReserve: () => void;
+}
 
-export default function WorkAndStudyBookingForm({ reservation }: Props) {
+export default function WorkAndStudyBookingForm({ reservation, onReserve }: FormProps) {
   // const [courseType, setCourseType] = useState("");
   const [startDate, setStartDate] = useState("");
   const [schedule, setSchedule] = useState("pm");
@@ -178,7 +179,7 @@ export default function WorkAndStudyBookingForm({ reservation }: Props) {
           <p className="text-xs text-gray-500 mb-4">
             La parte que resta será pagada en destino.
           </p>
-          <Button className="w-full bg-red-500 hover:bg-red-600">
+          <Button className="w-full bg-red-500 hover:bg-red-600" onClick={onReserve}>
             Reservar
           </Button>
         </div>
