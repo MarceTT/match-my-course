@@ -2,26 +2,44 @@
 
 import { useEffect, useState } from "react";
 import {
-  Select,
+  Select as BaseSelect,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
 
-interface GenericSelectProps<T extends string> {
+interface SelectProps<T extends string> {
   options: Record<string, T>; // label → id
   value?: T;
   onChange: (value: T) => void;
   placeholder?: string;
 }
 
-export default function GenericSelect<T extends string>({
+/**
+ * Componente Select genérico que recibe un objeto 
+ * de opciones (label → id) y controla su valor con 
+ * estado interno.
+ *
+ * @example
+ * const options = {
+ *   "Inglés general": "ingles-general",
+ *   "Inglés intensivo": "ingles-intensivo",
+ * };
+ *
+ * <Select
+ *   options={options}
+ *   value={curso}
+ *   onChange={(newValue) => setCurso(newValue)}
+ *   placeholder="Seleccionar..."
+ * />
+ */
+export function Select<T extends string>({
   options,
   value,
   onChange,
   placeholder = "Seleccionar opción",
-}: GenericSelectProps<T>) {
+}: SelectProps<T>) {
   const [selected, setSelected] = useState<T | "">(value ?? "");
 
   useEffect(() => {
@@ -29,7 +47,7 @@ export default function GenericSelect<T extends string>({
   }, [value]);
 
   return (
-    <Select
+    <BaseSelect
       value={selected}
       onValueChange={(val) => {
         setSelected(val as T);
@@ -46,6 +64,6 @@ export default function GenericSelect<T extends string>({
           </SelectItem>
         ))}
       </SelectContent>
-    </Select>
+    </BaseSelect>
   );
 }

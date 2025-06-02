@@ -4,13 +4,13 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
+  Select as BaseSelect,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import GenericSelect from "../../../ui/GenericSelect";
+import { Select } from "@matchmycourse/components/ui";
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
 import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
@@ -54,7 +54,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
             <label className="block text-sm text-gray-600 mb-1">Curso</label>
             <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{price}</div>
           </div>
-          <GenericSelect<Course>
+          <Select<Course>
             options={courseLabelToIdMap}
             value={courseType}
             onChange={(id) => setCourseType(id)}
@@ -68,7 +68,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
         {/* Schedule */}
         <div>
           <label className="block text-sm text-gray-600 mb-2">Horario de clases</label>
-          <Select value={schedule} onValueChange={setSchedule}>
+          <BaseSelect value={schedule} onValueChange={setSchedule}>
             <SelectTrigger>
               <SelectValue placeholder="elegir" />
             </SelectTrigger>
@@ -76,7 +76,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
               <SelectItem value="am">AM - 09:00 a 12:00</SelectItem>
               <SelectItem value="pm">PM - 13:00 a 16:00</SelectItem>
             </SelectContent>
-          </Select>
+          </BaseSelect>
           {(reservation.course == 'ingles-general-mas-sesiones-individuales') && (
             <p className="text-xs text-gray-500 mt-1">
               Esta clase cuenta con <strong>5 lecciones individuales</strong> a la semana
@@ -88,7 +88,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
         {schedule && (
           <div>
             <label className="block text-sm text-gray-600 mb-2">Semanas a estudiar</label>
-            <Select value={studyDuration} onValueChange={setStudyDuration}>
+            <BaseSelect value={studyDuration} onValueChange={setStudyDuration}>
               <SelectTrigger>
                 <SelectValue placeholder="elegir" />
               </SelectTrigger>
@@ -97,7 +97,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
                 <SelectItem value="2">2 semanas</SelectItem>
                 <SelectItem value="4">4 semanas</SelectItem>
               </SelectContent>
-            </Select>
+            </BaseSelect>
           </div>
         )}
 
@@ -105,7 +105,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
         {schedule && studyDuration && (
           <div>
             <label className="block text-sm text-gray-600 mb-2">Inicio de clases</label>
-            <Select value={startDate} onValueChange={setStartDate}>
+            <BaseSelect value={startDate} onValueChange={setStartDate}>
               <SelectTrigger>
                 <SelectValue placeholder="elegir" />
               </SelectTrigger>
@@ -113,7 +113,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
                 <SelectItem value="next-monday">Próximo lunes</SelectItem>
                 <SelectItem value="next-month">Próximo mes</SelectItem>
               </SelectContent>
-            </Select>
+            </BaseSelect>
           </div>
         )}
 
