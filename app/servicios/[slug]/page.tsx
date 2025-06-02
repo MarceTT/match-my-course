@@ -1,6 +1,7 @@
 import React from "react"
 import { notFound } from "next/navigation"
 import Carousel from "@/app/components/features/Carousel/Carousel"
+
 import { getAllServices } from "@/app/lib/api/services"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
 import TestimonialHighlightSection from "@/app/(landings)/testimonials/TestimonialHighlightSection"
