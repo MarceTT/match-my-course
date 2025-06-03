@@ -27,16 +27,13 @@ import {
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
-import compressImage from "@/app/hooks/useResizeImage";
-import { deleteImageSchool } from "../../actions/school";
+import compressImage from "@/hooks/useResizeImage";
 import ConfirmDialog from "../../components/dialog-delete-image";
 import { schoolEditSchema, SchoolEditValues } from "./SchoolEditSchema";
 import FullScreenLoader from "../../components/FullScreenLoader";
-import axiosInstance from "@/app/utils/axiosInterceptor";
-import { useSchoolById } from "@/app/hooks/useSchoolById";
-import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
-import { deleteSchoolImage } from "@/app/lib/api/schools";
+import { useSchoolById } from "@/hooks/useSchoolById";
+import { useUpdateSchool } from "@/hooks/useUpdateSchool";
+import { deleteSchoolImage } from "@/lib/api/schools";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 const MAX_GALLERY_IMAGES = 15;

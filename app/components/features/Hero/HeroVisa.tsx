@@ -1,5 +1,5 @@
 import React from 'react'
-import {raleway}from "../../../ui/fonts";
+import { raleway } from '@/lib/fonts'
 
 const HeroVisa = () => {
   return (

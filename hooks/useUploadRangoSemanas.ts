@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "../utils/axiosInterceptor";
+import axiosInstance from "../app/utils/axiosInterceptor";
 
-export function useUploadCalidad() {
+export function useUploadRangoSemanas() {
   return useMutation({
     mutationFn: async (formData: FormData) => {
-      const { data } = await axiosInstance.post("/excel/upload-calidad", formData, {
+      const { data } = await axiosInstance.post("/excel/upload-week-range", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

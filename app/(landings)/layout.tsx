@@ -1,7 +1,7 @@
 import { Geist_Mono } from 'next/font/google'
-import { raleway } from '../ui/fonts'
-import Footer from '../components/common/Footer'
-import Header from '../components/common/Header'
+import { Header, Footer } from "@matchmycourse/components";
+import { raleway } from '@/lib/fonts';
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",

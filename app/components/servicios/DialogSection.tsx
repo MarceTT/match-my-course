@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import DialogMatch from "@/app/components/common/DialogMatch"
+import DialogMatch from "@/components/common/DialogMatch"
 
 export default function DialogSection() {
   const [openAsesoria, setOpenAsesoria] = useState(false)

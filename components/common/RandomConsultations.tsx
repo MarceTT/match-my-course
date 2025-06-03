@@ -4,7 +4,7 @@ import { Star, Play } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Picture from "@/public/images/placeholder_img.svg";
 import Image from "next/image";
-import { raleway } from "@/app/ui/fonts";
+import { raleway } from "@/lib/fonts";
 
 interface Consultation {
   id: string;

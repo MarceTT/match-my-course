@@ -16,7 +16,7 @@ import { fetchCalidadDetails, fetchUploadedFiles } from "../../actions/excel";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import HistorialArchivos from "../../components/historial-files-table";
-import { useUploadCalidad } from "@/app/hooks/useUploadCalidad"; // ✅ nuevo hook axios
+import { useUploadCalidad } from "@/hooks/useUploadCalidad"; // ✅ nuevo hook axios
 
 const CalidadPage = () => {
   const [file, setFile] = useState<File | null>(null);
