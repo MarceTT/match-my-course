@@ -1,12 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookingPannelProps } from "@/app/lib/types";
+import { BookingPannelProps } from "@/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
 import { Course } from "@/lib/constants/courses";
-import { useState } from "react";
 import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 

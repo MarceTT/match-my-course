@@ -1,5 +1,5 @@
-import { services } from "../lib/data/services";
-import VideoCard from "./VideoCard";
+import { services } from "../../lib/data/services";
+import { VideoCard } from "./VideoCard";
 
 export default function VideoList() {
   return (

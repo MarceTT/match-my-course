@@ -1,6 +1,6 @@
 "use server";
 
-import { SchoolDetailsResponse } from "@/app/lib/types";
+import { SchoolDetailsResponse } from "@/lib/types";
 
 export async function fetchSchoolsWithDetails() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools`, { cache: "no-store" });

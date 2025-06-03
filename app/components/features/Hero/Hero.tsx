@@ -1,11 +1,11 @@
 "use client";
 
-import { raleway } from "../../../ui/fonts";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN"; // ✅ Asegúrate de importar esta función
+import { raleway } from "@/lib/fonts";
 
 const courseLabelToIdMap: Record<string, string> = {
   "Inglés general": "ingles-general",

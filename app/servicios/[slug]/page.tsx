@@ -1,13 +1,12 @@
 import React from "react"
 import { notFound } from "next/navigation"
 import Carousel from "@/app/components/features/Carousel/Carousel"
-
-import { getAllServices } from "@/app/lib/api/services"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
 import Consultances from "@/app/components/servicios/Consultances"
 import TestimonialHighlight from "@/app/(landings)/testimonials/TestimonialHighlightSection"
-import { raleway } from "@/app/components/ui/fonts"
 import { VideoPlayer } from "@/app/components"
+import { getAllServices } from "@/lib/api/services"
+import { raleway } from "@/lib/fonts"
 
 export async function generateStaticParams() {
   const services = await getAllServices()

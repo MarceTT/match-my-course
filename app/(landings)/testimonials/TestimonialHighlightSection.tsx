@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { getAllTestimonials } from '@/app/lib/api/testimonial'
-import { Testimonial } from '@/app/lib/types'
+import { getAllTestimonials } from '@/lib/api/testimonial'
+import { Testimonial } from '@/types'
 
 const TestimonialHighlight = () => {
   const [index, setIndex] = useState(0)
