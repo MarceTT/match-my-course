@@ -1,10 +1,14 @@
 export interface Reservation {
   schoolId?: string;
-  school?: string;
+  schoolName?: string;
   course: string;
   city?: string;
   weeks: number;
   schedule: string;
-  price?: number;
+  basePrice?: number,
+  enrollmentFee?: number,
+  materialsFee?: number
+  insuranceFee?: number
+  total?: number,
   starDate?: string;
 };

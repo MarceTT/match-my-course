@@ -6,22 +6,50 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BookingPannelProps } from "@/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
-import { Course } from "@/lib/constants/courses";
+import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 
 const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
   // const [currentReservation, setCurrentReservation] = useState(reservation);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false)
   
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
   
-  console.log('BookingPannel --> reservation', reservation)
+  // console.log('BookingPannel --> reservation', reservation)
 
-  const handleSubmitContact = (data: ReservationFormData) => {
-    console.log("Datos de contacto enviados:", data);
-    // Aquí lógica adicional (fetch, etc)
+  const handleSubmitContact = async (formData: ReservationFormData) => {
+    const reservationData = {
+      ...formData,
+      totalPrice: reservation?.total,
+      city: "Dublin", //""reservation?.city",
+      course: reservation?.course,
+      weeks: reservation?.weeks,
+      schedule: reservation?.schedule,
+      schoolName: reservation?.schoolName,
+    };
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/reservation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reservationData),
+      })
+
+      const result = await res.json()
+
+      if (result.success) {
+        setSubmitted(true)
+        // reset()
+      } else {
+        alert('Hubo un error al enviar el formulario')
+      }
+    } catch (error) {
+      alert('Error al enviar el formulario')
+      console.error(error)
+    }
   };
 
   if (loading) {
@@ -54,7 +82,9 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
   return (
     <>
       {(() => {
-        switch (reservation.course) {
+        const courseKey = courseLabelToIdMap[reservation.course];
+
+        switch (courseKey) {
           case Course.GENERAL:
           case Course.INTENSIVE:
           case Course.GENERAL_PLUS:

@@ -14,7 +14,7 @@ export function buildReservationQuery(reservation: Reservation): string {
 
 export function parseReservationFromQuery(searchParams: URLSearchParams): Reservation | null {
   const schoolId = searchParams.get("schoolId");
-  const school = searchParams.get("school") ?? "";
+  const schoolName = searchParams.get("school") ?? "";
   const course = searchParams.get("curso");
   const weeks = searchParams.get("semanas");
   const schedule = searchParams.get("horario");
@@ -23,7 +23,7 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 
   return {
     schoolId,
-    school,
+    schoolName,
     course,
     weeks: parseInt(weeks, 10),
     schedule,
@@ -32,11 +32,15 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
   return {
-    course: data.curso,
-    school: data.escuela,
-    schedule: data.horario,
-    price: Number(data.precio),
-    weeks: Number(data.semanas),
+    basePrice: data.basePrice,
+    course: data.course,
+    enrollmentFee: data.enrollmentFee,
+    insuranceFee: data.insuranceFee,
+    materialsFee: data.materialsFee,
+    schedule: data.schedule,
     schoolId: data.schoolId || "",
+    schoolName: data.schoolName,
+    total: Number(data.total),
+    weeks: Number(data.weeks),
   };
 }

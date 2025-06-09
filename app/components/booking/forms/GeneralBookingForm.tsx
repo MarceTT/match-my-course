@@ -28,9 +28,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
   const [schedule, setSchedule] = useState("pm");
   const [studyDuration, setStudyDuration] = useState("");
 
-  console.log('GeneralBookingForm --> reservation: ', reservation)
-
-  const { price } = reservation;
+  const { basePrice, total } = reservation;
 
   useEffect(() => {
     if (reservation.course && isValidCourse(reservation.course)) {
@@ -41,7 +39,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <div className="text-2xl font-bold">€{price}</div>
+        <div className="text-2xl font-bold">€{basePrice}</div>
         <button className="text-gray-400 hover:text-gray-600 flex items-center">
           <span className="text-gray-400 text-xs mr-2">¿Qué incluye?</span>
           <MdInfoOutline className="w-5 h-5" />
@@ -53,7 +51,7 @@ export default function GeneralBookingForm({ reservation, onReserve }: FormProps
         <div>
           <div className="flex justify-between">
             <label className="block text-sm text-gray-600 mb-1">Curso</label>
-            <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{price}</div>
+            <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{total}</div>
           </div>
           <Select<Course>
             options={courseLabelToIdMap}

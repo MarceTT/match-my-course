@@ -27,13 +27,14 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
   const [accomodationType, setAccomodationType] = useState("");
 
   console.log('WorkAndStudyBookingForm --> reservation: ', reservation)
-
-  const { price } = reservation;
+  
+  const { basePrice, total } = reservation;
+  console.log('WorkAndStudyBookingForm --> reservation --> total: ', total)
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <div className="text-2xl font-bold">€{price}</div>
+        <div className="text-2xl font-bold">€{total}</div>
         <button className="text-gray-400 hover:text-gray-600 flex items-center">
           <span className="text-gray-400 text-xs mr-2">¿Qué incluye?</span>
           <MdInfoOutline className="w-5 h-5" />
@@ -49,7 +50,7 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
               Curso
             </label>
             <div className="text-sm text-gray-900 mb-2 align-end font-semibold">
-              €{price}
+              €{basePrice}
             </div>
           </div>
           <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">
@@ -109,22 +110,6 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
           </Select>
         </div>
 
-        {/* Examen de salida */}
-        {/* {schedule && studyDuration && startDate && (
-          <div>
-            <label className="block text-sm text-gray-600 mb-2">Examen de salida</label>
-            <Select value={examType} onValueChange={setExamType}>
-              <SelectTrigger>
-                <SelectValue placeholder="elegir" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ielts">IELTS</SelectItem>
-                <SelectItem value="cambridge">Cambridge</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        )} */}
-
         {/* Accomodation */}
         {startDate && (
           <div>
@@ -152,16 +137,6 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
                   <SelectItem value="no">No</SelectItem>
                 </SelectContent>
               </Select>
-              {/* <Select defaultValue="4">
-                <SelectTrigger>
-                  <SelectValue placeholder="semanas" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">1 semana</SelectItem>
-                  <SelectItem value="2">2 semanas</SelectItem>
-                  <SelectItem value="4">4 semanas</SelectItem>
-                </SelectContent>
-              </Select> */}
             </div>
             <p className="text-xs text-gray-500 mt-1">
               El valor semanal de un alojamiento es de €250 - €350 euros semanales y 

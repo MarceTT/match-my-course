@@ -16,7 +16,7 @@ export const courseLabelToIdMap: Record<string, Course> = {
   "Inglés general más sesiones individuales": Course.GENERAL_PLUS,
   "Inglés general intensivo": Course.INTENSIVE,
   "Inglés general orientado a negocios": Course.BUSINESS,
-  "Inglés general más trabajo (6 meses)": Course.WORK_AND_STUDY,
+  "Programa de estudios y trabajo (25 semenas)": Course.WORK_AND_STUDY,
 };
 
 export const courseToLabelMap: Record<Course, string> = Object.fromEntries(

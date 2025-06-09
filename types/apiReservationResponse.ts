@@ -1,8 +1,12 @@
 export interface ApiReservationResponse {
-  curso: string;
-  escuela: string;
-  horario: string;
-  precio: string | number;
-  semanas: string | number;
+  course: string;
+  schoolName: string;
+  schedule: string;
+  weeks: number;
+  basePrice: number;
+  enrollmentFee: number;
+  materialsFee: number;
+  insuranceFee: number;
+  total: number;
   schoolId?: string;
 }
