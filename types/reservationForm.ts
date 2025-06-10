@@ -9,6 +9,7 @@ export const reservationFormSchema = z.object({
   consent: z.boolean().refine(val => val === true, {
     message: "Debes aceptar el consentimiento",
   }),
+  country: z.string().min(1, "La ciudad es requerida"),
 });
 
 export type ReservationFormData = z.infer<typeof reservationFormSchema>;

@@ -13,10 +13,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { countries } from "@/lib/constants/countries";
 import { transformCountryFormData } from "@/lib/helpers/countryHelper";
-import { ContactFormData } from "@/app/lib/types"
-import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect"
+import { countries } from "@/lib/constants/countries"
+import { ContactFormData } from "@/lib/types"
+import { CustomCountrySelect } from "@/components/common/CustomCountrySelect"
 
 export default function ContactPage() {
   const methods = useForm<ContactFormData>();
@@ -75,7 +75,6 @@ export default function ContactPage() {
                   />
                   {errors.firstName && <p className="text-red-600 text-sm">{errors.firstName.message}</p>}
                 </div>
-
                 <div>
                   <label className="block mb-1 font-medium">Apellido</label>
                   <input
@@ -85,7 +84,6 @@ export default function ContactPage() {
                   {errors.lastName && <p className="text-red-600 text-sm">{errors.lastName.message}</p>}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block mb-1 font-medium">Correo electrónico</label>
@@ -96,7 +94,6 @@ export default function ContactPage() {
                   />
                   {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
                 </div>
-
                 <FormField
                   control={control}
                   name="nationality"
@@ -116,7 +113,6 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={control}
                   name="phone"
@@ -157,7 +153,6 @@ export default function ContactPage() {
                   )}
                 />
               </div>
-
               <div>
                 <label className="block mb-1 font-medium">Motivo de la consulta</label>
                 <input

@@ -181,7 +181,7 @@ export default function ReservationSummaryModal({
                         control={form.control}
                         name="country"
                         render={({ field }) => (
-                          <FormItem className="w-[180px]">
+                          <FormItem className="w-[150px]">
                             <FormControl>
                               <CountrySelect
                                 value={field.value}
