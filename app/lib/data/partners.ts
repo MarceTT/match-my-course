@@ -138,11 +138,6 @@ export const partners: Partner[] = [
   },
   {
     key: 'irlanda',
-    src: '/partners/17.png',
-    alt: 'Erin College',
-  },
-  {
-    key: 'irlanda',
     src: '/partners/19.png',
     alt: 'Donegal English Language School',
   },
@@ -229,17 +224,12 @@ export const partners: Partner[] = [
   {
     key: 'irlanda',
     src: '/partners/36.png',
-    alt: 'Celtic School',
+    alt: 'Celtic School of English',
   },
   {
     key: 'irlanda',
     src: '/partners/37.png',
     alt: 'Everest Language School',
-  },
-  {
-    key: 'irlanda',
-    src: '/partners/39.png',
-    alt: 'SEDA College',
   },
   {
     key: 'irlanda',
