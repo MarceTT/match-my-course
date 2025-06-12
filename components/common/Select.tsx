@@ -9,8 +9,14 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
+// Versión genérica del tipo de opción
+type SelectOption<T extends string> = {
+  label: string;
+  value: T;
+};
+
 interface SelectProps<T extends string> {
-  options: Array<{ label: string; value: T; flag?: string }> | Record<string, T>;
+  options: Array<SelectOption<T>> | Record<string, T>;
   value?: T;
   onChange: (value: T) => void;
   placeholder?: string;
@@ -24,18 +30,21 @@ export function Select<T extends string>({
 }: SelectProps<T>) {
   const [selected, setSelected] = useState<T | "">(value ?? "");
 
-  // Normalizar options a array si es un objeto Record
-  const optionsArray = useMemo(() => {
-    return Array.isArray(options)
-      ? options
-      : Object.entries(options).map(([label, val]) => ({
-          label,
-          value: val,
-        }));
+  const optionsArray: Array<SelectOption<T>> = useMemo(() => {
+    if (Array.isArray(options)) {
+      return options;
+    }
+
+    return Object.entries(options).map(([label, val]) => ({
+      label,
+      value: val,
+    }));
   }, [options]);
 
   useEffect(() => {
-    if (value) setSelected(value);
+    if (value !== undefined) {
+      setSelected(value);
+    }
   }, [value]);
 
   return (
@@ -50,9 +59,8 @@ export function Select<T extends string>({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {optionsArray.map(({ label, value, flag }) => (
+        {optionsArray.map(({ label, value }) => (
           <SelectItem key={value} value={value}>
-            {flag && <span className="mr-2">{flag}</span>}
             {label}
           </SelectItem>
         ))}
