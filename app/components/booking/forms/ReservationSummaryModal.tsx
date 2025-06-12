@@ -40,7 +40,6 @@ export default function ReservationSummaryModal({
   onSubmitContact,
 }: ReservationSummaryModalProps) {
   const [step, setStep] = useState<"summary" | "contact">("summary");
-  const [submitted, setSubmitted] = useState(false)
 
   const form = useForm<ReservationFormData>({
     resolver: zodResolver(reservationFormSchema),
@@ -72,7 +71,7 @@ export default function ReservationSummaryModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center">
             {step === "summary" ? "Detalle de tu reserva" : "Tus datos de contacto"}

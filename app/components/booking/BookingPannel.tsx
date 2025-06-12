@@ -10,45 +10,20 @@ import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 
-const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
-  // const [currentReservation, setCurrentReservation] = useState(reservation);
+const BookingPannel = ({ reservation, submitReservation, loading, error }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false)
   
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  
-  // console.log('BookingPannel --> reservation', reservation)
 
   const handleSubmitContact = async (formData: ReservationFormData) => {
-    const reservationData = {
-      ...formData,
-      totalPrice: reservation?.total,
-      city: "Dublin", //""reservation?.city",
-      course: reservation?.course,
-      weeks: reservation?.weeks,
-      schedule: reservation?.schedule,
-      schoolName: reservation?.schoolName,
-    };
+    const result = await submitReservation(formData);
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/reservation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reservationData),
-      })
-
-      const result = await res.json()
-
-      if (result.success) {
-        setSubmitted(true)
-        // reset()
-      } else {
-        alert('Hubo un error al enviar el formulario')
-      }
-    } catch (error) {
-      alert('Error al enviar el formulario')
-      console.error(error)
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      alert(result.message || "Error al enviar la reserva");
     }
   };
 
@@ -77,6 +52,12 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
         <p>No hay datos de reserva disponibles.</p>
       </Card>
     );
+  }
+
+  if (submitted) {
+    return (
+      <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
+    )
   }
 
   return (
@@ -110,7 +91,6 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
             );
         }
       })()}
-
       <ReservationSummaryModal
         open={isModalOpen}
         onClose={handleCloseModal}
