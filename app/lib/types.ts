@@ -290,3 +290,16 @@ export interface Reservation {
   schedule: string;
   price: number;
 };
+
+export type ContactFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  reason: string;
+  details: string;
+  acceptTerms: boolean;
+  acceptPolicy: boolean;
+  nationality: string;
+  country: string;
+};
