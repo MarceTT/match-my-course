@@ -9,36 +9,38 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-// Versión genérica del tipo de opción
-type SelectOption<T extends string> = {
+type SelectOption<T extends string, Extra = unknown> = {
   label: string;
   value: T;
-};
+} & Extra;
 
-interface SelectProps<T extends string> {
-  options: Array<SelectOption<T>> | Record<string, T>;
+interface SelectProps<T extends string, Extra = unknown> {
+  options: Array<SelectOption<T, Extra>> | Record<string, T>;
   value?: T;
   onChange: (value: T) => void;
   placeholder?: string;
+  renderOption?: (option: SelectOption<T, Extra>) => React.ReactNode;
+  formatSelectedValue?: (value: T) => React.ReactNode;
 }
 
-export function Select<T extends string>({
+export function Select<T extends string, Extra = unknown>({
   options,
   value,
   onChange,
   placeholder = "Seleccionar opción",
-}: SelectProps<T>) {
+  renderOption,
+  formatSelectedValue,
+}: SelectProps<T, Extra>) {
   const [selected, setSelected] = useState<T | "">(value ?? "");
 
-  const optionsArray: Array<SelectOption<T>> = useMemo(() => {
+  const optionsArray: Array<SelectOption<T, Extra>> = useMemo(() => {
     if (Array.isArray(options)) {
       return options;
     }
-
     return Object.entries(options).map(([label, val]) => ({
       label,
-      value: val,
-    }));
+      value: val as T,
+    })) as Array<SelectOption<T, Extra>>;
   }, [options]);
 
   useEffect(() => {
@@ -56,12 +58,16 @@ export function Select<T extends string>({
       }}
     >
       <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}>
+          {formatSelectedValue
+            ? formatSelectedValue(selected as T)
+            : optionsArray.find((opt) => opt.value === selected)?.label}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        {optionsArray.map(({ label, value }) => (
-          <SelectItem key={value} value={value}>
-            {label}
+        {optionsArray.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {renderOption ? renderOption(option) : option.label}
           </SelectItem>
         ))}
       </SelectContent>

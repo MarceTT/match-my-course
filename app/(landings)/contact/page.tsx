@@ -16,6 +16,7 @@ import {
 
 import { CountrySelect } from "@/components/common/CountrySelect"
 import { countries } from "@/lib/constants/countries"
+import { transformCountryFormData } from "@/lib/helpers/countryHelper"
 
 export type ContactFormData = {
   firstName: string;
@@ -43,15 +44,17 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
 
   const onSubmit = async (formData: ContactFormData) => {
+    const transformedData = transformCountryFormData(formData, countries);
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(transformedData),
       })
 
       const result = await res.json()
-      console.log('result', result)
+
       if (result.success) {
         setSubmitted(true)
         reset()
@@ -147,6 +150,7 @@ export default function ContactPage() {
                                   value={field.value}
                                   onChange={field.onChange}
                                   placeholder="+56"
+                                  showNameInSelectedValue={false}
                                 />
                               </FormControl>
                             </FormItem>
@@ -165,43 +169,6 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-
-                {/* <FormField
-                  control={control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-base font-normal">
-                        Teléfono
-                      </FormLabel>
-                      <div className="flex gap-2">
-                        <FormField
-                          control={control}
-                          name="country"
-                          render={({ field }) => (
-                            <FormItem className="w-[140px]">
-                              <FormControl>
-                                <CountrySelect
-                                  value={countries.find((c) => c.value === field.value) || undefined}
-                                  onChange={(selected) => field.onChange(selected?.value)}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        <FormControl>
-                          <Input
-                            type="tel"
-                            placeholder="9898045991"
-                            className="h-10 border-gray-300 flex-1"
-                            {...field}
-                          />
-                        </FormControl>
-                      </div>
-                      <FormMessage className="font-semibold" />
-                    </FormItem>
-                  )}
-                /> */}
               </div>
 
               <div>
