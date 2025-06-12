@@ -277,15 +277,6 @@ export interface Partner {
   alt: string;
 }
 
-export interface Service {
-  id: string;
-  rating: number;
-  slug: string;
-  embed: string;
-  thumbnail: string;
-  title: string;
-}
-
 export type BookingPannelProps = {
   data: Reservation | null;
   error: string;
