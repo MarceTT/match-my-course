@@ -1,10 +1,21 @@
 "use client"
 
-import { Controller, useForm } from "react-hook-form"
+import { Controller, FormProvider, useForm } from "react-hook-form"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input";
 import Image from "next/image"
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import CountrySelect from "@/app/components/common/CountrySelect"
+import { Select } from "@/components/common/Select"
+import { countries } from "@/lib/constants/coutries"
 
 export type ContactFormData = {
   firstName: string;
@@ -15,16 +26,19 @@ export type ContactFormData = {
   details: string;
   acceptTerms: boolean;
   acceptPolicy: boolean;
+  nationality: string;
+  country: string;
 };
 
 export default function ContactPage() {
+  const methods = useForm<ContactFormData>();
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ContactFormData>()
+  } = methods;
 
   const [submitted, setSubmitted] = useState(false)
 
@@ -59,126 +73,175 @@ export default function ContactPage() {
         {submitted ? (
           <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg border-2">
-            <h3 className="font-bold mb-6 text-center">Escríbenos y te responderemos en un plazo de 48 horas</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block mb-1 font-medium">Nombre</label>
-                <input
-                  {...register("firstName", { required: "Este campo es requerido" })}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg border-2">
+              <h3 className="font-bold mb-6 text-center">Escríbenos y te responderemos en un plazo de 48 horas</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-1 font-medium">Nombre</label>
+                  <input
+                    {...register("firstName", { required: "Este campo es requerido" })}
+                    className="w-full border border-gray-300 rounded px-3 py-2"
+                  />
+                  {errors.firstName && <p className="text-red-600 text-sm">{errors.firstName.message}</p>}
+                </div>
+
+                <div>
+                  <label className="block mb-1 font-medium">Apellido</label>
+                  <input
+                    {...register("lastName", { required: "Este campo es requerido" })}
+                    className="w-full border border-gray-300 rounded px-3 py-2"
+                  />
+                  {errors.lastName && <p className="text-red-600 text-sm">{errors.lastName.message}</p>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-1 font-medium">Correo electrónico</label>
+                  <input
+                    type="email"
+                    {...register("email", { required: "Este campo es requerido" })}
+                    className="w-full border border-gray-300 rounded px-3 py-2"
+                  />
+                  {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
+                </div>
+
+                <FormField
+                  control={control}
+                  name="nationality"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nacionalidad</FormLabel>
+                      <FormControl>
+                        <Select
+                          options={countries}
+                          value={field.value}
+                          onChange={field.onChange}
+                          // placeholder="Nacionalidad..."
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.firstName && <p className="text-red-600 text-sm">{errors.firstName.message}</p>}
+
+                <FormField
+                  control={control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-base font-normal">
+                        Teléfono
+                      </FormLabel>
+                      <div className="flex gap-2">
+                        <FormField
+                          control={control}
+                          name="country"
+                          render={({ field }) => (
+                            <FormItem className="w-[140px]">
+                              <FormControl>
+                                <CountrySelect
+                                  value={field.value}
+                                  onChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <FormControl>
+                          <Input
+                            type="tel"
+                            placeholder="9898045991"
+                            className="h-10 border-gray-300 flex-1"
+                            {...field}
+                          />
+                        </FormControl>
+                      </div>
+                      <FormMessage className="font-semibold" />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div>
-                <label className="block mb-1 font-medium">Apellido</label>
+                <label className="block mb-1 font-medium">Motivo de la consulta</label>
                 <input
-                  {...register("lastName", { required: "Este campo es requerido" })}
+                  {...register("reason", { required: "Este campo es requerido" })}
                   className="w-full border border-gray-300 rounded px-3 py-2"
                 />
-                {errors.lastName && <p className="text-red-600 text-sm">{errors.lastName.message}</p>}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block mb-1 font-medium">Correo electrónico</label>
-                <input
-                  type="email"
-                  {...register("email", { required: "Este campo es requerido" })}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-                {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
+                {errors.reason && <p className="text-red-600 text-sm">{errors.reason.message}</p>}
               </div>
 
               <div>
-                <label className="block mb-1 font-medium">Número de teléfono</label>
-                <input
-                  {...register("phone", { required: "Este campo es requerido" })}
+                <label className="block mb-1 font-medium">Cuéntanos un poco más</label>
+                <textarea
+                  {...register("details", { required: "Este campo es requerido" })}
                   className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-                {errors.phone && <p className="text-red-600 text-sm">{errors.phone.message}</p>}
+                  rows={4}
+                ></textarea>
+                {errors.details && <p className="text-red-600 text-sm">{errors.details.message}</p>}
               </div>
-            </div>
 
-            <div>
-              <label className="block mb-1 font-medium">Motivo de la consulta</label>
-              <input
-                {...register("reason", { required: "Este campo es requerido" })}
-                className="w-full border border-gray-300 rounded px-3 py-2"
+              <Controller
+                name="acceptTerms"
+                control={control}
+                rules={{ required: "Debes aceptar los términos y condiciones" }}
+                render={({ field }) => (
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="terms"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <label htmlFor="terms" className="text-sm">
+                      Acepto los términos y condiciones.
+                    </label>
+                  </div>
+                )}
               />
-              {errors.reason && <p className="text-red-600 text-sm">{errors.reason.message}</p>}
-            </div>
 
-            <div>
-              <label className="block mb-1 font-medium">Cuéntanos un poco más</label>
-              <textarea
-                {...register("details", { required: "Este campo es requerido" })}
-                className="w-full border border-gray-300 rounded px-3 py-2"
-                rows={4}
-              ></textarea>
-              {errors.details && <p className="text-red-600 text-sm">{errors.details.message}</p>}
-            </div>
-
-            <Controller
-              name="acceptTerms"
-              control={control}
-              rules={{ required: "Debes aceptar los términos y condiciones" }}
-              render={({ field }) => (
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="terms"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                  <label htmlFor="terms" className="text-sm">
-                    Acepto los términos y condiciones.
-                  </label>
-                </div>
+              {errors.acceptTerms && (
+                <p className="text-red-600 text-sm">
+                  {errors.acceptTerms.message}
+                </p>
               )}
-            />
 
-            {errors.acceptTerms && (
-              <p className="text-red-600 text-sm">
-                {errors.acceptTerms.message}
-              </p>
-            )}
+              <Controller
+                name="acceptPolicy"
+                control={control}
+                rules={{ required: "Debes aceptar la política de consentimiento" }}
+                render={({ field }) => (
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="policy"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <label htmlFor="policy" className="text-sm">
+                      Doy mi consentimiento para el tratamiento de mis datos personales de acuerdo con la Política de Privacidad.
+                    </label>
+                  </div>
+                )}
+              />
 
-            <Controller
-              name="acceptPolicy"
-              control={control}
-              rules={{ required: "Debes aceptar la política de consentimiento" }}
-              render={({ field }) => (
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="policy"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                  <label htmlFor="policy" className="text-sm">
-                    Doy mi consentimiento para el tratamiento de mis datos personales de acuerdo con la Política de Privacidad.
-                  </label>
-                </div>
+              {errors.acceptPolicy && (
+                <p className="text-red-600 text-sm">
+                  {errors.acceptPolicy.message}
+                </p>
               )}
-            />
 
-            {errors.acceptPolicy && (
-              <p className="text-red-600 text-sm">
-                {errors.acceptPolicy.message}
-              </p>
-            )}
-
-            <div className="flex justify-center">
-              <Button
-                type="submit"
-                className="mt-2 w-full bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold"
-                size="lg"
-              >
-                Enviar
-              </Button>
-            </div>
-          </form>
+              <div className="flex justify-center">
+                <Button
+                  type="submit"
+                  className="mt-2 w-full bg-[#5371FF] hover:bg-[#4257FF] text-white text-base font-semibold"
+                  size="lg"
+                >
+                  Enviar
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
         )}
       </div>
         
