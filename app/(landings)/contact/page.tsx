@@ -13,11 +13,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-import { CountrySelect } from "@/components/common/CountrySelect";
 import { countries } from "@/lib/constants/countries";
 import { transformCountryFormData } from "@/lib/helpers/countryHelper";
 import { ContactFormData } from "@/app/lib/types"
+import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect"
 
 export default function ContactPage() {
   const methods = useForm<ContactFormData>();
@@ -105,7 +104,7 @@ export default function ContactPage() {
                     <FormItem>
                       <FormLabel>Nacionalidad</FormLabel>
                       <FormControl>
-                        <CountrySelect
+                        <CustomCountrySelect
                           options={countries}
                           value={field.value}
                           onChange={field.onChange}
@@ -133,7 +132,7 @@ export default function ContactPage() {
                           render={({ field }) => (
                             <FormItem className="w-[140px]">
                               <FormControl>
-                                <CountrySelect
+                                <CustomCountrySelect
                                   options={countries}
                                   value={field.value}
                                   onChange={field.onChange}
