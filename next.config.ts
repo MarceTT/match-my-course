@@ -23,8 +23,12 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'd2wv8pxed72bi5.cloudfront.net',
+        pathname: '/**',
+      },
     ],
-    domains: ['match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com', 'd2wv8pxed72bi5.cloudfront.net'],
   },
   async rewrites() {
     return [

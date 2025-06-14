@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Reservation } from "@/app/lib/types";
+import { Reservation } from "@/types";
+// import { Reservation } from "@/app/lib/types";
 
 export function useReservation({ schoolId, course, weeks, schedule}: {
   schoolId: string;
