@@ -63,6 +63,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
       options={countries}
       value={value}
       onChange={onChange}
+      placeholder="+56"
       styles={customStyles}
       getOptionLabel={(country) => `${country.flag} ${country.label} (${country.code})`}
       formatOptionLabel={(country) => (
