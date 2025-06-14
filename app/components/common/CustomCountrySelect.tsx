@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Select } from "./Select";
+import { Select } from "../../../components/common/Select";
 
 /**
  * Representa un país con información para mostrar en el selector.
@@ -61,7 +61,7 @@ interface CountrySelectProps {
 /**
  * Componente Select específico para países, que permite mostrar bandera, nombre y código telefónico.
  */
-export function CountrySelect({
+export function CustomCountrySelect({
   options,
   value,
   onChange,
