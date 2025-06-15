@@ -212,9 +212,9 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       schedule
     };
 
+    const query = buildReservationQuery(reservation);  
     prefetchSchool(`${school._id}`);
-    const query = buildReservationQuery(reservation);
-    router.push(`/school-detail/${reservation.schoolId}?${query}`)
+    setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
   };
 
   useEffect(() => {

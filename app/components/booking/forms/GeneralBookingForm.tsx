@@ -10,12 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
-import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import { isValidCourse } from "@/lib/helpers/courseHelper";
-import { Select } from "@matchmycourse/components";
+import { Select } from "@/components/common/Select";
+import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 
 interface FormProps {
   reservation: Reservation;

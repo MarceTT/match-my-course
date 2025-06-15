@@ -22,9 +22,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReservationFormData, reservationFormSchema } from "@/types/reservationForm";
 import { Reservation } from "@/types";
-import CountrySelect from "@/components/common/CountrySelect";
-import { Select } from "@matchmycourse/components";
 import { countries } from "@/lib/constants/countries";
+import { CustomCountrySelect } from "@/components/common/CustomCountrySelect";
 
 interface ReservationSummaryModalProps {
   open: boolean;
@@ -153,11 +152,12 @@ export default function ReservationSummaryModal({
                     <FormItem>
                       <FormLabel>Nacionalidad</FormLabel>
                       <FormControl>
-                        <Select
+                        <CustomCountrySelect
                           options={countries}
                           value={field.value}
                           onChange={field.onChange}
-                          placeholder="Nacionalidad..."
+                          placeholder="Selecciona tu país"
+                          showCode={false}
                         />
                       </FormControl>
                       <FormMessage />
@@ -182,9 +182,12 @@ export default function ReservationSummaryModal({
                         render={({ field }) => (
                           <FormItem className="w-[150px]">
                             <FormControl>
-                              <CountrySelect
+                              <CustomCountrySelect
+                                options={countries}
                                 value={field.value}
                                 onChange={field.onChange}
+                                placeholder="+56"
+                                showNameInSelectedValue={false}
                               />
                             </FormControl>
                           </FormItem>
