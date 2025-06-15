@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { IoStarSharp } from "react-icons/io5";
 import Picture from "../../../public/images/placeholder_img.svg";
-import { raleway } from "@/app/ui/fonts";
+import { raleway } from '@/lib/fonts';
 
 interface Testimonial {
     id: number

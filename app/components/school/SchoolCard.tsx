@@ -5,10 +5,10 @@ import { Star, BadgePercent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import useMediaQuery from "@/app/hooks/useMediaQuery";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
 

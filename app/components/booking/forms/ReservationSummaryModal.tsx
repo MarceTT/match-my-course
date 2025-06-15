@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReservationFormData, reservationFormSchema } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { countries } from "@/lib/constants/countries";
-import { CustomCountrySelect } from "../../common/CustomCountrySelect";
+import { CustomCountrySelect } from "@/components/common/CustomCountrySelect";
 
 interface ReservationSummaryModalProps {
   open: boolean;

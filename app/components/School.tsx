@@ -1,9 +1,9 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
-import { nunito } from "../ui/fonts";
 import Link from "next/link";
-import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
+import { usePrefetchSchoolDetails } from "@/hooks/usePrefetchSchoolDetails";
+import { nunito } from "@/lib/fonts";
 
 interface SchoolCardProps {
   _id: string;
@@ -16,15 +16,7 @@ interface SchoolCardProps {
   lowestPrice?: number;
 }
 
-const School = ({
-  _id,
-  name,
-  image,
-  location,
-  rating,
-  priority,
-  lowestPrice,
-}: SchoolCardProps) => {
+export function School({ _id, name, image, location, rating, priority, lowestPrice }: SchoolCardProps) {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);
 
@@ -88,5 +80,3 @@ const School = ({
     </div>
   );
 };
-
-export default School;

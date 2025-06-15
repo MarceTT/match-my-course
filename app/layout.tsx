@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { raleway } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
+import "./globals.css";
+import { raleway } from "@/lib/fonts";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",

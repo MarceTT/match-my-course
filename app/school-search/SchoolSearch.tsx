@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Footer from "../components/common/Footer";
 import Filter from "../components/features/Filter/Filter";
-import Header from "../components/common/Header";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
 import filtersConfig from "@/app/utils/filterConfig";
-import { useDebounce } from "@/app/hooks/useDebounce";
+import { useDebounce } from "@/hooks/useDebounce";
 import InfiniteSchoolFiltered from "../components/school/InfiniteSchoolFiltered";
+import { Header, Footer } from "@matchmycourse/components/layout";
 
 const normalizeCourse = (course: string) => {
   return course
@@ -71,9 +69,6 @@ const SchoolSearch = () => {
 
     router.replace(`/school-search?${params.toString()}`);
   }, [debouncedFilters, router]);
-
-  const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
-  const schools = Array.isArray(schoolsData) ? schoolsData : [];
 
   return (
     <div className="min-h-screen bg-gray-50 relative">

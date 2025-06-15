@@ -47,7 +47,6 @@ interface HistorialArchivosProps {
 }
 
 const HistorialArchivos = ({ files }: HistorialArchivosProps) => {
-  const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: fileDetails, isLoading, error } = useQuery({

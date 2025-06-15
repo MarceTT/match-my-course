@@ -20,7 +20,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@matchmycourse/components/*": ["components/*"],
+      "@matchmycourse/common": ["components/common/index.ts"],
+      "@matchmycourse/common/*": ["components/common/*"],
+      "@matchmycourse/layout": ["components/layout/index.ts"],
+      "@matchmycourse/layout/*": ["components/layout/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts","types/next-env.d.ts"],

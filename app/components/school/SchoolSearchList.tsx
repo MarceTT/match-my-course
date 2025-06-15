@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Grid, List, BadgePercent, ArrowUp } from "lucide-react";
 import { FaStar } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
-import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
+import { usePrefetchSchoolDetails } from "@/hooks/usePrefetchSchoolDetails";
 import { useInView } from "react-intersection-observer";
-import useMediaQuery from "@/app/hooks/useMediaQuery";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {Skeleton} from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Reservation } from "@/types";
 import { buildReservationQuery } from "@/lib/reservation";
@@ -182,38 +182,40 @@ interface SchoolCardProps {
   school: SchoolDetails;
   viewType: "grid" | "list";
 }
+
 function SchoolCard({ school, viewType }: SchoolCardProps) {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const prefetchSchool = usePrefetchSchoolDetails();
+  
   const rating = Number(school.qualities?.ponderado ?? 0);
   const antiguedad = school.description?.añoFundacion
     ? new Date().getFullYear() - school.description.añoFundacion
     : null;
-
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
   const priceOptions = (school.prices || []).filter(
     (p) => typeof p.precio === "number" && p.precio > 0
   );
-
   const selected = priceOptions[selectedOptionIndex] ?? null;
   const hasDiscount = selected?.oferta && selected.oferta < selected.precio;
-
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const handleShowSchool = () => {
-      const reservation: Reservation = {
-        schoolId: school._id.toString(),
-        course: searchParams.get("course")?.toString() ?? "",
-        weeks: 25, // TODO: WIP
-        schedule: "AM", // TODO: WIP
-      };
-      
-      const query = buildReservationQuery(reservation);  
-      prefetchSchool(`${school._id}`);
-      setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
-    }
+  const handleShowSchool = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const schedule = selectedOptionIndex === 0 ? "AM" : "PM";
+
+    const reservation: Reservation = {
+      schoolId: school._id.toString(),
+      course: searchParams.get("course")?.toString() ?? "",
+      weeks: 25, // TODO: WIP
+      schedule
+    };
+
+    const query = buildReservationQuery(reservation);  
+    prefetchSchool(`${school._id}`);
+    setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
+  };
 
   useEffect(() => {
     setSelectedOptionIndex(0);
@@ -379,11 +381,8 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
               )}
             </div>
             <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleShowSchool();
-              }}
               className="w-full sm:w-auto bg-[#5371FF] hover:bg-[#FCCC02] hover:text-[#5371FF] text-white text-sm font-semibold rounded-md px-4 py-2 transition"
+              onClick={handleShowSchool}
             >
               Ver escuela
             </Button>

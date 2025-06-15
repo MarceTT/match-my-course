@@ -3,16 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { PiUserCircleFill } from "react-icons/pi";
 import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import Logo from "@/public/logos/final-logo.png";
-import useMediaQuery from "@/app/hooks/useMediaQuery";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
-
-const Header = () => {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [open, setOpen] = useState(false)
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
@@ -141,5 +138,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;

@@ -1,7 +1,6 @@
 // lib/helpers/courseHelpers.ts
 
-import { Course } from "../constants/courses";
-import { courseMetadataMap } from "../constants/courses";
+import { Course, courseMetadataMap } from "../constants/courses";
 
 export function getCourseMetadata(course: Course) {
   return courseMetadataMap[course] ?? null;
