@@ -10,7 +10,7 @@ import { useInView } from "react-intersection-observer";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import {Skeleton} from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
+import { Reservation } from "@/types";
+import { buildReservationQuery } from "@/lib/reservation";
 
 const SkeletonSchoolCard = () => {
   return (
@@ -181,6 +183,7 @@ interface SchoolCardProps {
   viewType: "grid" | "list";
 }
 function SchoolCard({ school, viewType }: SchoolCardProps) {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const prefetchSchool = usePrefetchSchoolDetails();
   const rating = Number(school.qualities?.ponderado ?? 0);
@@ -200,9 +203,17 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleShowSchool = () => {
-    prefetchSchool(`${school._id}`);
-    setTimeout(() => router.push(`school-detail/${school._id}`), 50);
-  };
+      const reservation: Reservation = {
+        schoolId: school._id.toString(),
+        course: searchParams.get("course")?.toString() ?? "",
+        weeks: 25, // TODO: WIP
+        schedule: "AM", // TODO: WIP
+      };
+      
+      const query = buildReservationQuery(reservation);  
+      prefetchSchool(`${school._id}`);
+      setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
+    }
 
   useEffect(() => {
     setSelectedOptionIndex(0);

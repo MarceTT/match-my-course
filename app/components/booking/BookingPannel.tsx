@@ -1,37 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookingPannelProps } from "@/app/lib/types";
+import { BookingPannelProps } from "@/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
+import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
+import ReservationSummaryModal from "./forms/ReservationSummaryModal";
+import { ReservationFormData } from "@/types/reservationForm";
 
-const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
-  // const [courseType, setCourseType] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [duration, setDuration] = useState("");
+const BookingPannel = ({ reservation, submitReservation, loading, error }: BookingPannelProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false)
+  
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-  // "Inglés general": "ingles-general",
-  // "Inglés general más sesiones individuales": "ingles-general-mas-sesiones-individuales",
-  // "Inglés general intensivo": "ingles-general-intensivo",
-  // "Inglés general orientado a negocios": "ingles-general-orientado-a-negocios",
-  // "Inglés general más trabajo (6 meses)": "ingles-visa-de-trabajo",
+  const handleSubmitContact = async (formData: ReservationFormData) => {
+    const result = await submitReservation(formData);
 
-  // const reservationMock = {
-  //   // "course": "ingles-general",
-  //   // "course": "ingles-general-intensivo",
-  //   "course": "ingles-general-mas-sesiones-individuales",
-  //   // "course": "ingles-general-orientado-a-negocios",
-  //   // "course": "ingles-general-orientado-a-negocios",
-  //   // "course": "ingles-visa-de-trabajo",
-  //   "school": "Centre of English Studies (CES)",
-  //   "schedule": "AM",
-  //   "price": 4150,
-  //   "weeks": 25
-  // }
-
-  console.log('BookingPannel --> reservation', reservation)
-  // console.log('BookingPannel --> reservationMock', reservationMock)
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      alert(result.message || "Error al enviar la reserva");
+    }
+  };
 
   if (loading) {
     return (
@@ -52,7 +46,6 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
     );
   }
 
-  // if (!reservationMock) {
   if (!reservation) {
     return (
       <Card className="p-4">
@@ -61,16 +54,51 @@ const BookingPannel = ({ reservation, loading, error }: BookingPannelProps) => {
     );
   }
 
-  switch (reservation.course) {
-    // case "ingles-general":
-    // case "ingles-general-intensivo":
-    // case "ingles-general-mas-sesiones-individuales":
-    //   return <GeneralBookingForm reservation={reservation} />;
-    case "ingles-general-mas-trabajo":
-      return <WorkAndStudyBookingForm reservation={reservation} />;
-    default:
-      return <GeneralBookingForm reservation={reservation} />;
+  if (submitted) {
+    return (
+      <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
+    )
   }
+
+  return (
+    <>
+      {(() => {
+        const courseKey = courseLabelToIdMap[reservation.course];
+
+        switch (courseKey) {
+          case Course.GENERAL:
+          case Course.INTENSIVE:
+          case Course.GENERAL_PLUS:
+            return (
+              <GeneralBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+          case Course.WORK_AND_STUDY:
+            return (
+              <WorkAndStudyBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+          default:
+            return (
+              <GeneralBookingForm
+                reservation={reservation}
+                onReserve={handleOpenModal}
+              />
+            );
+        }
+      })()}
+      <ReservationSummaryModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        reservation={reservation}
+        onSubmitContact={handleSubmitContact}
+      />
+    </>
+  );
 }
 
 export default BookingPannel;
