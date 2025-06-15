@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { SchoolAccommodation, AccomodationDetail } from '../../../lib/types';
+import { SchoolAccommodation, AccomodationDetail } from '../../lib/types';
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 interface AccommodationProps {

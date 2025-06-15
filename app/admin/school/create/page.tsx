@@ -26,7 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { schoolFormSchema, SchoolFormValues } from "./SchoolSchema";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import compressImage from "@/hooks/useResizeImage";
+import compressImage from "@/app/hooks/useResizeImage";
 
 const CreateSchoolPage = () => {
   const router = useRouter();

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
-import { raleway } from "@/lib/fonts";
 import "../globals.css";
+import { raleway } from "../ui/fonts";
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",

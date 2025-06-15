@@ -20,7 +20,7 @@ import {
 import { Clock, CalendarClock, Timer, MapPin, DollarSign, GraduationCap } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { SchoolDetails } from "@/lib/types";
+import { SchoolDetails } from "@/app/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 

@@ -12,7 +12,7 @@ function getYouTubeVideoId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-export function VideoCard({ service }: { service: Service }) {
+export default function VideoCard({ service }: { service: Service }) {
   const videoId = getYouTubeVideoId(service.thumbnail);
   const [imageError, setImageError] = useState(false);
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "/placeholder.svg";
