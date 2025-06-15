@@ -262,7 +262,7 @@ declare module "next-auth" {
 }
 
 export type BookingPannelProps = {
-  data: Reservation | null;
+  reservation: Reservation | null;
   error: string;
   loading: boolean;
 };

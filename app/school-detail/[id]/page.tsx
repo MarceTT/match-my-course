@@ -3,9 +3,8 @@
 import React from "react";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
-import { notFound, useParams } from "next/navigation";
+import { notFound, useParams, useSearchParams } from "next/navigation";
 import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
-import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import Image from "next/image";
 import { raleway } from "@/app/ui/fonts";
 import { ArrowUp, Star } from "lucide-react";
@@ -15,42 +14,37 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import dynamic from "next/dynamic";
+import { useReservation } from "@/hooks/useReservation";
 
-const SchoolDetail = dynamic(
-  () => import("../../components/school/SchoolDetail"),
-  { ssr: false }
-);
-const BookingPannel = dynamic(
-  () => import("../../components/common/BookingPannel"),
-  { ssr: false }
-);
-const Certifications = dynamic(
-  () => import("../../components/school/Certifications"),
-  { ssr: false }
-);
-const Facilities = dynamic(() => import("../../components/school/Facilities"), {
-  ssr: false,
-});
-const SchoolInclusion = dynamic(
-  () => import("../../components/school/SchoolInclusion"),
-  { ssr: false }
-);
-const Accommodation = dynamic(
-  () => import("../../components/school/Accommodation"),
-  { ssr: false }
-);
-const Location = dynamic(() => import("../../components/school/Location"), {
-  ssr: false,
-});
-const SchoolStat = dynamic(() => import("@/app/components/school/SchoolStat"), {
-  ssr: false,
-});
+const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
+const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel"), { ssr: false });
+const Certifications = dynamic(() => import("../../components/school/Certifications"), { ssr: false });
+const Facilities = dynamic(() => import("../../components/school/Facilities"), { ssr: false });
+const SchoolInclusion = dynamic(() => import("../../components/school/SchoolInclusion"), { ssr: false });
+const Accommodation = dynamic(() => import("../../components/school/Accommodation"), { ssr: false });
+const Location = dynamic(() => import("../../components/school/Location"), { ssr: false });
+const SchoolStat = dynamic(() => import("@/app/components/school/SchoolStat"), { ssr: false });
 
 const SchoolHome = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError } = useSchoolDetails(id);
-
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
+  const searchParams = useSearchParams();
+
+  const course = searchParams.get("curso");
+  const weeks = searchParams.get("semanas");
+  const schedule = searchParams.get("horario");
+
+  const {
+    reservation,
+    loading: isBookingLoading,
+    error: hasBookingError
+  } = useReservation({
+    schoolId: id,
+    course,
+    weeks,
+    schedule
+  });
 
   if (isLoading) {
     return (
@@ -228,11 +222,14 @@ const SchoolHome = () => {
           </div>
 
           <div className="lg:col-span-1">
-            <BookingPannel />
+            <BookingPannel
+              reservation={reservation}
+              loading={isBookingLoading}
+              error={hasBookingError}
+            />
           </div>
         </div>
       </div>
-      {/* Botón flotante "Volver arriba" */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
@@ -242,7 +239,7 @@ const SchoolHome = () => {
           <ArrowUp className="h-5 w-5" />
         </button>
       )}
-      <Footer />
+      <Footer />    
     </div>
   );
 };
