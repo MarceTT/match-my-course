@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Select } from "../../../components/common/Select";
+import { Select } from "./Select";
 
 /**
  * Representa un país con información para mostrar en el selector.

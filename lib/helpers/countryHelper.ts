@@ -1,5 +1,5 @@
 
-import { ContactFormData } from "@/app/lib/types";
+import { ContactFormData } from "@/lib/types";
 import { Country } from "../constants/countries";
 
 export function transformCountryFormData(contactFormData: ContactFormData, countries: Country[]) {

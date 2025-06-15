@@ -4,8 +4,7 @@ import Hero from "./components/features/Hero/Hero";
 import dynamic from "next/dynamic";
 import SuspenseLoader from "./admin/components/SuspenseLoader";
 import { Suspense } from "react";
-// import { Footer, Header } from "@/components";
-import { Header, Footer } from "@matchmycourse/components";
+import { Footer, Header } from "@matchmycourse/components/layout";
 
 const SchoolPage = dynamic(() => import("./school/page"), { ssr: false });
 

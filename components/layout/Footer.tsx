@@ -10,7 +10,7 @@ import Logo from "@/public/logos/final-logo.png";
 // import { useAnimation } from "framer-motion";
 // import { useState, useEffect } from "react";
 
-export function Footer() {
+export default function Header() {
   // const [isHovered, setIsHovered] = useState(false);
   // const controls = useAnimation();
 

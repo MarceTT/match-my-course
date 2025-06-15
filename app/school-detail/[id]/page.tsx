@@ -7,13 +7,13 @@ import { notFound, useParams, useSearchParams } from "next/navigation";
 import { ArrowUp, Star } from "lucide-react";
 import { FaWalking } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Footer, Header } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSchoolDetails } from "@/hooks/useSchoolDetails";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import { useReservation } from "@/hooks/useReservation";
 import { raleway } from "@/lib/fonts";
+import { Footer, Header } from "@matchmycourse/layout";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
 const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel"), { ssr: false });

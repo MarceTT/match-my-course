@@ -1,5 +1,5 @@
 import { Geist_Mono } from 'next/font/google'
-import { Header, Footer } from "@matchmycourse/components";
+import { Footer, Header } from "@matchmycourse/components/layout";
 import { raleway } from '@/lib/fonts';
 
 

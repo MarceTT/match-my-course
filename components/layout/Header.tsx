@@ -8,7 +8,7 @@ import { IoMdClose } from "react-icons/io";
 import Logo from "@/public/logos/final-logo.png";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
-export function Header() {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
