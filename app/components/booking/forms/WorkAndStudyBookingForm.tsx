@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/select";
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
+import { DatePicker } from "@/components/common/DatePicker";
+import { isDateDisabled } from "@/lib/helpers/calendar";
+import { irishHolidays } from "@/lib/constants/holidays";
 
 interface FormProps {
   reservation: Reservation;
@@ -26,10 +29,10 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
   // const [examType, setExamType] = useState("");
   const [accomodationType, setAccomodationType] = useState("");
 
-  console.log('WorkAndStudyBookingForm --> reservation: ', reservation)
+  // console.log('WorkAndStudyBookingForm --> reservation: ', reservation)
   
   const { basePrice, total } = reservation;
-  console.log('WorkAndStudyBookingForm --> reservation --> total: ', total)
+  // console.log('WorkAndStudyBookingForm --> reservation --> total: ', total)
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -93,21 +96,13 @@ export default function WorkAndStudyBookingForm({ reservation, onReserve }: Form
         </div>
 
         {/* Course start */}
-        <div>
+        <div className="w-full">
           <label className="block text-sm text-gray-600 mb-2">
             Inicio de clases
           </label>
-          <Select value={startDate} onValueChange={setStartDate}>
-            <SelectTrigger>
-              <SelectValue placeholder="elegir" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">Martes 3 de Junio</SelectItem>
-              <SelectItem value="1">Lunes 9 de Junio</SelectItem>
-              <SelectItem value="2">Lunes 16 de Junio</SelectItem>
-              <SelectItem value="3">Lunes 23 de Junio</SelectItem>
-            </SelectContent>
-          </Select>
+          <DatePicker
+            disabled={(date) => isDateDisabled(date, irishHolidays)}
+          />
         </div>
 
         {/* Accomodation */}
