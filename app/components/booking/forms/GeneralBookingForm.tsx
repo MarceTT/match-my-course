@@ -1,10 +1,10 @@
 // components/booking/forms/GeneralBookingForm.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
+  Select as BaseSelect,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -12,26 +12,33 @@ import {
 } from "@/components/ui/select";
 import { MdInfoOutline } from "react-icons/md";
 import { Reservation } from "@/types";
+import { isValidCourse } from "@/lib/helpers/courseHelper";
+import { Select } from "@/components/common/Select";
+import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 
-type Props = {
+interface FormProps {
   reservation: Reservation;
-};
+  onReserve: () => void;
+}
 
-export default function GeneralBookingForm({ reservation }: Props) {
-  const [courseType, setCourseType] = useState("general");
+export default function GeneralBookingForm({ reservation, onReserve }: FormProps) {
+  const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   const [startDate, setStartDate] = useState("");
   const [schedule, setSchedule] = useState("pm");
   const [studyDuration, setStudyDuration] = useState("");
-  // const [examType, setExamType] = useState("");
-  // const [hostType, setHostType] = useState("");
 
-  console.log('GeneralBookingForm --> reservation: ', reservation)
-  const { price } = reservation;
+  const { basePrice, total } = reservation;
+
+  useEffect(() => {
+    if (reservation.course && isValidCourse(reservation.course)) {
+      setCourseType(reservation.course);
+    }
+  }, [reservation.course]);
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <div className="text-2xl font-bold">€{price}</div>
+        <div className="text-2xl font-bold">€{basePrice}</div>
         <button className="text-gray-400 hover:text-gray-600 flex items-center">
           <span className="text-gray-400 text-xs mr-2">¿Qué incluye?</span>
           <MdInfoOutline className="w-5 h-5" />
@@ -43,18 +50,14 @@ export default function GeneralBookingForm({ reservation }: Props) {
         <div>
           <div className="flex justify-between">
             <label className="block text-sm text-gray-600 mb-1">Curso</label>
-            <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{price}</div>
+            <div className="text-sm text-gray-900 mb-2 align-end font-semibold">€{total}</div>
           </div>
-          <Select value={courseType} onValueChange={setCourseType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Inglés general" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="general">Inglés general</SelectItem>
-              <SelectItem value="intensive">Inglés intensivo</SelectItem>
-              <SelectItem value="business">Inglés de negocios</SelectItem>
-            </SelectContent>
-          </Select>
+          <Select<Course>
+            options={courseLabelToIdMap}
+            value={courseType}
+            onChange={(id) => setCourseType(id)}
+            placeholder="Seleccionar curso"
+          />
           <p className="text-xs text-gray-500 mt-1">
             Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo
           </p>
@@ -63,7 +66,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
         {/* Schedule */}
         <div>
           <label className="block text-sm text-gray-600 mb-2">Horario de clases</label>
-          <Select value={schedule} onValueChange={setSchedule}>
+          <BaseSelect value={schedule} onValueChange={setSchedule}>
             <SelectTrigger>
               <SelectValue placeholder="elegir" />
             </SelectTrigger>
@@ -71,7 +74,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
               <SelectItem value="am">AM - 09:00 a 12:00</SelectItem>
               <SelectItem value="pm">PM - 13:00 a 16:00</SelectItem>
             </SelectContent>
-          </Select>
+          </BaseSelect>
           {(reservation.course == 'ingles-general-mas-sesiones-individuales') && (
             <p className="text-xs text-gray-500 mt-1">
               Esta clase cuenta con <strong>5 lecciones individuales</strong> a la semana
@@ -83,7 +86,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
         {schedule && (
           <div>
             <label className="block text-sm text-gray-600 mb-2">Semanas a estudiar</label>
-            <Select value={studyDuration} onValueChange={setStudyDuration}>
+            <BaseSelect value={studyDuration} onValueChange={setStudyDuration}>
               <SelectTrigger>
                 <SelectValue placeholder="elegir" />
               </SelectTrigger>
@@ -92,7 +95,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
                 <SelectItem value="2">2 semanas</SelectItem>
                 <SelectItem value="4">4 semanas</SelectItem>
               </SelectContent>
-            </Select>
+            </BaseSelect>
           </div>
         )}
 
@@ -100,7 +103,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
         {schedule && studyDuration && (
           <div>
             <label className="block text-sm text-gray-600 mb-2">Inicio de clases</label>
-            <Select value={startDate} onValueChange={setStartDate}>
+            <BaseSelect value={startDate} onValueChange={setStartDate}>
               <SelectTrigger>
                 <SelectValue placeholder="elegir" />
               </SelectTrigger>
@@ -108,7 +111,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
                 <SelectItem value="next-monday">Próximo lunes</SelectItem>
                 <SelectItem value="next-month">Próximo mes</SelectItem>
               </SelectContent>
-            </Select>
+            </BaseSelect>
           </div>
         )}
 
@@ -171,7 +174,7 @@ export default function GeneralBookingForm({ reservation }: Props) {
           <p className="text-xs text-gray-500 mb-4">
             Es parte del valor total que pagaras.
           </p>
-          <Button className="w-full bg-red-500 hover:bg-red-600">
+          <Button className="w-full bg-red-500 hover:bg-red-600" onClick={onReserve}>
             Reservar
           </Button>
         </div>

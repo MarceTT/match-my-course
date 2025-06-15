@@ -38,7 +38,8 @@ const SchoolHome = () => {
   const {
     reservation,
     loading: isBookingLoading,
-    error: hasBookingError
+    error: hasBookingError,
+    submitReservation
   } = useReservation({
     schoolId: id,
     course,
@@ -220,12 +221,12 @@ const SchoolHome = () => {
               minutesToCenter={school.description?.minutosAlCentro || 0}
             />
           </div>
-
           <div className="lg:col-span-1">
             <BookingPannel
               reservation={reservation}
               loading={isBookingLoading}
               error={hasBookingError}
+              submitReservation={submitReservation}
             />
           </div>
         </div>
