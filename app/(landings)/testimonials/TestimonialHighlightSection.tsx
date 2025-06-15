@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import { getAllTestimonials } from '@/lib/api/testimonial'
+import { getAllTestimonials } from '@/app/lib/api/testimonial'
 import { Testimonial } from '@/types'
 
-const TestimonialHighlightSection = () => {
+const TestimonialHighlight = () => {
   const [index, setIndex] = useState(0)
   const setFade = useState(true)[1]
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
@@ -106,4 +106,4 @@ const TestimonialHighlightSection = () => {
   )
 }
 
-export default TestimonialHighlightSection
+export default TestimonialHighlight

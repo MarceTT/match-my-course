@@ -3,7 +3,7 @@
 import React from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { useSchools } from "@/hooks/useSchools";
+import { useSchools } from "@/app/hooks/useSchools";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";

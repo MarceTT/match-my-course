@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { Partner } from '@/types'
+import { getAllPartners } from '@/app/lib/api/partners'
 import HeaderSection from './HeaderSection'
 import PartnerSection from './PartnerSection'
 import SchoolOptionsSection from './SchoolOptions'
-import { getAllPartners } from '@/lib/api/partners'
 
 
 export default function PartnersPage() {

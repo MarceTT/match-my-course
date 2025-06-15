@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useInfiniteSchools } from "../../hooks/useInfiniteSchools2"; // 2
+import School from "../components/School";
+import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 import { useInView } from "react-intersection-observer";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { ArrowUp } from "lucide-react";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
-import { School } from "../components";
 
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">

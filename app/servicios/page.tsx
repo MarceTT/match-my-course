@@ -1,10 +1,11 @@
 "use client";
 
-import Consultances from "../components/servicios/Consultances";
-import { useScrollToTop } from "../../hooks/useScrollToTop";
 import HeroVisa from "../components/features/Hero/HeroVisa";
+import Consultances from "../components/servicios/Consultances";
+import { useScrollToTop } from "../hooks/useScrollToTop";
 
-const ServicesHome = () => { 
+const ServicesHome = () => {
+ 
   useScrollToTop();
 
   return (

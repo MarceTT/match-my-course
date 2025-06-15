@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useDebounce } from "@/hooks/useDebounce"; // 💥 Vamos a crearlo
+import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,29 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 import dynamic from "next/dynamic";
 import CircularSlider from "@fseehawer/react-circular-slider";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
 });
+
+const visaCities: string[] = [
+  "Dublín",
+  "Bray",
+  "Galway",
+  "Naas",
+  "Tralee",
+  "Cork",
+  "Donegal",
+  "Drogheda",
+  "Limerick",
+  "Athlone",
+  "Waterford",
+  "Killarney",
+  "Wexford",
+];
 
 const normalize = (str: string) =>
   str
@@ -80,7 +97,7 @@ const Filter = ({
   setIsOpen,
   filters,
   setFilters,
-  // onResetFilters,
+  onResetFilters,
 }: FilterProps) => {
   const searchParams = useSearchParams();
   const debouncedSearchParams = useDebounce(searchParams.toString(), 150); // 💥 debounce 150ms

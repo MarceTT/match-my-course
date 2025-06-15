@@ -1,30 +1,30 @@
 import React from 'react'
 import Image from 'next/image'
 
-export function Features() {
-  const features = [
-    {
-      image: '/features-images/asesorias_gratis_PRINCIPAL.svg',
-      text: 'Asesores gratuitas',
-      url: '/servicios'
-    },
-    {
-      image: '/features-images/COMO_FUNCIONA_PRINCIPAL.svg',
-      text: 'Requisitos visas de estudio',
-      url: '/school-search?course=todos'
-    },
-    {
-      image: '/features-images/MATCH_PRINCIPAL.svg',
-      text: 'Busca una escuela a tu medida',
-      url: '/servicios'
-    },
-    {
-      image: '/features-images/BENEFICIOS_PRINCIPAL.svg',
-      text: 'Preparación e inserción en el extranjero',
-      url: '/servicios'
-    }
-  ]
+const Features = () => {
 
+    const features = [
+        {
+          image: '/features-images/asesorias_gratis_PRINCIPAL.svg',
+          text: 'Asesores gratuitas',
+          url: '/servicios'
+        },
+        {
+          image: '/features-images/COMO_FUNCIONA_PRINCIPAL.svg',
+          text: 'Requisitos visas de estudio',
+          url: '/school-search?course=todos'
+        },
+        {
+          image: '/features-images/MATCH_PRINCIPAL.svg',
+          text: 'Busca una escuela a tu medida',
+          url: '/servicios'
+        },
+        {
+          image: '/features-images/BENEFICIOS_PRINCIPAL.svg',
+          text: 'Preparación e inserción en el extranjero',
+          url: '/servicios'
+        }
+      ]
   return (
     <div className="container mx-auto px-6 py-12 flex flex-col bg-white lg:mt-6 rounded-3xl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -49,3 +49,5 @@ export function Features() {
     </div>
   )
 }
+
+export default Features

@@ -1,19 +1,20 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
+import Header from "../../components/common/Header";
+import Footer from "../../components/common/Footer";
 import { notFound, useParams, useSearchParams } from "next/navigation";
+import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
+import Image from "next/image";
+import { raleway } from "@/app/ui/fonts";
 import { ArrowUp, Star } from "lucide-react";
 import { FaWalking } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
-import { useSchoolDetails } from "@/hooks/useSchoolDetails";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
+import dynamic from "next/dynamic";
 import { useReservation } from "@/hooks/useReservation";
-import { raleway } from "@/lib/fonts";
-import { Footer, Header } from "@matchmycourse/layout";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
 const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel"), { ssr: false });

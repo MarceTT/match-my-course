@@ -1,4 +1,4 @@
-import { Installations } from "@/lib/types";
+import { Installations } from "@/app/lib/types";
 import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { motion } from "framer-motion";
