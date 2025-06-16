@@ -38,6 +38,7 @@ import { useSchoolById } from "@/app/hooks/useSchoolById";
 import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
 import { deleteSchoolImage } from "@/app/lib/api/schools";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { ReactSortable } from "react-sortablejs";
 
 const MAX_GALLERY_IMAGES = 15;
 
@@ -56,7 +57,9 @@ const customResolver: Resolver<SchoolEditValues> = async (values) => {
         ? values.logo.file
         : values.logo,
     mainImage:
-      values.mainImage && typeof values.mainImage === "object" && values.mainImage.file
+      values.mainImage &&
+      typeof values.mainImage === "object" &&
+      values.mainImage.file
         ? values.mainImage.file
         : values.mainImage,
     galleryImages: Array.isArray(values.galleryImages)
@@ -654,70 +657,135 @@ const EditSchoolPage = () => {
           </Card>
 
           {/* Sección de Galería */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Galería de Imágenes</CardTitle>
-              <CardDescription>
-                Sube hasta {MAX_GALLERY_IMAGES} imágenes (se optimizarán
-                automáticamente)
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FormField
-                control={form.control}
-                name="galleryImages"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="space-y-4">
-                        <div className="border-2 border-dashed rounded-lg p-4 hover:bg-muted/50 transition cursor-pointer">
-                          <Input
-                            type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
-                            multiple
-                            onChange={(e) => handleGalleryChange(e, field)}
-                            disabled={
-                              loadingGallery ||
-                              (field.value?.length || 0) >= MAX_GALLERY_IMAGES
-                            }
-                            className="hidden"
-                            id="gallery-upload"
-                          />
-                          <label
-                            htmlFor="gallery-upload"
-                            className="flex flex-col items-center justify-center gap-2"
-                          >
-                            <UploadCloud className="h-10 w-10 text-muted-foreground" />
-                            <span className="font-medium">
-                              {loadingGallery
-                                ? `Procesando... ${uploadProgress.toFixed(0)}%`
-                                : (field.value?.length || 0) >=
-                                  MAX_GALLERY_IMAGES
-                                ? `Máximo ${MAX_GALLERY_IMAGES} imágenes`
-                                : "Arrastra o selecciona imágenes"}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              Formatos: JPG, PNG, WEBP, SVG. Se optimizarán
-                              automáticamente
-                            </span>
-                          </label>
-                        </div>
-
-                        {loadingGallery && (
-                          <Progress value={uploadProgress} className="h-2" />
-                        )}
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                          {renderGalleryImages(field)}
-                        </div>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="galleryImages"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="space-y-4">
+                      <div className="border-2 border-dashed rounded-lg p-4 hover:bg-muted/50 transition cursor-pointer">
+                        <Input
+                          type="file"
+                          accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
+                          multiple
+                          onChange={(e) => handleGalleryChange(e, field)}
+                          disabled={
+                            loadingGallery ||
+                            (field.value?.length || 0) >= MAX_GALLERY_IMAGES
+                          }
+                          className="hidden"
+                          id="gallery-upload"
+                        />
+                        <label
+                          htmlFor="gallery-upload"
+                          className="flex flex-col items-center justify-center gap-2"
+                        >
+                          <UploadCloud className="h-10 w-10 text-muted-foreground" />
+                          <span className="font-medium">
+                            {loadingGallery
+                              ? `Procesando... ${uploadProgress.toFixed(0)}%`
+                              : (field.value?.length || 0) >= MAX_GALLERY_IMAGES
+                              ? `Máximo ${MAX_GALLERY_IMAGES} imágenes`
+                              : "Arrastra o selecciona imágenes"}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            Formatos: JPG, PNG, WEBP, SVG. Se optimizarán
+                            automáticamente
+                          </span>
+                        </label>
                       </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+
+                      {loadingGallery && (
+                        <Progress value={uploadProgress} className="h-2" />
+                      )}
+
+                      <ReactSortable
+                        list={field.value || []}
+                        setList={(newList) => {
+                          form.setValue("galleryImages", newList);
+                        }}
+                        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                        animation={200}
+                      >
+                        {(field.value || []).map((img, index) => {
+                          const imageObj =
+                            typeof img === "string"
+                              ? {
+                                  id: img.split("/").pop()?.split(".")[0],
+                                  url: img,
+                                  isNew: false,
+                                }
+                              : img instanceof File
+                              ? {
+                                  file: img,
+                                  url: URL.createObjectURL(img),
+                                  isNew: true,
+                                }
+                              : img;
+
+                          return (
+                            <div
+                              key={imageObj.url}
+                              className="relative aspect-square group"
+                            >
+                              <Image
+                                src={
+                                  imageObj.url.startsWith("blob:")
+                                    ? imageObj.url
+                                    : rewriteToCDN(imageObj.url)
+                                }
+                                alt={`Imagen ${index + 1}`}
+                                fill
+                                className="object-cover rounded-lg"
+                                onLoad={() =>
+                                  imageObj.url.startsWith("blob:") &&
+                                  URL.revokeObjectURL(imageObj.url)
+                                }
+                              />
+                              <ConfirmDialog
+                                title="Eliminar Imagen"
+                                description="¿Estás seguro de eliminar esta imagen?"
+                                onConfirm={() =>
+                                  handleRemoveImage(
+                                    "galleryImages",
+                                    imageObj.id,
+                                    imageObj.url
+                                  )
+                                }
+                              >
+                                <Button
+                                  variant="destructive"
+                                  size="icon"
+                                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  disabled={
+                                    removingImages.gallery[imageObj.url]
+                                  }
+                                >
+                                  {removingImages.gallery[imageObj.url] ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <FaRegTrashAlt className="h-4 w-4" />
+                                  )}
+                                </Button>
+                              </ConfirmDialog>
+                              {imageObj.isNew && (
+                                <span className="absolute bottom-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                                  Nuevo
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </ReactSortable>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
 
           <div className="flex justify-end gap-4">
             <Button

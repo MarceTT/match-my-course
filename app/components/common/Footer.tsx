@@ -7,33 +7,51 @@ import { FaInstagram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import Logo from "@/public/logos/final-logo.png";
-// import { useAnimation } from "framer-motion";
-// import { useState, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useState, useEffect } from "react";
 
-const Footer = () => {
-  // const [isHovered, setIsHovered] = useState(false);
-  // const controls = useAnimation();
+interface FooterProps {
+  avoidOverlap?: boolean;
+}
 
-  // useEffect(() => {
-  //   if (isHovered) {
-  //     controls.start({
-  //       scale: [1, 1.2, 1],
-  //       rotate: [0, -10, 10, -10, 10, 0],
-  //       transition: { duration: 0.5 },
-  //     });
-  //   } else {
-  //     controls.start({ scale: 1, rotate: 0 });
-  //   }
-  // }, [isHovered, controls]);
+const Footer = ({ avoidOverlap = false }: FooterProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const controls = useAnimation();
 
-  // const bounceAnimation = {
-  //   y: [0, -10, 0],
-  //   transition: {
-  //     duration: 1,
-  //     repeat: Infinity,
-  //     repeatType: "reverse" as const,
-  //   },
-  // };
+  useEffect(() => {
+    if (isHovered) {
+      controls.start({
+        scale: [1, 1.2, 1],
+        rotate: [0, -10, 10, -10, 10, 0],
+        transition: { duration: 0.5 },
+      });
+    } else {
+      controls.start({ scale: 1, rotate: 0 });
+    }
+  }, [isHovered, controls]);
+
+  const bounceAnimation = {
+    y: [0, -10, 0],
+    transition: {
+      duration: 1,
+      repeat: Infinity,
+      repeatType: "reverse" as const,
+    },
+  };
+
+  const handleWhatsappClick = () => {
+    const phone = "56912345678"; // Cambiar al número real con código de país
+    const isMobile = /iPhone|Android|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+    const url = isMobile
+      ? `whatsapp://send?phone=${phone}`
+      : `https://web.whatsapp.com/send?phone=${phone}`;
+
+    window.open(url, "_blank");
+  };
+
+  const bottomOffset = avoidOverlap ? "bottom-20" : "bottom-8";
 
   return (
     <footer className="bg-[#3D3D3D] text-white py-12">
@@ -66,7 +84,7 @@ const Footer = () => {
                   <FaYoutube className="h-6 w-6 text-gray-600" />
                 </div>
                 <div className="p-2 bg-white rounded-md">
-                  <FaWhatsapp className="h-6 w-6 text-gray-600" />
+                  <FaWhatsapp className="h-6 w-6 text-gray-600" onClick={handleWhatsappClick}/>
                 </div>
               </div>
             </div>
@@ -134,8 +152,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      {/* <motion.div
-        className="fixed bottom-8 right-8 z-50"
+      <motion.div
+        className={`fixed ${bottomOffset} right-4 z-50`}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1, duration: 0.5 }}
@@ -150,12 +168,13 @@ const Footer = () => {
             <button
               className="bg-white p-4 rounded-full shadow-lg"
               aria-label="Contactar por WhatsApp"
+              onClick={handleWhatsappClick}
             >
-              <FaWhatsapp className="h-6 w-6 text-[#489751]" />
+              <FaWhatsapp className="h-6 w-6 text-[#489751]"  />
             </button>
           </motion.div>
         </motion.div>
-      </motion.div> */}
+      </motion.div>
     </footer>
   );
 };

@@ -70,11 +70,7 @@ const CalidadPage = () => {
   const handleUpload = () => {
     if (!file) return setError("No se ha seleccionado ningún archivo.");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData, {
+    uploadMutation.mutate({ file, selectedColumns }, {
       onSuccess: () => {
         toast.success("Se insertaron los registros correctamente.");
         setFile(null);

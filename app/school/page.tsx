@@ -10,6 +10,10 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { ArrowUp } from "lucide-react";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 
+interface SchoolPageProps {
+  onScrollTopVisibilityChange?: (visible: boolean) => void;
+}
+
 const SkeletonCard = () => (
   <div className="flex flex-col rounded-lg shadow-md overflow-hidden bg-white animate-pulse min-h-[320px]">
     <Skeleton className="h-48 w-full" />
@@ -21,11 +25,14 @@ const SkeletonCard = () => (
   </div>
 );
 
-const SchoolPage = () => {
+const MAX_PAGES = 10;
+
+const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
   const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
   const [firstLoad, setFirstLoad] = useState(true);
   const pendingImages = useRef<Set<string>>(new Set());
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
+  const isFetching = useRef(false);
 
   const { ref: loaderRef, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: false });
 
@@ -48,10 +55,19 @@ const SchoolPage = () => {
     ) || [];
 
   useEffect(() => {
-    if (isInView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+    if (
+      isInView &&
+      hasNextPage &&
+      !isFetchingNextPage &&
+      !isFetching.current &&
+      (data?.pages.length ?? 0) < MAX_PAGES
+    ) {
+      isFetching.current = true;
+      fetchNextPage().finally(() => {
+        isFetching.current = false;
+      });
     }
-  }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage, data]);
 
   useEffect(() => {
     const newSchools = schools.filter((school) => !loadedIds.has(school._id));
@@ -69,6 +85,7 @@ const SchoolPage = () => {
           return new Promise<void>((resolve) => {
             const img = new Image();
             img.src = rewriteToCDN(school.mainImage) || "/placeholder.svg";
+            img.loading = "lazy";
             img.onload = () => resolve();
             img.onerror = () => resolve();
           });
@@ -86,6 +103,9 @@ const SchoolPage = () => {
     preload();
   }, [schools]);
 
+  useEffect(() => {
+    onScrollTopVisibilityChange?.(showScrollTop);
+  }, [showScrollTop, onScrollTopVisibilityChange]);
 
   if (isLoading) {
     return (

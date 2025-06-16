@@ -15,10 +15,11 @@ import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { fetchUploadedFiles, uploadExcelFile, fetchFileDetails } from "../../actions/excel";
+import { fetchUploadedFiles, fetchFileDetails } from "../../actions/excel";
 import { useQuery } from "@tanstack/react-query";
 import HistorialArchivos from "../../components/historial-files-table"; // Importa el nuevo componente reutilizable
 import FullScreenLoader from "../../components/FullScreenLoader";
+import { useUploadAlojamiento } from "@/app/hooks/useUploadAlojamiento";
 
 // Define el tipo de los detalles de alojamiento
 interface AccommodationItem {
@@ -64,6 +65,8 @@ const AlojamientoPage = () => {
     { key: "valorSemanal", header: "💰 Valor" },
   ];
 
+  const uploadMutation = useUploadAlojamiento();
+
   // Manejador para subir archivos
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -73,13 +76,11 @@ const AlojamientoPage = () => {
 
     const selectedFile = acceptedFiles[0];
 
-    // Validar tipo de archivo
     if (!selectedFile.name.match(/\.(xlsx|xls)$/)) {
       setError("Por favor seleccione un archivo Excel válido (.xlsx o .xls)");
       return;
     }
 
-    // Validar tamaño (máximo 10MB)
     if (selectedFile.size > 10 * 1024 * 1024) {
       setError("El archivo es demasiado grande. El tamaño máximo es 10MB.");
       return;
@@ -88,54 +89,42 @@ const AlojamientoPage = () => {
     setFile(selectedFile);
     setIsLoading(true);
 
-    try {
-      // Crear FormData antes de enviarlo
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
 
-      // Simular progreso de carga
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(interval);
-            return 90;
-          }
-          return prev + 5;
-        });
-      }, 100);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(interval);
+          return 90;
+        }
+        return prev + 5;
+      });
+    }, 100);
 
-      // Enviar el FormData a la Server Action
-      const result = await uploadExcelFile(formData);
-
-      clearInterval(interval);
-      setProgress(100);
-
-      setTimeout(() => {
-        setIsLoading(false);
-        setProgress(0);
-
-        if (result.status === 200) {
-          setSuccess(
-            `Se insertaron ${result.data.processedRows} registros correctamente en la base de datos`
-          );
+    uploadMutation.mutate(selectedFile, {
+      onSuccess: (result) => {
+        clearInterval(interval);
+        setProgress(100);
+        setTimeout(() => {
+          setIsLoading(false);
+          setProgress(0);
+          setSuccess(`Se insertaron ${result.data.processedRows} registros correctamente en la base de datos`);
           toast.success("Procesamiento exitoso");
-
-          // Limpiar el estado después del éxito
           setTimeout(() => {
             setFile(null);
             setSuccess(null);
           }, 3000);
-        } else {
-          setError(result.error || "Error al procesar los datos");
-        }
-      }, 500);
-    } catch (error) {
-      setIsLoading(false);
-      setProgress(0);
-      setError("Error al procesar los datos en el servidor");
-      console.error("Error processing data:", error);
-    }
-  }, []);
+        }, 500);
+      },
+      onError: (err: any) => {
+        clearInterval(interval);
+        setIsLoading(false);
+        setProgress(0);
+        setError(err.message || "Error al procesar los datos en el servidor");
+      },
+    });
+  }, [uploadMutation]);
 
   // Configuración de Dropzone
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

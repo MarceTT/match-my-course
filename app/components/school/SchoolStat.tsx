@@ -18,7 +18,7 @@ interface ChartEntry {
 interface SchoolStatProps {
   data: ChartEntry[];
   averageAge: number;
-  nationalityCount: number;
+  nacionalidades:number;
 }
 
 const COLORS = ["#1E1F5E", "#2E528F", "#4893C4", "#82E5E2"];
@@ -37,7 +37,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 const SchoolStat = ({
   data,
   averageAge,
-  nationalityCount,
+  nacionalidades,
 }: SchoolStatProps) => {
   return (
     <div className="max-w-4xl mx-auto mt-12 mb-10 lg:mb-0 xl:mb-0">
@@ -117,7 +117,7 @@ const SchoolStat = ({
               />
             </div>
             <div className="text-2xl font-semibold mt-2">
-              {nationalityCount}
+              {nacionalidades}
             </div>
             <div className="text-sm text-gray-500">
               Número de nacionalidades

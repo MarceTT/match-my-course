@@ -23,11 +23,12 @@ import { Input } from "@/components/ui/input";
 import {
   fetchFileAccommodationDetails,
   fetchUploadedFiles,
-  uploadExcelDetalleAlojamiento,
 } from "../../actions/excel";
 import { Checkbox } from "@/components/ui/checkbox";
 import HistorialArchivos from "../../components/historial-files-table";
 import FullScreenLoader from "../../components/FullScreenLoader";
+import { useUploadDetalleAlojamiento } from "@/app/hooks/useUploadDetalleAlojamiento";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 interface DetalleAlojamiento {
   schoolId: string; // O mongoose.Types.ObjectId si prefieres
@@ -80,19 +81,14 @@ const AlojamientoDetalleWeb = () => {
     { key: "detalleResidencia", header: "detalleResidencia" },
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelDetalleAlojamiento(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const uploadMutation = useUploadFile(
+    "/excel/upload-detalle-alojamiento",
+    "Detalle Alojamiento",
+    () => {
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -171,11 +167,7 @@ const AlojamientoDetalleWeb = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+    uploadMutation.mutate({ file, selectedColumns });
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

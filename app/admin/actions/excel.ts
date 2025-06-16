@@ -2,144 +2,144 @@
 
 import { refreshAccessToken } from "@/app/utils/requestServer";
 
-export async function uploadExcelFile(formData: FormData) {
-  const token = await refreshAccessToken();
+// export async function uploadExcelFile(formData: FormData) {
+//   const token = await refreshAccessToken();
 
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  const data = new FormData();
-  data.append("file", file);
+//   const data = new FormData();
+//   data.append("file", file);
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-alojamiento`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
-
-
-  if (!response.ok) {
-    // Capturar errores del servidor y retornar un mensaje
-    const errorResponse = await response.json();
-    throw new Error(errorResponse?.message || "Error uploading file");
-  }
-
-  // Obtener el status 200 y el contenido de la respuesta
-  const result = await response.json();
-
-  return {
-    status: response.status, // Aquí retornamos el código de estado
-    data: result, // La respuesta JSON del backend
-  };
-}
-
-export async function uploadExcelDetalleAlojamiento(formData: FormData, selectedColumns: string[]) {
-  const token = await refreshAccessToken();
-
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
-
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
-
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-detalle-alojamiento`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-alojamiento`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
 
+//   if (!response.ok) {
+//     // Capturar errores del servidor y retornar un mensaje
+//     const errorResponse = await response.json();
+//     throw new Error(errorResponse?.message || "Error uploading file");
+//   }
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   // Obtener el status 200 y el contenido de la respuesta
+//   const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//   return {
+//     status: response.status, // Aquí retornamos el código de estado
+//     data: result, // La respuesta JSON del backend
+//   };
+// }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-}
+// export async function uploadExcelDetalleAlojamiento(formData: FormData, selectedColumns: string[]) {
+//   const token = await refreshAccessToken();
 
-export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  try {
-    const token = await refreshAccessToken();
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
-  console.log("token", token);
-
-  if (!token) {
-    return { error: "No autorizado" }; 
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
-
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
-
-
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-detalle-alojamiento`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
 
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-  } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
-    return { error: "Error en la solicitud" };
-  }
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+// }
+
+// export async function uploadExcelCalidad(formData: FormData, selectedColumns: string[]) {
+
+//   try {
+//     const token = await refreshAccessToken();
+
+//   console.log("token", token);
+
+//   if (!token) {
+//     return { error: "No autorizado" }; 
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
+
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
+
+
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-calidad`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
+
+
+
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
+
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
+
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+//   } catch (error) {
+//     console.error("❌ Error en la solicitud:", error);
+//     return { error: "Error en la solicitud" };
+//   }
   
-}
+// }
 
 export async function uploadExcelDetalleEscuela(formData: FormData, selectedColumns: string[]) {
   const token = await refreshAccessToken();
@@ -231,182 +231,182 @@ export async function uploadExcelInstallation(formData: FormData, selectedColumn
     };
 }
 
-export async function uploadExcelNationality(formData: FormData, selectedColumns: string[]) {
-  const token = await refreshAccessToken();
+// export async function uploadExcelNationality(formData: FormData, selectedColumns: string[]) {
+//   const token = await refreshAccessToken();
 
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-nationality`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-nationality`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-}
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+// }
 
-export async function uploadExcelPrices(formData: FormData, selectedColumns: string[]) {
-  const token = await refreshAccessToken();
+// export async function uploadExcelPrices(formData: FormData, selectedColumns: string[]) {
+//   const token = await refreshAccessToken();
 
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-prices`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-prices`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-}
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+// }
 
-export async function uploadWeekRange(formData: FormData, selectedColumns: string[]){
-  const token = await refreshAccessToken();
+// export async function uploadWeekRange(formData: FormData, selectedColumns: string[]){
+//   const token = await refreshAccessToken();
 
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  console.log([...formData.entries()]);
-  console.log(file);
+//   console.log([...formData.entries()]);
+//   console.log(file);
 
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-week-range`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-week-range`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
 
-    console.log(response.status);
+//     console.log(response.status);
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-}
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+// }
 
-export async function uploadWeekPrice(formData: FormData, selectedColumns: string[]){
-  const token = await refreshAccessToken();
+// export async function uploadWeekPrice(formData: FormData, selectedColumns: string[]){
+//   const token = await refreshAccessToken();
 
-  if (!token) {
-    return { error: "No autorizado" }; // Si no hay cookie, devolver error
-  }
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file uploaded");
-  }
+//   if (!token) {
+//     return { error: "No autorizado" }; // Si no hay cookie, devolver error
+//   }
+//   const file = formData.get("file") as File;
+//   if (!file) {
+//     throw new Error("No file uploaded");
+//   }
 
-  const data = new FormData();
-  data.append("file", file);
-  data.append("selectedColumns", JSON.stringify(selectedColumns));
+//   const data = new FormData();
+//   data.append("file", file);
+//   data.append("selectedColumns", JSON.stringify(selectedColumns));
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-week-price`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-    body: data,
-    credentials: "include",
-  });
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/excel/upload-week-price`, {
+//     method: "POST",
+//     headers: {
+//       "Authorization": `Bearer ${token}`,
+//     },
+//     body: data,
+//     credentials: "include",
+//   });
 
-  const text = await response.text();
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
-      throw new Error("El servidor respondió con un formato inesperado.");
-    }
+//   const text = await response.text();
+//     let result;
+//     try {
+//       result = JSON.parse(text);
+//     } catch (e) {
+//       console.error("❌ Error: El servidor no devolvió JSON válido", text);
+//       throw new Error("El servidor respondió con un formato inesperado.");
+//     }
 
-    if (!response.ok) {
-      throw new Error(result?.message || "Error uploading file");
-    }
+//     if (!response.ok) {
+//       throw new Error(result?.message || "Error uploading file");
+//     }
 
-    return {
-      status: response.status, // Aquí retornamos el código de estado
-      data: result, // La respuesta JSON del backend
-    };
-}
+//     return {
+//       status: response.status, // Aquí retornamos el código de estado
+//       data: result, // La respuesta JSON del backend
+//     };
+// }
 
 export async function fetchUploadedFiles(tipo: string) {
   try {

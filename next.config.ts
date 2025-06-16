@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
         hostname: 'd2wv8pxed72bi5.cloudfront.net',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+      },
     ],
   },
   async rewrites() {

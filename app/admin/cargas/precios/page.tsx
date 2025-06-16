@@ -22,9 +22,11 @@ import FullScreenLoader from "../../components/FullScreenLoader";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { fetchPriceDetails, fetchUploadedFiles, uploadExcelPrices } from "../../actions/excel";
+import { fetchPriceDetails, fetchUploadedFiles } from "../../actions/excel";
 import { toast } from "sonner";
 import HistorialArchivos from "../../components/historial-files-table";
+import { useUploadCoursePrice } from "@/app/hooks/useUploadCoursePrice";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 // Definición de tipos
 interface CoursePrice {
@@ -91,19 +93,18 @@ const CargaPrecios = () => {
     { key: "examenes", header: "Exámenes" }, // Asegúrate de que `examenes` sea una clave válida
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelPrices(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const { mutate: uploadCoursePrice, isPending } = useUploadFile(
+    "/excel/upload-prices",
+    "Precios",
+    () => {
       setFile(null);
+      setError(null);
+      setSuccess(null);
+      setIsLoading(false);
+      setProgress(0);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -211,11 +212,7 @@ const CargaPrecios = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+    uploadCoursePrice({ file, selectedColumns });
   };
 
   if (queryLoading) {
@@ -372,10 +369,10 @@ const CargaPrecios = () => {
         {file && (
           <Button
             onClick={handleUpload}
-            disabled={uploadMutation.isPending}
+            disabled={isPending}
             className="w-full flex items-center justify-center"
           >
-            {uploadMutation.isPending ? (
+            {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Subiendo...

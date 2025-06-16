@@ -27,6 +27,13 @@ import { schoolFormSchema, SchoolFormValues } from "./SchoolSchema";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import compressImage from "@/app/hooks/useResizeImage";
+import { ReactSortable } from "react-sortablejs";
+import { useUploadSchoolImages } from "@/app/hooks/useUploadImagesSchool";
+
+interface GalleryItem {
+  id: string;
+  file: File;
+}
 
 const CreateSchoolPage = () => {
   const router = useRouter();
@@ -34,8 +41,8 @@ const CreateSchoolPage = () => {
   const [loadingMainImage, setLoadingMainImage] = useState(false);
   const [loadingGallery, setLoadingGallery] = useState(false);
   const [progressGallery, setProgressGallery] = useState(0);
+  const [galleryState, setGalleryState] = useState<GalleryItem[]>([]);
 
-  // Inicializamos el formulario con react-hook-form y zod
   const form = useForm<SchoolFormValues>({
     resolver: zodResolver(schoolFormSchema),
     defaultValues: {
@@ -48,31 +55,7 @@ const CreateSchoolPage = () => {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al subir las imágenes");
-      }
-
-      return response.json(); // Devolver la respuesta del backend
-    },
-    onSuccess: (result) => {
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Escuela creada exitosamente");
-        router.push("/admin/school");
-      }
-    },
-    onError: () => {
-      toast.error("Error al crear la escuela. Inténtalo nuevamente.");
-    },
-  });
+  const mutation = useUploadSchoolImages();
 
   const handleLogoChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -105,40 +88,42 @@ const CreateSchoolPage = () => {
     if (e.target.files) {
       setLoadingGallery(true);
       setProgressGallery(0);
-
       const files = Array.from(e.target.files);
-      const totalFiles = files.length;
-      let compressedFiles: File[] = [];
+      const total = files.length;
+      const compressedFiles: GalleryItem[] = [];
 
-      for (let i = 0; i < totalFiles; i++) {
-        const compressedFile = await compressImage(files[i]);
-        compressedFiles.push(compressedFile);
-        setProgressGallery(((i + 1) / totalFiles) * 100);
+      for (let i = 0; i < total; i++) {
+        const compressed = await compressImage(files[i]);
+        compressedFiles.push({
+          id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2)}`,
+          file: compressed,
+        });
+        setProgressGallery(((i + 1) / total) * 100);
       }
 
+      const updated = [...galleryState, ...compressedFiles].slice(0, 15);
+      setGalleryState(updated);
+      field.onChange(updated.map((g) => g.file));
       setLoadingGallery(false);
-      field.onChange([...field.value, ...compressedFiles].slice(0, 10));
     }
   };
 
   // Función de envío del formulario
-  async function onSubmit(data: SchoolFormValues) {
+  function buildFormData(data: SchoolFormValues): FormData {
     const formData = new FormData();
-
     formData.append("name", data.name);
     formData.append("city", data.city);
     formData.append("status", data.status.toString());
-
+  
     if (data.logo) formData.append("logo", data.logo);
     if (data.mainImage) formData.append("mainImage", data.mainImage);
-
-    if (data.galleryImages.length > 0) {
-      data.galleryImages.forEach((file) => {
-        formData.append("galleryImages", file); // ✅ Se envían todos los archivos
-      });
-    }
-
-    mutation.mutate(formData);
+    data.galleryImages.forEach((file) => formData.append("galleryImages", file));
+  
+    return formData;
+  }
+  
+  async function onSubmit(data: SchoolFormValues) {
+    mutation.mutate(buildFormData(data));
   }
 
   return (
@@ -329,80 +314,90 @@ const CreateSchoolPage = () => {
           </Card>
 
           <Card>
-            <CardContent className="pt-6">
-              <FormField
-                control={form.control}
-                name="galleryImages"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Galería de Imágenes</FormLabel>
-                    <FormControl>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {loadingGallery && (
-                          <div className="col-span-2 md:col-span-4 flex flex-col items-center gap-2">
-                            <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
-                            <span className="text-sm text-muted-foreground">
-                              Comprimiendo imágenes...
-                            </span>
-                            <div className="w-full bg-gray-200 h-2 rounded-md overflow-hidden">
-                              <Progress value={progressGallery} />
-                            </div>
-                          </div>
-                        )}
-                        {field.value?.map((file: File, index: number) => (
-                          <div key={index} className="relative aspect-square">
-                            <Image
-                              src={
-                                URL.createObjectURL(file) || "/placeholder.svg"
-                              }
-                              alt={`Gallery image ${index + 1}`}
-                              fill
-                              className="object-cover rounded-lg"
-                            />
-                            <button
-                              type="button"
-                              className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1"
-                              onClick={() => {
-                                const newFiles = [...field.value];
-                                newFiles.splice(index, 1);
-                                field.onChange(newFiles);
-                              }}
-                            >
-                              <FaRegTrashAlt className="h-4 w-4" />
-                            </button>
-                          </div>
-                        ))}
-                        {(!field.value || field.value.length < 5) && (
-                          <div className="border-2 border-dashed rounded-lg aspect-square flex items-center justify-center hover:bg-muted/50 transition cursor-pointer">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              id="gallery"
-                              multiple
-                              onChange={(e) => handleGalleryChange(e, field)}
-                            />
-                            <label htmlFor="gallery" className="cursor-pointer">
-                              <div className="flex flex-col items-center gap-2">
-                                <ImagePlus className="h-8 w-8 text-muted-foreground" />
-                                <span className="text-sm text-muted-foreground text-center">
-                                  Agregar imágenes
-                                </span>
-                              </div>
-                            </label>
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Sube hasta 5 imágenes para la galería
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+  <CardContent className="pt-6">
+    <FormField
+      control={form.control}
+      name="galleryImages"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Galería de Imágenes</FormLabel>
+          <FormControl>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {loadingGallery && (
+                <div className="col-span-2 md:col-span-4 flex flex-col items-center gap-2">
+                  <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                  <span className="text-sm text-muted-foreground">
+                    Comprimiendo imágenes...
+                  </span>
+                  <div className="w-full bg-gray-200 h-2 rounded-md overflow-hidden">
+                    <Progress value={progressGallery} />
+                  </div>
+                </div>
+              )}
+
+              <ReactSortable
+                list={galleryState}
+                setList={(newState) => {
+                  setGalleryState(newState);
+                  field.onChange(newState.map((g) => g.file));
+                }}
+                className="contents"
+                animation={200}
+              >
+                {galleryState.map((item) => (
+                  <div key={item.id} className="relative aspect-square">
+                    <Image
+                      src={URL.createObjectURL(item.file)}
+                      alt="Imagen de galeria"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1"
+                      onClick={() => {
+                        const filtered = galleryState.filter((g) => g.id !== item.id);
+                        setGalleryState(filtered);
+                        field.onChange(filtered.map((g) => g.file));
+                      }}
+                    >
+                      <FaRegTrashAlt className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </ReactSortable>
+
+              {galleryState.length < 15 && (
+                <div className="border-2 border-dashed rounded-lg aspect-square flex items-center justify-center hover:bg-muted/50 transition cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    id="gallery"
+                    multiple
+                    onChange={(e) => handleGalleryChange(e, field)}
+                  />
+                  <label htmlFor="gallery" className="cursor-pointer">
+                    <div className="flex flex-col items-center gap-2">
+                      <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground text-center">
+                        Agregar imágenes
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              )}
+            </div>
+          </FormControl>
+          <FormDescription>
+            Sube hasta 15 imágenes para la galería
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </CardContent>
+</Card>
 
           <div className="flex justify-end gap-4">
             <Button

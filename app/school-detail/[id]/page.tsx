@@ -99,7 +99,9 @@ const SchoolHome = () => {
           <div className="lg:col-span-2">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-4">
               <div className="flex flex-col flex-1">
-                <h2 className={`${raleway.className} text-3xl font-black text-center md:text-left lg:text-left xl:text-left`}>
+                <h2
+                  className={`${raleway.className} text-3xl font-black text-center md:text-left lg:text-left xl:text-left`}
+                >
                   {school.name || "Nombre no disponible"}
                 </h2>
                 <div className="flex items-center gap-4 mt-1 justify-center md:justify-start lg:justify-start xl:justify-start">
@@ -199,7 +201,11 @@ const SchoolHome = () => {
                   },
                 ]}
                 averageAge={school.nationalities.edadPromedio || 0}
-                nationalityCount={school.nationalities.nacionalidadesAnio || 0}
+                nacionalidades={
+                  typeof school.nationalities.nacionalidades === 'number' 
+                    ? school.nationalities.nacionalidades 
+                    : Object.keys(school.nationalities.nacionalidades).length || 0
+                }
               />
             )}
 

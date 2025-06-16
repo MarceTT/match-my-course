@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
-import { RotateCcw , GraduationCap} from "lucide-react";
+import { RotateCcw, GraduationCap } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { CircularWeekSlider } from "./CircularSlider";
 import dynamic from "next/dynamic";
-import CircularSlider from "@fseehawer/react-circular-slider";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
@@ -58,8 +58,6 @@ const courseCitiesMap: Record<string, string[]> = {
     "Tralee",
     "Cork",
     "Donegal",
-    "Drogheda",
-    "Limerick",
     "Athlone",
     "Waterford",
     "Killarney",
@@ -69,18 +67,18 @@ const courseCitiesMap: Record<string, string[]> = {
     "Dublín",
     "Cork",
     "Galway",
-    "Limerick",
+    //"Limerick",
     "Waterford",
     "Bray",
-    "Schull",
+    //"Schull",
   ],
   "ingles-general-mas-sesiones-individuales": [
     "Dublín",
     "Galway",
     "Wexford",
-    "Schull",
+    //"Schull",
   ],
-  "ingles-general-intensivo": ["Dublín", "Galway", "Cork", "Limerick"],
+  "ingles-general-intensivo": ["Dublín", "Galway", "Cork"],
   "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
 };
 
@@ -168,39 +166,26 @@ const Filter = ({
 
   const handleReset = () => {
     const resetFilters: Record<string, any> = {};
+    
     Object.entries(filtersConfig).forEach(([key, config]) => {
       if (config.type === "slider" && config.slider) {
-        if (key === "weeks") {
-          resetFilters[key] = []; // 🔥 Weeks vacías, no enviar weeksMin
-        } else {
-          resetFilters[key] = config.slider.default;
-        }
+        resetFilters[key] = [config.slider.min]; // Valor mínimo como array
       } else {
         resetFilters[key] = [];
       }
     });
-
-    // 🔥 Mantener el curso actual
-    if (filters.course) {
+  
+    // Mantener solo el curso actual
+    if (filters.course?.length > 0) {
       resetFilters.course = [...filters.course];
     }
-
+  
     setFilters(resetFilters);
-
-    setTimeout(() => {
-      const slider =
-        document.querySelector<HTMLInputElement>('[role="slider"]');
-      if (slider) {
-        slider.value = String(filtersConfig.weeks.slider?.min || 1); // forzamos a "1"
-      }
-    }, 100);
-
-    // 🔥 Opcional: limpiar weeksMin de la URL
+    
+    // Limpiar parámetros de URL
     const params = new URLSearchParams(window.location.search);
     params.delete("weeksMin");
     router.replace(`?${params.toString()}`);
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const isDefaultFilters = () => {
@@ -270,11 +255,11 @@ function FilterContent({
           return (
             <FilterSection title={config.label} key={key}>
               <SliderSection
-                value={value}
-                config={config.slider}
-                onChange={(val: number[]) => {
-                  if (!isVisaCourseSelected) onSliderChange(key, val);
-                }}
+                value={
+                  Array.isArray(filters[key]) ? filters[key] : [filters[key]]
+                }
+                config={config.slider!}
+                onChange={(val) => onSliderChange(key, val)}
                 disabled={isVisaCourseSelected}
               />
             </FilterSection>
@@ -351,7 +336,24 @@ function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
   );
 }
 
-function SliderSection({ value, config, onChange, disabled }: any) {
+interface SliderSectionProps {
+  value: number[];
+  config: {
+    min: number;
+    max: number;
+    step: number;
+    default: number | [number, number];
+  };
+  onChange: (val: number[]) => void;
+  disabled: boolean;
+}
+
+function SliderSection({
+  value,
+  config,
+  onChange,
+  disabled,
+}: SliderSectionProps) {
   const [localValue, setLocalValue] = useState<number>(config.min);
 
   useEffect(() => {
@@ -364,53 +366,13 @@ function SliderSection({ value, config, onChange, disabled }: any) {
     }
   }, [value, config.min, disabled]);
 
-  const weeksRange = Array.from(
-    { length: config.max - config.min + 1 },
-    (_, i) => config.min + i
-  );
-
-  const displayIndex = Math.max(0, (disabled ? 25 : localValue) - config.min);
-
   return (
     <div className="flex flex-col items-center justify-center px-2">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className={disabled ? "cursor-not-allowed opacity-70" : ""}>
-              <CircularSlider
-                width={180}
-                data={weeksRange}
-                dataIndex={displayIndex}
-                knobColor={disabled ? "#A3A3A3" : "#5271FF"}
-                progressColorFrom={disabled ? "#D1D5DB" : "#5271FF"}
-                progressColorTo={disabled ? "#D1D5DB" : "#5271FF"}
-                trackColor="#E5E7EB"
-                label="Semanas"
-                labelColor="#4B5563"
-                valueFontSize="1.8rem"
-                verticalOffset="1.5rem"
-                progressSize={6}
-                trackSize={3}
-                onChange={(val) => {
-                  if (!disabled) {
-                    const num = Number(val);
-                    setLocalValue(num);
-                    onChange([num]);
-                  }
-                }}
-              >
-                <GraduationCap className="text-white" x="9" y="9" width="18px" height="18px" />
-              </CircularSlider>
-            </div>
-          </TooltipTrigger>
-          {disabled && (
-            <TooltipContent side="right">
-              <p>Este curso requiere una duración fija de 25 semanas.</p>
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
-
+      <CircularWeekSlider
+        value={localValue}
+        onChange={(val) => onChange([val])}
+        disabled={disabled}
+      />
       <div className="mt-2 text-sm text-primary font-semibold">
         {disabled ? "25 semanas (fijo)" : `${localValue} semanas`}
       </div>

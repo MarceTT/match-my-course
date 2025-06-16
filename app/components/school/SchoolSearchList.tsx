@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {Skeleton} from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { Reservation } from "@/types";
 import { buildReservationQuery } from "@/lib/reservation";
@@ -86,22 +86,21 @@ const SchoolSearchList = ({
     }
   }, [course, isFetching, prevCourse]);
 
-  
   if (isLoading || localLoading) {
     const formattedCourse = course
       .replace(/-/g, " ")
       .replace(/\b\w/g, (l) => l.toUpperCase());
-  
+
     return (
       <div className="mt-6 space-y-4">
         <p className="text-gray-500 text-sm pl-1">
           Cargando resultados para <strong>{formattedCourse}</strong>...
         </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6 mt-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <SkeletonSchoolCard key={i} />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6 mt-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonSchoolCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -144,21 +143,13 @@ const SchoolSearchList = ({
       {viewType === "list" ? (
         <div className="space-y-6 mt-4">
           {schools.map((school) => (
-            <SchoolCard
-              key={school._id}
-              school={school}
-              viewType="list"
-            />
+            <SchoolCard key={school._id} school={school} viewType="list" />
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
           {schools.map((school) => (
-            <SchoolCard
-              key={school._id}
-              school={school}
-              viewType="grid"
-            />
+            <SchoolCard key={school._id} school={school} viewType="grid" />
           ))}
         </div>
       )}
@@ -224,7 +215,9 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       whileHover={{ scale: 1.02, y: -4 }}
       onMouseEnter={() => prefetchSchool(`${school._id}`)}
       className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 group ${
-        isGrid ? "flex flex-col h-full justify-between" : "flex flex-col sm:flex-row"
+        isGrid
+          ? "flex flex-col h-full justify-between"
+          : "flex flex-col sm:flex-row"
       }`}
     >
       <div
@@ -257,7 +250,10 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
       >
         <div className="flex justify-between items-start">
           <div className="flex flex-col">
-            <h1 className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl cursor-pointer" onClick={handleShowSchool}>
+            <h1
+              className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl cursor-pointer"
+              onClick={handleShowSchool}
+            >
               {school.name}
             </h1>
             <div className="flex items-center mt-1">
@@ -286,7 +282,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
           {!isGrid && !isMobile && priceOptions.length > 0 && (
             <div className="text-sm text-gray-700">
               <p className="font-semibold text-gray-900 pb-1 text-right">
-                Opciones:
+                Tipos de curso:
               </p>
               <ul className="space-y-2">
                 {priceOptions.map((p, i) => (
@@ -299,7 +295,8 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                     }`}
                     onClick={() => setSelectedOptionIndex(i)}
                   >
-                    Curso {p.horario} - {p.horasDeClase} horas/semana
+                    Curso {p.horario} - {Math.round(Number(p.horasDeClase))}{" "}
+                    horas/semana
                   </li>
                 ))}
               </ul>
@@ -310,7 +307,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         {(isGrid || isMobile) && priceOptions.length > 0 && (
           <div className="mt-4 w-full">
             <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Selecciona una opción:
+              Selecciona un tipo de curso:
             </label>
             <Select
               value={String(selectedOptionIndex)}
@@ -326,7 +323,7 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
                     value={String(i)}
                     className="flex items-center gap-2 text-sm"
                   >
-                    Curso {p.horario} - {p.horasDeClase}h/semana
+                    Curso {p.horario} - {Math.round(p.horasDeClase)} h/semana
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -335,11 +332,24 @@ function SchoolCard({ school, viewType }: SchoolCardProps) {
         )}
 
         <div className="text-sm mt-4 flex flex-row sm:flex-col sm:items-start sm:space-y-1 justify-between w-full lg:mt-0 xl:mt-0">
-          <p className="font-semibold text-base sm:text-lg text-gray-700">
-            Ciudad: <span className="text-gray-900">{school.city}</span>
+          {/* Versión para móviles */}
+          <p className="block lg:hidden font-semibold text-base sm:text-lg text-gray-700 mb-1 mt-2">
+            Ciudad:{" "}
+            <span className="inline-block px-2 py-1 bg-yellow-100 text-yellow-600 text-md font-bold rounded-lg">
+              {school.city}
+            </span>
+          </p>
+
+          {/* Solo ciudad en pantallas grandes */}
+          <p className="hidden lg:block">
+            <span className={`inline-block px-2 py-1 bg-yellow-100 text-yellow-600 text-lg font-bold rounded-lg ${isGrid ? "mt-2" : ""
+              }`}>
+              {school.city}
+            </span>
           </p>
           {antiguedad !== null && (
-            <span className="inline-flex items-center text-xs sm:text-sm md:text-base px-3 py-1 rounded-lg bg-gray-100 text-gray-700">
+            <span className={`inline-flex items-center text-xs sm:text-sm md:text-base px-3 py-1 rounded-lg bg-gray-100 text-gray-700 ${isGrid ? "mt-2" : ""
+              }`}>
               {antiguedad < 2
                 ? "Nueva escuela"
                 : `${antiguedad} años de trayectoria`}

@@ -13,7 +13,7 @@ import InfiniteSchoolFiltered from "../components/school/InfiniteSchoolFiltered"
 const normalizeCourse = (course: string) => {
   return course
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/\s+/g, "-");
 };
@@ -32,7 +32,8 @@ const SchoolSearch = () => {
       if (key === "course") {
         initial[key] = course ? [course] : ["ingles-general"];
       } else if (config.type === "slider") {
-        initial[key] = config.slider?.default ?? 0;
+        const def = config.slider?.default;
+        initial[key] = Array.isArray(def) ? def : [def];
       } else {
         initial[key] = [];
       }

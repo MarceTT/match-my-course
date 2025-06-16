@@ -12,14 +12,11 @@ export async function middleware(request: NextRequest) {
 
   if (!isAdminRoute) return NextResponse.next();
 
-  // ✅ Aquí va el código que preguntas:
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: true, // 👈 MUY IMPORTANTE en producción
+    secureCookie: true,
   });
-
-  console.log("[MIDDLEWARE] Token recibido:", token);
 
   if (!token) {
     const loginUrl = new URL("/login", request.url);

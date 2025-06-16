@@ -45,27 +45,37 @@ export const schoolEditSchema = z.object({
     }, "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg")
     .optional(),
 
-  galleryImages: z
-    .array(z.any())
-    .refine(
-      (files) =>
-        files.every(
-          (file) => typeof file === "string" || file?.size <= MAX_FILE_SIZE
-        ),
-      "Cada archivo debe ser menor a  100MB"
-    )
-    .refine(
-      (files) =>
-        files.every((file) => {
-          if (typeof file === "string") return true;
-          if (!file || !file.type) return false; // ⚠️ aseguramos que tenga tipo
-          return ACCEPTED_IMAGE_TYPES.includes(file?.type);
-        }),
-      "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg"
-    )
-    .refine((files) => files.length <= 15, "No puedes subir más de 15 imágenes")
-    .optional()
-    .default([]),
+    galleryImages: z
+  .array(z.any())
+  .refine(
+    (files) =>
+      files.every((file) => {
+        if (typeof file === "string") return true; // URL directa
+        if (file?.url && typeof file.url === "string") return true; // Objeto antiguo
+        if (file?.file && file?.isNew)
+          return ACCEPTED_IMAGE_TYPES.includes(file.file.type);
+        if (file instanceof File)
+          return ACCEPTED_IMAGE_TYPES.includes(file.type);
+        return false;
+      }),
+    "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg"
+  )
+  .refine(
+    (files) =>
+      files.every((file) => {
+        const target =
+          file instanceof File
+            ? file
+            : file?.file instanceof File
+            ? file.file
+            : null;
+        return !target || target.size <= MAX_FILE_SIZE;
+      }),
+    "Cada archivo debe ser menor a 100MB"
+  )
+  .refine((files) => files.length <= 15, "No puedes subir más de 15 imágenes")
+  .optional()
+  .default([]),
 });
 
 // Tipo inferido del esquema

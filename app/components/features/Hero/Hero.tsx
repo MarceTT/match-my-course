@@ -5,7 +5,7 @@ import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN"; // ✅ Asegúrate de importar esta función
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 const courseLabelToIdMap: Record<string, string> = {
   "Inglés general": "ingles-general",
@@ -35,10 +35,10 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-[70vh] md:h-[50vh] lg:h-[80vh] xl:h-[90vh] flex items-center justify-center overflow-hidden">
+    <div className="relative w-full h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] flex items-center justify-center overflow-hidden">
       <Image
-        src={rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina%2Binicial.webp") || "/placeholder.svg"}
-        alt="Hero background"
+        src={rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/portada2.webp") || "/placeholder.svg"}
+        alt="MatchMyCourse background"
         fill
         priority
         sizes="100vw"
@@ -47,7 +47,7 @@ const Hero = () => {
         className="object-cover object-center"
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-[15vh] lg:pt-[25vh] xl:pt-[30vh]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-[20vh] lg:pt-[25vh] xl:pt-[30vh]">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
           <h1 className={`${raleway.className} text-3xl lg:text-6xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)]`}>
             Encuentra tu curso de inglés

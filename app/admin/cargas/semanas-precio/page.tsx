@@ -24,7 +24,9 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import HistorialArchivos from "../../components/historial-files-table";
-import { fetchUploadedFiles, fetchWeekPriceDetails, uploadWeekPrice } from "../../actions/excel";
+import { fetchUploadedFiles, fetchWeekPriceDetails } from "../../actions/excel";
+import { useUploadWeekPrice } from "@/app/hooks/useUploadWeekPrice";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 
 
@@ -88,19 +90,14 @@ const SemanasPrecio = () => {
   ];
 
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-        uploadWeekPrice(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const { mutate: uploadMutation, isPending } = useUploadFile(
+    "/excel/upload-week-price",
+    "Semanas precio",
+    () => {
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -208,11 +205,7 @@ const SemanasPrecio = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+    uploadMutation({ file, selectedColumns });
   };
 
   if (queryLoading) {
@@ -368,10 +361,10 @@ const SemanasPrecio = () => {
       {file && (
         <Button
           onClick={handleUpload}
-          disabled={uploadMutation.isPending}
+          disabled={isPending}
           className="w-full flex items-center justify-center"
         >
-          {uploadMutation.isPending ? (
+          {isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Subiendo...

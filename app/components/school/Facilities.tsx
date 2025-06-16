@@ -1,7 +1,17 @@
+"use client";
+
+
 import { Installations } from "@/app/lib/types";
 import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { motion } from "framer-motion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useState } from "react";
 
 interface FacilitiesProps {
   installations: Installations;
@@ -10,94 +20,138 @@ interface FacilitiesProps {
 const Facilities = ({ installations }: FacilitiesProps) => {
   if (!installations) return null;
 
+  const [expandedItem, setExpandedItem] = useState<string>("Área académica");
+
   const groupedFacilities = [
     {
       title: "Área académica",
-      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/a%CC%81rea+de+estudio.svg"),
+      icon: "área+de+estudio.svg",
       items: [
         installations.biblioteca && "Biblioteca",
-        installations.laboratorioInformatica && "Laboratorio digital",
-        installations.areasAutoaprendizaje && "Área de autoaprendizaje",
+        installations.computadoresEstudiantes && "Computadores para estudiantes",
       ],
     },
     {
-      title: "Servicios generales",
-      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/APOYO+ESTUDIANNTE.svg"),
+      title: "Equipamiento de aulas",
+      icon: "computer.svg",
       items: [
-        installations.microondas && "Microondas",
-        installations.nevera && "Nevera",
-        installations.maquinaExpendedora && "Máquina expendedora",
-        installations.dispensadorAgua && "Dispensador de agua",
-        installations.impresoraFotocopiadora && "Impresora/fotocopiadora",
-        installations.freeWifi && "Wifi",
+        installations.pizarraDigital && "Pizarra digital en salas",
+        installations.television && "TV salas de clase",
+        installations.dataShow && "Data show",
+        installations.calefaccion && "Calefacción y extractores",
       ],
     },
     {
-      title: "Áreas comunes y recreativas",
-      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/RECREACIO%CC%81N.svg"),
+      title: "Áreas de alimentación",
+      icon: "SALON+DE+COMIDA.svg",
       items: [
         installations.cafeteria && "Cafetería",
         installations.restaurante && "Restaurante",
-        installations.cocinaEstudiantes && "Cocina para estudiantes",
-        installations.salaJuegosRecreacion && "Sala de juegos/recreación",
-        installations.jardin && "Jardín",
-        installations.terrazaAzotea && "Terraza",
-        installations.salon && "Salón",
+        installations.salonAlmorzar && "Salón para almorzar",
       ],
     },
     {
-      title: "Equipamiento de las aulas",
-      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/computer.svg"),
+      title: "Servicios de alimentación",
+      icon: "refrigerator.svg",
       items: [
-        installations.pizarraDigital && `Pizarra digital: ${installations.pizarraDigital}`,
-        installations.tv && `Televisión: ${installations.tv}`,
-        installations.calefaccion && `Calefacción: ${installations.calefaccion}`,
+        installations.microondas && "Microondas",
+        installations.refrigerador && "Refrigerador",
+        installations.lavaplatos && "Lavaplatos",
+        installations.maquinaCafe && "Máquina de café",
+        installations.maquinaAlimentos && "Dispensador de alimentos",
+        installations.dispensadorAgua && "Dispensadores",
+      ],
+    },
+    {
+      title: "Otros servicios",
+      icon: "APOYO+ESTUDIANNTE.svg",
+      items: [
+        installations.impresoraFotocopiadora && "Impresora/fotocopiadora",
+        installations.freeWifi && "WiFi",
+        installations.bikepark && "Estacionamiento",
+        installations.juegosRecreativos && "Juegos recreativos",
+        installations.jardin && "Jardín",
+        installations.terraza && "Terraza",
+        installations.instalacionDeportiva && "Área deportiva",
       ],
     },
     {
       title: "Accesibilidad",
-      image: rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/silla+ruedas.svg"),
+      icon: "silla+ruedas.svg",
       items: [
-        installations.accesoSillasRuedas && "Ingreso para discapacitados",
-        installations.wcMinusvalidos && "WC para minusválidos",
-        installations.elevators && "Ascensor",
+        installations.ascensor && "Ascensor",
+        installations.aulasSillaRuedas && "Acceso diversidad funcional",
       ],
     },
+    {
+      title: "Área fumadores",
+      icon: "FUMADORES.svg", // Considera cambiar por un icono más apropiado
+      items: [
+        installations.areaFumadores && "Área fumadores",
+      ],
+    }
   ];
+
+  const handleAccordionChange = (title: string) => {
+    setExpandedItem(prev => prev === title ? "" : title);
+  };
 
   return (
     <section className="max-w-7xl mx-auto py-10 px-4 lg:px-0 xl:px-0">
       <h1 className="text-2xl font-bold mb-8 text-center md:text-left text-black">
         Instalaciones y servicios de la escuela
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {groupedFacilities.map(
-          ({ title, image, items }, i) =>
+          ({ title, icon, items }, i) =>
             items.filter(Boolean).length > 0 && (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="flex flex-col items-center md:items-start text-center md:text-left p-6 bg-white rounded-2xl shadow-md"
+                transition={{ delay: i * 0.1 }}
               >
-                <div className="flex flex-col items-center md:flex-row md:items-center gap-2 mb-4">
-                  <Image
-                    src={image}
-                    alt={title}
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                  />
-                  <h2 className="text-lg font-semibold underline mt-2 md:mt-0">{title}</h2>
+                <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                  <Accordion 
+                    type="single" 
+                    value={expandedItem} 
+                    onValueChange={handleAccordionChange}
+                    collapsible
+                  >
+                    <AccordionItem value={title} className="border-0">
+                      <AccordionTrigger className="px-6 py-4 hover:no-underline [&[data-state=open]>svg]:rotate-180 w-full">
+                        <div className="flex items-center gap-4 w-full">
+                          <div className="bg-blue-50 p-3 rounded-lg">
+                            <Image
+                              src={rewriteToCDN(`https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/iconos+sitio/${icon}`)}
+                              alt={title}
+                              width={28}
+                              height={28}
+                            />
+                          </div>
+                          <div className="text-left flex-1">
+                            <h2 className="font-semibold text-gray-800">{title}</h2>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {items.filter(Boolean).length} servicios disponibles
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      
+                      <AccordionContent className="px-6 pb-4 pt-0">
+                        <ul className="space-y-3">
+                          {items.filter(Boolean).map((item, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="inline-block w-2 h-2 rounded-full bg-blue-500 mt-2 mr-3 flex-shrink-0"></span>
+                              <span className="text-gray-700">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
-                <ul className="list-disc pl-5 space-y-1 text-gray-700 font-medium italic text-sm max-w-xs md:max-w-none">
-                  {items.filter(Boolean).map((item, idx) => (
-                    <li key={idx} className="leading-snug break-words">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
               </motion.div>
             )
         )}

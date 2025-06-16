@@ -3,7 +3,6 @@ import { toast } from "sonner";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import { SchoolEditValues } from "@/app/admin/school/[id]/SchoolEditSchema";
 
-// 🛠️ Función utilitaria para verificar si es un archivo o blob
 function isFileOrBlob(file: any): file is File | Blob {
   return file instanceof File || file instanceof Blob;
 }
@@ -16,6 +15,7 @@ export function useUpdateSchool(
     mutationFn: async (data: SchoolEditValues) => {
       const formData = new FormData();
       console.log("📤 Galería antes de enviar:", data.galleryImages);
+
       formData.append("name", data.name);
       formData.append("city", data.city);
       formData.append("status", data.status.toString());
@@ -23,26 +23,36 @@ export function useUpdateSchool(
       if (isFileOrBlob(data.logo)) formData.append("logo", data.logo);
       if (isFileOrBlob(data.mainImage)) formData.append("mainImage", data.mainImage);
 
-      if (Array.isArray(data.galleryImages)) {
-        const galleryToSend = data.galleryImages.filter((img: any) => {
-          return (
-            img &&
-            (img instanceof File || (img?.file instanceof File && img?.isNew))
-          );
-        });
-      
-        console.log("📤 Galería antes de enviar:", galleryToSend);
-      
+      const galleryToSend = (Array.isArray(data.galleryImages)
+        ? data.galleryImages
+        : []
+      ).filter((img: any) =>
+        img && (img instanceof File || (img?.file instanceof File && img?.isNew))
+      );
+
+      const galleryOrder: string[] = [];
+
+      for (const img of data.galleryImages || []) {
+        if (typeof img === "string") {
+          galleryOrder.push(img);
+        } else if (img?.url && !img?.isNew) {
+          galleryOrder.push(img.url);
+        }
+      }
+
+      if (galleryToSend.length > 0) {
         for (const img of galleryToSend) {
           const fileToSend =
             img instanceof File ? img : img?.file instanceof File ? img.file : null;
-      
+
           if (fileToSend) {
             formData.append("galleryImages", fileToSend);
             console.log("📦 Enviando imagen:", fileToSend.name);
           }
         }
       }
+
+      formData.append("galleryOrder", JSON.stringify(galleryOrder));
 
       for (let pair of formData.entries()) {
         if (pair[1] instanceof File) {

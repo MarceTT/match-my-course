@@ -23,31 +23,27 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-    fetchNationality,
+  fetchNationality,
   fetchUploadedFiles,
-  uploadExcelNationality,
 } from "../../actions/excel";
 import HistorialArchivos from "../../components/historial-files-table";
 import { toast } from "sonner";
-
-
+import { useUploadNationality } from "@/app/hooks/useUploadNationality";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 interface NationalityData {
-    nombreEscuelaILEP: string;
-    nombreEscuelaAdm: string;
-    ciudadEscuela: string;
-    edadPromedio: number;
-    nacionalidades: Record<string, number>;
-    total: number;
-    nacionalidadesAnio: number;
-    continentes: {
-      europa: number;
-      asia: number;
-      latinoamerica: number;
-      africa: number;
-      otros: number;
-    };
-  }
+  nombreEscuelaILEP: string;
+  nombreEscuelaAdm: string;
+  ciudadEscuela: string;
+  edadPromedio: number;
+  nacionalidades: number;
+  continentes: {
+    europa: number;
+    asia: number;
+    latinoamerica: number;
+    otros: number;
+  };
+}
 
 interface ColumnDefinition<T> {
   key: keyof T;
@@ -74,53 +70,43 @@ function NacionalidadesPage() {
     queryFn: () => fetchUploadedFiles("Nacionalidades"),
   });
 
-
   const columnas: ColumnDefinition<NationalityData>[] = [
+    { key: "nombreEscuelaILEP", header: "Nombre Escuela ILEP" },
     { key: "nombreEscuelaAdm", header: "Nombre Escuela Adm" },
     { key: "ciudadEscuela", header: "Ciudad" },
     { key: "edadPromedio", header: "Edad Promedio" },
-    { key: "total", header: "Total" },
-    { key: "nacionalidadesAnio", header: "Nacionalidades al Año" },
+    { key: "nacionalidades", header: "Nacionalidades" },
     {
-      key: "continentes", 
+      key: "continentes",
       header: "Europa",
-      render: (value) => value.europa, // Extraer la propiedad anidada
+      render: (value) => value.europa,
     },
     {
-      key: "continentes", 
+      key: "continentes",
       header: "Asia",
-      render: (value) => value.asia, // Extraer la propiedad anidada
+      render: (value) => value.asia,
     },
     {
-      key: "continentes", 
+      key: "continentes",
       header: "Latinoamérica",
-      render: (value) => value.latinoamerica, // Extraer la propiedad anidada
+      render: (value) => value.latinoamerica,
     },
     {
-      key: "continentes", 
-      header: "África",
-      render: (value) => value.africa, // Extraer la propiedad anidada
-    },
-    {
-      key: "continentes", 
+      key: "continentes",
       header: "Otros",
-      render: (value) => value.otros, // Extraer la propiedad anidada
+      render: (value) => value.otros,
     },
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelNationality(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const uploadMutation = useUploadFile(
+    "/excel/upload-nationality", // endpoint
+    "Nacionalidades",             // label para toast
+    () => {
+      // acción al éxito: reset states, etc.
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -228,11 +214,7 @@ function NacionalidadesPage() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+    uploadMutation.mutate({ file, selectedColumns });
   };
 
   if (queryLoading) {

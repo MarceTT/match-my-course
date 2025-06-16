@@ -72,28 +72,32 @@ export interface Installations {
   nombreEscuela: string;
   ciudadEscuela: string;
   biblioteca: boolean;
-  laboratorioInformatica: boolean;
-  areasAutoaprendizaje: boolean;
-  tv: string;
-  pizarraDigital: string;
-  calefaccion: string;
+  computadoresEstudiantes: boolean; // Reemplaza a laboratorioInformatica
+  pizarraDigital: boolean; // Cambiado de string a boolean
+  television: boolean; // Cambiado de string (tv) a boolean
+  dataShow: boolean; // Nuevo campo
+  calefaccion: boolean; // Cambiado de string a boolean
+  extractoresAire: boolean; // Nuevo campo
   cafeteria: boolean;
   restaurante: boolean;
-  cocinaEstudiantes: boolean;
-  salaJuegosRecreacion: boolean;
-  jardin: boolean;
-  terrazaAzotea: boolean;
-  salon: boolean;
-  zonaDeportiva: boolean;
+  salonAlmorzar: boolean; // Similar a cocinaEstudiantes
   microondas: boolean;
-  nevera: boolean;
-  maquinaExpendedora: boolean;
+  refrigerador: boolean; // Cambiado de nevera
+  lavaplatos: boolean; // Nuevo campo
+  maquinaCafe: boolean; // Nuevo campo
+  maquinaAlimentos: boolean; // Similar a maquinaExpendedora
   dispensadorAgua: boolean;
   impresoraFotocopiadora: boolean;
   freeWifi: boolean;
-  accesoSillasRuedas: boolean;
+  bikepark: boolean; // Nuevo campo
+  juegosRecreativos: boolean; // Similar a salaJuegosRecreacion
+  jardin: boolean;
+  terraza: boolean; // Similar a terrazaAzotea
+  instalacionDeportiva: boolean; // Similar a zonaDeportiva
+  aulasSillaRuedas: boolean; // Similar a accesoSillasRuedas
   wcMinusvalidos: boolean;
-  elevators: boolean;
+  ascensor: boolean; // Similar a elevators
+  areaFumadores: boolean; // Nuevo campo
   patrimoniales: boolean;
   disenoImponente: boolean;
   clasicosTradicionales: boolean;

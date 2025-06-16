@@ -29,33 +29,38 @@ import { Progress } from "@/components/ui/progress";
 import HistorialArchivos from "../../components/historial-files-table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 interface Instalacion {
   Nombre_Escuela_Adm: string;
   Ciudad_Escuela: string;
   Biblioteca: number;
-  Laboratorio_de_informatica: number;
-  Areas_de_autoaprendizaje: number;
-  TV: string;
-  Pizarra_digital: string;
-  Calefaccion: string;
+  Computadores_para_estudiantes: number; // Nuevo campo
+  Pizarra_digital: number; // Cambiado de string a número (0/1)
+  Television: number; // Cambiado de string a número (0/1)
+  Data_Show: number; // Nuevo campo
+  Calefaccion: number; // Cambiado de string a número (0/1)
+  Extractores_o_Aire_Ac: number; // Nuevo campo
   Cafeteria: number;
   Restaurante: number;
-  Cocina_para_uso_de_los_estudiantes: number;
-  Sala_de_juegos_recreacion: number;
-  Jardin: number;
-  Terraza_en_la_azotea: number;
-  Salon: number;
-  Zona_deportiva: number;
+  Salon_para_almorzar: number; // Nuevo campo
   Microondas: number;
-  Nevera: number;
-  Maquina_expendedora: number;
+  Refrigerador: number; // Cambiado de Nevera
+  Lavaplatos: number; // Nuevo campo
+  Maquina_de_cafe: number; // Nuevo campo
+  Maquina_de_alimentos: number; // Similar a Maquina_expendedora
   Dispensador_de_agua: number;
   Impresora_fotocopiadora: number;
   Free_Wi_Fi: number;
-  Accesos_a_aulas_adaptados_a_sillas_de_ruedas: number;
+  Bikepark: number; // Nuevo campo
+  Juegos_recreativos: number; // Similar a Sala_de_juegos_recreacion
+  Jardin: number;
+  Terraza: number; // Similar a Terraza_en_la_azotea
+  Instalacion_deportiva: number; // Similar a Zona_deportiva
+  Aulas_para_silla_de_ruedas: number; // Similar a Accesos_a_aulas_adaptados_a_sillas_de_ruedas
   WC_para_minusvalidos: number;
-  Elevators: number;
+  Ascensor: number; // Similar a Elevators
+  Area_fumadores: number; // Nuevo campo
   Patrimoniales: number;
   Diseno_imponente: number;
   Clasicos_tradicionales: number;
@@ -92,34 +97,32 @@ const InstalacionesPage = () => {
     { key: "Nombre_Escuela_Adm", header: "Nombre Escuela Adm" },
     { key: "Ciudad_Escuela", header: "Ciudad" },
     { key: "Biblioteca", header: "Biblioteca" },
-    { key: "Laboratorio_de_informatica", header: "Laboratorio de Informática" },
-    { key: "Areas_de_autoaprendizaje", header: "Áreas de Autoaprendizaje" },
-    { key: "TV", header: "TV" },
+    { key: "Computadores_para_estudiantes", header: "Computadores para Estudiantes" },
     { key: "Pizarra_digital", header: "Pizarra Digital" },
+    { key: "Television", header: "Televisión" },
+    { key: "Data_Show", header: "Data Show" },
     { key: "Calefaccion", header: "Calefacción" },
+    { key: "Extractores_o_Aire_Ac", header: "Extractores/Aire Acondicionado" },
     { key: "Cafeteria", header: "Cafetería" },
     { key: "Restaurante", header: "Restaurante" },
-    {
-      key: "Cocina_para_uso_de_los_estudiantes",
-      header: "Cocina para Estudiantes",
-    },
-    { key: "Sala_de_juegos_recreacion", header: "Sala de Juegos/Recreación" },
-    { key: "Jardin", header: "Jardín" },
-    { key: "Terraza_en_la_azotea", header: "Terraza en la Azotea" },
-    { key: "Salon", header: "Salón" },
-    { key: "Zona_deportiva", header: "Zona Deportiva" },
+    { key: "Salon_para_almorzar", header: "Salón para Almorzar" },
     { key: "Microondas", header: "Microondas" },
-    { key: "Nevera", header: "Nevera" },
-    { key: "Maquina_expendedora", header: "Máquina Expendedora" },
+    { key: "Refrigerador", header: "Refrigerador" },
+    { key: "Lavaplatos", header: "Lavaplatos" },
+    { key: "Maquina_de_cafe", header: "Máquina de Café" },
+    { key: "Maquina_de_alimentos", header: "Máquina de Alimentos" },
     { key: "Dispensador_de_agua", header: "Dispensador de Agua" },
     { key: "Impresora_fotocopiadora", header: "Impresora/Fotocopiadora" },
     { key: "Free_Wi_Fi", header: "Free Wi-Fi" },
-    {
-      key: "Accesos_a_aulas_adaptados_a_sillas_de_ruedas",
-      header: "Accesos para Sillas de Ruedas",
-    },
+    { key: "Bikepark", header: "Bikepark" },
+    { key: "Juegos_recreativos", header: "Juegos Recreativos" },
+    { key: "Jardin", header: "Jardín" },
+    { key: "Terraza", header: "Terraza" },
+    { key: "Instalacion_deportiva", header: "Instalación Deportiva" },
+    { key: "Aulas_para_silla_de_ruedas", header: "Aulas para Silla de Ruedas" },
     { key: "WC_para_minusvalidos", header: "WC para Minusválidos" },
-    { key: "Elevators", header: "Elevadores" },
+    { key: "Ascensor", header: "Ascensor" },
+    { key: "Area_fumadores", header: "Área de Fumadores" },
     { key: "Patrimoniales", header: "Patrimoniales" },
     { key: "Diseno_imponente", header: "Diseño Imponente" },
     { key: "Clasicos_tradicionales", header: "Clásicos/Tradicionales" },
@@ -127,19 +130,55 @@ const InstalacionesPage = () => {
     { key: "AULAS", header: "Aulas" },
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelInstallation(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+
+  const transformDataForServer = (data: Instalacion[]) => {
+    return data.map((item) => ({
+      nombreEscuela: item.Nombre_Escuela_Adm,
+      ciudadEscuela: item.Ciudad_Escuela,
+      biblioteca: Boolean(item.Biblioteca),
+      computadoresEstudiantes: Boolean(item.Computadores_para_estudiantes),
+      pizarraDigital: Boolean(item.Pizarra_digital),
+      television: Boolean(item.Television),
+      dataShow: Boolean(item.Data_Show),
+      calefaccion: Boolean(item.Calefaccion),
+      extractoresAire: Boolean(item.Extractores_o_Aire_Ac),
+      cafeteria: Boolean(item.Cafeteria),
+      restaurante: Boolean(item.Restaurante),
+      salonAlmorzar: Boolean(item.Salon_para_almorzar),
+      microondas: Boolean(item.Microondas),
+      refrigerador: Boolean(item.Refrigerador),
+      lavaplatos: Boolean(item.Lavaplatos),
+      maquinaCafe: Boolean(item.Maquina_de_cafe),
+      maquinaAlimentos: Boolean(item.Maquina_de_alimentos),
+      dispensadorAgua: Boolean(item.Dispensador_de_agua),
+      impresoraFotocopiadora: Boolean(item.Impresora_fotocopiadora),
+      freeWifi: Boolean(item.Free_Wi_Fi),
+      bikepark: Boolean(item.Bikepark),
+      juegosRecreativos: Boolean(item.Juegos_recreativos),
+      jardin: Boolean(item.Jardin),
+      terraza: Boolean(item.Terraza),
+      instalacionDeportiva: Boolean(item.Instalacion_deportiva),
+      aulasSillaRuedas: Boolean(item.Aulas_para_silla_de_ruedas),
+      wcMinusvalidos: Boolean(item.WC_para_minusvalidos),
+      ascensor: Boolean(item.Ascensor),
+      areaFumadores: Boolean(item.Area_fumadores),
+      patrimoniales: Boolean(item.Patrimoniales),
+      disenoImponente: Boolean(item.Diseno_imponente),
+      clasicosTradicionales: Boolean(item.Clasicos_tradicionales),
+      modernosContemporaneos: Boolean(item.Modernos_Contemporaneos),
+      aulas: item.AULAS,
+    }));
+  };
+
+  const uploadMutation = useUploadFile(
+    "/excel/upload-installation", // endpoint
+    "Instalaciones", // label para toast
+    () => {
+      // acción al éxito: reset states, etc.
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -246,12 +285,8 @@ const InstalacionesPage = () => {
       setError("No se ha seleccionado ningún archivo.");
       return;
     }
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+  
+    uploadMutation.mutate({ file, selectedColumns });
   };
 
   if (queryLoading) {

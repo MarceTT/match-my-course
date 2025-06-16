@@ -25,10 +25,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   fetchUploadedFiles,
   fetchWeekRangeDetails,
-  uploadWeekRange,
 } from "../../actions/excel";
 import { toast } from "sonner";
 import HistorialArchivos from "../../components/historial-files-table";
+import { useUploadWeekRange } from "@/app/hooks/useUploadWeekRange";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 interface WeekRange {
   schoolId: string;
@@ -90,20 +91,14 @@ const RangoSemanasPrecio = () => {
     { key: "Precio", header: "Precio" },
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadWeekRange(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const { mutate: uploadMutation, isPending } = useUploadFile(
+    "/excel/upload-week-range",
+    "Rango de semanas",
+    () => {
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-      setPreviewData([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  );
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setError(null);
@@ -217,11 +212,7 @@ const RangoSemanasPrecio = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-    console.log([...formData.entries()]);
-    uploadMutation.mutate(formData);
+    uploadMutation({ file, selectedColumns });
   };
 
   if (queryLoading) {
@@ -408,10 +399,10 @@ const RangoSemanasPrecio = () => {
         {file && (
           <Button
             onClick={handleUpload}
-            disabled={uploadMutation.isPending}
+            disabled={isPending}
             className="w-full flex items-center justify-center"
           >
-            {uploadMutation.isPending ? (
+            {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Subiendo...

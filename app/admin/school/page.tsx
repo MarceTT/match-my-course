@@ -1,6 +1,6 @@
 "use client";   
 
-import React from "react";
+import React, { useEffect } from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { useSchools } from "@/app/hooks/useSchools";
@@ -12,11 +12,11 @@ import { Button } from "@/components/ui/button";
 const SchoolPage = () => {
   const { data: schools, isLoading, error } = useSchools();
 
-  console.log("🔍 Datos desde React Query Schools:", schools);
-
-  if (error) {
-    toast.error("Error al cargar las escuelas");
-  }
+  useEffect(() => {
+    if (error) {
+      toast.error("Error al cargar las escuelas");
+    }
+  }, [error]);
   return (
     <div className="p-4">
       <div className="flex items-center justify-between py-4 px-4">
