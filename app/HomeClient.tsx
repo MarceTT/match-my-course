@@ -9,7 +9,7 @@ import { Suspense, useState } from "react";
 
 const Carousel = dynamic(() => import("./components/features/Carousel/Carousel"), { ssr: false });
 const Features = dynamic(() => import("./components/Features"), { ssr: false });
-const SchoolPage = dynamic(() => import("./school/page"), { ssr: false });
+const SchoolPage = dynamic(() => import("./school/SchoolPage"), { ssr: false });
 
 export default function HomeClient() {
   const [isScrollTopVisible, setScrollTopVisible] = useState(false);
