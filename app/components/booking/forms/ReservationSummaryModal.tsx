@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +31,10 @@ interface ReservationSummaryModalProps {
   open: boolean;
   onClose: () => void;
   reservation: Reservation;
+  formData: Partial<ReservationFormData & {
+    startDate?: Date;
+    accommodation?: "si" | "no";
+  }>;
   onSubmitContact: (data: ReservationFormData) => void;
 }
 
@@ -36,6 +42,7 @@ export default function ReservationSummaryModal({
   open,
   onClose,
   reservation,
+  formData,
   onSubmitContact,
 }: ReservationSummaryModalProps) {
   const [step, setStep] = useState<"summary" | "contact">("summary");
@@ -64,8 +71,10 @@ export default function ReservationSummaryModal({
   }
 
   async function onSubmit(formData: ReservationFormData) {
+    console.log('onSubmit')
     onSubmitContact(formData);
     // onClose();
+
   }
 
   return (
@@ -84,7 +93,9 @@ export default function ReservationSummaryModal({
             <p><strong>Curso:</strong> {reservation.course}</p>
             <p><strong>Modalidad:</strong> {reservation.schedule}</p>
             <p><strong>Semanas de estudio:</strong> {reservation.weeks}</p>
-            <p><strong>Inicio:</strong> {reservation.starDate}</p>
+            <p>
+              <strong>Inicio:</strong> {formData.startDate ? format(formData.startDate, "PPP", { locale: es }) : "No seleccionado"}
+            </p>
             {reservation.total !== undefined && (
               <p><strong>Precio final:</strong> €{reservation.total.toLocaleString()}</p>
             )}
