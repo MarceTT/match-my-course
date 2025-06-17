@@ -134,7 +134,13 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
                 <Link href="/escuelas-socias">Escuelas</Link>
               </li>
               <li>
-                <Link href="/clases">Clases de inglés online</Link>
+                <a
+                  href="https://api.whatsapp.com/send/?phone=56931714541&text&type=phone_number&app_absent=0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Clases de inglés online
+                </a>
               </li>
               <li>
                 <Link href="/contacto">Contacto</Link>
