@@ -8,6 +8,13 @@ import {
 } from "@/lib/reservation";
 import { ReservationFormData } from "@/types/reservationForm";
 
+// Datos adicionales que no participan del cálculo de reserva,
+// pero sí se envían al backend
+type ExtraReservationData = {
+  startDate?: Date;
+  accommodation?: "si" | "no";
+};
+
 type UseReservationParams = {
   schoolId: string;
   course: string | null;
@@ -28,7 +35,6 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     const fetchReservation = async () => {
       const parsedWeeks = parseInt(weeks ?? "", 10);
 
-      // Validación de parámetros
       if (!schoolId || !course || !schedule || isNaN(parsedWeeks)) {
         setReservation(null);
         setError("Parámetros incompletos o inválidos");
@@ -71,19 +77,17 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     };
 
     fetchReservation();
-    
-    return () => {
-      controller.abort(); // cancelar fetch al desmontar
-    };
+    return () => controller.abort();
   }, [schoolId, course, weeks, schedule]);
 
-  const submitReservation = async (formData: ReservationFormData) => {
+  const submitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
       return { success: false, message: "Reserva no inicializada" };
     }
 
     const reservationData = {
       ...formData,
+      ...extras,
       totalPrice: reservation.total,
       city: reservation.city ?? "Dublín",
       course: reservation.course,
@@ -93,11 +97,14 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     };
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/reservation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(reservationData),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/reservation`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reservationData),
+        }
+      );
 
       const result = await res.json();
 
@@ -113,5 +120,11 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     }
   };
 
-  return { reservation, loading, error, submitted, submitReservation };
+  return {
+    reservation,
+    loading,
+    error,
+    submitted,
+    submitReservation,
+  };
 }

@@ -11,4 +11,5 @@ export interface Reservation {
   insuranceFee?: number
   total?: number,
   starDate?: string;
+  logoUrl?: string;
 };

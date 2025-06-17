@@ -10,6 +10,12 @@ export const reservationFormSchema = z.object({
     message: "Debes aceptar el consentimiento",
   }),
   country: z.string().min(1, "La ciudad es requerida"),
+
+  // Campos extendidos:
+  studyDuration: z.number().optional(),
+  schedule: z.enum(["am", "pm"]).optional(),
+  startDate: z.date().optional(),
+  accommodation: z.enum(["si", "no"]).optional(),
 });
 
 export type ReservationFormData = z.infer<typeof reservationFormSchema>;

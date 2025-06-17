@@ -42,5 +42,6 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     schoolName: data.schoolName,
     total: Number(data.total),
     weeks: Number(data.weeks),
+    logoUrl: data.logoUrl
   };
 }
