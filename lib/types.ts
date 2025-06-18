@@ -1,6 +1,3 @@
-import { Reservation } from "@/types";
-import { ReservationFormData } from "@/types/reservationForm";
-
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
 }
@@ -261,13 +258,6 @@ declare module "next-auth" {
     refreshToken: string;
   }
 }
-
-export type BookingPannelProps = {
-  reservation: Reservation | null;
-  error: string;
-  loading: boolean;
-  submitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
-};
 
 export type ContactFormData = {
   firstName: string;
