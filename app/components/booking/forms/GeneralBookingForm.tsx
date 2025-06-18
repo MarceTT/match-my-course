@@ -26,14 +26,17 @@ export default function GeneralBookingForm({
   onChangeFormData,
   onReserve
 }: FormProps) {
-  const { basePrice, schedule } = reservation;
+  const { basePrice, schedule, weeks } = reservation;
+  console.log('schedule', schedule)
   const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   
-  const weekOptions: { label: string; value: string }[] = [
-    { label: "1 semana", value: "1" },
-    { label: "2 semanas", value: "2" },
-    { label: "4 semanas", value: "4" },
-  ];
+  const weekOptions = Array.from({ length: 36 }, (_, i) => {
+    const weekNumber = i + 1;
+    return {
+      label: `${weekNumber} semana${weekNumber > 1 ? 's' : ''}`,
+      value: weekNumber.toString(),
+    };
+  });
 
   useEffect(() => {
     if (reservation.courseKey && isValidCourse(reservation.courseKey)) {
@@ -58,19 +61,19 @@ export default function GeneralBookingForm({
           value={schedule?.toLowerCase() as "am" | "pm" | undefined}
           onChange={(val) => onChangeFormData({ schedule: val })}
         />
-        {/* {formData.schedule && ( */}
+        {schedule && (
           <StudyWeeksSection
-            value={formData.studyDuration}
+            value={weeks}
             onChange={(val) => onChangeFormData({ studyDuration: val })}
             options={weekOptions}
           />
-        {/* )} */}
-        {/* {formData.schedule && formData.studyDuration && ( */}
+        )}
+        {schedule && formData.studyDuration && (
           <StartDatePicker
             value={formData.startDate}
             onChange={(date) => onChangeFormData({ startDate: date })}
           />
-        {/* )} */}
+        )}
         <ReserveSection onReserve={onReserve} />
       </div>
     </div>

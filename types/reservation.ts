@@ -11,6 +11,6 @@ export interface Reservation {
   materialsFee?: number
   insuranceFee?: number
   total?: number,
-  starDate?: string;
+  startDate?: string;
   logoUrl?: string;
 };
