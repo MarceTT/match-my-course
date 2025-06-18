@@ -1,6 +1,6 @@
+// schoolEditSchema.ts
 import { z } from "zod";
 
-// Definimos el esquema de validación con Zod para la edición de escuelas
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
@@ -10,73 +10,54 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/svg+xml",
 ];
 
+// Esquema para una imagen de galería
+const galleryImageSchema = z.union([
+  z.string().url(), // Para URLs existentes
+  z.instanceof(File), // Para nuevos archivos
+  z.object({
+    id: z.string().optional(),
+    url: z.string(),
+    file: z.instanceof(File).optional(),
+    isNew: z.boolean().optional(),
+  }),
+]);
+
 export const schoolEditSchema = z.object({
-  name: z
-    .string()
-    .min(3, "El nombre debe tener al menos 3 caracteres")
-    .max(100, "El nombre no puede tener más de 100 caracteres"),
-  city: z
-    .string()
-    .min(3, "La ciudad debe tener al menos 3 caracteres")
-    .max(50, "La ciudad no puede tener más de 50 caracteres"),
+  name: z.string().min(3).max(100),
+  city: z.string().min(3).max(50),
   status: z.boolean().default(true),
+  
+  logo: z.union([
+    z.string().url(),
+    z.instanceof(File),
+    z.null()
+  ]).optional(),
+  
+  mainImage: z.union([
+    z.string().url(),
+    z.instanceof(File),
+    z.null()
+  ]).optional(),
 
-  logo: z
-    .any()
-    .refine((file) => {
-      if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
-      return file.size <= MAX_FILE_SIZE;
-    }, "El archivo debe ser menor a 100MB")
-    .refine((file) => {
-      if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
-      return ACCEPTED_IMAGE_TYPES.includes(file.type);
-    }, "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg")
-    .optional(),
-
-  mainImage: z
-    .any()
-    .refine((file) => {
-      if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
-      return file.size <= MAX_FILE_SIZE;
-    }, "El archivo debe ser menor a 100MB")
-    .refine((file) => {
-      if (!file || typeof file === "string") return true; // 🔥 Si es string (URL) o null, no validar
-      return ACCEPTED_IMAGE_TYPES.includes(file.type);
-    }, "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg")
-    .optional(),
-
-    galleryImages: z
-  .array(z.any())
-  .refine(
-    (files) =>
-      files.every((file) => {
-        if (typeof file === "string") return true; // URL directa
-        if (file?.url && typeof file.url === "string") return true; // Objeto antiguo
-        if (file?.file && file?.isNew)
-          return ACCEPTED_IMAGE_TYPES.includes(file.file.type);
-        if (file instanceof File)
-          return ACCEPTED_IMAGE_TYPES.includes(file.type);
-        return false;
+  galleryImages: z.array(galleryImageSchema)
+    .max(15, "No puedes subir más de 15 imágenes")
+    .refine(
+      (files) => files.every((file) => {
+        if (typeof file === "string") return true;
+        if (file instanceof File) {
+          return ACCEPTED_IMAGE_TYPES.includes(file.type) && 
+                 file.size <= MAX_FILE_SIZE;
+        }
+        if (file.file) {
+          return ACCEPTED_IMAGE_TYPES.includes(file.file.type) && 
+                 file.file.size <= MAX_FILE_SIZE;
+        }
+        return true;
       }),
-    "Solo se aceptan archivos .jpg, .jpeg, .png, .webp y .svg"
-  )
-  .refine(
-    (files) =>
-      files.every((file) => {
-        const target =
-          file instanceof File
-            ? file
-            : file?.file instanceof File
-            ? file.file
-            : null;
-        return !target || target.size <= MAX_FILE_SIZE;
-      }),
-    "Cada archivo debe ser menor a 100MB"
-  )
-  .refine((files) => files.length <= 15, "No puedes subir más de 15 imágenes")
-  .optional()
-  .default([]),
+      "Formato no soportado o tamaño excedido"
+    )
+    .default([]),
 });
 
-// Tipo inferido del esquema
 export type SchoolEditValues = z.infer<typeof schoolEditSchema>;
+export type GalleryImage = z.infer<typeof galleryImageSchema>;
