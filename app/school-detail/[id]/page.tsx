@@ -40,12 +40,7 @@ const SchoolHome = () => {
     loading: isBookingLoading,
     error: hasBookingError,
     onSubmitReservation
-  } = useReservation({
-    schoolId: id,
-    course,
-    weeks,
-    schedule
-  });
+  } = useReservation({ schoolId: id, course, weeks, schedule });
 
   if (isLoading) {
     return (

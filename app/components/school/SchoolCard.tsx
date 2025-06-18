@@ -28,8 +28,8 @@ interface SchoolCardProps {
 }
 
 export default function SchoolCard({ school, viewType }: SchoolCardProps) {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const prefetchSchool = usePrefetchSchoolDetails();
   const rating = Number(school.qualities?.ponderado ?? 0);
   const antiguedad = school.description?.añoFundacion
@@ -47,12 +47,20 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  const handleScheduleOption = (i: number) => () => {
+    setSelectedOptionIndex(i)
+    const params = new URLSearchParams(searchParams.toString());
+    const jornadaValue = i === 0 ? 'am' : 'pm';
+    params.set('horario', jornadaValue);
+    router.push(`?${params.toString()}`);
+  }
+
   const handleShowSchool = () => {
     const reservation: Reservation = {
       schoolId: school._id.toString(),
       course: searchParams.get("course")?.toString() ?? "",
-      weeks: Number(searchParams.get("semanas") ?? 1),
-      schedule: "AM", // TODO: WIP
+      weeks: Number(searchParams.get("weeksMin") ?? 1),
+      schedule: selectedOptionIndex === 0 ? 'am' : 'pm'
     };
     
     const query = buildReservationQuery(reservation);  
@@ -102,7 +110,10 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       >
         <div className="flex justify-between items-start">
           <div className="flex flex-col">
-            <h1 className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl cursor-pointer" onClick={handleShowSchool}>
+            <h1 
+              className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl cursor-pointer"
+              onClick={handleShowSchool}
+            >
               {school.name}
             </h1>
             <div className="flex items-center mt-1">
@@ -142,7 +153,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
                         ? "font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded"
                         : "hover:text-blue-500 hover:bg-gray-50 px-2 py-1 rounded"
                     }`}
-                    onClick={() => setSelectedOptionIndex(i)}
+                    onClick={handleScheduleOption(i)}
                   >
                     Curso {p.horario} - {p.horasDeClase} horas/semana
                   </li>
