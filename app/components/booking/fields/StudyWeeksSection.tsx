@@ -18,7 +18,7 @@ const StudyWeeksSection = ({
         options={options}
         value={value?.toString() ?? ""}
         onChange={(val) => onChange(Number(val))}
-        placeholder="Elegir"
+        placeholder="Seleccionar..."
       />
     </div>
   );
