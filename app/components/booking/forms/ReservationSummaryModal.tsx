@@ -88,14 +88,24 @@ export default function ReservationSummaryModal({
 
         {step === "summary" ? (
           <div className="space-y-2 text-sm text-gray-700">
-            <p><strong>Escuela:</strong> {reservation.schoolName}</p>
-            <p><strong>Ciudad:</strong> Dublin</p>
-            <p><strong>Curso:</strong> {reservation.course}</p>
-            <p><strong>Modalidad:</strong> {reservation.schedule}</p>
-            <p><strong>Semanas de estudio:</strong> {reservation.weeks}</p>
+            <p>
+              <strong>Escuela:</strong> {reservation.schoolName}</p>
+            <p>
+              <strong>Ciudad:</strong> Dublin</p>
+            <p>
+              <strong>Curso:</strong> {reservation.course}</p>
+            <p>
+              <strong>Modalidad:</strong> {reservation.schedule}</p>
+            <p>
+              <strong>Semanas de estudio:</strong> {reservation.weeks}</p>
             <p>
               <strong>Inicio:</strong> {formData.startDate ? format(formData.startDate, "PPP", { locale: es }) : "No seleccionado"}
             </p>
+            {formData.accommodation && (
+              <p>
+                <strong>Alojamiento:</strong> {formData.accommodation}
+              </p>
+            )}
             {reservation.total !== undefined && (
               <p><strong>Precio final:</strong> €{reservation.total.toLocaleString()}</p>
             )}
