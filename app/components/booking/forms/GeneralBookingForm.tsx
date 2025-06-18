@@ -28,7 +28,7 @@ export default function GeneralBookingForm({
 }: FormProps) {
   const { basePrice } = reservation;
   const [courseType, setCourseType] = useState<Course | undefined>(undefined);
-
+  
   const weekOptions: { label: string; value: string }[] = [
     { label: "1 semana", value: "1" },
     { label: "2 semanas", value: "2" },
@@ -36,10 +36,10 @@ export default function GeneralBookingForm({
   ];
 
   useEffect(() => {
-    if (reservation.course && isValidCourse(reservation.course)) {
-      setCourseType(reservation.course);
+    if (reservation.courseKey && isValidCourse(reservation.courseKey)) {
+      setCourseType(reservation.courseKey);
     }
-  }, [reservation.course]);
+  }, [reservation.courseKey]);
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">

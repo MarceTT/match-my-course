@@ -29,7 +29,7 @@ export default function CourseSection({
           options={courseLabelToIdMap}
           value={selectedCourse}
           onChange={(id) => onChange?.(id)}
-          placeholder="Seleccionar curso"
+          placeholder="Seleccionar curso..."
         />
       ) : (
         <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">

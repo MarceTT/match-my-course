@@ -2,6 +2,7 @@ import type {
   ApiReservationResponse,
   Reservation
 } from "@/types";
+import { Course, courseLabelToIdMap } from "./constants/courses";
 
 export function buildReservationQuery(reservation: Reservation): string {
   return new URLSearchParams({
@@ -31,9 +32,12 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 }
 
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
+  const courseKey: Course | undefined = courseLabelToIdMap[data.course];
+
   return {
     basePrice: data.basePrice,
     course: data.course,
+    courseKey,
     enrollmentFee: data.enrollmentFee,
     insuranceFee: data.insuranceFee,
     materialsFee: data.materialsFee,
