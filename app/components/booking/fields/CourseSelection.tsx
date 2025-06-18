@@ -3,7 +3,6 @@ import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 
 interface CourseSectionProps {
   basePrice: number;
-  editable: boolean;
   selectedCourse?: Course;
   onChange?: (course: Course) => void;
   helperText: string;
@@ -12,7 +11,6 @@ interface CourseSectionProps {
 
 export default function CourseSection({
   basePrice,
-  editable,
   selectedCourse,
   onChange,
   helperText,
@@ -24,18 +22,12 @@ export default function CourseSection({
         <label className="block text-sm text-gray-600 mb-1">{labelText}</label>
         <div className="text-sm text-gray-900 mb-2 font-semibold">€{basePrice}</div>
       </div>
-      {editable ? (
-        <Select<Course>
-          options={courseLabelToIdMap}
-          value={selectedCourse}
-          onChange={(id) => onChange?.(id)}
-          placeholder="Seleccionar curso..."
-        />
-      ) : (
-        <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">
-          {courseLabelToIdMap[selectedCourse || ""] || "Curso seleccionado"}
-        </div>
-      )}
+      <Select<Course>
+        options={courseLabelToIdMap}
+        value={selectedCourse}
+        onChange={(id) => onChange?.(id)}
+        placeholder="Seleccionar curso..."
+      />
       <p className="text-xs text-gray-500 mt-1">{helperText}</p>
     </div>
   );

@@ -3,14 +3,21 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BookingPannelProps } from "@/lib/types";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
 import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
+import { Reservation } from "@/types";
 
-const BookingPannel = ({ reservation, submitReservation, loading, error }: BookingPannelProps) => {
+export type BookingPannelProps = {
+  reservation: Reservation | null;
+  error: string;
+  loading: boolean;
+  onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
+};
+
+const BookingPannel = ({ reservation, onSubmitReservation, loading, error }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
@@ -23,7 +30,7 @@ const BookingPannel = ({ reservation, submitReservation, loading, error }: Booki
   };
 
   const handleSubmitContact = async (finalData: ReservationFormData) => {
-    const result = await submitReservation(finalData);
+    const result = await onSubmitReservation(finalData);
 
     if (result.success) {
       setSubmitted(true);
@@ -89,9 +96,7 @@ const BookingPannel = ({ reservation, submitReservation, loading, error }: Booki
         onClose={handleCloseModal}
         reservation={reservation}
         formData={formData}
-        onSubmitContact={() =>
-          handleSubmitContact(formData as ReservationFormData)
-        }
+        onSubmitContact={handleSubmitContact}
       />
     </>
   );

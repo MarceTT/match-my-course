@@ -9,9 +9,12 @@ export const reservationFormSchema = z.object({
   consent: z.boolean().refine(val => val === true, {
     message: "Debes aceptar el consentimiento",
   }),
+  consent2: z.boolean().refine(val => val === true, {
+    message: "Debes aceptar los Términos y Condiciones",
+  }),
   country: z.string().min(1, "La ciudad es requerida"),
 
-  // Campos extendidos:
+  // Campos extendidos (opcionales):
   studyDuration: z.number().optional(),
   schedule: z.enum(["am", "pm"]).optional(),
   startDate: z.date().optional(),

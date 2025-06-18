@@ -26,7 +26,7 @@ export default function GeneralBookingForm({
   onChangeFormData,
   onReserve
 }: FormProps) {
-  const { basePrice } = reservation;
+  const { basePrice, schedule } = reservation;
   const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   
   const weekOptions: { label: string; value: string }[] = [
@@ -50,28 +50,27 @@ export default function GeneralBookingForm({
       <div className="space-y-4">
         <CourseSection
           basePrice={basePrice ?? 0}
-          editable={true}
           selectedCourse={courseType}
           onChange={setCourseType}
           helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
         />
         <ScheduleSelect
-          value={formData.schedule}
+          value={schedule?.toLowerCase() as "am" | "pm" | undefined}
           onChange={(val) => onChangeFormData({ schedule: val })}
         />
-        {formData.schedule && (
+        {/* {formData.schedule && ( */}
           <StudyWeeksSection
             value={formData.studyDuration}
             onChange={(val) => onChangeFormData({ studyDuration: val })}
             options={weekOptions}
           />
-        )}
-        {formData.schedule && formData.studyDuration && (
+        {/* )} */}
+        {/* {formData.schedule && formData.studyDuration && ( */}
           <StartDatePicker
             value={formData.startDate}
             onChange={(date) => onChangeFormData({ startDate: date })}
           />
-        )}
+        {/* )} */}
         <ReserveSection onReserve={onReserve} />
       </div>
     </div>

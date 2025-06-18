@@ -5,8 +5,6 @@ import { ReservationFormData } from "@/types/reservationForm";
 import ScheduleSelect from "../fields/ScheduleSection";
 import CoursePrice from "../fields/CoursePrice";
 import InfoButton from "../fields/InfoButton";
-import CourseSection from "../fields/CourseSelection";
-import { Course } from "@/lib/constants/courses";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import AccommodationSection from "../fields/AccomodationSection";
@@ -24,7 +22,7 @@ export default function WorkAndStudyBookingForm({
   onChangeFormData,
   onReserve,
 }: FormProps) {
-  const { basePrice } = reservation;
+  const { basePrice, course, schedule } = reservation;
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -33,12 +31,21 @@ export default function WorkAndStudyBookingForm({
         <InfoButton onClick={() => console.log("Mostrar info")} />
       </div>
       <div className="space-y-4">
-        <CourseSection
-          basePrice={basePrice ?? 0}
-          editable={false}
-          selectedCourse={reservation.course as Course}
-          helperText="Pagada tu reserva, te explicaremos cómo debes solicitar tu permiso de residencia de 8 meses."
-        />
+        <div>
+          <div className="flex justify-between">
+            <label className="block text-sm text-gray-600 mb-1">
+              Curso
+            </label>
+            <div className="text-sm text-gray-900 mb-2 font-semibold">€{basePrice}</div>
+          </div>
+          <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">
+            {course}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Pagada tu reserva, te explicaremos cómo debes solicitar tu permiso de residencia de 8 meses.
+          </p>
+        </div>
+        
         <div>
           <label className="block text-sm text-gray-600 mb-2">
             Semanas a estudiar
@@ -48,7 +55,7 @@ export default function WorkAndStudyBookingForm({
           </div>
         </div>
         <ScheduleSelect
-          value={formData.schedule}
+          value={schedule?.toLowerCase() as "am" | "pm" | undefined}
           onChange={(val) => onChangeFormData({ schedule: val })}
         />
         <StartDatePicker

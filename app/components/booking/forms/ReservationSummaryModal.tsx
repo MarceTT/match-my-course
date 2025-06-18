@@ -56,6 +56,7 @@ export default function ReservationSummaryModal({
       nationality: "",
       phone: "",
       consent: false,
+      consent2: false,
     },
   });
 
@@ -70,11 +71,13 @@ export default function ReservationSummaryModal({
     setStep("contact");
   }
 
-  async function onSubmit(formData: ReservationFormData) {
-    console.log('onSubmit')
-    onSubmitContact(formData);
-    // onClose();
+  async function onSubmit(data: ReservationFormData) {
+    const finalData = {
+      ...formData, // viene del paso anterior, por props
+      ...data,     // campos del formulario de contacto
+    };
 
+    onSubmitContact(finalData as ReservationFormData);
   }
 
   return (
@@ -88,14 +91,24 @@ export default function ReservationSummaryModal({
 
         {step === "summary" ? (
           <div className="space-y-2 text-sm text-gray-700">
-            <p><strong>Escuela:</strong> {reservation.schoolName}</p>
-            <p><strong>Ciudad:</strong> Dublin</p>
-            <p><strong>Curso:</strong> {reservation.course}</p>
-            <p><strong>Modalidad:</strong> {reservation.schedule}</p>
-            <p><strong>Semanas de estudio:</strong> {reservation.weeks}</p>
+            <p>
+              <strong>Escuela:</strong> {reservation.schoolName}</p>
+            <p>
+              <strong>Ciudad:</strong> Dublin</p>
+            <p>
+              <strong>Curso:</strong> {reservation.course}</p>
+            <p>
+              <strong>Modalidad:</strong> {reservation.schedule}</p>
+            <p>
+              <strong>Semanas de estudio:</strong> {reservation.weeks}</p>
             <p>
               <strong>Inicio:</strong> {formData.startDate ? format(formData.startDate, "PPP", { locale: es }) : "No seleccionado"}
             </p>
+            {formData.accommodation && (
+              <p>
+                <strong>Alojamiento:</strong> {formData.accommodation}
+              </p>
+            )}
             {reservation.total !== undefined && (
               <p><strong>Precio final:</strong> €{reservation.total.toLocaleString()}</p>
             )}
@@ -109,7 +122,6 @@ export default function ReservationSummaryModal({
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              {/* Fila 1: Nombre + Apellido */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -124,7 +136,6 @@ export default function ReservationSummaryModal({
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="lastName"
@@ -139,8 +150,6 @@ export default function ReservationSummaryModal({
                   )}
                 />
               </div>
-
-              {/* Fila 2: Email + Nacionalidad */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -155,7 +164,6 @@ export default function ReservationSummaryModal({
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="nationality"
@@ -176,8 +184,6 @@ export default function ReservationSummaryModal({
                   )}
                 />
               </div>
-
-              {/* Fila 3: Teléfono */}
               <FormField
                 control={form.control}
                 name="phone"
@@ -217,24 +223,44 @@ export default function ReservationSummaryModal({
                   </FormItem>
                 )}
               />
-
-              {/* Checkbox de consentimiento */}
               <FormField
                 control={form.control}
                 name="consent"
                 render={({ field }) => (
-                  <FormItem className="flex items-start space-x-2">
-                    <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                    <div className="text-sm leading-tight">
-                      Acepto que MatchMyCourse me contacte vía correo o teléfono.
+                  <FormItem className="flex flex-col gap-y-2">
+                    <div className="flex items-start gap-x-2">
+                      <FormControl>
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                      <div className="text-sm leading-tight">
+                        Doy mi consentimiento para el tratamiento de mis datos personales
+                        asociados al curso tomado de acuerdo con los términos de la
+                        Política de Privacidad.
+                      </div>
                     </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
+              <FormField
+                control={form.control}
+                name="consent2"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-y-2">
+                    <div className="flex items-start gap-x-2">
+                      <FormControl>
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                      </FormControl>
+                      <div className="text-sm leading-tight">
+                        Declaro haber leído, comprendido y aceptado los Términos y Condiciones
+                        generales del servicio, incluyendo las políticas de pagos, cambios,
+                        cancelaciones y devoluciones asociadas al curso contratado.
+                      </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button className="w-full bg-red-500 hover:bg-red-600">
                 Enviar solicitud
               </Button>

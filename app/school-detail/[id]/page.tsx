@@ -39,7 +39,7 @@ const SchoolHome = () => {
     reservation,
     loading: isBookingLoading,
     error: hasBookingError,
-    submitReservation
+    onSubmitReservation
   } = useReservation({
     schoolId: id,
     course,
@@ -232,7 +232,7 @@ const SchoolHome = () => {
               reservation={reservation}
               loading={isBookingLoading}
               error={hasBookingError}
-              submitReservation={submitReservation}
+              onSubmitReservation={onSubmitReservation}
             />
           </div>
         </div>

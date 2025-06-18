@@ -80,7 +80,7 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     return () => controller.abort();
   }, [schoolId, course, weeks, schedule]);
 
-  const submitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
+  const onSubmitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
       return { success: false, message: "Reserva no inicializada" };
     }
@@ -125,6 +125,6 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     loading,
     error,
     submitted,
-    submitReservation,
+    onSubmitReservation,
   };
 }
