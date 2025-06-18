@@ -51,7 +51,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
     const reservation: Reservation = {
       schoolId: school._id.toString(),
       course: searchParams.get("course")?.toString() ?? "",
-      weeks: 25, // TODO: WIP
+      weeks: Number(searchParams.get("semanas") ?? 1),
       schedule: "AM", // TODO: WIP
     };
     

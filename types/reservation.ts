@@ -2,6 +2,7 @@ export interface Reservation {
   schoolId?: string;
   schoolName?: string;
   course: string;
+  courseKey?: string;
   city?: string;
   weeks: number;
   schedule: string;
