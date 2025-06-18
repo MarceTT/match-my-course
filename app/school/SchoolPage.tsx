@@ -34,7 +34,11 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
   const isFetching = useRef(false);
 
-  const { ref: loaderRef, inView: isInView } = useInView({ threshold: 0.1, triggerOnce: false });
+  const { ref: loaderRef, inView: isInView } = useInView({ 
+    threshold: 0.1,
+    triggerOnce: false,
+    rootMargin: "200px" // Carga antes de llegar al final
+  });
 
   const {
     data,
