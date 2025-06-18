@@ -52,7 +52,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
     const params = new URLSearchParams(searchParams.toString());
     const jornadaValue = i === 0 ? 'am' : 'pm';
     params.set('horario', jornadaValue);
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   const handleShowSchool = () => {
