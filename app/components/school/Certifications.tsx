@@ -24,39 +24,17 @@ const logoMap: Record<string, string> = {
 };
 
 const Certifications = ({ school }: CertificationsProps) => {
-  if (!school?.certifications) return null;
+  if (!school?.certifications || typeof school.certifications !== "object") return null;
 
-  const staticCertifications = [
-    {
-      key: "Eaquals",
-      description:
-        "acreditación internacional que garantiza la excelencia en la enseñanza de idiomas, evaluando aspectos como la calidad de la enseñanza, el currículo de los profesores, la gestión institucional, el bienestar del estudiante, la infraestructura y la evaluación del aprendizaje",
-    },
-    {
-      key: "IALC",
-      description:
-        "acreditación que certifica escuelas independientes de alta calidad en la enseñanza de idiomas. Se enfoca en garantizar programas bien estructurados, enseñanza personalizada, atención al estudiante y una experiencia inmersiva en el idioma y la cultura local",
-    },
-  ];
-
-  const dynamicCertifications = Object.entries(school.certifications)
-    .filter(([key, value]) => value && !["Eaquals", "IALC"].includes(key))
+  const validCerts = Object.entries(school.certifications)
+    .filter(([key, value]) => Boolean(value) && key in logoMap)
     .map(([key]) => ({
       key,
+      logo: logoMap[key],
       description: school.accreditations?.[key] ?? "",
     }));
 
-  const allCertifications = [...staticCertifications, ...dynamicCertifications];
-
-  const sortedCertifications = allCertifications.sort((a, b) => {
-    const order = ["Eaquals", "IALC", "ACELS"];
-    const aIndex = order.indexOf(a.key);
-    const bIndex = order.indexOf(b.key);
-    if (aIndex === -1 && bIndex === -1) return a.key.localeCompare(b.key);
-    if (aIndex === -1) return 1;
-    if (bIndex === -1) return -1;
-    return aIndex - bIndex;
-  });
+  if (validCerts.length === 0) return null;
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -67,17 +45,23 @@ const Certifications = ({ school }: CertificationsProps) => {
         <Info className="mt-2 lg:mt-0 lg:ml-2 h-5 w-5 text-gray-400" />
       </div>
 
-      <div className="flex flex-wrap justify-center md:justify-start gap-6">
-        {sortedCertifications.map(({ key, description }) => {
-          const logoSrc = logoMap[key];
-          if (!logoSrc) return null;
-
-          return (
+      {validCerts.length === 1 ? (
+        <div className="text-center md:text-left">
+          <h2 className="text-xl font-semibold text-blue-600">
+            {validCerts[0].key}
+          </h2>
+          <p className="text-sm text-gray-700 max-w-xl mx-auto md:mx-0 mt-2">
+            {validCerts[0].description}
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-center md:justify-start gap-6">
+          {validCerts.map(({ key, logo, description }) => (
             <TooltipProvider key={key} delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Image
-                    src={logoSrc}
+                    src={logo}
                     alt={key}
                     width={140}
                     height={80}
@@ -90,9 +74,9 @@ const Certifications = ({ school }: CertificationsProps) => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
