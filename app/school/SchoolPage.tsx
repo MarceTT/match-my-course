@@ -28,16 +28,12 @@ const SkeletonCard = () => (
 const MAX_PAGES = 10;
 
 const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
-  const [loadedIds, setLoadedIds] = useState<Set<string>>(new Set());
-  const [firstLoad, setFirstLoad] = useState(true);
-  const pendingImages = useRef<Set<string>>(new Set());
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
   const isFetching = useRef(false);
 
   const { ref: loaderRef, inView: isInView } = useInView({ 
     threshold: 0.1,
-    triggerOnce: false,
-    rootMargin: "200px" // Carga antes de llegar al final
+    rootMargin: "200px"
   });
 
   const {
@@ -49,14 +45,11 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
     isError,
   } = useInfiniteSchools();
 
-  const schools =
-    Array.from(
-      new Map(
-        data?.pages
-          .flatMap((page) => page.schools)
-          .map((s) => [s._id, s])
-      ).values()
-    ) || [];
+  const schools = Array.from(
+    new Map(
+      data?.pages.flatMap((page) => page.schools).map((s) => [s._id, s])
+    ).values()
+  ) || [];
 
   useEffect(() => {
     if (
@@ -72,40 +65,6 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
       });
     }
   }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage, data]);
-
-  useEffect(() => {
-    const newSchools = schools.filter((school) => !loadedIds.has(school._id));
-    if (newSchools.length === 0) {
-      setFirstLoad(false);
-      return;
-    }
-
-    newSchools.forEach((school) => pendingImages.current.add(school._id));
-
-    const preload = async () => {
-      await Promise.all(
-        newSchools.map((school) => {
-          if (!school.mainImage) return Promise.resolve();
-          return new Promise<void>((resolve) => {
-            const img = new Image();
-            img.src = rewriteToCDN(school.mainImage) || "/placeholder.svg";
-            img.loading = "lazy";
-            img.onload = () => resolve();
-            img.onerror = () => resolve();
-          });
-        })
-      );
-      setLoadedIds((prev) => {
-        const newSet = new Set(prev);
-        newSchools.forEach((s) => newSet.add(s._id));
-        return newSet;
-      });
-
-      setFirstLoad(false);
-    };
-
-    preload();
-  }, [schools]);
 
   useEffect(() => {
     onScrollTopVisibilityChange?.(showScrollTop);
@@ -129,7 +88,6 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {schools.map((school) => {
-          const isLoaded = loadedIds.has(school._id);
           const price =
             school.prices?.[0]?.horarios?.precio &&
             !isNaN(Number(school.prices[0].horarios.precio))
@@ -139,44 +97,34 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
           return (
             <div
               key={school._id}
-              className={`transition-all duration-700 ease-in-out transform min-h-[320px] ${
-                isLoaded
-                  ? "opacity-100 scale-100 blur-0"
-                  : "opacity-0 scale-95 blur-sm"
-              }`}
+              className="transition-opacity duration-300 ease-in-out opacity-100"
             >
-              {firstLoad || !isLoaded ? (
-                <SkeletonCard />
-              ) : (
-                <School
-                  _id={school._id}
-                  name={school.name}
-                  location={school.city}
-                  image={rewriteToCDN(school.mainImage) || "/placeholder.svg"}
-                  rating={parseFloat(String(school.ponderado ?? 0))}
-                  price={price}
-                  lowestPrice={school.lowestPrice}
-                />
-              )}
+              <School
+                _id={school._id}
+                name={school.name}
+                location={school.city}
+                image={rewriteToCDN(school.mainImage) || "/placeholder.svg"}
+                rating={parseFloat(String(school.ponderado ?? 0))}
+                price={price}
+                lowestPrice={school.lowestPrice}
+              />
             </div>
           );
         })}
       </div>
 
       {hasNextPage && (
-        <>
+        <div ref={loaderRef} className="flex justify-center mt-10">
           {isFetchingNextPage ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full">
               {Array.from({ length: 4 }).map((_, i) => (
                 <SkeletonCard key={`loading-skeleton-${i}`} />
               ))}
             </div>
           ) : (
-            <div ref={loaderRef} className="flex justify-center mt-10 animate-bounce">
-              <InfiniteLoaderScroll />
-            </div>
+            <InfiniteLoaderScroll />
           )}
-        </>
+        </div>
       )}
 
       {showScrollTop && (

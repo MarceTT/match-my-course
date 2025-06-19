@@ -172,7 +172,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
         >
           <motion.div animate={bounceAnimation}>
             <button
-              className="bg-[#489751] p-4 rounded-full shadow-lg"
+              className="bg-[#00D757] p-4 rounded-full shadow-lg"
               aria-label="Contactar por WhatsApp"
               onClick={handleWhatsappClick}
             >

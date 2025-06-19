@@ -23,6 +23,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import HistorialArchivos from "../../components/historial-files-table";
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 
 interface DescriptionItem {
@@ -91,19 +92,15 @@ const DescriptionPage = () => {
     { key: "representacion", header: "representacion" },
   ];
 
-  const uploadMutation = useMutation({
-    mutationFn: (formData: FormData) =>
-      uploadExcelDetalleEscuela(formData, selectedColumns),
-    onSuccess: () => {
-      toast.success("Se insertaron los registros correctamente.");
+  const uploadMutation = useUploadFile(
+    "/excel/upload-escuela-detalle", // endpoint
+    "Descripción", // label para toast
+    () => {
+      // acción al éxito: reset states, etc.
       setFile(null);
       setSelectedColumns([]);
-      setColumns([]);
-    },
-    onError: (error: any) => {
-      setError(error.message || "Error al procesar los datos en el servidor");
-    },
-  });
+    }
+  )
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -183,11 +180,10 @@ const DescriptionPage = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("selectedColumns", JSON.stringify(selectedColumns));
-
-    uploadMutation.mutate(formData);
+    uploadMutation.mutate({
+      file,
+      selectedColumns,
+    });
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
