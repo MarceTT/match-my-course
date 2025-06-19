@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { LuHeart } from "react-icons/lu";
@@ -37,27 +37,22 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
     setVisible(true);
   };
 
+  const imageUrls = images.map((img) => (typeof img === "string" ? img : img.src));
+
+  useEffect(() => {
+    imageUrls.forEach((url) => {
+      const img = new window.Image();
+      img.src = url;
+    });
+  }, [imageUrls]);
+
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-3">
-        {/* Header */}
         <TooltipProvider delayDuration={0}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
             <h1 className="text-3xl font-black">{city}, Irlanda</h1>
             <div className="flex flex-wrap items-center gap-4 mt-2 sm:mt-0">
-              {/* <div className="flex items-center gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button className="bg-[#F15368] hover:bg-[#F15368]/90 rounded-full w-8 h-8 p-0">
-                      <LuHeart className="w-5 h-5 text-white fill-white" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Guardar</TooltipContent>
-                </Tooltip>
-                <span className="text-sm text-gray-600 font-semibold">
-                  Guardar
-                </span>
-              </div> */}
               <div className="flex items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -79,12 +74,10 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           </div>
         </TooltipProvider>
 
-        {/* Galería */}
         <div className="grid grid-cols-6 grid-rows-1 gap-2">
-          {images.slice(0, 5).map((src, i) => {
-            const url = typeof src === "string" ? src : src.src;
+          {imageUrls.slice(0, 5).map((url, i) => {
+            const remaining = imageUrls.length - 5;
             const [loaded, setLoaded] = useState(false);
-            const remaining = images.length - 5;
 
             return (
               <div
@@ -106,6 +99,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   }`}
                   onLoad={() => setLoaded(true)}
                   onError={() => setLoaded(true)}
+                  loading="lazy"
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition">
@@ -124,11 +118,10 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           })}
         </div>
 
-        {/* Visor */}
         <PhotoSlider
-          images={images.map((src, index) => ({
+          images={imageUrls.map((src, index) => ({
             key: `img-${index}`,
-            src: typeof src === "string" ? src : src.src,
+            src,
           }))}
           visible={visible}
           index={index}
