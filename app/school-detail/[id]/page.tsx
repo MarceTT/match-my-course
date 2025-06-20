@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import dynamic from "next/dynamic";
-import { useReservation } from "@/hooks/useReservation";
+import { useBooking } from "@/hooks/useBooking";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
 const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel"), { ssr: false });
@@ -39,8 +39,9 @@ const SchoolHome = () => {
     reservation,
     loading: isBookingLoading,
     error: hasBookingError,
-    onSubmitReservation
-  } = useReservation({ schoolId: id, course, weeks, schedule });
+    onSubmitReservation,
+    courseInfo
+  } = useBooking({ schoolId: id, course, weeks, schedule });
 
   if (isLoading) {
     return (
@@ -227,6 +228,7 @@ const SchoolHome = () => {
               reservation={reservation}
               loading={isBookingLoading}
               error={hasBookingError}
+              courseInfo={courseInfo}
               onSubmitReservation={onSubmitReservation}
             />
           </div>

@@ -10,7 +10,7 @@ interface ReserveSectionProps {
 
 const ReserveSection = ({
   onReserve,
-  amount = 200,
+  amount = 100,
   reserveLabel = "Reserva",
   notes = [
     "La parte que resta será pagada en destino.",

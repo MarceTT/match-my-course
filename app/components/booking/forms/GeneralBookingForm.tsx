@@ -12,9 +12,11 @@ import CourseSection from "../fields/CourseSelection";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import StudyWeeksSection from "../fields/StudyWeeksSection";
+import { CoursesInfo } from "@/lib/types/coursesInfo";
 
 interface FormProps {
   reservation: Reservation;
+  courseInfo: CoursesInfo;
   formData: Partial<ReservationFormData>;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
@@ -22,12 +24,12 @@ interface FormProps {
 
 export default function GeneralBookingForm({
   reservation,
+  courseInfo,
   formData,
   onChangeFormData,
   onReserve
 }: FormProps) {
   const { basePrice, schedule, weeks } = reservation;
-  console.log('schedule', schedule)
   const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   
   const weekOptions = Array.from({ length: 36 }, (_, i) => {
@@ -53,7 +55,9 @@ export default function GeneralBookingForm({
       <div className="space-y-4">
         <CourseSection
           basePrice={basePrice ?? 0}
+          bookingAmound={100}
           selectedCourse={courseType}
+          courseInfo={courseInfo}
           onChange={setCourseType}
           helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
         />
