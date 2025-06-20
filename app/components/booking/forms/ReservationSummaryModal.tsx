@@ -109,10 +109,14 @@ export default function ReservationSummaryModal({
                 <strong>Alojamiento:</strong> {formData.accommodation}
               </p>
             )}
-            {reservation.total !== undefined && (
-              <p><strong>Precio final:</strong> €{reservation.total.toLocaleString()}</p>
+            {reservation.basePrice !== undefined && (
+              <p>
+                <strong>Precio final:</strong> €{reservation.basePrice.toLocaleString()}
+              </p>
             )}
-            <p><strong>Gastos adicionales:</strong> Matrícula, materiales, exámen de salida, seguro médico.</p>
+            <p>
+              <strong>Gastos adicionales:</strong> Matrícula, materiales, exámen de salida, seguro médico.
+            </p>
             <div className="pt-6">
               <Button className="w-full bg-red-500 hover:bg-red-600" onClick={handleNext}>
                 Siguiente

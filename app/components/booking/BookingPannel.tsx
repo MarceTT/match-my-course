@@ -9,15 +9,23 @@ import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
 import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
+import { CoursesInfo } from "@/lib/types/coursesInfo";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
   error: string;
   loading: boolean;
+  courseInfo: CoursesInfo;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
 };
 
-const BookingPannel = ({ reservation, onSubmitReservation, loading, error }: BookingPannelProps) => {
+const BookingPannel = ({
+  reservation,
+  onSubmitReservation,
+  loading,
+  error,
+  courseInfo
+}: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
@@ -86,6 +94,7 @@ const BookingPannel = ({ reservation, onSubmitReservation, loading, error }: Boo
       ) : (
         <GeneralBookingForm
           reservation={reservation}
+          courseInfo={courseInfo}
           formData={formData}
           onChangeFormData={handleFormDataChange}
           onReserve={handleOpenModal}

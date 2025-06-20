@@ -22,11 +22,15 @@ type UseReservationParams = {
   schedule: string | null;
 };
 
-export function useReservation({ schoolId, course, weeks, schedule }: UseReservationParams) {
+export function useBooking({ schoolId, course, weeks, schedule }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+
+  const [courses, setCourses] = useState<string[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+  const [errorCourses, setErrorCourses] = useState<Error | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -53,7 +57,7 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
         });
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-calculo-reserva/${schoolId}?${query}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`,
           { signal }
         );
 
@@ -79,6 +83,25 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     fetchReservation();
     return () => controller.abort();
   }, [schoolId, course, weeks, schedule]);
+
+  useEffect(() => {
+    if (!schoolId) return;
+
+    const fetchCourses = async () => {
+      try {
+        setLoadingCourses(true);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/tipo-cursos/${schoolId}`);
+        const json = await res.json();
+        setCourses(json.data || []);
+      } catch (error) {
+        setErrorCourses(error as Error);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    fetchCourses();
+  }, [schoolId]);
 
   const onSubmitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
@@ -126,5 +149,10 @@ export function useReservation({ schoolId, course, weeks, schedule }: UseReserva
     error,
     submitted,
     onSubmitReservation,
+    courseInfo: {
+      list: courses,
+      loading: loadingCourses,
+      error: !!errorCourses
+    },
   };
 }

@@ -56,3 +56,13 @@ export const courseMetadataMap: Record<Course, CourseMetadata> = {
     mode: "presencial",
   },
 };
+
+/**
+ * Utilidad para transformar los nombres de curso que llegan del backend (string[])
+ * al enum Course[] para lógica interna en el frontend.
+ */
+export function parseCoursesFromApi(labels: string[]): Course[] {
+  return labels
+    .map(label => courseLabelToIdMap[label])
+    .filter((courseId): courseId is Course => Boolean(courseId));
+}
