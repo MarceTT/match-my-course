@@ -17,7 +17,7 @@ import dynamic from "next/dynamic";
 import { useBooking } from "@/hooks/useBooking";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
-const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel"), { ssr: false });
+const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel.container"), { ssr: false });
 const Certifications = dynamic(() => import("../../components/school/Certifications"), { ssr: false });
 const Facilities = dynamic(() => import("../../components/school/Facilities"), { ssr: false });
 const SchoolInclusion = dynamic(() => import("../../components/school/SchoolInclusion"), { ssr: false });

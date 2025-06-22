@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import GeneralBookingForm from "./forms/GeneralBookingForm";
 import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
 import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
@@ -10,6 +8,10 @@ import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
+import BookingPannelLoading from "./BookingPannel.loading";
+import BookingPannelError from "./BookingPannel.error";
+import BookingPannelNoReservation from "./BookingPannel.noReservation";
+import BookingPannelSubmit from "./BookingPannel.submit";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
@@ -34,6 +36,7 @@ const BookingPannel = ({
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleFormDataChange = (updated: Partial<ReservationFormData>) => {
+    console.log('updated', updated)
     setFormData((prev) => ({ ...prev, ...updated }));
   };
 
@@ -47,59 +50,39 @@ const BookingPannel = ({
     }
   };
 
-  if (loading) {
-    return (
-      <Card className="p-4">
-        <Skeleton className="h-6 w-3/4 mb-2" />
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-full mb-2" />
-        <Skeleton className="h-4 w-2/3" />
-      </Card>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card className="p-4 border border-red-500 bg-red-50 text-red-700">
-        <p>Error: {error}</p>
-      </Card>
-    );
-  }
-
-  if (!reservation) {
-    return (
-      <Card className="p-4">
-        <p>No hay datos de reserva disponibles.</p>
-      </Card>
-    );
-  }
-
-  if (submitted) {
-    return (
-      <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
-    );
-  }
+  if (loading) return <BookingPannelLoading />;
+  if (error) return <BookingPannelError message={error} />;
+  if (!reservation) return <BookingPannelNoReservation />;
+  if (submitted) return <BookingPannelSubmit />;
 
   const courseKey = courseLabelToIdMap[reservation.course];
 
-  return (
-    <>
-      {courseKey === Course.WORK_AND_STUDY ? (
+  const renderBookingForm = () => {
+    if (courseKey === Course.WORK_AND_STUDY) {
+      return (
         <WorkAndStudyBookingForm
           reservation={reservation}
           formData={formData}
           onChangeFormData={handleFormDataChange}
           onReserve={handleOpenModal}
         />
-      ) : (
-        <GeneralBookingForm
-          reservation={reservation}
-          courseInfo={courseInfo}
-          formData={formData}
-          onChangeFormData={handleFormDataChange}
-          onReserve={handleOpenModal}
-        />
-      )}
+      );
+    }
+
+    return (
+      <GeneralBookingForm
+        reservation={reservation}
+        courseInfo={courseInfo}
+        formData={formData}
+        onChangeFormData={handleFormDataChange}
+        onReserve={handleOpenModal}
+      />
+    );
+  };
+
+  return (
+    <>
+      {renderBookingForm()}
       <ReservationSummaryModal
         open={isModalOpen}
         onClose={handleCloseModal}
