@@ -2,7 +2,7 @@ import type {
   ApiReservationResponse,
   Reservation
 } from "@/types";
-import { Course, courseLabelToIdMap } from "./constants/courses";
+import { CourseKey, courseLabelToIdMap } from "./helpers/courseHelper";
 
 export function buildReservationQuery(reservation: Reservation): string {
   return new URLSearchParams({
@@ -32,7 +32,7 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 }
 
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
-  const courseKey: Course | undefined = courseLabelToIdMap[data.course];
+  const courseKey: CourseKey | undefined = courseLabelToIdMap[data.course];
 
   return {
     basePrice: data.basePrice,

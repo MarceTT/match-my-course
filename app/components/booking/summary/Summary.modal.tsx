@@ -76,9 +76,16 @@ export default function SummaryModal({
           </DialogTitle>
         </DialogHeader>
         {step === "summary" ? (
-          <BookingSummaryStepOne reservation={reservation} formData={formData} onNext={handleNext} />
+          <BookingSummaryStepOne
+            reservation={reservation}
+            formData={formData}
+            onNext={handleNext}
+          />
         ) : (
-          <BookingSummaryStepTwo form={form} onSubmit={onSubmit} />
+          <BookingSummaryStepTwo
+            form={form}
+            onSubmit={onSubmit}
+          />
         )}
       </DialogContent>
     </Dialog>
