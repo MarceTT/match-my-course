@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import dynamic from "next/dynamic";
-import { useBooking } from "@/hooks/useBooking";
+import { useBooking } from "@/app/components/booking/hooks/useBooking";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
 const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel.container"), { ssr: false });

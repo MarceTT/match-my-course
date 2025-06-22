@@ -16,7 +16,7 @@ interface FormProps {
   onReserve: () => void;
 }
 
-export default function WorkAndStudyBookingForm({
+export default function WorkAndStudyBooking({
   reservation,
   formData,
   onChangeFormData,

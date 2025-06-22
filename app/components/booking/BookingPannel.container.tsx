@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import GeneralBookingForm from "./forms/GeneralBookingForm";
-import WorkAndStudyBookingForm from "./forms/WorkAndStudyBookingForm";
 import { Course, courseLabelToIdMap } from "@/lib/constants/courses";
-import ReservationSummaryModal from "./forms/ReservationSummaryModal";
 import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
@@ -12,6 +9,9 @@ import BookingPannelLoading from "./BookingPannel.loading";
 import BookingPannelError from "./BookingPannel.error";
 import BookingPannelNoReservation from "./BookingPannel.noReservation";
 import BookingPannelSubmit from "./BookingPannel.submit";
+import WorkAndStudyBooking from "./forms/BookingForm.workAndStudy";
+import SummaryModal from "./summary/Summary.modal";
+import GeneralBooking from "./forms/BookingForm.general";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
@@ -60,7 +60,7 @@ const BookingPannel = ({
   const renderBookingForm = () => {
     if (courseKey === Course.WORK_AND_STUDY) {
       return (
-        <WorkAndStudyBookingForm
+        <WorkAndStudyBooking
           reservation={reservation}
           formData={formData}
           onChangeFormData={handleFormDataChange}
@@ -70,7 +70,7 @@ const BookingPannel = ({
     }
 
     return (
-      <GeneralBookingForm
+      <GeneralBooking
         reservation={reservation}
         courseInfo={courseInfo}
         formData={formData}
@@ -83,7 +83,7 @@ const BookingPannel = ({
   return (
     <>
       {renderBookingForm()}
-      <ReservationSummaryModal
+      <SummaryModal
         open={isModalOpen}
         onClose={handleCloseModal}
         reservation={reservation}
