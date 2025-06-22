@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Reservation } from "@/types";
-import { isValidCourse } from "@/lib/helpers/courseHelper";
-import { Course } from "@/lib/constants/courses";
+import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { ReservationFormData } from "@/types/reservationForm";
 import ScheduleSelect from "../fields/ScheduleSection";
 import CoursePrice from "../fields/CoursePrice";
@@ -29,8 +27,6 @@ export default function GeneralBooking({
   onChangeFormData,
   onReserve
 }: FormProps) {
-  const { basePrice, schedule, weeks } = reservation;
-  const [courseType, setCourseType] = useState<Course | undefined>(undefined);
   
   const weekOptions = Array.from({ length: 36 }, (_, i) => {
     const weekNumber = i + 1;
@@ -40,44 +36,45 @@ export default function GeneralBooking({
     };
   });
 
-  useEffect(() => {
-    if (reservation.courseKey && isValidCourse(reservation.courseKey)) {
-      setCourseType(reservation.courseKey);
-    }
-  }, [reservation.courseKey]);
+  const getCourseType = (): CourseKey | undefined => {
+    return formData.courseType ?? (isValidCourse(reservation.courseKey) ? reservation.courseKey as CourseKey : undefined);
+  };
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <CoursePrice amount={basePrice ?? 0} />
+        <CoursePrice amount={reservation.basePrice ?? 0} />
         <InfoButton onClick={() => console.log("Mostrar info")} />
       </div>
       <div className="space-y-4">
         <CourseSection
-          basePrice={basePrice ?? 0}
+          basePrice={reservation.basePrice ?? 0}
           bookingAmound={100}
-          selectedCourse={courseType}
+          selectedCourse={getCourseType()}
           courseInfo={courseInfo}
           onChange={(courseType) => onChangeFormData({ courseType })}
           helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
         />
         <ScheduleSelect
-          value={schedule?.toLowerCase() as "am" | "pm" | undefined}
+          value={
+            (formData.schedule ??
+              reservation.schedule)?.toLowerCase() as "am" | "pm" | undefined
+          }
           onChange={(val) => onChangeFormData({ schedule: val })}
         />
-        {schedule && (
+        {/* {schedule && ( */}
           <StudyWeeksSection
-            value={weeks}
+            value={formData.studyDuration ?? reservation.weeks}
             onChange={(val) => onChangeFormData({ studyDuration: val })}
             options={weekOptions}
           />
-        )}
-        {schedule && formData.studyDuration && (
+        {/* )} */}
+        {/* {schedule && formData.studyDuration && ( */}
           <StartDatePicker
             value={formData.startDate}
             onChange={(date) => onChangeFormData({ startDate: date })}
           />
-        )}
+        {/* )} */}
         <ReserveSection onReserve={onReserve} />
       </div>
     </div>
