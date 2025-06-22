@@ -24,7 +24,7 @@ type UseReservationParams = {
 
 export function useBooking({ schoolId, course, weeks, schedule }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -40,6 +40,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     const signal = controller.signal;
 
     const fetchReservation = async () => {
+      setError(false);
+      setErrorMessage("");
+      setLoading(true);
+
       if (!schoolId || !course || !schedule || weeks <= 0) {
         setReservation(null);
         setError(true)
@@ -74,7 +78,8 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
           setErrorMessage("");
         } else {
           setReservation(null);
-          setError(json.message || "Error al calcular reserva");
+          setError(true);
+          setErrorMessage(json.message || "Error al calcular reserva");
         }
       } catch (err) {
         console.error(err);

@@ -32,13 +32,14 @@ const SchoolHome = () => {
   const searchParams = useSearchParams();
 
   const course = searchParams.get("curso");
-  const weeks = searchParams.get("semanas");
+  const weeks = parseInt(searchParams.get("semanas") ?? "1", 10); // 👈 conversión segura
   const schedule = searchParams.get("horario");
 
   const {
     reservation,
     loading: isBookingLoading,
     error: hasBookingError,
+    errorMessage: errorMessage,
     onSubmitReservation,
     courseInfo
   } = useBooking({ schoolId: id, course, weeks, schedule });
@@ -228,6 +229,7 @@ const SchoolHome = () => {
               reservation={reservation}
               loading={isBookingLoading}
               error={hasBookingError}
+              errorMessage={errorMessage}
               courseInfo={courseInfo}
               onSubmitReservation={onSubmitReservation}
             />
