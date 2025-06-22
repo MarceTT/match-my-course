@@ -15,7 +15,8 @@ import { CourseKey, courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
-  error: string;
+  error: boolean;
+  errorMessage: string;
   loading: boolean;
   courseInfo: CoursesInfo;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
@@ -26,6 +27,7 @@ const BookingPannel = ({
   onSubmitReservation,
   loading,
   error,
+  errorMessage,
   courseInfo
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +52,7 @@ const BookingPannel = ({
   };
 
   if (loading) return <BookingPannelLoading />;
-  if (error) return <BookingPannelError message={error} />;
+  if (error) return <BookingPannelError message={errorMessage} />;
   if (!reservation) return <BookingPannelNoReservation />;
   if (submitted) return <BookingPannelSubmit />;
 

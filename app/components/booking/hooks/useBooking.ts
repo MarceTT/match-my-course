@@ -18,30 +18,36 @@ type ExtraReservationData = {
 type UseReservationParams = {
   schoolId: string;
   course: string | null;
-  weeks: string | null;
+  weeks: number;
   schedule: string | null;
 };
 
 export function useBooking({ schoolId, course, weeks, schedule }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const [courses, setCourses] = useState<string[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [errorCourses, setErrorCourses] = useState<Error | null>(null);
 
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
     const fetchReservation = async () => {
-      const parsedWeeks = parseInt(weeks ?? "", 10);
+      setError(false);
+      setErrorMessage("");
+      setLoading(true);
 
-      if (!schoolId || !course || !schedule || isNaN(parsedWeeks)) {
+      if (!schoolId || !course || !schedule || weeks <= 0) {
         setReservation(null);
-        setError("Parámetros incompletos o inválidos");
+        setError(true)
+        setErrorMessage("Parámetros incompletos o inválidos");
         setLoading(false);
         return;
       }
@@ -52,7 +58,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         const query = buildReservationQuery({
           schoolId,
           course,
-          weeks: parsedWeeks,
+          weeks,
           schedule,
         });
 
@@ -61,20 +67,25 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
           { signal }
         );
 
+        await delay(1000);
+
         const json = await res.json();
 
         if (res.ok) {
           const reservation = createReservationFromApiResponse(json.data);
           setReservation(reservation);
-          setError("");
+          setError(false);
+          setErrorMessage("");
         } else {
           setReservation(null);
-          setError(json.message || "Error al calcular reserva");
+          setError(true);
+          setErrorMessage(json.message || "Error al calcular reserva");
         }
       } catch (err) {
         console.error(err);
         setReservation(null);
-        setError("Error al conectar con el servidor");
+        setError(true);
+        setErrorMessage("Error al conectar con el servidor");
       } finally {
         setLoading(false);
       }
@@ -147,6 +158,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     reservation,
     loading,
     error,
+    errorMessage,
     submitted,
     onSubmitReservation,
     courseInfo: {
