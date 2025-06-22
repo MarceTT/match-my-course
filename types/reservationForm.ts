@@ -1,3 +1,4 @@
+import { Course } from "@/lib/constants/courses";
 import * as z from "zod";
 
 export const reservationFormSchema = z.object({
@@ -19,6 +20,7 @@ export const reservationFormSchema = z.object({
   schedule: z.enum(["am", "pm"]).optional(),
   startDate: z.date().optional(),
   accommodation: z.enum(["si", "no"]).optional(),
+  courseType: z.nativeEnum(Course).optional(),
 });
 
 export type ReservationFormData = z.infer<typeof reservationFormSchema>;

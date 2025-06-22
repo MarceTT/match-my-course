@@ -22,7 +22,7 @@ interface FormProps {
   onReserve: () => void;
 }
 
-export default function GeneralBookingForm({
+export default function GeneralBooking({
   reservation,
   courseInfo,
   formData,
@@ -58,7 +58,7 @@ export default function GeneralBookingForm({
           bookingAmound={100}
           selectedCourse={courseType}
           courseInfo={courseInfo}
-          onChange={setCourseType}
+          onChange={(courseType) => onChangeFormData({ courseType })}
           helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
         />
         <ScheduleSelect
