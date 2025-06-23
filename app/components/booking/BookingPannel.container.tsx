@@ -66,6 +66,7 @@ const BookingPannel = ({
       return (
         <WorkAndStudyBooking
           reservation={reservation}
+          scheduleInfo={scheduleInfo}
           formData={formData}
           onChangeFormData={handleFormDataChange}
           onReserve={handleOpenModal}
