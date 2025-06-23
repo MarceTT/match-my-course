@@ -33,6 +33,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [errorCourses, setErrorCourses] = useState<Error | null>(null);
 
+  const [schedules, setSchedules] = useState<string[]>([]);
+  const [loadingSchedules, setLoadingSchedules] = useState(false);
+  const [errorSchedules, setErrorSchedules] = useState<Error | null>(null);
+
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
@@ -114,6 +118,25 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     fetchCourses();
   }, [schoolId]);
 
+  useEffect(() => {
+    if (!schoolId) return;
+
+    const fetchSchedules = async () => {
+      try {
+        setLoadingSchedules(true);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/horarios/${schoolId}/${course}`);
+        const json = await res.json();
+        setSchedules(json.data.horarios || []);
+      } catch (error) {
+        setErrorSchedules(error as Error);
+      } finally {
+        setLoadingSchedules(false);
+      }
+    };
+
+    fetchSchedules();
+  }, [schoolId, course]);
+
   const onSubmitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
       return { success: false, message: "Reserva no inicializada" };
@@ -166,5 +189,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       loading: loadingCourses,
       error: !!errorCourses
     },
+    scheduleInfo: {
+      list: schedules,
+      loading: loadingSchedules,
+      error: !!errorSchedules
+    }
   };
 }

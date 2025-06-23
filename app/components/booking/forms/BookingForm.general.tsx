@@ -11,10 +11,12 @@ import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import StudyWeeksSection from "../fields/StudyWeeksSection";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
+import { ScheduleInfo } from "@/lib/types/scheduleInfo";
 
 interface FormProps {
   reservation: Reservation;
   courseInfo: CoursesInfo;
+  scheduleInfo: ScheduleInfo;
   formData: Partial<ReservationFormData>;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
@@ -23,6 +25,7 @@ interface FormProps {
 export default function GeneralBooking({
   reservation,
   courseInfo,
+  scheduleInfo,
   formData,
   onChangeFormData,
   onReserve
@@ -56,11 +59,10 @@ export default function GeneralBooking({
           helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
         />
         <ScheduleSelect
-          value={
-            (formData.schedule ??
-              reservation.schedule)?.toLowerCase() as "am" | "pm" | undefined
-          }
+          value={undefined}
+          scheduleInfo={scheduleInfo}
           onChange={(val) => onChangeFormData({ schedule: val })}
+          placeholder="Selecciona horario"
         />
         {/* {schedule && ( */}
           <StudyWeeksSection

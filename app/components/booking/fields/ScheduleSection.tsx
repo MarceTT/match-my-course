@@ -1,21 +1,19 @@
 "use client";
 
 import { Select } from "@/components/common/Select";
+import { ScheduleInfo } from "@/lib/types/scheduleInfo";
 
 interface ScheduleSectionProps {
-  value?: "am" | "pm";
-  onChange: (val: "am" | "pm") => void;
+  value?: string;
+  scheduleInfo: ScheduleInfo;
+  onChange: (val: string) => void;
   label?: string;
   placeholder?: string;
 }
 
-const scheduleOptions = [
-  { label: "AM - 09:00 a 12:00", value: "am" },
-  { label: "PM - 13:00 a 16:00", value: "pm" },
-];
-
 export default function ScheduleSection({
   value,
+  scheduleInfo,
   onChange,
   label = "Horario de clases",
   placeholder = "Elegir"
@@ -26,9 +24,9 @@ export default function ScheduleSection({
         {label}
       </label>
       <Select
-        options={scheduleOptions}
+        options={(scheduleInfo?.list || []).map((item) => ({ label: item, value: item }))}
         value={value || ""}
-        onChange={(val) => onChange(val as "am" | "pm")}
+        onChange={(val) => onChange(val)}
         placeholder={placeholder}
       />
     </div>
