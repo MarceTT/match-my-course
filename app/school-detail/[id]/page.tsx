@@ -41,7 +41,8 @@ const SchoolHome = () => {
     error: hasBookingError,
     errorMessage: errorMessage,
     onSubmitReservation,
-    courseInfo
+    courseInfo,
+    scheduleInfo
   } = useBooking({ schoolId: id, course, weeks, schedule });
 
   if (isLoading) {
@@ -231,6 +232,7 @@ const SchoolHome = () => {
               error={hasBookingError}
               errorMessage={errorMessage}
               courseInfo={courseInfo}
+              scheduleInfo={scheduleInfo}
               onSubmitReservation={onSubmitReservation}
             />
           </div>
