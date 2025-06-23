@@ -8,9 +8,11 @@ import InfoButton from "../fields/InfoButton";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import AccommodationSection from "../fields/AccomodationSection";
+import { ScheduleInfo } from "@/lib/types/scheduleInfo";
 
 interface FormProps {
   reservation: Reservation;
+  scheduleInfo: ScheduleInfo;
   formData: Partial<ReservationFormData>;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
@@ -19,10 +21,11 @@ interface FormProps {
 export default function WorkAndStudyBooking({
   reservation,
   formData,
+  scheduleInfo,
   onChangeFormData,
   onReserve,
 }: FormProps) {
-  const { basePrice, course, schedule } = reservation;
+  const { basePrice, course } = reservation;
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -55,8 +58,10 @@ export default function WorkAndStudyBooking({
           </div>
         </div>
         <ScheduleSelect
-          value={schedule?.toLowerCase() as "am" | "pm" | undefined}
+          value={undefined}
+          scheduleInfo={scheduleInfo}
           onChange={(val) => onChangeFormData({ schedule: val })}
+          placeholder="Selecciona horario"
         />
         <StartDatePicker
           value={formData.startDate}
