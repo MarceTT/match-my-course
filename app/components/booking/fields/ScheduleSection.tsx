@@ -16,7 +16,7 @@ export default function ScheduleSection({
   scheduleInfo,
   onChange,
   label = "Horario de clases",
-  placeholder = "Elegir"
+  placeholder = "Seleccionar..."
 }: ScheduleSectionProps) {
   return (
     <div>
