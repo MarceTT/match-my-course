@@ -10,11 +10,11 @@ import { raleway } from "@/app/ui/fonts";
 import { ArrowUp, Star } from "lucide-react";
 import { FaWalking } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import dynamic from "next/dynamic";
 import { useBooking } from "@/app/components/booking/hooks/useBooking";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
 const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel.container"), { ssr: false });
@@ -42,28 +42,15 @@ const SchoolHome = () => {
     errorMessage: errorMessage,
     onSubmitReservation,
     courseInfo,
-    scheduleInfo
+    scheduleInfo,
+    weeksBySchoolInfo
   } = useBooking({ schoolId: id, course, weeks, schedule });
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <Skeleton className="h-96 w-full mb-6" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-4">
-              <Skeleton className="h-10 w-3/4" />
-              <Skeleton className="h-5 w-1/2" />
-              <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-6 w-2/3" />
-            </div>
-            <div className="lg:col-span-1">
-              <Skeleton className="h-[400px] w-full" />
-            </div>
-          </div>
-        </div>
+        <LoadingSkeleton />
         <Footer />
       </div>
     );
@@ -233,6 +220,7 @@ const SchoolHome = () => {
               errorMessage={errorMessage}
               courseInfo={courseInfo}
               scheduleInfo={scheduleInfo}
+              weeksBySchoolInfo={weeksBySchoolInfo}
               onSubmitReservation={onSubmitReservation}
             />
           </div>

@@ -13,6 +13,7 @@ import SummaryModal from "./summary/Summary.modal";
 import GeneralBooking from "./forms/BookingForm.general";
 import { CourseKey, courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 import { ScheduleInfo } from "@/lib/types/scheduleInfo";
+import { WeeksBySchoolInfo } from "@/lib/types/weeksBySchoolInfo";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
@@ -21,6 +22,7 @@ export type BookingPannelProps = {
   loading: boolean;
   courseInfo: CoursesInfo;
   scheduleInfo: ScheduleInfo;
+  weeksBySchoolInfo: WeeksBySchoolInfo;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
 };
 
@@ -31,7 +33,8 @@ const BookingPannel = ({
   error,
   errorMessage,
   courseInfo,
-  scheduleInfo
+  scheduleInfo,
+  weeksBySchoolInfo
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -79,6 +82,7 @@ const BookingPannel = ({
         reservation={reservation}
         courseInfo={courseInfo}
         scheduleInfo={scheduleInfo}
+        weeksBySchoolInfo={weeksBySchoolInfo}
         formData={formData}
         onChangeFormData={handleFormDataChange}
         onReserve={handleOpenModal}

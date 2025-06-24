@@ -36,6 +36,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   const [schedules, setSchedules] = useState<string[]>([]);
   const [loadingSchedules, setLoadingSchedules] = useState(false);
   const [errorSchedules, setErrorSchedules] = useState<Error | null>(null);
+  
+  const [weeksBySchool, setWeeksBySchool] = useState<string[]>([]);
+  const [loadingWeeksBySchool, setLoadingWeeksBySchool] = useState(false);
+  const [errorWeeksBySchool, setErrorWeeksBySchool] = useState<Error | null>(null);
 
   const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -74,7 +78,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         await delay(1000);
 
         const json = await res.json();
-
+        
         if (res.ok) {
           const reservation = createReservationFromApiResponse(json.data);
           setReservation(reservation);
@@ -137,6 +141,25 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     fetchSchedules();
   }, [schoolId, course]);
 
+  useEffect(() => {
+    if (!schoolId) return;
+
+    const fetchWeeksBySchool = async () => {
+      try {
+        setLoadingWeeksBySchool(true);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/semanas/${schoolId}/${course}`);
+        const json = await res.json();
+        setWeeksBySchool(json.data.semanas || []);
+      } catch (error) {
+        setErrorWeeksBySchool(error as Error);
+      } finally {
+        setLoadingWeeksBySchool(false);
+      }
+    };
+
+    fetchWeeksBySchool();
+  }, [schoolId, course]);
+
   const onSubmitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
       return { success: false, message: "Reserva no inicializada" };
@@ -193,6 +216,11 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       list: schedules,
       loading: loadingSchedules,
       error: !!errorSchedules
+    },
+    weeksBySchoolInfo: {
+      list: weeksBySchool,
+      loading: loadingWeeksBySchool,
+      error: !!errorWeeksBySchool
     }
   };
 }

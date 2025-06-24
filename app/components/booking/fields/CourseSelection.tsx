@@ -35,8 +35,12 @@ export default function CourseSection({
   return (
     <div>
       <div className="flex justify-between">
-        <label className="block text-sm text-gray-600 mb-1">{labelText}</label>
-        <div className="text-sm text-gray-900 mb-2 font-semibold">€{basePrice - bookingAmound}</div>
+        <label className="block text-sm text-gray-600 mb-1">
+          {labelText}
+        </label>
+        <div className="text-sm text-gray-900 mb-2 font-semibold">
+          €{basePrice - bookingAmound}
+        </div>
       </div>
       <Select<CourseKey>
         options={courseOptions}
