@@ -7,7 +7,7 @@ import {
   createReservationFromApiResponse,
 } from "@/lib/reservation";
 import { ReservationFormData } from "@/types/reservationForm";
-import { fetchCourses } from "../services/booking.services";
+import { fetchCourses, fetchSchedulesByCourse } from "../services/booking.services";
 
 // Datos adicionales que no participan del cálculo de reserva,
 // pero sí se envían al backend
@@ -125,14 +125,13 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   }, [schoolId]);
 
   useEffect(() => {
-    if (!schoolId) return;
+    if (!schoolId || !course) return;
 
-    const fetchSchedules = async () => {
+    const loadSchedules = async () => {
       try {
         setLoadingSchedules(true);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/horarios/${schoolId}/${course}`);
-        const json = await res.json();
-        setSchedules(json.data.horarios || []);
+        const schedules = await fetchSchedulesByCourse(schoolId, course);
+        setSchedules(schedules);
       } catch (error) {
         setErrorSchedules(error as Error);
       } finally {
@@ -140,7 +139,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       }
     };
 
-    fetchSchedules();
+    loadSchedules();
   }, [schoolId, course]);
 
   useEffect(() => {
@@ -170,7 +169,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     console.log('Recalculando formData:', formData);
     console.log('Recalculando updatedFormData:', updatedFormData);
     console.log('Recalculando reservation:', reservation);
-    
+
     // Creamos una versión completa local actualizada
     const newFormData = { ...formData, ...updatedFormData };
     console.log('Recalculando newFormData:', newFormData);
@@ -185,6 +184,11 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     const schoolId = reservation?.schoolId;
 
     console.log('Recalculando:', schoolId, 'course:', course, 'weeks:', weeks, 'schedule:', schedule);
+
+    if (updatedFormData.courseType && schoolId && course) {
+      const newSchedules = await fetchSchedulesByCourse(schoolId?.toString(), course);
+      setSchedules(newSchedules);
+    }    
 
     if (!reservation?.schoolId || !course || !weeks || !schedule) {
       console.log('Faltan parámetros para recalcular la reserva');
