@@ -10,3 +10,16 @@ export const fetchCourses = async (schoolId: string) => {
   const json = await res.json();
   return json.data || {};
 };
+
+export const fetchSchedulesByCourse = async (schoolId: string, course: string) => {
+  if (!schoolId || !course) throw new Error('School ID and course are required');
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/horarios/${schoolId}/${course}`);
+
+  if (!res.ok) {
+    throw new Error('Error fetching schedules');
+  }
+
+  const json = await res.json();
+  return json.data.horarios || [];
+};
