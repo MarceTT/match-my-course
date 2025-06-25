@@ -42,7 +42,7 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     insuranceFee: data.insuranceFee,
     materialsFee: data.materialsFee,
     schedule: data.schedule,
-    schoolId: data.schoolId || "",
+    schoolId: data.schoolId,
     schoolName: data.schoolName,
     total: Number(data.total),
     weeks: Number(data.weeks),
