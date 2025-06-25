@@ -23,11 +23,17 @@ export type BookingPannelProps = {
   courseInfo: CoursesInfo;
   scheduleInfo: ScheduleInfo;
   weeksBySchoolInfo: WeeksBySchoolInfo;
+  formData: Partial<ReservationFormData>;
+  onFormDataChange: (updated: Partial<ReservationFormData>) => void;
+  onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
 };
 
 const BookingPannel = ({
   reservation,
+  formData,
+  onFormDataChange,
+  onUpdateReservation,
   onSubmitReservation,
   loading,
   error,
@@ -38,14 +44,9 @@ const BookingPannel = ({
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleFormDataChange = (updated: Partial<ReservationFormData>) => {
-    setFormData((prev) => ({ ...prev, ...updated }));
-  };
 
   const handleSubmitContact = async (finalData: ReservationFormData) => {
     const result = await onSubmitReservation(finalData);
@@ -71,7 +72,8 @@ const BookingPannel = ({
           reservation={reservation}
           scheduleInfo={scheduleInfo}
           formData={formData}
-          onChangeFormData={handleFormDataChange}
+          onUpdateReservation={onUpdateReservation}
+          onChangeFormData={onFormDataChange}
           onReserve={handleOpenModal}
         />
       );
@@ -84,7 +86,8 @@ const BookingPannel = ({
         scheduleInfo={scheduleInfo}
         weeksBySchoolInfo={weeksBySchoolInfo}
         formData={formData}
-        onChangeFormData={handleFormDataChange}
+        onUpdateReservation={onUpdateReservation}
+        onChangeFormData={onFormDataChange}
         onReserve={handleOpenModal}
       />
     );

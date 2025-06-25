@@ -14,6 +14,7 @@ interface FormProps {
   reservation: Reservation;
   scheduleInfo: ScheduleInfo;
   formData: Partial<ReservationFormData>;
+  onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
 }
