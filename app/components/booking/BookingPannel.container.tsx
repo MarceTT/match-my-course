@@ -63,7 +63,7 @@ const BookingPannel = ({
   if (!reservation) return <BookingPannelNoReservation />;
   if (submitted) return <BookingPannelSubmit />;
 
-  const courseKey = courseLabelToIdMap[reservation.course];
+  const courseKey = reservation ? courseLabelToIdMap[reservation.course] : undefined;
 
   const renderBookingForm = () => {
     if (courseKey === CourseKey.WORK_AND_STUDY) {

@@ -15,7 +15,7 @@ import { ScheduleInfo } from "@/lib/types/scheduleInfo";
 import { WeeksBySchoolInfo } from "@/lib/types/weeksBySchoolInfo";
 
 interface FormProps {
-  reservation: Reservation;
+  reservation: Reservation | null;
   courseInfo: CoursesInfo;
   scheduleInfo: ScheduleInfo;
   weeksBySchoolInfo: WeeksBySchoolInfo;
@@ -36,18 +36,19 @@ export default function GeneralBooking({
   onReserve
 }: FormProps) {
   const getCourseType = (): CourseKey | undefined => {
-    return formData.courseType ?? (isValidCourse(reservation.courseKey) ? reservation.courseKey as CourseKey : undefined);
+    return formData.courseType ?? (isValidCourse(reservation?.courseKey) ? reservation.courseKey as CourseKey : undefined);
   };
+  const helperText = "Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo";
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <CoursePrice amount={reservation.total ?? 0} />
+        <CoursePrice amount={reservation?.total ?? 0} />
         <InfoButton onClick={() => console.log("Mostrar info")} />
       </div>
       <div className="space-y-4">
         <CourseSection
-          basePrice={reservation.total ?? 0}
+          basePrice={reservation?.total ?? 0}
           bookingAmound={100}
           selectedCourse={getCourseType()}
           courseInfo={courseInfo}
@@ -55,21 +56,20 @@ export default function GeneralBooking({
             onChangeFormData({ courseType })
             onUpdateReservation({ courseType });
           }}
-          helperText="Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo"
+          helperText={helperText}
         />
         <ScheduleSelect
-          value={undefined}
+          value={formData.schedule ?? reservation?.specificSchedule ?? undefined}
           scheduleInfo={scheduleInfo}
-          onChange={(val) => {
-            onChangeFormData({ schedule: val })
-            onUpdateReservation({ schedule: val });
+          onChange={(schedule) => {
+            onChangeFormData({ schedule })
+            onUpdateReservation({ schedule });
           }}
         />
         {/* {schedule && ( */}
           <StudyWeeksSection
-            value={formData.studyDuration ?? reservation.weeks ?? undefined}
+            value={formData.studyDuration ?? reservation?.weeks ?? undefined}
             weeksBySchoolInfo={weeksBySchoolInfo}
-            // onChange={(val) => onChangeFormData({ studyDuration: val })}
             onChange={(studyDuration) => {
               onChangeFormData({ studyDuration }); // sigue actualizando formData
               onUpdateReservation({ studyDuration }); // actualiza la reserva directamente

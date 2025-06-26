@@ -24,7 +24,10 @@ export default function ScheduleSection({
         {label}
       </label>
       <Select
-        options={(scheduleInfo?.list || []).map((item) => ({ label: item, value: item }))}
+        options={(scheduleInfo?.list || []).map((item) => ({
+          label: item.horario,
+          value: item.horario
+        }))}
         value={value || ""}
         onChange={(val) => onChange(val)}
         placeholder={placeholder}

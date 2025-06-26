@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { Reservation } from "@/types";
 import {
-  buildReservationQuery,
   createReservationFromApiResponse,
 } from "@/lib/reservation";
 import { ReservationFormData } from "@/types/reservationForm";
-import { fetchCourses, fetchSchedulesByCourse } from "../services/booking.services";
+import {
+  fetchCourses,
+  fetchReservationCalculation,
+  fetchSchedulesByCourse
+} from "../services/booking.services";
+import { Schedule } from "@/lib/types/scheduleInfo";
 
 // Datos adicionales que no participan del cálculo de reserva,
 // pero sí se envían al backend
@@ -34,7 +38,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [errorCourses, setErrorCourses] = useState<Error | null>(null);
 
-  const [schedules, setSchedules] = useState<string[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loadingSchedules, setLoadingSchedules] = useState(false);
   const [errorSchedules, setErrorSchedules] = useState<Error | null>(null);
   
@@ -44,7 +48,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
 
   const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
 
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     const controller = new AbortController();
@@ -57,46 +61,31 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
 
       if (!schoolId || !course || !schedule || weeks <= 0) {
         setReservation(null);
-        setError(true)
+        setError(true);
         setErrorMessage("Parámetros incompletos o inválidos");
         setLoading(false);
         return;
       }
 
       try {
-        setLoading(true);
+        const data = await fetchReservationCalculation(schoolId, course, weeks, schedule, signal);
 
-        const query = buildReservationQuery({
-          schoolId,
-          course,
-          weeks,
-          schedule,
-        });
+        // await delay(1000);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`,
-          { signal }
-        );
-
-        await delay(1000);
-
-        const json = await res.json();
-        
-        if (res.ok) {
-          const reservation = createReservationFromApiResponse(json.data);
-          setReservation(reservation);
-          setError(false);
-          setErrorMessage("");
-        } else {
-          setReservation(null);
-          setError(true);
-          setErrorMessage(json.message || "Error al calcular reserva");
-        }
-      } catch (err) {
-        console.error(err);
+        const reservation = createReservationFromApiResponse(data);
+        setReservation(reservation);
+        setError(false);
+        setErrorMessage("");
+      } catch (error) {
+        console.error(error);
         setReservation(null);
         setError(true);
-        setErrorMessage("Error al conectar con el servidor");
+   
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("Error al calcular reserva");
+        }
       } finally {
         setLoading(false);
       }
@@ -166,63 +155,48 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   };
 
   const onUpdateReservation = async (updatedFormData: Partial<ReservationFormData>) => {
-    console.log('Recalculando formData:', formData);
-    console.log('Recalculando updatedFormData:', updatedFormData);
-    console.log('Recalculando reservation:', reservation);
+    // console.log('Recalculando reserva con formData:', formData);
+    // console.log('Recalculando reserva con updatedFormData:', updatedFormData);
 
-    // Creamos una versión completa local actualizada
     const newFormData = { ...formData, ...updatedFormData };
-    console.log('Recalculando newFormData:', newFormData);
-    
-    // Actualizamos el estado con esa versión local
     setFormData(newFormData);
 
-    // Datos base desde reservation (si no vienen desde formData)
-    const course = newFormData.courseType ?? reservation?.course;
+    const course = newFormData.courseType ?? reservation?.courseKey;
     const weeks = newFormData.studyDuration ?? reservation?.weeks;
     const schedule = newFormData.schedule ?? reservation?.schedule;
     const schoolId = reservation?.schoolId;
 
-    console.log('Recalculando:', schoolId, 'course:', course, 'weeks:', weeks, 'schedule:', schedule);
-
-    if (updatedFormData.courseType && schoolId && course) {
-      const newSchedules = await fetchSchedulesByCourse(schoolId?.toString(), course);
+    // Solo cargar horarios si cambia el tipo de curso
+    if (
+      updatedFormData.courseType && 
+      updatedFormData.courseType !== formData.courseType &&
+      schoolId
+    ) {
+      const newSchedules = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
       setSchedules(newSchedules);
-    }    
+    }
 
-    if (!reservation?.schoolId || !course || !weeks || !schedule) {
+    if (!schoolId || !course || !weeks || !schedule) {
       console.log('Faltan parámetros para recalcular la reserva');
       return;
     }
 
-    console.log('Recalculando reserva con course:', course);
-    console.log('Recalculando reserva con weeks:', weeks);
-    console.log('Recalculando reserva con schedule:', schedule);
-    console.log('Recalculando reserva con:', schoolId);
+    // console.log('Recalculando reserva con course:', course);
+    // console.log('Recalculando reserva con weeks:', weeks);
+    // console.log('Recalculando reserva con schedule:', schedule);
+    // console.log('Recalculando reserva con schoolId:', schoolId);
 
     try {
       setLoading(true);
 
-      const query = buildReservationQuery({
-        schoolId,
-        course,
-        weeks,
-        schedule,
-      });
+      const controller = new AbortController();
+      const signal = controller.signal;
+      const data = await fetchReservationCalculation(schoolId, course, weeks, schedule, signal);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`);
-
-      const json = await res.json();
-
-      if (res.ok) {
-        const newReservation = createReservationFromApiResponse(json.data);
-        setReservation(newReservation);
-        setError(false);
-        setErrorMessage('');
-      } else {
-        setReservation(null);
-        setError(json.message || 'Error al calcular reserva');
-      }
+      const reservation = createReservationFromApiResponse(data);
+      setReservation(reservation);
+      setError(false);
+      setErrorMessage("");
     } catch (err) {
       console.error(err);
       setReservation(null);

@@ -1,5 +1,10 @@
+export type Schedule = {
+  horario: string;
+  precioMinimo: number;
+};
+
 export type ScheduleInfo = {
-  list: string[];
+  list: Schedule[];
   loading: boolean;
   error: boolean;
 };
