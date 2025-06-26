@@ -81,7 +81,6 @@ export default function GeneralBooking({
             value={formData.startDate}
             onChange={(startDate) => {
               onChangeFormData({ startDate });
-              onUpdateReservation({ startDate });
             }}
           />
         {/* )} */}
