@@ -44,7 +44,7 @@ export default function GeneralBooking({
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
         <CoursePrice amount={reservation?.total ?? 0} />
-        <InfoButton onClick={() => console.log("Mostrar info")} />
+        {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
       <div className="space-y-4">
         <CourseSection
