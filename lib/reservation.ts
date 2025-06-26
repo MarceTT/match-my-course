@@ -40,12 +40,13 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     courseKey,
     enrollmentFee: data.enrollmentFee,
     insuranceFee: data.insuranceFee,
+    logoUrl: data.logoUrl,
     materialsFee: data.materialsFee,
     schedule: data.schedule,
     schoolId: data.schoolId,
     schoolName: data.schoolName,
+    specificSchedule: data.specificSchedule,
     total: Number(data.total),
     weeks: Number(data.weeks),
-    logoUrl: data.logoUrl
   };
 }

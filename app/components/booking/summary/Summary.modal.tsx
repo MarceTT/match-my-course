@@ -17,7 +17,7 @@ import BookingSummaryStepTwo from "./Summary.stepTwo";
 interface ReservationSummaryModalProps {
   open: boolean;
   onClose: () => void;
-  reservation: Reservation;
+  reservation: Reservation | null;
   formData: Partial<ReservationFormData & {
     startDate?: Date;
     accommodation?: "si" | "no";

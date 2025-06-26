@@ -6,23 +6,23 @@ import { ReservationFormData } from "@/types/reservationForm";
 import { courseToLabelMap, isValidCourse } from "@/lib/helpers/courseHelper";
 
 type Props = {
-  reservation: Reservation;
+  reservation: Reservation | null;
   formData: Partial<ReservationFormData>;
   onNext: () => void;
 };
 
 export default function SummaryStepOne({ reservation, formData, onNext }: Props) {
-  const courseKey = formData.courseType ?? reservation.courseKey;
+  const courseKey = formData.courseType ?? reservation?.courseKey;
 
   return (
     <div className="space-y-2 text-sm text-gray-700">
       <p>
         <strong>Escuela:</strong>{" "}
-        {reservation.schoolName}
+        {reservation?.schoolName}
       </p>
       <p>
         <strong>Ciudad:</strong>{" "}
-        {reservation.city}
+        {reservation?.city}
       </p>
       <p>
         <strong>Curso:</strong>{" "}
@@ -30,11 +30,11 @@ export default function SummaryStepOne({ reservation, formData, onNext }: Props)
       </p>
       <p>
         <strong>Modalidad:</strong>{" "}
-        {formData.schedule?.toUpperCase() ?? reservation.schedule.toUpperCase()}
+        {formData.schedule?.toUpperCase() ?? reservation?.schedule.toUpperCase()}
       </p>
       <p>
         <strong>Semanas de estudio:</strong>{" "}
-        {formData.studyDuration ?? reservation.weeks}
+        {formData.studyDuration ?? reservation?.weeks}
       </p>
       <p>
         <strong>Inicio:</strong>{" "}
@@ -48,7 +48,7 @@ export default function SummaryStepOne({ reservation, formData, onNext }: Props)
       )}
       <p>
         <strong>Precio final:</strong>{" "}
-        €{reservation.basePrice?.toLocaleString()}
+        €{reservation?.basePrice?.toLocaleString()}
       </p>
       <p>
         <strong>Gastos adicionales:</strong>{" "}

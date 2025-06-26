@@ -21,5 +21,33 @@ export const fetchSchedulesByCourse = async (schoolId: string, course: string) =
   }
 
   const json = await res.json();
-  return json.data.horarios || [];
+  return json.data || [];
+};
+
+export const fetchReservationCalculation = async (
+  schoolId: string,
+  course: string,
+  weeks: number,
+  schedule: string,
+  signal?: AbortSignal // opcional, por si quieres abortar la consulta
+) => {
+  const query = new URLSearchParams({
+    schoolId,
+    curso: course,
+    semanas: weeks.toString(),
+    horario: schedule,
+  });
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`,
+    { signal }
+  );
+
+  if (!res.ok) {
+    const json = await res.json();
+    throw new Error(json.message || 'Error al calcular reserva');
+  }
+
+  const json = await res.json();
+  return json.data;
 };

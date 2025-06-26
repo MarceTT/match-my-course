@@ -1,13 +1,14 @@
 export interface ApiReservationResponse {
-  course: string;
-  schoolName: string;
-  schedule: string;
-  weeks: number;
   basePrice: number;
+  course: string;
   enrollmentFee: number;
-  materialsFee: number;
   insuranceFee: number;
-  total: number;
-  schoolId?: string;
   logoUrl: string;
+  materialsFee: number;
+  schedule: string;
+  schoolId?: string;
+  schoolName: string;
+  specificSchedule: string;
+  total: number;
+  weeks: number;
 }
