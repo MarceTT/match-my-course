@@ -5,7 +5,7 @@ import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { ReservationFormData } from "@/types/reservationForm";
 import ScheduleSelect from "../fields/ScheduleSection";
 import CoursePrice from "../fields/CoursePrice";
-import InfoButton from "../fields/InfoButton";
+// import InfoButton from "../fields/InfoButton";
 import CourseSection from "../fields/CourseSelection";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
