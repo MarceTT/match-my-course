@@ -9,13 +9,6 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { motion } from "framer-motion";
 import { Reservation } from "@/types";
 import { buildReservationQuery } from "@/lib/reservation";
@@ -59,23 +52,25 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const handleScheduleOption = (i: number) => () => {
-    setSelectedOptionIndex(i);
-    const params = new URLSearchParams(searchParams.toString());
-    const jornadaValue = i === 0 ? 'am' : 'pm';
-    params.set('horario', jornadaValue);
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+  // const handleScheduleOption = (i: number) => () => {
+  //   setSelectedOptionIndex(i);
+  //   const params = new URLSearchParams(searchParams.toString());
+  //   const jornadaValue = i === 0 ? 'am' : 'pm';
+  //   params.set('horario', jornadaValue);
+  //   router.push(`?${params.toString()}`, { scroll: false });
+  // };
 
   const handleShowSchool = () => {
     const reservation: Reservation = {
       schoolId: school._id.toString(),
       course: searchParams.get("course")?.toString() ?? "",
       weeks: Number(searchParams.get("weeksMin") ?? 1),
-      schedule: selectedOptionIndex === 0 ? 'am' : 'pm'
+      // schedule: selectedOptionIndex === 0 ? 'am' : 'pm'
+      schedule: "PM"
     };
 
     const query = buildReservationQuery(reservation);
+
     prefetchSchool(`${school._id}`);
     setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
   };

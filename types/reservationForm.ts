@@ -19,6 +19,7 @@ export const reservationFormSchema = z.object({
   // Campos extendidos (opcionales):
   studyDuration: z.number().optional(),
   schedule: z.string().min(1, "El horario es requerido"),
+  specificSchedule: z.string().optional(),
   startDate: z.date().optional(),
   accommodation: z.enum(["si", "no"]).optional(),
   courseType: z.nativeEnum(CourseKey).optional(),

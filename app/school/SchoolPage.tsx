@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import School from "../components/School";
 import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
@@ -94,7 +94,7 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
               ? Number(school.prices[0].horarios.precio)
               : 0;
 
-          const courseTypes = (school.courseTypes || []).join(", ");
+          // const courseTypes = (school.courseTypes || []).join(", ");
 
           return (
             <div
