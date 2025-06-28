@@ -47,13 +47,15 @@ const School = ({
   const searchParams = useSearchParams();
 
   const handleClick = () => {
+    const course = searchParams.get("course")?.toString().toLowerCase();
+    const courseTypeLower = courseTypes?.[0]?.toLowerCase();
+    const finalCourse = course ?? courseTypeLower ?? "ingles-general";
+    console.log('finalCourse', finalCourse);
+
     const reservation: Reservation = {
       schoolId: _id.toString(),
       city: location,
-      course:
-        searchParams.get("course")?.toString().toLowerCase() ??
-        courseTypes?.[0]?.toLowerCase() ??
-        "ingles-general",
+      course: finalCourse,
       weeks: Number(searchParams.get("weeksMin") ?? 1),
       schedule: generalEnglishPrice?.horario ?? "PM",
       specificSchedule:
