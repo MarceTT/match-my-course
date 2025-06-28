@@ -164,7 +164,11 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     const course = newFormData.courseType ?? reservation?.courseKey;
     const weeks = newFormData.studyDuration ?? reservation?.weeks;
     const schedule = newFormData.schedule ?? reservation?.schedule;
+    // const specificSchedule = newFormData.specificSchedule ?? reservation?.specificSchedule;
     const schoolId = reservation?.schoolId;
+
+    // console.log('schedule', schedule)
+    // console.log('specificSchedule', specificSchedule)
 
     // Solo cargar horarios si cambia el tipo de curso
     if (
@@ -216,7 +220,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       ...formData,
       ...extras,
       totalPrice: reservation.total,
-      city: reservation.city ?? "Dublín",
+      city: reservation.city,
       course: reservation.course,
       weeks: reservation.weeks,
       schedule: reservation.schedule,
