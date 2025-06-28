@@ -11,7 +11,7 @@ export function buildReservationQuery(reservation: Reservation): string {
     semanas: reservation.weeks.toString(),
     horario: reservation.schedule,
     city: reservation.city ?? "",
-    horarioEspecifico: reservation.specificSchedule ?? ""
+    // horarioEspecifico: reservation.specificSchedule ?? ""
   }).toString();
 }
 
@@ -22,9 +22,9 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
   const weeks = searchParams.get("semanas");
   const schedule = searchParams.get("horario");
   const city = searchParams.get("city");
-  const specificSchedule = searchParams.get("horarioEspecifico");
+  // const specificSchedule = searchParams.get("horarioEspecifico");
 
-  if (!schoolId || !course || !weeks || !schedule || !city || !specificSchedule) return null;
+  if (!schoolId || !course || !weeks || !schedule || !city) return null;
 
   return {
     schoolId,
@@ -33,7 +33,7 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
     weeks: parseInt(weeks, 10),
     schedule,
     city,
-    specificSchedule
+    // specificSchedule
   };
 }
 
