@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -27,6 +26,21 @@ interface SchoolCardProps {
   viewType: "grid" | "list";
 }
 
+function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
+  const pm = precios.filter(p => p.horario === "PM");
+  const am = precios.filter(p => p.horario === "AM");
+
+  if (pm.length > 0) {
+    return [pm.reduce((min, p) => p.precio < min.precio ? p : min)];
+  }
+
+  if (am.length > 0) {
+    return [am.reduce((min, p) => p.precio < min.precio ? p : min)];
+  }
+
+  return [];
+}
+
 export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -37,9 +51,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
     : null;
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
-  const priceOptions = (school.prices || []).filter(
-    (p) => typeof p.precio === "number" && p.precio > 0
-  );
+  const priceOptions = filtrarPrecioMasBarato(school.prices);
 
   const selected = priceOptions[selectedOptionIndex] ?? null;
   const hasDiscount = selected?.oferta && selected.oferta < selected.precio;
@@ -48,12 +60,12 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleScheduleOption = (i: number) => () => {
-    setSelectedOptionIndex(i)
+    setSelectedOptionIndex(i);
     const params = new URLSearchParams(searchParams.toString());
     const jornadaValue = i === 0 ? 'am' : 'pm';
     params.set('horario', jornadaValue);
     router.push(`?${params.toString()}`, { scroll: false });
-  }
+  };
 
   const handleShowSchool = () => {
     const reservation: Reservation = {
@@ -62,11 +74,11 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       weeks: Number(searchParams.get("weeksMin") ?? 1),
       schedule: selectedOptionIndex === 0 ? 'am' : 'pm'
     };
-    
-    const query = buildReservationQuery(reservation);  
+
+    const query = buildReservationQuery(reservation);
     prefetchSchool(`${school._id}`);
     setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
-  }
+  };
 
   useEffect(() => {
     setSelectedOptionIndex(0);
@@ -83,7 +95,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       <div
         className={`${
           isGrid ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"
-        } overflow-hidden rounded-lg relative`}
+        } overflow-hidden rounded-lg relative flex items-stretch`}
       >
         {hasDiscount && (
           <div className="absolute top-2 right-2 z-10 bg-yellow-400 text-yellow-900 text-xs sm:text-sm font-extrabold px-2 py-1 rounded-md shadow-lg flex items-center gap-1 animate-pulse">
@@ -94,9 +106,8 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
         <Image
           src={rewriteToCDN(school.mainImage)}
           alt={school.name}
-          width={500}
-          height={300}
-          className="h-full w-full object-cover cursor-pointer"
+          fill
+          className="object-cover cursor-pointer"
           loading="lazy"
           placeholder="empty"
           onClick={handleShowSchool}
@@ -138,57 +149,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
               </span>
             </div>
           </div>
-
-          {!isGrid && !isMobile && priceOptions.length > 0 && (
-            <div className="text-sm text-gray-700">
-              <p className="font-semibold text-gray-900 pb-1 text-right">
-                Opciones:
-              </p>
-              <ul className="space-y-2">
-                {priceOptions.map((p, i) => (
-                  <li
-                    key={i}
-                    className={`cursor-pointer transition-colors ${
-                      selectedOptionIndex === i
-                        ? "font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded"
-                        : "hover:text-blue-500 hover:bg-gray-50 px-2 py-1 rounded"
-                    }`}
-                    onClick={handleScheduleOption(i)}
-                  >
-                    Curso {p.horario} - {p.horasDeClase} horas/semana
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
-
-        {(isGrid || isMobile) && priceOptions.length > 0 && (
-          <div className="mt-4 w-full">
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Selecciona una opción:
-            </label>
-            <Select
-              value={String(selectedOptionIndex)}
-              onValueChange={(val) => setSelectedOptionIndex(Number(val))}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Elige una opción" />
-              </SelectTrigger>
-              <SelectContent className="z-50">
-                {priceOptions.map((p, i) => (
-                  <SelectItem
-                    key={i}
-                    value={String(i)}
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    Curso {p.horario} - {p.horasDeClase}h/semana
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
 
         <div className="text-sm mt-4 flex flex-row sm:flex-col sm:items-start sm:space-y-1 justify-between w-full lg:mt-0 xl:mt-0">
           <p className="font-semibold text-base sm:text-lg text-gray-700">
@@ -218,7 +179,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
           ) : null}
 
           <div className="mt-4 w-full flex flex-col items-center sm:items-end text-center sm:text-right space-y-2">
-            <div className="flex flex-col sm:items-end">
+            <div className="flex flex-col sm:items-end mb-2">
               {hasDiscount ? (
                 <>
                   <span className="text-xs text-gray-500 line-through">

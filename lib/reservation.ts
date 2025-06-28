@@ -10,6 +10,8 @@ export function buildReservationQuery(reservation: Reservation): string {
     curso: reservation.course,
     semanas: reservation.weeks.toString(),
     horario: reservation.schedule,
+    city: reservation.city ?? "",
+    horarioEspecifico: reservation.specificSchedule ?? ""
   }).toString();
 }
 
@@ -19,8 +21,10 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
   const course = searchParams.get("curso");
   const weeks = searchParams.get("semanas");
   const schedule = searchParams.get("horario");
+  const city = searchParams.get("city");
+  const specificSchedule = searchParams.get("horarioEspecifico");
 
-  if (!schoolId || !course || !weeks || !schedule) return null;
+  if (!schoolId || !course || !weeks || !schedule || !city || !specificSchedule) return null;
 
   return {
     schoolId,
@@ -28,6 +32,8 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
     course,
     weeks: parseInt(weeks, 10),
     schedule,
+    city,
+    specificSchedule
   };
 }
 
@@ -48,5 +54,6 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     specificSchedule: data.specificSchedule,
     total: Number(data.total),
     weeks: Number(data.weeks),
+    logoUrl: data.logoUrl
   };
 }

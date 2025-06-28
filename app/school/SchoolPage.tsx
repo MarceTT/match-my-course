@@ -94,6 +94,8 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
               ? Number(school.prices[0].horarios.precio)
               : 0;
 
+          const courseTypes = (school.courseTypes || []).join(", ");
+
           return (
             <div
               key={school._id}
@@ -107,6 +109,9 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
                 rating={parseFloat(String(school.ponderado ?? 0))}
                 price={price}
                 lowestPrice={school.lowestPrice}
+                courseTypes={school.courseTypes}
+                generalEnglishPrice={school.generalEnglishPrice}
+                specificSchedule={school.specificSchedule}
               />
             </div>
           );

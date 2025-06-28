@@ -30,19 +30,35 @@ import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 // Definición de tipos
 interface CoursePrice {
-  nombreEscuelaILEP: string;
+  nombreCurso?: string;
+  nombreEscuelaILEP?: string;
   nombreEscuelaAdm: string;
   ciudadEscuela: string;
   descripcionCurso: string;
   inicioClases: string;
   duracion: string;
   requisitoEntrada: string;
-  horario: {
-    inicio: string;
-    termino: string;
-    horasSemana: number;
+  plazoReserva?: string;
+  usoOferta?: string;
+  horarioEspecifico?: string;
+  horarios: {
+    inicio?: string;
+    termino?: string;
+    horasSemana?: number;
+    lessonsPerWeek?: number;
+    horario?: string;
+    minutesPerLesson?: number;
+    dias?: string;
+    precio?: number;
+    oferta?: string;
+    matricula?: number;
+    material?: number;
+    seguro?: number;
   };
   examenes: {
+    PEL?: string;
+    TIE?: string;
+    IELTS?: string;
     CAE?: string;
     FCE?: string;
     PET?: string;
@@ -55,6 +71,8 @@ interface CoursePrice {
     TOEIC?: string;
   };
 }
+
+
 
 interface ColumnDefinition<T> {
   key: keyof T; // Asegura que `key` sea una clave válida de `T`
@@ -83,15 +101,21 @@ const CargaPrecios = () => {
 
   // Definición de columnas para la tabla
   const columnas: ColumnDefinition<CoursePrice>[] = [
-    { key: "nombreEscuelaAdm", header: "Escuela" },
+    { key: "nombreCurso", header: "Nombre del Curso" },
+    { key: "nombreEscuelaAdm", header: "Escuela (Adm)" },
+    { key: "nombreEscuelaILEP", header: "Escuela ILEP" },
     { key: "ciudadEscuela", header: "Ciudad" },
     { key: "descripcionCurso", header: "Descripción" },
-    { key: "inicioClases", header: "Inicio" },
+    { key: "inicioClases", header: "Inicio de Clases" },
     { key: "duracion", header: "Duración" },
-    { key: "requisitoEntrada", header: "Requisito" },
-    { key: "horario", header: "Horario" }, // Asegúrate de que `horario` sea una clave válida
-    { key: "examenes", header: "Exámenes" }, // Asegúrate de que `examenes` sea una clave válida
+    { key: "requisitoEntrada", header: "Requisito de Entrada" },
+    { key: "plazoReserva", header: "Plazo de Reserva" },
+    { key: "usoOferta", header: "Uso de la Oferta" },
+    { key: "horarioEspecifico", header: "Horario Específico" },
+    { key: "horarios", header: "Horario" },
+    { key: "examenes", header: "Exámenes" },
   ];
+  
 
   const { mutate: uploadCoursePrice, isPending } = useUploadFile(
     "/excel/upload-prices",

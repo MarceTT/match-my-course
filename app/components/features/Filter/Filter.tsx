@@ -5,7 +5,7 @@ import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, GraduationCap } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,

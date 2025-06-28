@@ -4,6 +4,18 @@ import type { StaticImageData } from "next/image";
 import { nunito } from "../ui/fonts";
 import Link from "next/link";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Reservation } from "@/types/reservation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { buildReservationQuery } from "@/lib/reservation";
+
+type GeneralEnglishPrice = {
+  precio: number;
+  horario: string;
+  horarioEspecifico: string;
+  fuente: string;
+};
 
 interface SchoolCardProps {
   _id: string;
@@ -14,6 +26,9 @@ interface SchoolCardProps {
   price: number;
   priority?: boolean;
   lowestPrice?: number;
+  courseTypes?: string[];
+  generalEnglishPrice?: GeneralEnglishPrice;
+  specificSchedule?: string;
 }
 
 const School = ({
@@ -24,14 +39,48 @@ const School = ({
   rating,
   priority,
   lowestPrice,
+  courseTypes = [],
+  generalEnglishPrice,
+  specificSchedule
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleClick = () => {
+    const reservation: Reservation = {
+      schoolId: _id.toString(),
+      city: location,
+      course:
+        searchParams.get("course")?.toString().toLowerCase() ??
+        courseTypes?.[0]?.toLowerCase() ??
+        "inglés general",
+      weeks: Number(searchParams.get("weeksMin") ?? 1),
+      schedule: generalEnglishPrice?.horario ?? "am",
+      specificSchedule:
+        generalEnglishPrice?.horarioEspecifico
+          ?.toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9\-]/g, "") ?? "",
+    };
+  
+    const query = buildReservationQuery(reservation);
+    const href = `/school-detail/${_id}?${query}`;
+  
+    prefetchSchool(_id); // si querés que esto se mantenga
+    router.push(href);   // navegar al hacer click
+  };
+
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">
       <Link
-        href={`/school-detail/${_id}`}
+        href="#"
+        onClick={(e) => {
+          e.preventDefault(); // evita navegación automática
+          handleClick();      // hace la navegación personalizada
+        }}
         onMouseEnter={handlePrefetch}
         onTouchStart={handlePrefetch}
         className="flex flex-col h-full"
@@ -60,15 +109,40 @@ const School = ({
             <span>Calificaciones:</span>
             <div className="flex items-center gap-1">
               <span className="font-semibold">{rating.toFixed(1)}</span>
-                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
             </div>
           </div>
 
           <p className="text-sm text-gray-900 line-clamp-1 font-semibold">
-            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md">{location}</span>
+            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md">
+              {location}
+            </span>
           </p>
 
-          <div className="mt-auto">
+          {courseTypes && courseTypes.length > 0 && (
+            <div className="mt-3">
+              <p className="text-xs text-muted-foreground mb-1 font-semibold italic">
+                Tipos de curso que ofrece la escuela
+              </p>
+              <ul className="space-y-1 text-sm text-slate-700">
+                {courseTypes.slice(0, 5).map((course, idx) => (
+                  <li
+                    key={idx}
+                    className="relative pl-5 before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:rounded-full before:bg-blue-500"
+                  >
+                    {course}
+                  </li>
+                ))}
+                {courseTypes.length > 5 && (
+                  <li className="pl-5 text-blue-600 italic">
+                    y {courseTypes.length - 5} más...
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {/* <div className="mt-auto">
             {typeof lowestPrice === "number" && lowestPrice > 0 ? (
               <div className="flex flex-wrap items-center gap-1 text-left">
                 <span className="text-sm text-gray-500 font-medium">Desde</span>
@@ -82,7 +156,7 @@ const School = ({
             ) : (
               <div className="text-gray-400 italic text-sm">Precio no disponible</div>
             )}
-          </div>
+          </div> */}
         </div>
       </Link>
     </div>
