@@ -7,8 +7,6 @@ import dynamic from "next/dynamic";
 import SuspenseLoader from "./admin/components/SuspenseLoader";
 import { Suspense, useState } from "react";
 
-const Carousel = dynamic(() => import("./components/features/Carousel/Carousel"), { ssr: false });
-const Features = dynamic(() => import("./components/Features"), { ssr: false });
 const SchoolPage = dynamic(() => import("./school/SchoolPage"), { ssr: false });
 
 export default function HomeClient() {
@@ -19,8 +17,6 @@ export default function HomeClient() {
       <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
         <Hero />
       </Suspense>
-      {/* <Carousel />
-      <Features /> */}
       <div className="container mx-auto px-6 py-16">
         <SchoolPage onScrollTopVisibilityChange={setScrollTopVisible} />
       </div>

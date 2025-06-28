@@ -1,11 +1,8 @@
 import { Star } from "lucide-react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
-import { nunito } from "../ui/fonts";
 import Link from "next/link";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Reservation } from "@/types/reservation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
@@ -38,10 +35,10 @@ const School = ({
   location,
   rating,
   priority,
-  lowestPrice,
+  // lowestPrice,
   courseTypes = [],
   generalEnglishPrice,
-  specificSchedule
+  // specificSchedule
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);
@@ -56,9 +53,9 @@ const School = ({
       course:
         searchParams.get("course")?.toString().toLowerCase() ??
         courseTypes?.[0]?.toLowerCase() ??
-        "inglés general",
+        "ingles-general",
       weeks: Number(searchParams.get("weeksMin") ?? 1),
-      schedule: generalEnglishPrice?.horario ?? "am",
+      schedule: generalEnglishPrice?.horario ?? "PM",
       specificSchedule:
         generalEnglishPrice?.horarioEspecifico
           ?.toLowerCase()
