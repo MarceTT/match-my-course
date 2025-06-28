@@ -54,6 +54,5 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     specificSchedule: data.specificSchedule,
     total: Number(data.total),
     weeks: Number(data.weeks),
-    logoUrl: data.logoUrl
   };
 }
