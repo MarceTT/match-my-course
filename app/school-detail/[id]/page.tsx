@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { JSX } from "react";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import { notFound, useParams, useSearchParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
 import Image from "next/image";
 import { raleway } from "@/app/ui/fonts";
 import { ArrowUp, Star } from "lucide-react";
-import { FaWalking } from "react-icons/fa";
+import { FaWalking, FaBus, FaTrain, FaShuttleVan } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
@@ -16,14 +16,35 @@ import dynamic from "next/dynamic";
 import { useBooking } from "@/app/components/booking/hooks/useBooking";
 import LoadingSkeleton from "./LoadingSkeleton";
 
-const SchoolDetail = dynamic(() => import("../../components/school/SchoolDetail"), { ssr: false });
-const BookingPannel = dynamic(() => import("../../components/booking/BookingPannel.container"), { ssr: false });
-const Certifications = dynamic(() => import("../../components/school/Certifications"), { ssr: false });
-const Facilities = dynamic(() => import("../../components/school/Facilities"), { ssr: false });
-const SchoolInclusion = dynamic(() => import("../../components/school/SchoolInclusion"), { ssr: false });
-const Accommodation = dynamic(() => import("../../components/school/Accommodation"), { ssr: false });
-const Location = dynamic(() => import("../../components/school/Location"), { ssr: false });
-const SchoolStat = dynamic(() => import("@/app/components/school/SchoolStat"), { ssr: false });
+const SchoolDetail = dynamic(
+  () => import("../../components/school/SchoolDetail"),
+  { ssr: false }
+);
+const BookingPannel = dynamic(
+  () => import("../../components/booking/BookingPannel.container"),
+  { ssr: false }
+);
+const Certifications = dynamic(
+  () => import("../../components/school/Certifications"),
+  { ssr: false }
+);
+const Facilities = dynamic(() => import("../../components/school/Facilities"), {
+  ssr: false,
+});
+const SchoolInclusion = dynamic(
+  () => import("../../components/school/SchoolInclusion"),
+  { ssr: false }
+);
+const Accommodation = dynamic(
+  () => import("../../components/school/Accommodation"),
+  { ssr: false }
+);
+const Location = dynamic(() => import("../../components/school/Location"), {
+  ssr: false,
+});
+const SchoolStat = dynamic(() => import("@/app/components/school/SchoolStat"), {
+  ssr: false,
+});
 
 const SchoolHome = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +55,33 @@ const SchoolHome = () => {
   const course = searchParams.get("curso");
   const weeks = parseInt(searchParams.get("semanas") ?? "1", 10);
   const schedule = searchParams.get("horario");
+
+  const normalize = (str: string) => str.trim().toLowerCase();
+
+  const getTransportIcon = (schoolName: string) => {
+    const name = normalize(schoolName);
+  
+    const trenEscuelas = [
+      "active language learning",
+      "english path",
+      "irish college of english",
+      "university of limerick language centre"
+    ].map(normalize);
+  
+    const busEscuelas = [
+      "emerald cultural institute",
+      "killarney school of english"
+    ].map(normalize);
+  
+    if (trenEscuelas.includes(name)) {
+      return <FaTrain className="text-base w-5 h-5" />;
+    } else if (busEscuelas.includes(name)) {
+      return <FaBus className="text-base w-5 h-5" />;
+    } else {
+      return <FaWalking className="text-base w-5 h-5" />;
+    }
+  };
+  
 
   const {
     reservation,
@@ -130,10 +178,11 @@ const SchoolHome = () => {
                   )}
                   {school.description?.minutosAlCentro && (
                     <div className="flex items-center text-sm gap-1">
-                      <FaWalking className="text-base w-5 h-5" />
+                      {getTransportIcon(school.name) || (
+                        <FaWalking className="text-base w-5 h-5" />
+                      )}
                       <span className="text-sm">
-                        a {school.description.minutosAlCentro} minutos del
-                        centro
+                        {school.description.minutosAlCentro} min/centro
                       </span>
                     </div>
                   )}
@@ -190,9 +239,10 @@ const SchoolHome = () => {
                 ]}
                 averageAge={school.nationalities.edadPromedio || 0}
                 nacionalidades={
-                  typeof school.nationalities.nacionalidades === 'number' 
-                    ? school.nationalities.nacionalidades 
-                    : Object.keys(school.nationalities.nacionalidades).length || 0
+                  typeof school.nationalities.nacionalidades === "number"
+                    ? school.nationalities.nacionalidades
+                    : Object.keys(school.nationalities.nacionalidades).length ||
+                      0
                 }
               />
             )}
@@ -241,7 +291,7 @@ const SchoolHome = () => {
           <ArrowUp className="h-5 w-5" />
         </button>
       )}
-      <Footer />    
+      <Footer />
     </div>
   );
 };
