@@ -57,7 +57,8 @@ const courseCitiesMap: Record<string, string[]> = {
     "Naas",
     "Tralee",
     "Cork",
-    "Donegal",
+    "Limerick",
+    //"Donegal",
     "Athlone",
     "Waterford",
     "Killarney",
@@ -67,9 +68,13 @@ const courseCitiesMap: Record<string, string[]> = {
     "Dublín",
     "Cork",
     "Galway",
-    //"Limerick",
+    "Athlone",
+    "Naas",
+    "Limerick",
     "Waterford",
     "Bray",
+    "Wexford",
+    "Tralee",
     //"Schull",
   ],
   "ingles-general-mas-sesiones-individuales": [
@@ -78,7 +83,7 @@ const courseCitiesMap: Record<string, string[]> = {
     "Wexford",
     //"Schull",
   ],
-  "ingles-general-intensivo": ["Dublín", "Galway", "Cork"],
+  "ingles-general-intensivo": ["Dublín", "Galway", "Cork", "Bray", "Limerick", "Tralee"],
   "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
 };
 
