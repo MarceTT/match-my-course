@@ -3,9 +3,9 @@ import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import Link from "next/link";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
-import { Reservation } from "@/types/reservation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
+import { Reservation } from "@/types";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -42,10 +42,10 @@ const School = ({
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);
-
+  
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  
   const handleClick = () => {
     const course = searchParams.get("course")?.toString().toLowerCase();
     const courseTypeLower = courseTypes?.[0]?.toLowerCase();
