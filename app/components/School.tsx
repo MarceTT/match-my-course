@@ -6,6 +6,7 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
+import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -47,15 +48,24 @@ const School = ({
   const searchParams = useSearchParams();
   
   const handleClick = () => {
-    const course = searchParams.get("course")?.toString().toLowerCase();
-    const courseTypeLower = courseTypes?.[0]?.toLowerCase();
-    const finalCourse = course ?? courseTypeLower ?? "ingles-general";
-    console.log('finalCourse', finalCourse);
+    // const course = searchParams.get("course")?.toString().toLowerCase();
+    // console.log('School.tsx --> course: ', course);
+    
+    // const courseTypeLower = courseTypes?.[0]?.toLowerCase();
+    // const courseTypeForUrl = courseLabelToIdMap[courseTypes?.[0]?.toLowerCase()]
+    // console.log('School.tsx --> courseTypeForUrl: ', courseTypeForUrl);
+    // const courseTypeLower = courseTypes?.[0]?.toLowerCase();
+    // console.log('School.tsx --> courseTypeLower: ', courseTypeLower);
+    // const finalCourse = course ?? courseTypeLower ?? "ingles-general";
+    
+    // console.log('School.tsx --> finalCourse: ', finalCourse);
+    // console.log('School.tsx --> finalCourse2: ', courseLabelToIdMap[finalCourse]);
 
     const reservation: Reservation = {
       schoolId: _id.toString(),
       city: location,
-      course: finalCourse,
+      // course: finalCourse,
+      course: 'ingles-general',
       weeks: Number(searchParams.get("weeksMin") ?? 1),
       schedule: generalEnglishPrice?.horario ?? "PM",
       specificSchedule:
@@ -68,6 +78,7 @@ const School = ({
     const query = buildReservationQuery(reservation);
     const href = `/school-detail/${_id}?${query}`;
   
+    console.log('query', query)
     prefetchSchool(_id); // si querés que esto se mantenga
     router.push(href);   // navegar al hacer click
   };
