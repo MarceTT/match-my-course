@@ -59,6 +59,11 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       setErrorMessage("");
       setLoading(true);
 
+      // console.log('schoolId', schoolId)
+      // console.log('course', course)
+      // console.log('schedule', schedule)
+      // console.log('weeks', weeks)
+
       if (!schoolId || !course || !schedule || weeks <= 0) {
         setReservation(null);
         setError(true);

@@ -10,9 +10,8 @@ import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Reservation } from "@/types";
-import { buildReservationQuery } from "@/lib/reservation";
 import { SchoolDetails } from "@/app/lib/types";
+import { getSchoolRedirectUrl } from "@/lib/helpers/bookingHelper";
 
 interface SchoolCardProps {
   school: SchoolDetails;
@@ -61,18 +60,20 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   // };
 
   const handleShowSchool = () => {
-    const reservation: Reservation = {
-      schoolId: school._id.toString(),
-      course: searchParams.get("course")?.toString() ?? "",
-      weeks: Number(searchParams.get("weeksMin") ?? 1),
-      // schedule: selectedOptionIndex === 0 ? 'am' : 'pm'
-      schedule: "PM"
-    };
+    const schoolId = school._id.toString();
+    const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
+    const weeks = Number(searchParams.get("weeks") ?? 1);
+    const city = 'Dublin';
+    const schedule = "PM";
 
-    const query = buildReservationQuery(reservation);
+    // console.log('schoolId SchoolCard.tsx:', schoolId);
+
+    const query = getSchoolRedirectUrl(schoolId, { course, weeks, city, schedule });
+
+    // console.log('URL generada desde SchoolCard.tsx:', query);
 
     prefetchSchool(`${school._id}`);
-    setTimeout(() => router.push(`school-detail/${school._id}?${query}`), 50);
+    setTimeout(() => router.push(query), 50);
   };
 
   useEffect(() => {
