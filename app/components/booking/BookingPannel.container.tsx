@@ -5,8 +5,8 @@ import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
 import BookingPannelLoading from "./BookingPannel.loading";
-import BookingPannelError from "./BookingPannel.error";
-import BookingPannelNoReservation from "./BookingPannel.noReservation";
+// import BookingPannelError from "./BookingPannel.error";
+// import BookingPannelNoReservation from "./BookingPannel.noReservation";
 import BookingPannelSubmit from "./BookingPannel.submit";
 import WorkAndStudyBooking from "./forms/BookingForm.workAndStudy";
 import SummaryModal from "./summary/Summary.modal";
@@ -36,8 +36,8 @@ const BookingPannel = ({
   onUpdateReservation,
   onSubmitReservation,
   loading,
-  error,
-  errorMessage,
+  // error,
+  // errorMessage,
   courseInfo,
   scheduleInfo,
   weeksBySchoolInfo
@@ -59,8 +59,8 @@ const BookingPannel = ({
   };
 
   if (loading) return <BookingPannelLoading />;
-  if (error) return <BookingPannelError message={errorMessage} />;
-  if (!reservation) return <BookingPannelNoReservation />;
+  // if (error) return <BookingPannelError message={errorMessage} />;
+  // if (!reservation) return <BookingPannelNoReservation />;
   if (submitted) return <BookingPannelSubmit />;
 
   const courseKey = reservation ? courseLabelToIdMap[reservation.course] : undefined;
