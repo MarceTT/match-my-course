@@ -12,10 +12,16 @@ export async function middleware(request: NextRequest) {
 
   if (!isAdminRoute) return NextResponse.next();
 
+  // const token = await getToken({
+  //   req: request,
+  //   secret: process.env.NEXTAUTH_SECRET,
+  //   secureCookie: true,
+  // });
+
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: true,
+    secureCookie: process.env.NODE_ENV === "production",
   });
 
   if (!token) {

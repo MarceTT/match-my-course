@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import HistorialArchivos from "../../components/historial-files-table";
 import { useUploadCalidad } from "@/app/hooks/useUploadCalidad"; // ✅ nuevo hook axios
+import { useUploadFile } from "@/app/hooks/useUploadFile";
 
 const CalidadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -34,7 +35,14 @@ const CalidadPage = () => {
     queryFn: () => fetchUploadedFiles("Calidad"),
   });
 
-  const uploadMutation = useUploadCalidad();
+  const uploadMutation = useUploadFile(
+    "/excel/upload-calidad",
+    "Calidad",
+    () => {
+      setFile(null);
+      setSelectedColumns([]);
+    }
+  );
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setError(null);
@@ -70,17 +78,7 @@ const CalidadPage = () => {
   const handleUpload = () => {
     if (!file) return setError("No se ha seleccionado ningún archivo.");
 
-    uploadMutation.mutate({ file, selectedColumns }, {
-      onSuccess: () => {
-        toast.success("Se insertaron los registros correctamente.");
-        setFile(null);
-        setColumns([]);
-        setSelectedColumns([]);
-      },
-      onError: (err: any) => {
-        setError(err.message || "Error al procesar los datos en el servidor");
-      }
-    });
+    uploadMutation.mutate({ file, selectedColumns });
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
