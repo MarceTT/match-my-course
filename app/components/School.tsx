@@ -6,7 +6,7 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
-import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
+// import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -48,19 +48,6 @@ const School = ({
   const searchParams = useSearchParams();
   
   const handleClick = () => {
-    // const course = searchParams.get("course")?.toString().toLowerCase();
-    // console.log('School.tsx --> course: ', course);
-    
-    // const courseTypeLower = courseTypes?.[0]?.toLowerCase();
-    // const courseTypeForUrl = courseLabelToIdMap[courseTypes?.[0]?.toLowerCase()]
-    // console.log('School.tsx --> courseTypeForUrl: ', courseTypeForUrl);
-    // const courseTypeLower = courseTypes?.[0]?.toLowerCase();
-    // console.log('School.tsx --> courseTypeLower: ', courseTypeLower);
-    // const finalCourse = course ?? courseTypeLower ?? "ingles-general";
-    
-    // console.log('School.tsx --> finalCourse: ', finalCourse);
-    // console.log('School.tsx --> finalCourse2: ', courseLabelToIdMap[finalCourse]);
-
     const reservation: Reservation = {
       schoolId: _id.toString(),
       city: location,
