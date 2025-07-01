@@ -20,11 +20,12 @@ interface FormProps {
 }
 
 export default function WorkAndStudyBooking({
-  reservation,
   formData,
-  scheduleInfo,
   onChangeFormData,
   onReserve,
+  onUpdateReservation,
+  reservation,
+  scheduleInfo,
 }: FormProps) {
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -57,14 +58,19 @@ export default function WorkAndStudyBooking({
           </div>
         </div>
         <ScheduleSelect
-          value={undefined}
+          value={formData.schedule ?? reservation?.specificSchedule ?? undefined}
           scheduleInfo={scheduleInfo}
-          onChange={(val) => onChangeFormData({ schedule: val })}
+          onChange={(schedule) => {
+            onChangeFormData({ schedule })
+            onUpdateReservation({ schedule });
+          }}
           placeholder="Selecciona horario"
         />
         <StartDatePicker
           value={formData.startDate}
-          onChange={(date) => onChangeFormData({ startDate: date })}
+          onChange={(date) => {
+            onChangeFormData({ startDate: date })
+          }}
         />
         {formData.startDate && (
           <AccommodationSection
