@@ -26,14 +26,14 @@ interface FormProps {
 }
 
 export default function GeneralBooking({
-  reservation,
   courseInfo,
-  scheduleInfo,
-  weeksBySchoolInfo,
   formData,
-  onUpdateReservation,
   onChangeFormData,
-  onReserve
+  onReserve,
+  onUpdateReservation,
+  reservation,
+  scheduleInfo,
+  weeksBySchoolInfo
 }: FormProps) {
   const getCourseType = (): CourseKey | undefined => {
     return formData.courseType ?? (isValidCourse(reservation?.courseKey) ? reservation.courseKey as CourseKey : undefined);
