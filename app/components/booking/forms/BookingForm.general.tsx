@@ -38,6 +38,7 @@ export default function GeneralBooking({
   const getCourseType = (): CourseKey | undefined => {
     return formData.courseType ?? (isValidCourse(reservation?.courseKey) ? reservation.courseKey as CourseKey : undefined);
   };
+  const bookingAmound = 100;
   const helperText = "Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo";
 
   return (
@@ -46,18 +47,27 @@ export default function GeneralBooking({
         <CoursePrice amount={reservation?.total ?? 0} />
         {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
+      
       <div className="space-y-4">
-        <CourseSection
-          basePrice={reservation?.total ?? 0}
-          bookingAmound={100}
-          selectedCourse={getCourseType()}
-          courseInfo={courseInfo}
-          onChange={(courseType) => {
-            onChangeFormData({ courseType })
-            onUpdateReservation({ courseType });
-          }}
-          helperText={helperText}
-        />
+        <div>
+          <div className="flex justify-between">
+            <label className="block text-sm text-gray-600 mb-1">
+              Curso
+            </label>
+            <div className="text-sm text-gray-900 mb-2 font-semibold">
+              €{(reservation?.basePrice ?? 0)  - bookingAmound}
+            </div>
+          </div>
+          <CourseSection
+            selectedCourse={getCourseType()}
+            courseInfo={courseInfo}
+            onChange={(courseType) => {
+              onChangeFormData({ courseType })
+              onUpdateReservation({ courseType });
+            }}
+            helperText={helperText}
+          />
+        </div>
         <ScheduleSelect
           value={formData.schedule ?? reservation?.specificSchedule ?? undefined}
           scheduleInfo={scheduleInfo}
