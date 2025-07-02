@@ -4,7 +4,7 @@ import { Reservation } from "@/types";
 import { ReservationFormData } from "@/types/reservationForm";
 import ScheduleSelect from "../fields/ScheduleSection";
 import CoursePrice from "../fields/CoursePrice";
-import InfoButton from "../fields/InfoButton";
+// import InfoButton from "../fields/InfoButton";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import AccommodationSection from "../fields/AccomodationSection";
@@ -27,11 +27,14 @@ export default function WorkAndStudyBooking({
   reservation,
   scheduleInfo,
 }: FormProps) {
+  const bookingAmound = 100;
+  const helperText = "Pagando por reserva, te explicaremos cómo solicitar tu visa de estudio y trabajo";
+
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
         <CoursePrice amount={reservation?.basePrice ?? 0} />
-        <InfoButton onClick={() => console.log("Mostrar info")} />
+        {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
       <div className="space-y-4">
         <div>
@@ -39,16 +42,17 @@ export default function WorkAndStudyBooking({
             <label className="block text-sm text-gray-600 mb-1">
               Curso
             </label>
-            <div className="text-sm text-gray-900 mb-2 font-semibold">€{reservation?.basePrice}</div>
+            <div className="text-sm text-gray-900 mb-2 font-semibold">
+              €{(reservation?.basePrice ?? 0) - bookingAmound}            
+            </div>
           </div>
           <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">
             {reservation?.course}
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Pagada tu reserva, te explicaremos cómo debes solicitar tu permiso de residencia de 8 meses.
+            {helperText}
           </p>
         </div>
-        
         <div>
           <label className="block text-sm text-gray-600 mb-2">
             Semanas a estudiar

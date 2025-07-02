@@ -7,23 +7,17 @@ import {
 import { CoursesInfo } from "@/lib/types/coursesInfo";
 
 interface CourseSectionProps {
-  basePrice: number;
-  bookingAmound: number;
-  selectedCourse?: CourseKey;
   courseInfo: CoursesInfo;
-  onChange?: (course: CourseKey) => void;
   helperText: string;
-  labelText?: string; // opcional override del texto
+  onChange?: (course: CourseKey) => void;
+  selectedCourse?: CourseKey;
 }
 
 export default function CourseSection({
-  basePrice,
-  bookingAmound,
-  selectedCourse,
-  onChange,
+  courseInfo,
   helperText,
-  labelText = "Curso",
-  courseInfo
+  onChange,
+  selectedCourse,
 }: CourseSectionProps) {
   const rawLabels: string[] = courseInfo.list;
   const courseValues: CourseKey[] = parseCoursesFromApi(rawLabels);
@@ -34,14 +28,6 @@ export default function CourseSection({
 
   return (
     <div>
-      <div className="flex justify-between">
-        <label className="block text-sm text-gray-600 mb-1">
-          {labelText}
-        </label>
-        <div className="text-sm text-gray-900 mb-2 font-semibold">
-          €{basePrice - bookingAmound}
-        </div>
-      </div>
       <Select<CourseKey>
         options={courseOptions}
         value={selectedCourse}
