@@ -43,7 +43,7 @@ export default function WorkAndStudyBooking({
               Curso
             </label>
             <div className="text-sm text-gray-900 mb-2 font-semibold">
-              €{(reservation?.basePrice ?? 0) - bookingAmound}            
+              €{(reservation?.total ?? 0) - bookingAmound}            
             </div>
           </div>
           <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-2">
