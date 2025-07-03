@@ -42,6 +42,7 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
 
   return {
     basePrice: data.basePrice,
+    city: data.city,
     course: data.course,
     courseKey,
     enrollmentFee: data.enrollmentFee,
