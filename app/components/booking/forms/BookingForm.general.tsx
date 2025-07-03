@@ -55,7 +55,7 @@ export default function GeneralBooking({
               Curso
             </label>
             <div className="text-sm text-gray-900 mb-2 font-semibold">
-              €{(reservation?.basePrice ?? 0)  - bookingAmound}
+              €{(reservation?.total ?? 0)  - bookingAmound}
             </div>
           </div>
           <CourseSection
