@@ -24,6 +24,17 @@ export const fetchSchedulesByCourse = async (schoolId: string, course: string) =
   return json.data || [];
 };
 
+export async function fetchWeeksBySchool(schoolId: string, course: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/semanas/${schoolId}/${course}`);
+
+  if (!res.ok) {
+    throw new Error("Error fetching weeks");
+  }
+
+  const json = await res.json();
+  return json.data.semanas || [];
+}
+
 export const fetchReservationCalculation = async (
   schoolId: string,
   course: string,

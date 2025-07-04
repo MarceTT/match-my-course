@@ -9,7 +9,8 @@ import { ReservationFormData } from "@/types/reservationForm";
 import {
   fetchCourses,
   fetchReservationCalculation,
-  fetchSchedulesByCourse
+  fetchSchedulesByCourse,
+  fetchWeeksBySchool
 } from "../services/booking.services";
 import { Schedule } from "@/lib/types/scheduleInfo";
 
@@ -137,14 +138,15 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   }, [schoolId, course]);
 
   useEffect(() => {
-    if (!schoolId) return;
+    if (!schoolId || !course) return;
 
-    const fetchWeeksBySchool = async () => {
+
+    const loadWeeks = async () => {
       try {
         setLoadingWeeksBySchool(true);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/semanas/${schoolId}/${course}`);
-        const json = await res.json();
-        setWeeksBySchool(json.data.semanas || []);
+        const weeks = await fetchWeeksBySchool(schoolId, course);
+        setWeeksBySchool(weeks);
+        setErrorWeeksBySchool(null);
       } catch (error) {
         setErrorWeeksBySchool(error as Error);
       } finally {
@@ -152,7 +154,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       }
     };
 
-    fetchWeeksBySchool();
+    loadWeeks();
   }, [schoolId, course]);
 
   const onFormDataChange = (updated: Partial<ReservationFormData>) => {
@@ -175,14 +177,19 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     // console.log('schedule', schedule)
     // console.log('specificSchedule', specificSchedule)
 
-    // Solo cargar horarios si cambia el tipo de curso
+    // Cargar horarios y semanas si cambia el tipo de curso
     if (
       updatedFormData.courseType && 
       updatedFormData.courseType !== formData.courseType &&
       schoolId
     ) {
+      // Cargar los horarios cuando cambia el tipo de curso
       const newSchedules = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
       setSchedules(newSchedules);
+
+      // Carga semanas nuevas al cambiar curso
+      const newWeeks = await fetchWeeksBySchool(schoolId.toString(), updatedFormData.courseType);
+      setWeeksBySchool(newWeeks);
     }
 
     if (!schoolId || !course || !weeks || !schedule) {
