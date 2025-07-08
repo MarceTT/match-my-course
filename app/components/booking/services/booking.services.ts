@@ -62,3 +62,22 @@ export const fetchReservationCalculation = async (
   const json = await res.json();
   return json.data;
 };
+
+export const fetchCheapestCourseBySchool = async (
+  schoolId: string,
+  course: string,
+  signal?: AbortSignal
+) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/curso-mas-economico/${schoolId}/${course}`,
+    { signal }
+  );
+
+  if (!res.ok) {
+    const json = await res.json();
+    throw new Error(json.message || 'Error al calcular reserva');
+  }
+
+  const json = await res.json();
+  return json.data;
+};

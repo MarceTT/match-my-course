@@ -21,6 +21,7 @@ interface FormProps {
   weeksBySchoolInfo: WeeksBySchoolInfo;
   formData: Partial<ReservationFormData>;
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
+  onChangeTypeOfCourse: (updatedData: Partial<ReservationFormData>) => void;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
 }
@@ -31,6 +32,7 @@ export default function GeneralBooking({
   onChangeFormData,
   onReserve,
   onUpdateReservation,
+  onChangeTypeOfCourse,
   reservation,
   scheduleInfo,
   weeksBySchoolInfo
@@ -63,7 +65,8 @@ export default function GeneralBooking({
             courseInfo={courseInfo}
             onChange={(courseType) => {
               onChangeFormData({ courseType })
-              onUpdateReservation({ courseType });
+              // onUpdateReservation({ courseType });
+              onChangeTypeOfCourse({ courseType });
             }}
             helperText={helperText}
           />
@@ -76,24 +79,20 @@ export default function GeneralBooking({
             onUpdateReservation({ schedule });
           }}
         />
-        {/* {schedule && ( */}
-          <StudyWeeksSection
-            value={formData.studyDuration ?? reservation?.weeks ?? undefined}
-            weeksBySchoolInfo={weeksBySchoolInfo}
-            onChange={(studyDuration) => {
-              onChangeFormData({ studyDuration }); // sigue actualizando formData
-              onUpdateReservation({ studyDuration }); // actualiza la reserva directamente
-            }}
-          />
-        {/* )} */}
-        {/* {schedule && formData.studyDuration && ( */}
-          <StartDatePicker
-            value={formData.startDate}
-            onChange={(startDate) => {
-              onChangeFormData({ startDate });
-            }}
-          />
-        {/* )} */}
+        <StudyWeeksSection
+          value={formData.studyDuration ?? reservation?.weeks ?? undefined}
+          weeksBySchoolInfo={weeksBySchoolInfo}
+          onChange={(studyDuration) => {
+            onChangeFormData({ studyDuration }); // sigue actualizando formData
+            onUpdateReservation({ studyDuration }); // actualiza la reserva directamente
+          }}
+        />
+        <StartDatePicker
+          value={formData.startDate}
+          onChange={(startDate) => {
+            onChangeFormData({ startDate });
+          }}
+        />
         <ReserveSection onReserve={onReserve} />
       </div>
     </div>

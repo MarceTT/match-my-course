@@ -7,6 +7,7 @@ import {
 } from "@/lib/reservation";
 import { ReservationFormData } from "@/types/reservationForm";
 import {
+  fetchCheapestCourseBySchool,
   fetchCourses,
   fetchReservationCalculation,
   fetchSchedulesByCourse,
@@ -28,7 +29,7 @@ type UseReservationParams = {
   schedule: string | null;
 };
 
-export function useBooking({ schoolId, course, weeks, schedule }: UseReservationParams) {
+export function useBooking({ schoolId, course }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -48,24 +49,20 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   const [errorWeeksBySchool, setErrorWeeksBySchool] = useState<Error | null>(null);
 
   const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
-
-  // const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
+  
+  /**
+   * Realiza la primera carga del curso más económico.
+   */
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    const fetchReservation = async () => {
+    const fetchCheapestCourse = async () => {
       setError(false);
       setErrorMessage("");
       setLoading(true);
 
-      // console.log('schoolId', schoolId)
-      // console.log('course', course)
-      // console.log('schedule', schedule)
-      // console.log('weeks', weeks)
-
-      if (!schoolId || !course || !schedule || weeks <= 0) {
+      if (!schoolId || !course) {
         setReservation(null);
         setError(true);
         setErrorMessage("Parámetros incompletos o inválidos");
@@ -74,9 +71,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       }
 
       try {
-        const data = await fetchReservationCalculation(schoolId, course, weeks, schedule, signal);
-
-        // await delay(1000);
+        const data = await fetchCheapestCourseBySchool(schoolId, course, signal);
 
         const reservation = createReservationFromApiResponse(data);
         setReservation(reservation);
@@ -97,10 +92,13 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       }
     };
 
-    fetchReservation();
+    fetchCheapestCourse();
     return () => controller.abort();
-  }, [schoolId, course, weeks, schedule]);
+  }, [schoolId, course]);
 
+  /**
+   * Cargar los cursos
+   */
   useEffect(() => {
     if (!schoolId) return;
 
@@ -119,6 +117,9 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     loadCourses();
   }, [schoolId]);
 
+  /**
+   * Cargar los horarios
+   */
   useEffect(() => {
     if (!schoolId || !course) return;
 
@@ -137,6 +138,9 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     loadSchedules();
   }, [schoolId, course]);
 
+  /**
+   * Cargar las semanas
+   */
   useEffect(() => {
     if (!schoolId || !course) return;
 
@@ -161,21 +165,18 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     setFormData((prev) => ({ ...prev, ...updated }));
   };
 
+  /**
+   * Actualiza la los datos de la reserva cada vez que se 
+   * modifica algún parámetro.
+   */
   const onUpdateReservation = async (updatedFormData: Partial<ReservationFormData>) => {
-    // console.log('Recalculando reserva con formData:', formData);
-    // console.log('Recalculando reserva con updatedFormData:', updatedFormData);
-
     const newFormData = { ...formData, ...updatedFormData };
     setFormData(newFormData);
 
     const course = newFormData.courseType ?? reservation?.courseKey;
     const weeks = newFormData.studyDuration ?? reservation?.weeks;
     const schedule = newFormData.schedule ?? reservation?.schedule;
-    // const specificSchedule = newFormData.specificSchedule ?? reservation?.specificSchedule;
     const schoolId = reservation?.schoolId;
-
-    // console.log('schedule', schedule)
-    // console.log('specificSchedule', specificSchedule)
 
     // Cargar horarios y semanas si cambia el tipo de curso
     if (
@@ -210,6 +211,68 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       const data = await fetchReservationCalculation(schoolId, course, weeks, schedule, signal);
 
       const reservation = createReservationFromApiResponse(data);
+      setReservation(reservation);
+      setError(false);
+      setErrorMessage("");
+    } catch (err) {
+      console.error(err);
+      setReservation(null);
+      setError(true);
+      setErrorMessage('Error al conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Se usa cuando se cambia el selector de curso, la definición es 
+   * traer el curso más barato para 1 semana. Este podría ser AM o
+   * PM.
+   * @param updatedFormData 
+   * @returns 
+   */
+  const onChangeTypeOfCourse = async (updatedFormData: Partial<ReservationFormData>) => {
+    const newFormData = { ...formData, ...updatedFormData };
+    setFormData(newFormData);
+    
+    const schoolId = reservation?.schoolId;
+    const course = newFormData.courseType ?? reservation?.courseKey;
+
+    // Cargar horarios y semanas si cambia el tipo de curso
+    if (
+      updatedFormData.courseType && 
+      updatedFormData.courseType !== formData.courseType &&
+      schoolId
+    ) {
+      // Cargar los horarios cuando cambia el tipo de curso
+      const newSchedules = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
+      setSchedules(newSchedules);
+
+      // Carga semanas nuevas al cambiar curso
+      const newWeeks = await fetchWeeksBySchool(schoolId.toString(), updatedFormData.courseType);
+      setWeeksBySchool(newWeeks);
+    }
+
+    if (!schoolId || !course) {
+      console.log('Faltan parámetros para recalcular la reserva');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const controller = new AbortController();
+      const signal = controller.signal;
+      const data = await fetchCheapestCourseBySchool(schoolId, course, signal);
+
+      const reservation = createReservationFromApiResponse(data);
+
+      setFormData((prev) => ({
+        ...prev,
+        schedule: reservation.specificSchedule, // aquí se selecciona automáticamente el más barato
+        studyDuration: reservation.weeks ?? 1
+      }));
+
       setReservation(reservation);
       setError(false);
       setErrorMessage("");
@@ -272,6 +335,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     formData,
     onFormDataChange,
     onUpdateReservation,
+    onChangeTypeOfCourse,
     onSubmitReservation,
     courseInfo: {
       list: courses,
