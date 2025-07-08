@@ -268,18 +268,18 @@ const SchoolHome = () => {
           </div>
           <div className="lg:col-span-1">
             <BookingPannel
-              reservation={reservation}
-              loading={isBookingLoading}
+              courseInfo={courseInfo}
               error={hasBookingError}
               errorMessage={errorMessage}
-              courseInfo={courseInfo}
+              formData={formData}
+              loading={isBookingLoading}
+              onChangeTypeOfCourse={onChangeTypeOfCourse}
+              onFormDataChange={onFormDataChange}
+              onSubmitReservation={onSubmitReservation}
+              onUpdateReservation={onUpdateReservation}
+              reservation={reservation}
               scheduleInfo={scheduleInfo}
               weeksBySchoolInfo={weeksBySchoolInfo}
-              formData={formData}
-              onFormDataChange={onFormDataChange}
-              onChangeTypeOfCourse={onChangeTypeOfCourse}
-              onUpdateReservation={onUpdateReservation}
-              onSubmitReservation={onSubmitReservation}
             />
           </div>
         </div>

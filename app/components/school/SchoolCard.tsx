@@ -51,24 +51,16 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  // const handleScheduleOption = (i: number) => () => {
-  //   setSelectedOptionIndex(i);
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   const jornadaValue = i === 0 ? 'am' : 'pm';
-  //   params.set('horario', jornadaValue);
-  //   router.push(`?${params.toString()}`, { scroll: false });
-  // };
-
   const handleShowSchool = () => {
     const schoolId = school._id.toString();
     const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
-    const weeks = Number(searchParams.get("weeks") ?? 1);
-    const city = 'Dublin';
-    const schedule = "PM";
-
-    // console.log('schoolId SchoolCard.tsx:', schoolId);
-
-    const query = getSchoolRedirectUrl(schoolId, { course, weeks, city, schedule });
+    const weeks = Number(searchParams.get("weeksMin") ?? 1);
+    // const city = searchParams.get("city");
+    // const city = 'Dublin';
+    // const schedule = "PM";
+    
+    const query = getSchoolRedirectUrl(schoolId, { course, weeks });
+    // const query = getSchoolRedirectUrl(schoolId, { course, weeks, city, schedule });
 
     // console.log('URL generada desde SchoolCard.tsx:', query);
 
