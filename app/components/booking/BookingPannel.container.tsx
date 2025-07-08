@@ -5,8 +5,6 @@ import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
 import BookingPannelLoading from "./BookingPannel.loading";
-// import BookingPannelError from "./BookingPannel.error";
-// import BookingPannelNoReservation from "./BookingPannel.noReservation";
 import BookingPannelSubmit from "./BookingPannel.submit";
 import WorkAndStudyBooking from "./forms/BookingForm.workAndStudy";
 import SummaryModal from "./summary/Summary.modal";
@@ -25,6 +23,7 @@ export type BookingPannelProps = {
   weeksBySchoolInfo: WeeksBySchoolInfo;
   formData: Partial<ReservationFormData>;
   onFormDataChange: (updated: Partial<ReservationFormData>) => void;
+  onChangeTypeOfCourse: (updatedData: Partial<ReservationFormData>) => void;
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
 };
@@ -32,12 +31,11 @@ export type BookingPannelProps = {
 const BookingPannel = ({
   reservation,
   formData,
+  onChangeTypeOfCourse,
   onFormDataChange,
   onUpdateReservation,
   onSubmitReservation,
   loading,
-  // error,
-  // errorMessage,
   courseInfo,
   scheduleInfo,
   weeksBySchoolInfo
@@ -59,8 +57,6 @@ const BookingPannel = ({
   };
 
   if (loading) return <BookingPannelLoading />;
-  // if (error) return <BookingPannelError message={errorMessage} />;
-  // if (!reservation) return <BookingPannelNoReservation />;
   if (submitted) return <BookingPannelSubmit />;
 
   const courseKey = reservation ? courseLabelToIdMap[reservation.course] : undefined;
@@ -86,6 +82,7 @@ const BookingPannel = ({
         scheduleInfo={scheduleInfo}
         weeksBySchoolInfo={weeksBySchoolInfo}
         formData={formData}
+        onChangeTypeOfCourse={onChangeTypeOfCourse}
         onUpdateReservation={onUpdateReservation}
         onChangeFormData={onFormDataChange}
         onReserve={handleOpenModal}

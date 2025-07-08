@@ -1,6 +1,6 @@
 "use client";
 
-import React, { JSX } from "react";
+import React from "react";
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import { notFound, useParams, useSearchParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
 import Image from "next/image";
 import { raleway } from "@/app/ui/fonts";
 import { ArrowUp, Star } from "lucide-react";
-import { FaWalking, FaBus, FaTrain, FaShuttleVan } from "react-icons/fa";
+import { FaWalking, FaBus, FaTrain } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
@@ -93,6 +93,7 @@ const SchoolHome = () => {
     weeksBySchoolInfo,
     formData,
     onFormDataChange,
+    onChangeTypeOfCourse,
     onUpdateReservation,
     onSubmitReservation,
   } = useBooking({ schoolId: id, course, weeks, schedule });
@@ -276,6 +277,7 @@ const SchoolHome = () => {
               weeksBySchoolInfo={weeksBySchoolInfo}
               formData={formData}
               onFormDataChange={onFormDataChange}
+              onChangeTypeOfCourse={onChangeTypeOfCourse}
               onUpdateReservation={onUpdateReservation}
               onSubmitReservation={onSubmitReservation}
             />
