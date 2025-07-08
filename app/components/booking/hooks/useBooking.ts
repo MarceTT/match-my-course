@@ -29,7 +29,7 @@ type UseReservationParams = {
   schedule: string | null;
 };
 
-export function useBooking({ schoolId, course }: UseReservationParams) {
+export function useBooking({ schoolId, course, weeks, schedule }: UseReservationParams) {
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -71,7 +71,14 @@ export function useBooking({ schoolId, course }: UseReservationParams) {
       }
 
       try {
-        const data = await fetchCheapestCourseBySchool(schoolId, course, signal);
+        let data = null;
+
+        if (weeks === 1) {
+          data = await fetchCheapestCourseBySchool(schoolId, course, signal);
+
+        } else {
+          data = await fetchReservationCalculation(schoolId, course, weeks, schedule || 'PM', signal);
+        }
 
         const reservation = createReservationFromApiResponse(data);
         setReservation(reservation);
@@ -94,7 +101,7 @@ export function useBooking({ schoolId, course }: UseReservationParams) {
 
     fetchCheapestCourse();
     return () => controller.abort();
-  }, [schoolId, course]);
+  }, [schoolId, course, weeks, schedule]);
 
   /**
    * Cargar los cursos
