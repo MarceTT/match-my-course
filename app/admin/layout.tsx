@@ -1,3 +1,4 @@
+/// <reference path="../../types/next-auth.d.ts" />
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import AdminShell from "./AdminShell";

@@ -1,14 +1,16 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    user: DefaultSession["user"] & {
+    user: {
       id: string;
+      name: string;
+      email: string;
       role: string;
       accessToken: string;
       refreshToken: string;
       emailVerified?: Date | null;
-    };
+    } & DefaultSession["user"];
     error?: string;
   }
 
@@ -33,7 +35,7 @@ declare module "next-auth/jwt" {
     accessToken: string;
     refreshToken: string;
     accessTokenExpires?: number;
-    error?: string;
     emailVerified?: Date | null;
+    error?: string;
   }
 }
