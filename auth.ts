@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
@@ -95,10 +95,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
   },
+  jwt: {
+    maxAge: 60 * 60,
+  } as any,
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
   debug: true,
-});
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
 
 async function refreshAccessToken(token: any) {
   try {

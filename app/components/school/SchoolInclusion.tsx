@@ -26,9 +26,9 @@ const SchoolInclusion = () => {
     <div className="space-y-8">
      <div className="w-full py-12 ">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold text-center md:text-left text-black mb-16">
-          ¿Qué servicios adicionales incluye tu reserva?
-        </h1>
+        <h2 className="text-2xl font-bold text-center md:text-left text-black mb-16">
+        ¿Qué servicios adicionales incluye tu reserva con la escuela?
+        </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {servicios.map((servicio, index) => (

@@ -8,6 +8,7 @@ import { CiMenuFries } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import Logo from "@/public/logos/final-logo.png";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
+import SchoolSearch from "./SchoolSearch";
 
 const navItems = [
   { name: "Servicios", href: "/servicios" },
@@ -66,7 +67,12 @@ const Header = () => {
               </Link>
             ))}
           </nav>
+          
         </div>
+
+        <div className="hidden md:block ml-auto">
+            <SchoolSearch />
+          </div>
 
         <div className="flex items-center">
           <button
@@ -103,6 +109,9 @@ const Header = () => {
           >
             <IoMdClose className="h-6 w-6 text-gray-600" />
           </button>
+        </div>
+        <div className="px-6 mb-4 flex items-center justify-center">
+          <SchoolSearch />
         </div>
         <nav className="flex flex-col items-center space-y-4">
           {navItems.map((item, index) => (

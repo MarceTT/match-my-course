@@ -384,4 +384,3 @@ function SliderSection({
     </div>
   );
 }
-

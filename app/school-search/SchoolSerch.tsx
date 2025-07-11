@@ -109,7 +109,7 @@ const SchoolSearch = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="lg:hidden fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
+          className="lg:hidden fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full bg-[#fe6361] text-white font-semibold shadow-lg hover:bg-[#fe6361] transition"
         >
           Filtros
         </button>

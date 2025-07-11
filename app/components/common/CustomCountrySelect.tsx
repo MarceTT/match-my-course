@@ -56,6 +56,11 @@ interface CountrySelectProps {
    * @default true
    */
   showNameInSelectedValue?: boolean;
+
+  /**
+   * Clases adicionales para el select.
+   */
+  className?: string;
 }
 
 /**
@@ -69,8 +74,10 @@ export function CustomCountrySelect({
   showFlag = true,
   showCode = true,
   showNameInSelectedValue = true,
+  className ,
 }: CountrySelectProps) {
   return (
+    <div className={className}>
     <Select<string, { flag: string; code: string }>
       options={options}
       value={value}
@@ -96,5 +103,6 @@ export function CustomCountrySelect({
         );
       }}
     />
+    </div>
   );
 }

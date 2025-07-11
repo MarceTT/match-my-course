@@ -57,7 +57,7 @@ export default function SchoolSearchList({
   isFetching = false,
   course,
 }: SchoolListProps) {
-  const [viewType, setViewType] = useState<"grid" | "list">("list");
+  const [viewType, setViewType] = useState<"grid" | "list">("grid");
   const { ref } = useInView();
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
   const [localLoading, setLocalLoading] = useState(false);

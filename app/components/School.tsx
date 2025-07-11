@@ -6,7 +6,8 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
-// import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
+import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
+import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -25,6 +26,7 @@ interface SchoolCardProps {
   priority?: boolean;
   lowestPrice?: number;
   courseTypes?: string[];
+  seoCourses?: any;
   generalEnglishPrice?: GeneralEnglishPrice;
   specificSchedule?: string;
 }
@@ -39,6 +41,7 @@ const School = ({
   // lowestPrice,
   courseTypes = [],
   generalEnglishPrice,
+  seoCourses = [],
   // specificSchedule
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
@@ -48,26 +51,25 @@ const School = ({
   const searchParams = useSearchParams();
   
   const handleClick = () => {
-    const reservation: Reservation = {
-      schoolId: _id.toString(),
-      city: location,
-      // course: finalCourse,
-      course: 'ingles-general',
-      weeks: Number(searchParams.get("weeksMin") ?? 1),
-      schedule: generalEnglishPrice?.horario ?? "PM",
-      specificSchedule:
-        generalEnglishPrice?.horarioEspecifico
-          ?.toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9\-]/g, "") ?? "",
-    };
-  
-    const query = buildReservationQuery(reservation);
-    const href = `/school-detail/${_id}?${query}`;
-  
-    console.log('query', query)
-    prefetchSchool(_id); // si querés que esto se mantenga
-    router.push(href);   // navegar al hacer click
+    const seoEntry = seoCourses.find((c: any) => c.subcategoria === "Inglés General");
+    if (!seoEntry?.url) return;
+
+    const schoolId = _id.toString();
+    const course = "ingles-general";
+    const semanas = Number(searchParams.get("weeksMin") ?? 1);
+    const ciudad = location;
+    const horario = generalEnglishPrice?.horario ?? "PM";
+
+    const fullUrl = buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
+      schoolId,
+      curso: course,
+      semanas,
+      ciudad,
+      horario,
+    });
+
+    prefetchSchool(schoolId);
+    router.push(fullUrl);
   };
 
   return (
@@ -75,8 +77,8 @@ const School = ({
       <Link
         href="#"
         onClick={(e) => {
-          e.preventDefault(); // evita navegación automática
-          handleClick();      // hace la navegación personalizada
+          e.preventDefault();
+          handleClick();
         }}
         onMouseEnter={handlePrefetch}
         onTouchStart={handlePrefetch}

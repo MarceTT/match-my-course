@@ -2,15 +2,13 @@ import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    user: {
+    user: DefaultSession["user"] & {
       id: string;
-      name: string;
-      email: string;
-      role: string; // Tipo explícito
+      role: string;
       accessToken: string;
       refreshToken: string;
       emailVerified?: Date | null;
-    } & DefaultSession["user"]; // Combina con tipos por defecto
+    };
     error?: string;
   }
 
@@ -18,7 +16,7 @@ declare module "next-auth" {
     id: string;
     name: string;
     email: string;
-    role: string; // Asegúrate que coincide con tu backend
+    role: string;
     accessToken: string;
     refreshToken: string;
     emailVerified?: Date | null;
@@ -31,7 +29,7 @@ declare module "next-auth/jwt" {
     id: string;
     name: string;
     email: string;
-    role: string; // Mismo tipo que en User
+    role: string;
     accessToken: string;
     refreshToken: string;
     accessTokenExpires?: number;

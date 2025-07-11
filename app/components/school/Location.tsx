@@ -4,15 +4,21 @@ import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { BsPersonWalking } from "react-icons/bs";
+import { motion } from "framer-motion";
 
 interface LocationProps {
   schoolName: string;
   city: string;
   minutesToCenter: number;
+  transportIcon: React.ReactNode;
 }
 
-const Location = ({ schoolName, city, minutesToCenter }: LocationProps) => {
+const Location = ({
+  schoolName,
+  city,
+  minutesToCenter,
+  transportIcon,
+}: LocationProps) => {
   const query = `${schoolName}, ${city}`;
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
     query
@@ -23,13 +29,19 @@ const Location = ({ schoolName, city, minutesToCenter }: LocationProps) => {
 
   return (
     <div className="mb-8 lg:mb-16 xl:mb-16">
-      <h1 className="text-2xl font-bold mb-4 text-center md:text-left text-black">Ubicación</h1>
+      <h2 className="text-2xl font-bold mb-4 text-center md:text-left text-black">
+      Ubicación de la escuela en {city}
+      </h2>
       <div className="space-y-4">
         <div className="flex items-center gap-2 text-gray-600">
-          <BsPersonWalking className="w-5 h-5" />
-          <span>
-            {minutesToCenter} minutos caminando al centro de la ciudad
-          </span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          >
+            {transportIcon}
+          </motion.div>
+          <span>{minutesToCenter} minutos al centro de la ciudad</span>
         </div>
 
         <div className="relative w-full h-[300px] rounded-lg overflow-hidden">
@@ -49,7 +61,7 @@ const Location = ({ schoolName, city, minutesToCenter }: LocationProps) => {
               size="sm"
               className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-2"
             >
-              <MapPin className="h-4 w-4" />
+              {transportIcon}
               Ver en Google Maps
             </Button>
           </Link>

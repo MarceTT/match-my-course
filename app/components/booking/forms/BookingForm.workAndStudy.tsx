@@ -17,6 +17,7 @@ interface FormProps {
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
   onReserve: () => void;
+  href?: string;
 }
 
 export default function WorkAndStudyBooking({

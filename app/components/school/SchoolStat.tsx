@@ -41,9 +41,9 @@ const SchoolStat = ({
 }: SchoolStatProps) => {
   return (
     <div className="max-w-4xl mx-auto mt-12 mb-10 lg:mb-0 xl:mb-0">
-      <h1 className="text-2xl font-bold mb-6 text-center md:text-left lg:text-left xl:text-left">
-        Estudiantes por continente (2024)
-      </h1>
+      <h2 className="text-2xl font-bold mb-6 text-center md:text-left lg:text-left xl:text-left">
+      Estudiantes internacionales por continente
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
         {/* Donut chart */}
@@ -88,7 +88,7 @@ const SchoolStat = ({
         </div>
 
         {/* Estadísticas adicionales */}
-        <div className="flex flex-col items-center gap-8 text-center">
+        <div className="flex flex-col items-center gap-8 text-center md:gap-12 lg:gap-12 sm:flex-row sm:justify-center">
           <div>
             <div className="w-10 h-10 relative mx-auto">
               <Image

@@ -92,6 +92,10 @@ const data = {
           title: "Cargar Semanas de Precio",
           url: "/admin/cargas/semanas-precio",
         },
+        {
+          title: "Cargar SEO",
+          url: "/admin/cargas/seo"
+        }
       ],
     },
   ],

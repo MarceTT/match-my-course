@@ -19,9 +19,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import CountrySelect from "./CountrySelect";
+import { CustomCountrySelect } from "./CustomCountrySelect";
+import { countries } from "@/lib/constants/countries";
+import { z } from "zod";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -36,6 +39,7 @@ const formSchema = z.object({
   consent: z.boolean().refine((val) => val === true, {
     message: "Debes aceptar el tratamiento de datos personales",
   }),
+  nationality: z.string(),
 });
 
 interface ReservationDialogProps {
@@ -52,6 +56,7 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
       country: { value: "CL", label: "Chile", code: "+56", flag: "🇨🇱" },
       phone: "",
       consent: false,
+      nationality: "CL",
     },
   });
 
@@ -126,6 +131,29 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
 
             <FormField
               control={form.control}
+              name="nationality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-normal">
+                    Nacionalidad
+                  </FormLabel>
+                  <FormControl>
+                    <CustomCountrySelect
+                      className="min-h-[56px]"
+                      options={countries}
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Selecciona tu país"
+                      showCode={false}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="phone"
               render={({ field }) => (
                 <FormItem>
@@ -176,9 +204,13 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
                     Doy mi consentimiento para el tratamiento de mis datos
                     personales asociados al curso tomado de acuerdo con los
                     términos de la{" "}
-                    <a href="#" className="text-blue-600 hover:underline">
+                    <Link
+                      href="https://www.matchmycourse.com/politica-de-privacidad"
+                      target="_blank"
+                      className="text-blue-600 hover:underline"
+                    >
                       Política de Privacidad
-                    </a>
+                    </Link>
                     .
                     <FormMessage className="mt-4 font-semibold" />
                   </div>

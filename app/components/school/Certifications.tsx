@@ -39,11 +39,11 @@ const Certifications = ({ school }: CertificationsProps) => {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <div className="flex flex-col items-center text-center mb-8 md:text-left lg:flex-row lg:items-center lg:text-left">
-        <h1 className="text-2xl font-bold text-black">
+        <h2 className="text-2xl font-bold text-black">
           Acreditaciones y certificaciones de calidad
-        </h1>
-        <Info className="mt-2 lg:mt-0 lg:ml-2 h-5 w-5 text-gray-400" />
+        </h2>
       </div>
+      {/* <Info className="mt-2 lg:mt-0 lg:ml-2 h-5 w-5 text-gray-400" /> */}
 
       {validCerts.length === 1 ? (
         <div className="text-center md:text-left">

@@ -63,7 +63,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
       ],
     },
     {
-      title: "Otros servicios",
+      title: "Otros servicios para estudiantes",
       icon: "APOYO+ESTUDIANNTE.svg",
       items: [
         installations.impresoraFotocopiadora && "Impresora/fotocopiadora",
@@ -98,9 +98,9 @@ const Facilities = ({ installations }: FacilitiesProps) => {
 
   return (
     <section className="max-w-7xl mx-auto py-10 px-4 lg:px-0 xl:px-0">
-      <h1 className="text-2xl font-bold mb-8 text-center md:text-left text-black">
+      <h2 className="text-2xl font-bold mb-8 text-center md:text-left text-black">
         Instalaciones y servicios de la escuela
-      </h1>
+      </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {groupedFacilities.map(
@@ -131,7 +131,7 @@ const Facilities = ({ installations }: FacilitiesProps) => {
                             />
                           </div>
                           <div className="text-left flex-1">
-                            <h2 className="font-semibold text-gray-800">{title}</h2>
+                            <p className="font-semibold text-gray-800">{title}</p>
                             <p className="text-sm text-gray-500 mt-1">
                               {items.filter(Boolean).length} servicios disponibles
                             </p>

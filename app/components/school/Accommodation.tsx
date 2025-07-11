@@ -7,9 +7,10 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 interface AccommodationProps {
   accommodations: SchoolAccommodation[];
   detailAccomodation: AccomodationDetail[];
+  school: string;
 }
 
-const Accommodation = ({ accommodations, detailAccomodation }: AccommodationProps) => {
+const Accommodation = ({ accommodations, detailAccomodation, school }: AccommodationProps) => {
   const renderOption = (type: string, detail: string, imageSrc: string) => (
     <div key={type} className="flex flex-col items-center md:items-start text-center md:text-left">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-3">
@@ -31,9 +32,9 @@ const Accommodation = ({ accommodations, detailAccomodation }: AccommodationProp
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 lg:px-0 xl:px-0">
-      <h1 className="text-2xl font-bold mb-12 text-center justify-start md:text-left text-black">
-        ¿Qué alojamiento te ofrece la escuela?
-      </h1>
+      <h2 className="text-2xl font-bold mb-12 text-center justify-start md:text-left text-black">
+      Alojamiento para estudiantes en {school}
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {accommodations.map((school) => (

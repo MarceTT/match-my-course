@@ -2,13 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaFacebook } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaYoutube } from "react-icons/fa";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaYoutube, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 import Logo from "@/public/logos/final-logo.png";
 import { motion, useAnimation } from "framer-motion";
 import { useState, useEffect } from "react";
+import { raleway } from "@/app/ui/fonts";
 
 interface FooterProps {
   avoidOverlap?: boolean;
@@ -40,7 +38,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
   };
 
   const handleWhatsappClick = () => {
-    const phone = "56912345678"; // Cambiar al número real con código de país
+    const phone = "56931714541";
     const isMobile = /iPhone|Android|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
@@ -51,18 +49,16 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
     window.open(url, "_blank");
   };
 
-  const bottomOffset = avoidOverlap ? "bottom-20" : "bottom-8";
+  const bottomOffset = avoidOverlap ? "bottom-20" : "bottom-20";
 
   return (
-    <footer className="bg-[#3D3D3D] text-white py-12">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <div className="flex flex-col items-center md:flex-row md:justify-between mb-4 gap-8 md:gap-4 text-center md:text-left">
-          <div className="mt-5 mb-6 md:mb-0">
-            <Link
-              href="/"
-              className="flex items-center text-2xl font-bold mb-6 lg:items-center"
-            >
-              <div className="relative w-[400px] h-[50px]">
+    <footer className={`${raleway.className} antialiased bg-[#ededed] text-[#535353] py-12`}>
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8 text-center lg:text-left">
+          {/* Logo y descripción - Columna izquierda */}
+          <div className="flex flex-col items-center lg:items-start">
+            <Link href="/" className="inline-block mb-6">
+              <div className="relative w-[300px] h-[40px] mx-auto lg:mx-0">
                 <Image
                   src={Logo}
                   alt="Logo de MatchMyCourse"
@@ -72,92 +68,174 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
                 />
               </div>
             </Link>
-            <div className="flex items-center justify-center gap-2">
-              <div className="flex items-center justify-center gap-2">
-                <div className="p-2 bg-white rounded-md">
-                  <FaFacebook className="h-6 w-6 text-gray-600" />
+
+            <p className="text-sm mb-6 leading-relaxed max-w-md text-justify">
+              Maximizamos la compatibilidad entre estudiantes y escuelas de inglés con una plataforma transparente,
+              confiable y personalizada, que permite tomar decisiones informadas, simplificando todo el proceso de
+              búsqueda, comparación y reserva.
+            </p>
+
+            {/* Redes sociales */}
+            <div className="flex justify-center items-center gap-1 lg:justify-start">
+              <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                <Link href="https://www.linkedin.com/company/matchmycourse/about/" target="_blank"><FaLinkedin className="h-5 w-5 text-[#535353]" /></Link>
+              </div>
+              <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                <Link href="https://www.instagram.com/your.abroad.experience/?hl=es-la" target="_blank"><FaInstagram className="h-5 w-5 text-[#535353]" /></Link>
+              </div>
+              <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                <Link href="https://www.youtube.com/@matchmycourse" target="_blank"><FaYoutube className="h-5 w-5 text-[#535353]" /></Link>
+              </div>
+              <div
+                className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={handleWhatsappClick}
+              >
+                <FaWhatsapp className="h-5 w-5 text-[#535353]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Área de enlaces - Columna derecha con 2 sub-columnas */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Sub-columna izquierda */}
+            <div className="space-y-8 text-center md:text-left">
+              {/* Navegación */}
+              <div>
+                <h3 className="font-semibold mb-4 text-[#535353] underline">Navegación</h3>
+                <ul className="space-y-3 text-sm">
+                  <li>
+                    <Link href="/servicios" className="hover:text-[#333] transition-colors">
+                      Material de apoyo al estudiante
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/servicios" className="hover:text-[#333] transition-colors">
+                      Asesorías personalizadas
+                    </Link>
+                  </li>
+                  {/* <li>
+                    <Link href="/match-escuelas" className="hover:text-[#333] transition-colors">
+                      Match de escuelas
+                    </Link>
+                  </li> */}
+                  <li>
+                    <Link href="/school-search?course=ingles-general" className="hover:text-[#333] transition-colors">
+                      Buscador de escuelas
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Nosotros */}
+              <div>
+                <h3 className="font-semibold mb-4 text-[#535353] underline">Nosotros</h3>
+                <ul className="space-y-3 text-sm">
+                  <li>
+                    <Link href="/servicios" className="hover:text-[#333] transition-colors">
+                      Nuestros servicios
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/escuelas-socias" className="hover:text-[#333] transition-colors">
+                      Escuelas socias
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/terminos-y-condiciones" className="hover:text-[#333] transition-colors">
+                      Términos y condiciones
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/politica-de-privacidad" className="hover:text-[#333] transition-colors">
+                      Políticas de privacidad
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/testimonios" className="hover:text-[#333] transition-colors">
+                      Testimonios
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/contacto" className="hover:text-[#333] transition-colors">
+                      Contáctanos
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Sub-columna derecha */}
+            <div className="space-y-4 text-center md:text-left">
+              {/* Súmate */}
+              <div>
+                <h3 className="font-semibold mb-2 text-[#535353] underline">Súmate</h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link href="/contacto" className="hover:text-[#333] transition-colors">
+                      Soy una escuela
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/contacto" className="hover:text-[#333] transition-colors">
+                      Trabaja con nosotros
+                    </Link>
+                  </li>
+                </ul>
+                <div>
+                  <h3 className="font-semibold mt-4 text-[#535353] underline">Email</h3>
+                  <a href="mailto:info@matchmycourse.com" className="text-sm hover:text-[#333] transition-colors">
+                    info@matchmycourse.com
+                  </a>
                 </div>
-                <div className="p-2 bg-white rounded-md">
-                  <FaInstagram className="h-6 w-6 text-gray-600" />
-                </div>
-                <div className="p-2 bg-white rounded-md">
-                  <FaYoutube className="h-6 w-6 text-gray-600" />
-                </div>
-                <div className="p-2 bg-white rounded-md">
-                  <FaWhatsapp className="h-6 w-6 text-gray-600" onClick={handleWhatsappClick}/>
+              </div>
+
+              {/* Otros destinos */}
+              <div>
+                <h3 className="font-semibold mt-4 text-[#535353] underline">Otros destinos</h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a
+                      href="https://abroad.cl/programas/estudiar-trabajar-nueva-zelanda"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Nueva Zelanda
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://abroad.cl/programas/estudiar-italiano-italia"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Italia
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Dirección */}
+              <div>
+                <h3 className="font-semibold mt-4 text-[#535353] underline">Dirección</h3>
+                <p className="text-sm">77 Camden Street Lower, Dublin, Ireland</p>
+              </div>
+
+              {/* Teléfonos */}
+              <div>
+                <h3 className="font-semibold mt-4 text-[#535353] underline">Teléfonos</h3>
+                <div className="space-y-1 text-sm">
+                  <p>Irlanda: +353925210018</p>
+                  <p>Chile: +56931714541</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full md:w-auto">
-            <h3 className="font-semibold mb-4">DESTINOS</h3>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="https://www.matchmycourse.com/school-search?course=ingles-general"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Irlanda
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://abroad.cl/programas/estudiar-italiano-italia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Italia
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://abroad.cl/programas/estudiar-trabajar-nueva-zelanda"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Nueva Zelanda
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div className="w-full md:w-auto">
-            <h3 className="font-semibold mb-4">ABROAD</h3>
-            <ul className="space-y-2">
-              {/* <li>
-                <Link href="/quienes-somos">Quiénes somos</Link>
-              </li> */}
-              <li>
-                <Link href="/programas">Programas</Link>
-              </li>
-              <li>
-                <Link href="/escuelas-socias">Escuelas</Link>
-              </li>
-              <li>
-                <a
-                  href="https://api.whatsapp.com/send/?phone=56931714541&text&type=phone_number&app_absent=0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Clases de inglés online
-                </a>
-              </li>
-              <li>
-                <Link href="/contacto">Contacto</Link>
-              </li>
-              <li>
-                <Link href="/testimonios">Tesimonios</Link>
-              </li>
-              <li>
-                <Link href="/terminos-y-condiciones">Términos y Condiciones</Link>
-              </li>
-              <li>
-                <Link href="/politica-de-privacidad">Política de Privacidad</Link>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
+
+      {/* Botón flotante de WhatsApp */}
       <motion.div
         className={`fixed ${bottomOffset} right-4 z-50`}
         initial={{ scale: 0, opacity: 0 }}
@@ -172,11 +250,11 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
         >
           <motion.div animate={bounceAnimation}>
             <button
-              className="bg-[#00D757] p-4 rounded-full shadow-lg"
+              className="bg-[#00D757] p-4 rounded-full shadow-lg hover:bg-[#00C851] transition-colors"
               aria-label="Contactar por WhatsApp"
               onClick={handleWhatsappClick}
             >
-              <FaWhatsapp className="h-6 w-6 text-white"  />
+              <FaWhatsapp className="h-6 w-6 text-white" />
             </button>
           </motion.div>
         </motion.div>

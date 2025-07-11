@@ -11,7 +11,8 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { SchoolDetails } from "@/app/lib/types";
-import { getSchoolRedirectUrl } from "@/lib/helpers/bookingHelper";
+import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
+import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 
 interface SchoolCardProps {
   school: SchoolDetails;
@@ -51,22 +52,38 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const isGrid = viewType === "grid";
   const isMobile = useMediaQuery("(max-width: 640px)");
 
+  // const handleScheduleOption = (i: number) => () => {
+  //   setSelectedOptionIndex(i);
+  //   const params = new URLSearchParams(searchParams.toString());
+  //   const jornadaValue = i === 0 ? 'am' : 'pm';
+  //   params.set('horario', jornadaValue);
+  //   router.push(`?${params.toString()}`, { scroll: false });
+  // };
+
   const handleShowSchool = () => {
     const schoolId = school._id.toString();
     const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
-    const weeks = Number(searchParams.get("weeksMin") ?? 1);
-    // const city = searchParams.get("city");
-    // const city = 'Dublin';
-    // const schedule = "PM";
-    
-    const query = getSchoolRedirectUrl(schoolId, { course, weeks });
-    // const query = getSchoolRedirectUrl(schoolId, { course, weeks, city, schedule });
-
-    // console.log('URL generada desde SchoolCard.tsx:', query);
-
-    prefetchSchool(`${school._id}`);
-    setTimeout(() => router.push(query), 50);
+    const weeks = Number(searchParams.get("weeks") ?? 1);
+    const city = searchParams.get("city") ?? "Dublin";
+    const schedule = searchParams.get("horario") ?? "PM";
+  
+    const subcategoria = cursoSlugToSubcategoria[course];
+    const seoEntry = school.cursosEos?.find((c: any) => c.subcategoria === subcategoria);
+  
+    if (!seoEntry?.url) return;
+  
+    const fullUrl = buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
+      schoolId,
+      curso: course,
+      semanas: weeks,
+      ciudad: city,
+      horario: schedule,
+    });
+  
+    prefetchSchool(schoolId);
+    setTimeout(() => router.push(fullUrl), 50);
   };
+  
 
   useEffect(() => {
     setSelectedOptionIndex(0);

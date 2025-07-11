@@ -64,6 +64,22 @@ export interface SchoolDetails {
   selectedPrice?: number | null;
   hasOffer?: boolean;
   priceSource?: string;
+  cursosEos?: CursoSeo[];
+}
+
+export interface CursoSeo {
+  _id: string;
+  schoolId: string;
+  categoria: string;
+  subcategoria: string;
+  escuela: string;
+  ciudad: string;
+  url: string;
+  h1: string;
+  metaTitle: string;
+  metaDescription: string;
+  keywordPrincipal: string;
+  __v: number;
 }
 
 export interface Installations {
