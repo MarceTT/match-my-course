@@ -14,9 +14,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Match My Course",
   description: "Match My Course",
-  other: {
-    "facebook-domain-verification": "r10bqkdz2nziy7vzg7h0cv7qb2upbm",
-  },
 };
 
 export default function RootLayout({
@@ -50,6 +47,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="Match My Course" />
         <meta name="application-name" content="Match My Course" />
+        <meta name="facebook-domain-verification" content="r10bqkdz2nziy7vzg7h0cv7qb2upbm" />
       </head>
       <body
         className={`${raleway.className} ${geistMono.variable} antialiased`}
