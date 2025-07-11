@@ -13,7 +13,7 @@ import { useScrollTopButton } from "@/hooks/useScrollTopButton";
 import dynamic from "next/dynamic";
 import { useBooking } from "@/app/components/booking/hooks/useBooking";
 import { raleway } from "@/app/ui/fonts";
-import LoadingSkeleton from "../../../../../school-detail/[id]/LoadingSkeleton";
+import LoadingSkeleton from "./LoadingSkeleton";
 import { useRouter } from "next/navigation";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
@@ -25,8 +25,14 @@ import SchoolInclusion from "@/app/components/school/SchoolInclusion";
 import Location from "@/app/components/school/Location";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
 
-const SchoolDetail = dynamic(() => import("@/app/components/school/SchoolDetail"), { ssr: false });
-const BookingPannel = dynamic(() => import("@/app/components/booking/BookingPannel.container"), { ssr: false });
+const SchoolDetail = dynamic(
+  () => import("@/app/components/school/SchoolDetail"),
+  { ssr: false }
+);
+const BookingPannel = dynamic(
+  () => import("@/app/components/booking/BookingPannel.container"),
+  { ssr: false }
+);
 
 type Props = {
   schoolId: string;
@@ -36,17 +42,26 @@ type Props = {
   schedule: string;
 };
 
-const SchoolSeoHome = ({ schoolId, seoCourses, slugCurso, weeks, schedule }: Props) => {
+const SchoolSeoHome = ({
+  schoolId,
+  seoCourses,
+  slugCurso,
+  weeks,
+  schedule,
+}: Props) => {
   const { data, isLoading, isError } = useSchoolDetails(schoolId);
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
   const router = useRouter();
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
   console.log("SlugCurso:", slugCurso, "→ Subcategoria:", subcategoria);
-  console.log("SEO Courses disponibles:", seoCourses.map(c => c.subcategoria));
+  console.log(
+    "SEO Courses disponibles:",
+    seoCourses.map((c) => c.subcategoria)
+  );
 
   const seo = subcategoria
-    ? seoCourses.find(c => c.subcategoria === subcategoria) ?? seoCourses[0]
+    ? seoCourses.find((c) => c.subcategoria === subcategoria) ?? seoCourses[0]
     : seoCourses[0];
   console.log("SEO seleccionado:", seo);
 
@@ -60,19 +75,32 @@ const SchoolSeoHome = ({ schoolId, seoCourses, slugCurso, weeks, schedule }: Pro
     weeksBySchoolInfo,
     formData,
     onFormDataChange,
+    onChangeTypeOfCourse,
     onUpdateReservation,
     onSubmitReservation,
   } = useBooking({ schoolId, course: slugCurso, weeks, schedule });
 
-  if (isLoading) return <><Header/><LoadingSkeleton/><Footer/></>;
+  if (isLoading)
+    return (
+      <>
+        <Header />
+        <LoadingSkeleton />
+        <Footer />
+      </>
+    );
   if (isError || !data) return notFound();
 
   const school = data.data.school;
 
   const getTransportIcon = (name: string) => {
     const norm = name.toLowerCase();
-    const tren = ["active language learning","english path","irish college of english","university of limerick language centre"];
-    const bus = ["emerald cultural institute","killarney school of english"];
+    const tren = [
+      "active language learning",
+      "english path",
+      "irish college of english",
+      "university of limerick language centre",
+    ];
+    const bus = ["emerald cultural institute", "killarney school of english"];
     if (tren.includes(norm)) return <FaTrain className="w-5 h-5" />;
     if (bus.includes(norm)) return <FaBus className="w-5 h-5" />;
     return <FaWalking className="w-5 h-5" />;
@@ -83,21 +111,27 @@ const SchoolSeoHome = ({ schoolId, seoCourses, slugCurso, weeks, schedule }: Pro
     ? 2025 - parseInt(school.description.añoFundacion.toString())
     : null;
 
-    const goBack = () => {
-      router.back();
-    };
+  const goBack = () => {
+    router.back();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="max-w-7xl mx-auto px-4 mt-4">
-        <button onClick={() => goBack()} className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2">
+        <button
+          onClick={() => goBack()}
+          className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2"
+        >
           ← Volver a resultados
         </button>
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
-        <SchoolDetail images={(school.galleryImages||[]).map(rewriteToCDN)} city={school.city!} />
+        <SchoolDetail
+          images={(school.galleryImages || []).map(rewriteToCDN)}
+          city={school.city!}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           <div className="lg:col-span-2">
@@ -174,41 +208,81 @@ const SchoolSeoHome = ({ schoolId, seoCourses, slugCurso, weeks, schedule }: Pro
               </div>
             </div>
 
-            <motion.p initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:0.5}}
-              className="text-gray-700 leading-relaxed mb-6 text-justify">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-gray-700 leading-relaxed mb-6 text-justify"
+            >
               {school.description?.detalleEscuela}
             </motion.p>
 
-            {school.nationalities?.continentes && <SchoolStat
-              data={[
-                {name:"Latinoamérica", value:(school.nationalities.continentes.latinoamerica||0)*100},
-                {name:"Europa", value:(school.nationalities.continentes.europa||0)*100},
-                {name:"Asia", value:(school.nationalities.continentes.asia||0)*100},
-                {name:"Otros", value:(school.nationalities.continentes.otros||0)*100},
-              ]}
-              averageAge={school.nationalities.edadPromedio || 0}
-              nacionalidades={typeof school.nationalities.nacionalidades === 'number'
-                ? school.nationalities.nacionalidades
-                : Object.keys(school.nationalities.nacionalidades).length
-              }
-            />}
+            {school.nationalities?.continentes && (
+              <SchoolStat
+                data={[
+                  {
+                    name: "Latinoamérica",
+                    value:
+                      (school.nationalities.continentes.latinoamerica || 0) *
+                      100,
+                  },
+                  {
+                    name: "Europa",
+                    value: (school.nationalities.continentes.europa || 0) * 100,
+                  },
+                  {
+                    name: "Asia",
+                    value: (school.nationalities.continentes.asia || 0) * 100,
+                  },
+                  {
+                    name: "Otros",
+                    value: (school.nationalities.continentes.otros || 0) * 100,
+                  },
+                ]}
+                averageAge={school.nationalities.edadPromedio || 0}
+                nacionalidades={
+                  typeof school.nationalities.nacionalidades === "number"
+                    ? school.nationalities.nacionalidades
+                    : Object.keys(school.nationalities.nacionalidades).length
+                }
+              />
+            )}
 
             {!!school.qualities && <Certifications school={school.qualities} />}
-            {!!school.installations && <Facilities installations={school.installations} />}
-            {Array.isArray(school.accommodation) && school.accommodation.length>0 &&
-              <Accommodation accommodations={school.accommodation} detailAccomodation={school.accomodationDetail||[]} school={school.name} />
-            }
+            {!!school.installations && (
+              <Facilities installations={school.installations} />
+            )}
+            {Array.isArray(school.accommodation) &&
+              school.accommodation.length > 0 && (
+                <Accommodation
+                  accommodations={school.accommodation}
+                  detailAccomodation={school.accomodationDetail || []}
+                  school={school.name}
+                />
+              )}
             <SchoolInclusion />
-            <Location schoolName={school.name} city={school.city!}
-              minutesToCenter={school.description?.minutosAlCentro||0} transportIcon={getTransportIcon(school.name)} />
+            <Location
+              schoolName={school.name}
+              city={school.city!}
+              minutesToCenter={school.description?.minutosAlCentro || 0}
+              transportIcon={getTransportIcon(school.name)}
+            />
           </div>
 
           <div className="lg:col-span-1" id="booking-pannel">
             <BookingPannel
-              reservation={reservation} loading={isBookingLoading} error={hasBookingError} errorMessage={errorMessage}
-              courseInfo={courseInfo} scheduleInfo={scheduleInfo} weeksBySchoolInfo={weeksBySchoolInfo}
-              formData={formData} onFormDataChange={onFormDataChange}
-              onUpdateReservation={onUpdateReservation} onSubmitReservation={onSubmitReservation}
+              courseInfo={courseInfo}
+              error={hasBookingError}
+              errorMessage={errorMessage}
+              formData={formData}
+              loading={isBookingLoading}
+              onChangeTypeOfCourse={onChangeTypeOfCourse}
+              onFormDataChange={onFormDataChange}
+              onSubmitReservation={onSubmitReservation}
+              onUpdateReservation={onUpdateReservation}
+              reservation={reservation}
+              scheduleInfo={scheduleInfo}
+              weeksBySchoolInfo={weeksBySchoolInfo}
             />
           </div>
         </div>
@@ -217,12 +291,14 @@ const SchoolSeoHome = ({ schoolId, seoCourses, slugCurso, weeks, schedule }: Pro
       <ScrollToBookingButton />
 
       {showScrollTop && (
-        <button onClick={scrollToTop} className="hidden md:flex fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg">
+        <button
+          onClick={scrollToTop}
+          className="hidden md:flex fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg"
+        >
           <ArrowUp className="h-5 w-5" />
         </button>
       )}
 
-      
       <Footer />
     </div>
   );
