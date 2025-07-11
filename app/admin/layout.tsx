@@ -1,4 +1,3 @@
-/// <reference path="../../types/next-auth.d.ts" />
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import AdminShell from "./AdminShell";
@@ -10,8 +9,10 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  
+  const user = session?.user as { role: string } | undefined;
 
-  if (!session || session.user?.role !== "admin") {
+  if (!session || user?.role !== "admin") {
     redirect("/unauthorized");
   }
 
