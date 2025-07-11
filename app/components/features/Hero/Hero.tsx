@@ -37,7 +37,7 @@ const Hero = () => {
   return (
     <div className="relative w-full h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] flex items-center justify-center overflow-hidden">
       <Image
-        src={rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/portada2.webp") || "/placeholder.svg"}
+        src={rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Matchmycourse-Cursos-de-ingles-en-el-extranjero-matchmycourse.webp") || "/placeholder.svg"}
         alt="MatchMyCourse background"
         fill
         priority

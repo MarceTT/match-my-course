@@ -16,7 +16,7 @@ export const revalidate = 3600; // cada hora
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const base = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
   const data = await fetchAllSeoEntries();
   const schools = Array.isArray(data) ? data : [data];
