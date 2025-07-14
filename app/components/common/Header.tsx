@@ -22,7 +22,7 @@ const navItems = [
   },
   {
     name: "Contáctanos",
-    href: "/contactanos",
+    href: "/contacto",
   },
   {
     name: "Testimonios",
