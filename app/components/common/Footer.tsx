@@ -78,6 +78,9 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
             {/* Redes sociales */}
             <div className="flex justify-center items-center gap-1 lg:justify-start">
               <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
+                <Link href="https://www.facebook.com/matchmycourse" target="_blank"><FaFacebook className="h-5 w-5 text-[#535353]" /></Link>
+              </div>
+              <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
                 <Link href="https://www.linkedin.com/company/matchmycourse/about/" target="_blank"><FaLinkedin className="h-5 w-5 text-[#535353]" /></Link>
               </div>
               <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
@@ -132,7 +135,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
                 <ul className="space-y-3 text-sm">
                   <li>
                     <Link href="/servicios" className="hover:text-[#333] transition-colors">
-                      Nuestros servicios
+                      Asesorías gratis
                     </Link>
                   </li>
                   <li>

@@ -5,15 +5,43 @@ import { raleway } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
 import Script from "next/script";
+import { rewriteToCDN } from "./utils/rewriteToCDN";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
+const ogImage = rewriteToCDN(
+  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
+);
+
 export const metadata: Metadata = {
-  title: "Match My Course",
-  description: "Match My Course",
+  title: "MatchMyCourse | Encuentra tu curso de inglés",
+  description:
+    "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
+  openGraph: {
+    title: "MatchMyCourse | Encuentra tu curso de inglés",
+    description: "Compara escuelas, cursos y reserva fácil y segura.",
+    url: "https://www.matchmycourse.com",
+    siteName: "MatchMyCourse",
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "MatchMyCourse OG Image",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MatchMyCourse | Encuentra tu curso de inglés",
+    description:
+      "Reserva tu curso ideal de inglés. Compara escuelas en Irlanda con MatchMyCourse.",
+    images: [ogImage],
+  },
 };
 
 export default function RootLayout({
@@ -47,7 +75,10 @@ export default function RootLayout({
         <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="Match My Course" />
         <meta name="application-name" content="Match My Course" />
-        <meta name="facebook-domain-verification" content="r10bqkdz2nziy7vzg7h0cv7qb2upbm" />
+        <meta
+          name="facebook-domain-verification"
+          content="r10bqkdz2nziy7vzg7h0cv7qb2upbm"
+        />
       </head>
       <body
         className={`${raleway.className} ${geistMono.variable} antialiased`}

@@ -63,7 +63,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
   const handleShowSchool = () => {
     const schoolId = school._id.toString();
     const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
-    const weeks = Number(searchParams.get("weeks") ?? 1);
+    const weeks = Number(searchParams.get("weeksMin") ?? 1);
     const city = searchParams.get("city") ?? "Dublin";
     const schedule = searchParams.get("horario") ?? "PM";
   

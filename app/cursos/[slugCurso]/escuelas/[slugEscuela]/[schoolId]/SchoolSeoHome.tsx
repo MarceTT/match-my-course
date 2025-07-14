@@ -138,7 +138,7 @@ const SchoolSeoHome = ({
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-4">
               <div className="flex flex-col flex-1">
                 <h1
-                  className={`${raleway.className} text-3xl font-black text-center md:text-left lg:text-left xl:text-left`}
+                  className={`${raleway.className} text-4xl font-black text-center md:text-left lg:text-left xl:text-left`}
                 >
                   {school.name || "Nombre no disponible"}
                 </h1>

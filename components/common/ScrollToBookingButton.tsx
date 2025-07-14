@@ -19,10 +19,19 @@ const ScrollToBookingButton = () => {
     return rect.top < window.innerHeight && rect.bottom > 0;
   };
 
+
   const scrollToBooking = () => {
     const target = document.getElementById("booking-pannel");
     if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+      const headerOffset = 100;
+      const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - headerOffset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+  
       setHasClicked(true);
       setTimeout(() => {
         if (checkBookingVisibility()) {
@@ -71,7 +80,7 @@ const ScrollToBookingButton = () => {
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
           onClick={scrollToBooking}
-          className="fixed bottom-4 left-4 right-4 z-50 bg-green-600 hover:bg-green-700 text-white text-lg font-semibold py-3 rounded-full shadow-md md:hidden"
+          className="fixed bottom-4 left-4 right-4 z-50 bg-[#fe6361] hover:bg-red-500 text-white text-lg font-semibold py-3 rounded-full shadow-md md:hidden"
         >
           Reserva aquí
         </motion.button>

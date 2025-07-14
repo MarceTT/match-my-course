@@ -51,7 +51,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
       <div className="lg:col-span-3">
         <TooltipProvider delayDuration={0}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-            <h2 className="text-3xl font-black">Estudiar inglés en {city}, Irlanda</h2>
+            <h2 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-black">Estudiar inglés en {city}, Irlanda</h2>
             <div className="flex flex-wrap items-center gap-4 mt-2 sm:mt-0">
               <div className="flex items-center gap-2">
                 <Tooltip>

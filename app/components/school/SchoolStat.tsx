@@ -88,7 +88,7 @@ const SchoolStat = ({
         </div>
 
         {/* Estadísticas adicionales */}
-        <div className="flex flex-col items-center gap-8 text-center md:gap-12 lg:gap-12 sm:flex-row sm:justify-center">
+        <div className="flex flex-row justify-center items-center gap-8 text-center md:flex-col md:gap-12">
           <div>
             <div className="w-10 h-10 relative mx-auto">
               <Image
@@ -101,7 +101,7 @@ const SchoolStat = ({
                 loading="lazy"
               />
             </div>
-            <div className="text-2xl font-semibold mt-2">{averageAge} años</div>
+            <div className="text-2xl font-semibold mt-2">{averageAge}</div>
             <div className="text-sm text-gray-500">Edad promedio</div>
           </div>
           <div>
