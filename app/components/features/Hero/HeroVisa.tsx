@@ -9,7 +9,7 @@ const HeroVisa = () => {
   );
 
   return (
-    <div className="relative overflow-hidden h-[25vh] lg:h-[50vh] flex items-center justify-center">
+    <div className="relative overflow-hidden h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] flex items-center justify-center">
       <Image
         src={bgImage}
         alt="Visa Hero Background"
@@ -24,7 +24,7 @@ const HeroVisa = () => {
       <div className="container mx-auto px-4 relative z-20">
         <div className="max-w-4xl mx-auto text-center">
           <h2
-            className={`${raleway.className} text-4xl lg:text-5xl font-black text-white mb-4`}
+            className={`${raleway.className} text-4xl lg:text-5xl font-black text-white mb-4 md:mb-6 lg:mb-8 xl:mb-10`}
           >
             Asesoría gratuita para
             <div className="mt-1">la visa de estudio y trabajo</div>
