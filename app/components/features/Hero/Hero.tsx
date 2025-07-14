@@ -62,7 +62,7 @@ const Hero = () => {
         className="object-cover object-center hidden md:block"
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-[20vh] lg:pt-[25vh] xl:pt-[30vh]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-[20vh] lg:pt-[18vh] xl:pt-[22vh]">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -70,7 +70,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className={`${raleway.className} text-3xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}
           >
-            Tu curso ideal de inglés te espera
+            Encuentra y reserva tu curso de inglés
           </motion.h1>
 
           <motion.h1

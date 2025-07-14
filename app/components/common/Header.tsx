@@ -11,10 +11,22 @@ import useMediaQuery from "@/app/hooks/useMediaQuery";
 import SchoolSearch from "./SchoolSearch";
 
 const navItems = [
-  { name: "Servicios", href: "/servicios" },
+  { name: "Asesorías gratis", href: "/servicios" },
+  // {
+  //   name: "Promociones",
+  //   href: "/school-search?course=ingles-visa-de-trabajo&offers=verpromociones",
+  // },
   {
-    name: "Promociones",
-    href: "/school-search?course=ingles-visa-de-trabajo&offers=verpromociones",
+    name: "Escuelas socias",
+    href: "/escuelas-socias",
+  },
+  {
+    name: "Contáctanos",
+    href: "/contactanos",
+  },
+  {
+    name: "Testimonios",
+    href: "/testimonios",
   },
 ];
 
