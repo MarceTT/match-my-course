@@ -64,7 +64,6 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
       nationality: "CL",
     },
   });
-  
 
   useEffect(() => {
     if (!open) {
@@ -76,11 +75,14 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
     const transformedData = transformReservationData(values, countries);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/consulting`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(transformedData),
-      })
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/email/consulting`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(transformedData),
+        }
+      );
 
       const result = await res.json();
 
@@ -95,7 +97,7 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
       }
     } catch (error) {
       toast.error("Error al enviar el formulario");
-      console.error(error)
+      console.error(error);
     }
   }
   return (
@@ -246,7 +248,9 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
               )}
             />
             {submitted ? (
-              <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
+              <p className="text-center text-green-600 text-lg">
+                ¡Gracias por tu mensaje!
+              </p>
             ) : (
               <Button
                 type="submit"
@@ -254,12 +258,12 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
                 className="w-full h-12 bg-[#FF385C] hover:bg-[#E51D58] text-white font-semibold"
               >
                 {form.formState.isSubmitting ? (
-                  <span>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                    <p>Enviando...</p>
-                  </span>
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Enviando...</span>
+                  </div>
                 ) : (
-                  <p>Contactar</p>
+                  <span>Contactar</span>
                 )}
               </Button>
             )}
