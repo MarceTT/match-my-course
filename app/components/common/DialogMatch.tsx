@@ -28,6 +28,7 @@ import Link from "next/link";
 import { transformReservationData } from "@/lib/helpers/transformReservation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { launchConfettiBurst } from "@/lib/confetti";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -86,6 +87,7 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
       if (result.success) {
         setSubmitted(true);
         form.reset();
+        launchConfettiBurst();
         toast.success("¡Mensaje enviado, revisa tu correo electrónico!");
         onOpenChange(false);
       } else {
