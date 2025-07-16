@@ -6,13 +6,15 @@ interface StudyWeeksSectionProps {
   weeksBySchoolInfo: WeeksBySchoolInfo;
   onChange: (weeks: number) => void;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const StudyWeeksSection = ({
   value,
   onChange,
   weeksBySchoolInfo,
-  placeholder = 'Seleccionar...'
+  placeholder = 'Seleccionar...',
+  disabled = false,
 }: StudyWeeksSectionProps) => {
   return (
     <div>
@@ -27,6 +29,7 @@ const StudyWeeksSection = ({
         value={value?.toString() ?? ""}
         onChange={(val) => onChange(Number(val))}
         placeholder={placeholder}
+        disabled={disabled}
       />
     </div>
   );

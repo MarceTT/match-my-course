@@ -12,4 +12,7 @@ export interface ApiReservationResponse {
   specificSchedule: string;
   total: number;
   weeks: number;
+  offer?: number;
+  startDate?: string;
+  accommodation?: "si" | "no" | "posterior" | null;
 }

@@ -9,20 +9,28 @@ import {
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReservationFormData, reservationFormSchema } from "@/types/reservationForm";
+import {
+  ReservationFormData,
+  reservationFormSchema,
+} from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import BookingSummaryStepOne from "./Summary.stepOne";
 import BookingSummaryStepTwo from "./Summary.stepTwo";
+import { AnimatePresence, motion } from "framer-motion";
+
 
 interface ReservationSummaryModalProps {
   open: boolean;
   onClose: () => void;
   reservation: Reservation | null;
-  formData: Partial<ReservationFormData & {
-    startDate?: Date;
-    accommodation?: "si" | "no";
-  }>;
+  formData: Partial<
+    ReservationFormData & {
+      startDate?: Date;
+      accommodation?: "si" | "no" | "posterior";
+    }
+  >;
   onSubmitContact: (data: ReservationFormData) => void;
+  disabled?: boolean;
 }
 
 export default function SummaryModal({
@@ -31,6 +39,7 @@ export default function SummaryModal({
   reservation,
   formData,
   onSubmitContact,
+  disabled,
 }: ReservationSummaryModalProps) {
   const [step, setStep] = useState<"summary" | "contact">("summary");
 
@@ -58,35 +67,64 @@ export default function SummaryModal({
     setStep("contact");
   }
 
+  const { handleSubmit, ...restForm } = form;
+
   async function onSubmit(data: ReservationFormData) {
     const finalData = {
-      ...formData, // viene del paso anterior, por props
-      ...data,     // campos del formulario de contacto
+      ...formData,
+      ...data,
     };
-
-    onSubmitContact(finalData as ReservationFormData);
+    try {
+      onSubmitContact(finalData);
+      onClose(); // cerramos el modal si todo salió bien
+    } catch (err) {
+      console.error("Error en envío de contacto", err);
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-4xl w-full">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center">
-            {step === "summary" ? "Detalle de tu reserva" : "Tus datos de contacto"}
+            {step === "summary"
+              ? "Detalle de tu reserva"
+              : "Tus datos de contacto"}
           </DialogTitle>
         </DialogHeader>
-        {step === "summary" ? (
-          <BookingSummaryStepOne
-            reservation={reservation}
-            formData={formData}
-            onNext={handleNext}
-          />
-        ) : (
-          <BookingSummaryStepTwo
-            form={form}
-            onSubmit={onSubmit}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {step === "summary" ? (
+            <motion.div
+              key="summary"
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 40 }}
+              transition={{ duration: 0.25 }}
+            >
+              <BookingSummaryStepOne
+                reservation={reservation}
+                formData={formData}
+                onNext={handleNext}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="contact"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.25 }}
+            >
+              <BookingSummaryStepTwo
+                form={form}
+                onSubmit={onSubmit}
+                onBack={() => setStep("summary")}
+                disabled={disabled}
+                
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </DialogContent>
     </Dialog>
   );

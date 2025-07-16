@@ -1,6 +1,7 @@
 export type Schedule = {
   horario: string;
   precioMinimo: number;
+  oferta?: number;
 };
 
 export type ScheduleInfo = {

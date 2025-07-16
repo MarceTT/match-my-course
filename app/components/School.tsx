@@ -29,6 +29,7 @@ interface SchoolCardProps {
   seoCourses?: any;
   generalEnglishPrice?: GeneralEnglishPrice;
   specificSchedule?: string;
+  offer?: number;
 }
 
 const School = ({
@@ -42,7 +43,8 @@ const School = ({
   courseTypes = [],
   generalEnglishPrice,
   seoCourses = [],
-  // specificSchedule
+  // specificSchedule,
+  //offer
 }: SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);

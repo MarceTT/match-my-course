@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,9 @@ import { CustomCountrySelect } from "./CustomCountrySelect";
 import { countries } from "@/lib/constants/countries";
 import { z } from "zod";
 import Link from "next/link";
+import { transformReservationData } from "@/lib/helpers/transformReservation";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -48,6 +51,7 @@ interface ReservationDialogProps {
 }
 
 const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
+  const [submitted, setSubmitted] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,6 +63,7 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
       nationality: "CL",
     },
   });
+  
 
   useEffect(() => {
     if (!open) {
@@ -67,8 +72,29 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
   }, [open, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Aquí iría la lógica para enviar los datos
-    console.log(values);
+    const transformedData = transformReservationData(values, countries);
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/consulting`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(transformedData),
+      })
+
+      const result = await res.json();
+
+      if (result.success) {
+        setSubmitted(true);
+        form.reset();
+        toast.success("¡Mensaje enviado, revisa tu correo electrónico!");
+        onOpenChange(false);
+      } else {
+        toast.error("Hubo un error al enviar el formulario");
+      }
+    } catch (error) {
+      toast.error("Error al enviar el formulario");
+      console.error(error)
+    }
   }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -217,13 +243,24 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
                 </FormItem>
               )}
             />
-
-            <Button
-              type="submit"
-              className="w-full h-12 bg-[#FF385C] hover:bg-[#E51D58] text-white font-semibold"
-            >
-              Reservar
-            </Button>
+            {submitted ? (
+              <p className="text-center text-green-600 text-lg">¡Gracias por tu mensaje!</p>
+            ) : (
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="w-full h-12 bg-[#FF385C] hover:bg-[#E51D58] text-white font-semibold"
+              >
+                {form.formState.isSubmitting ? (
+                  <span>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                    <p>Enviando...</p>
+                  </span>
+                ) : (
+                  <p>Contactar</p>
+                )}
+              </Button>
+            )}
           </form>
         </Form>
       </DialogContent>

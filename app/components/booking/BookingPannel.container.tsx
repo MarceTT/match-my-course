@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
@@ -12,6 +12,9 @@ import GeneralBooking from "./forms/BookingForm.general";
 import { CourseKey, courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 import { ScheduleInfo } from "@/lib/types/scheduleInfo";
 import { WeeksBySchoolInfo } from "@/lib/types/weeksBySchoolInfo";
+import { launchConfettiBurst } from "@/lib/confetti";
+import { getInitialStartDate } from "@/lib/helpers/calendar";
+import { irishHolidays } from "@/lib/constants/holidays";
 
 export type BookingPannelProps = {
   reservation: Reservation | null;
@@ -42,18 +45,40 @@ const BookingPannel = ({
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  useEffect(() => {
+    if (!formData.accommodation) {
+      onFormDataChange({ accommodation: "posterior" });
+    }
+  }, [formData.accommodation]);
+
+  useEffect(() => {
+    if (!formData.startDate && reservation) {
+      const fechaCalculada = getInitialStartDate(new Date(), irishHolidays);
+      if (fechaCalculada) {
+        onFormDataChange({ startDate: fechaCalculada });
+      }
+    }
+  }, [formData.startDate, reservation]);
+
   const handleSubmitContact = async (finalData: ReservationFormData) => {
+    setIsSending(true);
     const result = await onSubmitReservation(finalData);
 
     if (result.success) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setIsSending(false);
+      launchConfettiBurst();
       setSubmitted(true);
     } else {
+      setIsSending(false);
       alert(result.message || "Error al enviar la reserva");
     }
+    setIsSending(false);
   };
 
   if (loading) return <BookingPannelLoading />;
@@ -71,6 +96,7 @@ const BookingPannel = ({
           onUpdateReservation={onUpdateReservation}
           onChangeFormData={onFormDataChange}
           onReserve={handleOpenModal}
+          disabled={isSending}
         />
       );
     }
@@ -86,6 +112,7 @@ const BookingPannel = ({
         onUpdateReservation={onUpdateReservation}
         onChangeFormData={onFormDataChange}
         onReserve={handleOpenModal}
+        disabled={isSending}
       />
     );
   };
@@ -99,6 +126,7 @@ const BookingPannel = ({
         reservation={reservation}
         formData={formData}
         onSubmitContact={handleSubmitContact}
+        disabled={isSending}
       />
     </>
   );

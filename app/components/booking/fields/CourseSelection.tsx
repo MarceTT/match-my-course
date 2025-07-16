@@ -11,6 +11,7 @@ interface CourseSectionProps {
   helperText: string;
   onChange?: (course: CourseKey) => void;
   selectedCourse?: CourseKey;
+  disabled?: boolean;
 }
 
 export default function CourseSection({
@@ -18,6 +19,7 @@ export default function CourseSection({
   helperText,
   onChange,
   selectedCourse,
+  disabled = false,
 }: CourseSectionProps) {
   const rawLabels: string[] = courseInfo.list;
   const courseValues: CourseKey[] = parseCoursesFromApi(rawLabels);
@@ -33,6 +35,7 @@ export default function CourseSection({
         value={selectedCourse}
         onChange={(id) => onChange?.(id)}
         placeholder="Seleccionar curso..."
+        disabled={disabled}
       />
       <p className="text-xs text-gray-500 mt-1">
         {helperText}

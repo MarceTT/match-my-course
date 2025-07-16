@@ -1,60 +1,28 @@
-// lib/utils/calendar.ts
 
-/**
- * Determina si una fecha debe estar deshabilitada en el calendario.
- *
- * Reglas:
- * - Solo los lunes pueden estar habilitados, excepto cuando ese lunes es feriado.
- * - Si el lunes es feriado, se habilita el siguiente día hábil (es decir, no fin de semana ni feriado).
- *
- * @param date Fecha a evaluar.
- * @param holidays Lista de feriados (como objetos Date).
- * @returns true si la fecha debe estar deshabilitada, false si está habilitada.
- */
-export function isDateDisabled(date: Date, holidays: Date[]): boolean {
+export function isValidMonday(date: Date, holidays: Date[], minDate: Date): boolean {
   const isMonday = date.getDay() === 1;
-  if (!isMonday) return true;
+  const isAfterMinDate = date >= minDate;
+  const isHoliday = holidays.some(h => h.toDateString() === date.toDateString());
 
-  const isHoliday = holidays.some(
-    (h) => h.toDateString() === date.toDateString()
-  );
-
-  if (!isHoliday) return false;
-
-  const fallbackDate = getNextAvailableDate(date, holidays);
-  return date.toDateString() !== fallbackDate?.toDateString();
+  return isMonday && isAfterMinDate && !isHoliday;
 }
 
-/**
- * Retorna el siguiente día hábil a partir de una fecha dada (excluyendo fines de semana y feriados).
- * Si no se encuentra un día válido dentro de un límite de días, retorna null.
- *
- * @param startDate Fecha desde donde comenzar la búsqueda.
- * @param holidays Lista de fechas feriadas.
- * @param maxAttempts Número máximo de días a revisar para evitar loops infinitos. Default: 10.
- * @returns Fecha del siguiente día hábil o null si no se encuentra.
- */
-export function getNextAvailableDate(
-  startDate: Date,
-  holidays: Date[],
-  maxAttempts = 10
-): Date | null {
-  const nextDate = new Date(startDate);
-  let attempts = 0;
+export function getInitialStartDate(today: Date, holidays: Date[]): Date | null {
+  const sixWeeksLater = new Date(today);
+  sixWeeksLater.setDate(sixWeeksLater.getDate() + 42);
 
-  while (attempts < maxAttempts) {
-    nextDate.setDate(nextDate.getDate() + 1);
-    attempts++;
+  let date = new Date(sixWeeksLater);
 
-    const isWeekend = nextDate.getDay() === 0 || nextDate.getDay() === 6;
-    const isHoliday = holidays.some(
-      (h) => h.toDateString() === nextDate.toDateString()
-    );
+  for (let i = 0; i < 14; i++) {
+    const isMonday = date.getDay() === 1;
+    const isHoliday = holidays.some(h => h.toDateString() === date.toDateString());
 
-    if (!isWeekend && !isHoliday) {
-      return nextDate;
+    if (isMonday && !isHoliday) {
+      return date;
     }
+
+    date.setDate(date.getDate() + 1);
   }
 
-  return null; // No se encontró un día hábil dentro del límite
+  return null;
 }

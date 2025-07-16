@@ -40,6 +40,8 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
   const courseKey: CourseKey | undefined = courseLabelToIdMap[data.course];
 
+  console.log("data nueva de prices", data);
+
   return {
     basePrice: data.basePrice,
     city: data.city,
@@ -55,5 +57,8 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     specificSchedule: data.specificSchedule,
     total: Number(data.total),
     weeks: Number(data.weeks),
+    offer: typeof data.offer === "string" ? parseFloat(data.offer) : data.offer,
+    startDate: data.startDate,
+    accommodation: data.accommodation || null,
   };
 }

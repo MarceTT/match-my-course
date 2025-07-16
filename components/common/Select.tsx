@@ -21,6 +21,7 @@ interface SelectProps<T extends string, Extra = unknown> {
   placeholder?: string;
   renderOption?: (option: SelectOption<T, Extra>) => React.ReactNode;
   formatSelectedValue?: (value: T) => React.ReactNode;
+  disabled?: boolean;
 }
 
 export function Select<T extends string, Extra = unknown>({
@@ -30,6 +31,7 @@ export function Select<T extends string, Extra = unknown>({
   placeholder = "Seleccionar opción",
   renderOption,
   formatSelectedValue,
+  disabled = false,
 }: SelectProps<T, Extra>) {
   const [selected, setSelected] = useState<T | "">(value ?? "");
 
@@ -56,6 +58,7 @@ export function Select<T extends string, Extra = unknown>({
         setSelected(val as T);
         onChange(val as T);
       }}
+      disabled={disabled}
     >
       <SelectTrigger>
         <SelectValue placeholder={placeholder}>

@@ -21,13 +21,13 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { subcategoriaToCursoSlug } from "@/lib/courseMap";
 
 function slugify(str: string): string {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "");
-  }
+  return str
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+}
 
 export default function SchoolSearch() {
   const router = useRouter();
@@ -35,7 +35,9 @@ export default function SchoolSearch() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const prefetchSchool = usePrefetchSchoolDetails();
 
   useEffect(() => {
@@ -48,19 +50,45 @@ export default function SchoolSearch() {
   const { data, isLoading } = useSchoolSearch({ q: debouncedQuery });
   const schools = data?.results || [];
   const courses = schools.flatMap((school: any) =>
-    (school.cursos || []).map((curso: any) => ({
-      ...curso,
-      id: school.id,
-      escuela: school.name,
-      ciudad: school.city,
-      logo: school.logo,
-      slug: school.slug,
-      slugCurso: curso.slug,
-    }))
+    (school.cursos || [])
+      .map((curso: any) => {
+        const precio = Number(curso.precio?.precioBase);
+        const oferta = Number(curso.precio?.precioOferta);
+        const precioValido = !isNaN(precio) && precio > 0;
+        const ofertaValida = !isNaN(oferta) && oferta > 0;
+
+        return precioValido || ofertaValida
+          ? {
+              ...curso,
+              id: school._id,
+              escuela: school.name,
+              ciudad: school.city,
+              logo: school.logo,
+              slug: school.slug ?? slugify(school.name),
+              slugCurso: curso.slug,
+              precio: precioValido ? precio : null,
+              oferta: ofertaValida ? oferta : null,
+              courseseo: curso.seo ?? null,
+            }
+          : null;
+      })
+      .filter(Boolean)
   );
 
   useEffect(() => {
     if (open) {
+      const last = localStorage.getItem("selected_course");
+      if (last) {
+        const { query: lastQuery, scroll } = JSON.parse(last);
+        setQuery(lastQuery);
+        setDebouncedQuery(lastQuery);
+        setTimeout(() => {
+          if (scrollRef.current && scroll) {
+            scrollRef.current.scrollTop = scroll;
+          }
+        }, 200);
+      }
+
       setTimeout(() => {
         inputRef.current?.focus();
         document.body.style.overflow = "hidden";
@@ -91,8 +119,7 @@ export default function SchoolSearch() {
       if (e.key === "ArrowUp") {
         e.preventDefault();
         setHighlightIndex(
-          (i) =>
-            (i - 1 + Math.max(1, courses.length)) % Math.max(1, courses.length)
+          (i) => (i - 1 + Math.max(1, courses.length)) % Math.max(1, courses.length)
         );
       }
       if (e.key === "Enter") {
@@ -116,19 +143,24 @@ export default function SchoolSearch() {
     return () => document.removeEventListener("keydown", down);
   }, [courses, open, highlightIndex]);
 
-
   const handleShowSchool = (curso: any) => {
     const schoolId = curso.id || curso._id;
     if (!schoolId) return;
-  
+
     const courseSlug = subcategoriaToCursoSlug[curso.courseseo?.subcategoria] ?? "";
     const weeks = 1;
     const city = curso.ciudad ?? "Dublín";
     const schedule = curso.horario ?? "PM";
-  
     const seoEntry = curso.courseseo;
     if (!seoEntry?.url) return;
-  
+
+    localStorage.setItem("selected_course", JSON.stringify({
+      id: schoolId,
+      slug: curso.slug ?? slugify(curso.nombre),
+      query: curso.escuela,
+      scroll: scrollRef.current?.scrollTop ?? 0
+    }));
+
     const fullUrl = buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId.toString(), {
       schoolId: schoolId.toString(),
       curso: courseSlug,
@@ -136,13 +168,15 @@ export default function SchoolSearch() {
       ciudad: city,
       horario: schedule,
     });
-  
+
     prefetchSchool(schoolId.toString());
-    setTimeout(() => router.push(fullUrl), 50);
+    setTimeout(() => router.push(fullUrl), 10);
     setOpen(false);
   };
-  
-  
+
+  const selectedCourse = JSON.parse(
+    typeof window !== "undefined" ? localStorage.getItem("selected_course") || "{}" : "{}"
+  );
 
   return (
     <>
@@ -162,9 +196,7 @@ export default function SchoolSearch() {
           aria-expanded={open}
           aria-haspopup="listbox"
           onInteractOutside={(e) => {
-            const isScrollbarClick = (
-              e.target as HTMLElement
-            ).classList.contains("scrollbar");
+            const isScrollbarClick = (e.target as HTMLElement).classList.contains("scrollbar");
             if (isScrollbarClick) e.preventDefault();
           }}
         >
@@ -174,10 +206,7 @@ export default function SchoolSearch() {
             </VisuallyHidden>
 
             <div className="relative w-full max-w-[602px] mx-auto">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <Input
                 ref={inputRef}
                 placeholder="Buscar escuela..."
@@ -195,6 +224,8 @@ export default function SchoolSearch() {
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   onClick={() => {
                     setQuery("");
+                    localStorage.removeItem("selected_course");
+                    localStorage.removeItem("search_scroll");
                     setTimeout(() => inputRef.current?.focus(), 0);
                   }}
                   aria-label="Limpiar búsqueda"
@@ -205,7 +236,7 @@ export default function SchoolSearch() {
             </div>
           </DialogHeader>
 
-          <div className="p-4 max-h-[60vh] overflow-y-auto" id="search-results">
+          <div ref={scrollRef} className="p-4 max-h-[60vh] overflow-y-auto" id="search-results">
             <AnimatePresence mode="wait">
               {isLoading ? (
                 <motion.div
@@ -224,9 +255,7 @@ export default function SchoolSearch() {
                   className="text-center py-8 text-gray-500"
                 >
                   No encontramos resultados para "{query}"
-                  <p className="text-sm mt-2">
-                    Prueba con otros términos de búsqueda
-                  </p>
+                  <p className="text-sm mt-2">Prueba con otros términos de búsqueda</p>
                 </motion.div>
               ) : !query ? (
                 <motion.div
@@ -238,26 +267,6 @@ export default function SchoolSearch() {
                   <div className="text-center text-gray-500 mb-4">
                     Escribe para buscar escuelas y cursos
                   </div>
-                  <div className="grid grid-cols-1 gap-4">
-
-                    <div className="p-3 border rounded-lg">
-                      <h3 className="font-medium mb-2">Atajos</h3>
-                      <ul className="space-y-1 text-sm">
-                        <li className="flex items-center justify-between">
-                          <span>Abrir búsqueda</span>
-                          <kbd className="bg-gray-100 px-2 py-1 rounded text-xs">
-                            ⌘K
-                          </kbd>
-                        </li>
-                        <li className="flex items-center justify-between">
-                          <span>Navegar resultados</span>
-                          <kbd className="bg-gray-100 px-2 py-1 rounded text-xs">
-                            ↑↓
-                          </kbd>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -267,78 +276,76 @@ export default function SchoolSearch() {
                   transition={{ duration: 0.2 }}
                   className="space-y-4"
                 >
-                  {courses.map((c: any, i: number) => (
-                    <motion.div
-                      key={`${c.nombre}-${i}`}
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.1, delay: i * 0.03 }}
-                      onClick={() => handleShowSchool(c)}
-                      onMouseEnter={() => setHighlightIndex(i)}
-                      className={`cursor-pointer border rounded-md p-6 transition-all flex items-center gap-4 hover:bg-gray-50 ${
-                        i === highlightIndex
-                          ? "bg-blue-50 border-blue-500"
-                          : "border-gray-200"
-                      }`}
-                      role="option"
-                      aria-selected={i === highlightIndex}
-                    >
-                      {c.logo && (
-                        <Image
-                          src={rewriteToCDN(c.logo)}
-                          alt={c.escuela}
-                          width={64}
-                          height={64}
-                          className="w-16 h-16 object-contain rounded"
-                        />
-                      )}
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-800">
-                          {c.escuela}
-                        </p>
-                        <p className="text-sm text-gray-600 font-semibold">
-                          {c.nombre}
-                        </p>
-                        <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                          {c.ciudad} —
-                          {c.oferta && Number(c.oferta) > 0 ? (
-                            <>
-                              <span className="text-green-700 font-semibold">
-                                {new Intl.NumberFormat("en-IE", {
+                  {courses.map((c: any, i: number) => {
+                    const isSelected = selectedCourse?.id === c.id && selectedCourse?.slug === c.slug;
+                    return (
+                      <motion.div
+                        key={`${c.nombre}-${i}`}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.1, delay: i * 0.03 }}
+                        onClick={() => handleShowSchool(c)}
+                        onMouseEnter={() => setHighlightIndex(i)}
+                        className={`cursor-pointer border rounded-md p-6 transition-all flex items-center gap-4 hover:bg-gray-50 ${
+                          isSelected
+                            ? "bg-blue-100 border-blue-400"
+                            : i === highlightIndex
+                            ? "bg-blue-50 border-blue-500"
+                            : "border-gray-200"
+                        }`}
+                        role="option"
+                        aria-selected={i === highlightIndex}
+                      >
+                        {c.logo && (
+                          <Image
+                            src={rewriteToCDN(c.logo)}
+                            alt={c.escuela}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 object-contain rounded"
+                          />
+                        )}
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-gray-800">{c.escuela}</p>
+                          <p className="text-sm text-gray-600 font-semibold">{c.nombre}</p>
+                          {c.precio && (
+                            <p className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                              {c.ciudad} —
+                              {c.oferta ? (
+                                <>
+                                  <span className="text-green-700 font-semibold">
+                                    {new Intl.NumberFormat("en-IE", {
+                                      style: "currency",
+                                      currency: "EUR",
+                                      minimumFractionDigits: 0,
+                                    }).format(c.oferta)}
+                                  </span>
+                                  <span className="line-through text-gray-400">
+                                    {new Intl.NumberFormat("en-IE", {
+                                      style: "currency",
+                                      currency: "EUR",
+                                      minimumFractionDigits: 0,
+                                    }).format(c.precio)}
+                                  </span>
+                                  <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-800 font-medium">
+                                    Oferta
+                                  </span>
+                                </>
+                              ) : (
+                                <>Desde {new Intl.NumberFormat("en-IE", {
                                   style: "currency",
                                   currency: "EUR",
                                   minimumFractionDigits: 0,
-                                }).format(Number(c.oferta))}
-                              </span>
-                              <span className="line-through text-gray-400">
-                                {new Intl.NumberFormat("en-IE", {
-                                  style: "currency",
-                                  currency: "EUR",
-                                  minimumFractionDigits: 0,
-                                }).format(Number(c.precio))}
-                              </span>
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-800 font-medium">
-                                Oferta
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              Desde{" "}
-                              {new Intl.NumberFormat("en-IE", {
-                                style: "currency",
-                                currency: "EUR",
-                                minimumFractionDigits: 0,
-                              }).format(Number(c.precio))}
-                            </>
+                                }).format(c.precio)}</>
+                              )}
+                              <span className="ml-1">({c.horario})</span>
+                            </p>
                           )}
-                          <span className="ml-1">({c.horario})</span>
-                        </p>
-                      </div>
-                      {i === highlightIndex && (
-                        <Check className="text-blue-600" size={18} />
-                      )}
-                    </motion.div>
-                  ))}
+                        </div>
+                        {i === highlightIndex && <Check className="text-blue-600" size={18} />}
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>

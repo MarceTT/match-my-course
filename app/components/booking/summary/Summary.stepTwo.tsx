@@ -15,16 +15,30 @@ import { CustomCountrySelect } from "../../common/CustomCountrySelect";
 import { countries } from "@/lib/constants/countries";
 import { ReservationFormData } from "@/types/reservationForm";
 import { UseFormReturn } from "react-hook-form";
+import { Loader2 } from "lucide-react";
 
 type ContactStepProps = {
   form: UseFormReturn<ReservationFormData>;
   onSubmit: (data: ReservationFormData) => void;
+  onBack: () => void;
+  disabled?: boolean;
 };
 
-export default function SummaryStepTwo({ form, onSubmit }: ContactStepProps) {
+export default function SummaryStepTwo({ form, onSubmit, onBack, disabled }: ContactStepProps) {
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+  onSubmit={form.handleSubmit(
+    (data) => {
+      console.log("✔ FORM OK", data);
+      onSubmit(data);
+    },
+    (errors) => {
+      console.error("❌ VALIDATION ERRORS", errors);
+    }
+  )}
+  className="space-y-6"
+>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -62,7 +76,11 @@ export default function SummaryStepTwo({ form, onSubmit }: ContactStepProps) {
               <FormItem>
                 <FormLabel>Correo electrónico</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="ejemplo@correo.com" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="ejemplo@correo.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -134,11 +152,15 @@ export default function SummaryStepTwo({ form, onSubmit }: ContactStepProps) {
             <FormItem className="flex flex-col gap-y-2">
               <div className="flex items-start gap-x-2">
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
                 <div className="text-sm leading-tight">
-                  Doy mi consentimiento para el tratamiento de mis datos personales asociados
-                  al curso tomado de acuerdo con los términos de la Política de Privacidad.
+                  Doy mi consentimiento para el tratamiento de mis datos
+                  personales asociados al curso tomado de acuerdo con los
+                  términos de la Política de Privacidad.
                 </div>
               </div>
               <FormMessage />
@@ -153,12 +175,16 @@ export default function SummaryStepTwo({ form, onSubmit }: ContactStepProps) {
             <FormItem className="flex flex-col gap-y-2">
               <div className="flex items-start gap-x-2">
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
                 <div className="text-sm leading-tight">
-                  Declaro haber leído, comprendido y aceptado los Términos y Condiciones
-                  generales del servicio, incluyendo políticas de pagos, cambios, cancelaciones
-                  y devoluciones asociadas al curso contratado.
+                  Declaro haber leído, comprendido y aceptado los Términos y
+                  Condiciones generales del servicio, incluyendo políticas de
+                  pagos, cambios, cancelaciones y devoluciones asociadas al
+                  curso contratado.
                 </div>
               </div>
               <FormMessage />
@@ -166,9 +192,21 @@ export default function SummaryStepTwo({ form, onSubmit }: ContactStepProps) {
           )}
         />
 
-        <Button type="submit" className="w-full bg-red-500 hover:bg-red-600">
-          Enviar solicitud
-        </Button>
+        <div className="flex justify-between">
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-gray-50 hover:bg-gray-100"
+            onClick={onBack}
+          >
+            ← Ver detalles
+          </Button>
+
+          <Button type="submit" className="bg-red-500 hover:bg-red-600" disabled={disabled}>
+            {disabled && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {disabled ? "Enviando..." : "Enviar solicitud"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

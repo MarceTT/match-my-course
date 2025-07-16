@@ -307,6 +307,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       weeks: reservation.weeks,
       schedule: reservation.schedule,
       schoolName: reservation.schoolName,
+      offer: reservation.offer,
     };
 
     try {

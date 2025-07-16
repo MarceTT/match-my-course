@@ -7,11 +7,12 @@ import {
 } from "@/components/ui/select";
 
 interface AccommodationSectionProps {
-  value?: "si" | "no";
-  onChange: (val: "si" | "no") => void;
+  value?: "si" | "no" | "posterior";
+  onChange: (val: "si" | "no" | "posterior") => void;
+  disabled?: boolean;
 }
 
-const AccommodationSection = ({ value, onChange }: AccommodationSectionProps) => {
+const AccommodationSection = ({ value, onChange, disabled = false }: AccommodationSectionProps) => {
   return (
     <div>
       <div className="flex justify-between">
@@ -23,17 +24,19 @@ const AccommodationSection = ({ value, onChange }: AccommodationSectionProps) =>
         <Select
           value={value || ""}
           onValueChange={(val) => {
-            if (val === "si" || val === "no") {
+            if (val === "si" || val === "no" || val === "posterior") {
               onChange(val);
             }
           }}
+          disabled={disabled}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Elegir" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="si">Sí</SelectItem>
             <SelectItem value="no">No</SelectItem>
+            <SelectItem value="posterior">Lo veo mas adelante</SelectItem>
           </SelectContent>
         </Select>
       </div>

@@ -9,6 +9,7 @@ interface ScheduleSectionProps {
   onChange: (val: string) => void;
   label?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export default function ScheduleSection({
@@ -16,7 +17,8 @@ export default function ScheduleSection({
   scheduleInfo,
   onChange,
   label = "Horario de clases",
-  placeholder = "Seleccionar..."
+  placeholder = "Seleccionar...",
+  disabled = false,
 }: ScheduleSectionProps) {
   return (
     <div>
@@ -31,6 +33,7 @@ export default function ScheduleSection({
         value={value || ""}
         onChange={(val) => onChange(val)}
         placeholder={placeholder}
+        disabled={disabled}
       />
     </div>
   );

@@ -27,7 +27,7 @@ type DatePickerProps = {
   /**
    * Función que define qué fechas deben estar deshabilitadas.
    */
-  disabled?: (date: Date) => boolean;
+  disabled?: boolean | ((date: Date) => boolean);
 };
 
 /**

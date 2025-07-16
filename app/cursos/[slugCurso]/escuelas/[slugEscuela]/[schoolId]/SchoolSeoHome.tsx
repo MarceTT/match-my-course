@@ -16,7 +16,6 @@ import { raleway } from "@/app/ui/fonts";
 import LoadingSkeleton from "./LoadingSkeleton";
 import { useRouter } from "next/navigation";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
-import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import Certifications from "@/app/components/school/Certifications";
 import Facilities from "@/app/components/school/Facilities";
 import Accommodation from "@/app/components/school/Accommodation";
@@ -54,16 +53,11 @@ const SchoolSeoHome = ({
   const router = useRouter();
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
-  console.log("SlugCurso:", slugCurso, "→ Subcategoria:", subcategoria);
-  console.log(
-    "SEO Courses disponibles:",
-    seoCourses.map((c) => c.subcategoria)
-  );
+ 
 
   const seo = subcategoria
     ? seoCourses.find((c) => c.subcategoria === subcategoria) ?? seoCourses[0]
     : seoCourses[0];
-  console.log("SEO seleccionado:", seo);
 
   const {
     reservation,
@@ -91,6 +85,8 @@ const SchoolSeoHome = ({
   if (isError || !data) return notFound();
 
   const school = data.data.school;
+
+  console.log("reservation", reservation);
 
   const getTransportIcon = (name: string) => {
     const norm = name.toLowerCase();

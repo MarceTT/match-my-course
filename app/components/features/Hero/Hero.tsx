@@ -68,18 +68,18 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className={`${raleway.className} text-3xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}
+            className={`${raleway.className} text-4xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}
           >
-            Encuentra y reserva tu curso de inglés
+            Encuentra tu <br />curso de inglés
           </motion.h1>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className={`${raleway.className} text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] hidden md:block`}
+            className={`${raleway.className} text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] hidden md:block`}
           >
-            Encuentra y reserva tu curso de inglés
+            Encuentra tu curso de inglés
           </motion.h1>
 
           <div className="flex flex-col sm:flex-row bg-white rounded-2xl sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl">

@@ -14,4 +14,6 @@ export interface Reservation {
   startDate?: string;
   total?: number,
   weeks: number;
+  offer?: number;
+  accommodation?: "si" | "no" | "posterior" | null;
 };
