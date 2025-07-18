@@ -16,6 +16,7 @@ import { countries } from "@/lib/constants/countries";
 import { ReservationFormData } from "@/types/reservationForm";
 import { UseFormReturn } from "react-hook-form";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 type ContactStepProps = {
   form: UseFormReturn<ReservationFormData>;
@@ -160,7 +161,14 @@ export default function SummaryStepTwo({ form, onSubmit, onBack, disabled }: Con
                 <div className="text-sm leading-tight">
                   Doy mi consentimiento para el tratamiento de mis datos
                   personales asociados al curso tomado de acuerdo con los
-                  términos de la Política de Privacidad.
+                  términos de la{" "}
+                    <Link
+                      href="https://www.matchmycourse.com/politica-de-privacidad"
+                      target="_blank"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Política de Privacidad
+                    </Link>.
                 </div>
               </div>
               <FormMessage />
@@ -181,9 +189,15 @@ export default function SummaryStepTwo({ form, onSubmit, onBack, disabled }: Con
                   />
                 </FormControl>
                 <div className="text-sm leading-tight">
-                  Declaro haber leído, comprendido y aceptado los Términos y
-                  Condiciones generales del servicio, incluyendo políticas de
-                  pagos, cambios, cancelaciones y devoluciones asociadas al
+                  Declaro haber leído, comprendido y aceptado los{" "}
+                    <Link
+                      href="https://www.matchmycourse.com/terminos-y-condiciones"
+                      target="_blank"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Términos y Condiciones generales del servicio
+                    </Link>,
+                  incluyendo políticas de pagos, cambios, cancelaciones y devoluciones asociadas al
                   curso contratado.
                 </div>
               </div>
