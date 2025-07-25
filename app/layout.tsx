@@ -9,6 +9,7 @@ import { rewriteToCDN } from "./utils/rewriteToCDN";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { GTMPageViewTracker } from "./ui/GTMPageViewTracker";
 import PromotionalPopup from "./ui/promotional-popup";
+import { Suspense } from "react";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -113,7 +114,9 @@ export default function RootLayout({
           />
         </noscript>
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!} />
+        <Suspense fallback={null}>
         <GTMPageViewTracker />
+        </Suspense>
         <ReactQueryProvider>
           {children}
           <Toaster position="top-center" richColors closeButton />
