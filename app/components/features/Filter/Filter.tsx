@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { CircularWeekSlider } from "./CircularSlider";
 import dynamic from "next/dynamic";
-import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
+import { useTour } from "@reactour/tour"; // <--- NUEVO
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
@@ -220,77 +220,42 @@ function FilterContent({
   const isVisaCourseSelected = selectedCourseName === "ingles-visa-de-trabajo";
   const customCities = courseCitiesMap[selectedCourseName] || [];
 
-  const [run, setRun] = useState(false);
   const offerRef = useRef<HTMLDivElement | null>(null);
+  const { setIsOpen, setSteps } = useTour(); // <--- REACTOUR API
 
   useEffect(() => {
     if (!isVisaCourseSelected) return;
-  
+
     const lastShown = localStorage.getItem("offerTourLastShown");
     const now = Date.now();
     const sevenDays = 7 * 24 * 60 * 60 * 1000;
-  
+
     if (!lastShown || now - parseInt(lastShown, 10) > sevenDays) {
       localStorage.setItem("offerTourLastShown", now.toString());
-  
-      // Centrar el checkbox ANTES de que empiece Joyride
+
       setTimeout(() => {
         offerRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
       }, 200);
-  
-      // Iniciar Joyride después de que terminó el scroll
+
       setTimeout(() => {
-        setRun(true);
+        setSteps?.([
+          {
+            selector: '[data-tour="offers-section"]',
+            content:
+              "Filtra aquí los cursos en oferta y encuentra los mejores precios",
+            position: "right",
+          },
+        ]);
+        setIsOpen(true);
       }, 1000);
     }
-  }, [isVisaCourseSelected]);
-  
-
-  const steps: Step[] = [
-    {
-      target: '[data-tour="offers-checkbox"]',
-      content: "Filtra aquí los cursos en oferta y encuentra los mejores precios",
-      placement: "right",
-      disableBeacon: true,
-      hideCloseButton: true,
-      locale: {
-        close: 'Cerrar',
-      },
-    },
-  ];
+  }, [isVisaCourseSelected, setSteps, setIsOpen]);
 
   return (
     <>
-      {isVisaCourseSelected && (
-        <Joyride
-          steps={steps}
-          run={run}
-          continuous={false}
-          showSkipButton={false}
-          showProgress={false}
-          spotlightClicks={false}
-          disableOverlayClose={false}
-          disableScrolling
-          disableScrollParentFix
-          styles={{
-            options: {
-              zIndex: 10000,
-              primaryColor: "#5371FF",
-              textColor: "#000",
-              backgroundColor: "#fff",
-            },
-          }}
-          callback={(data: CallBackProps) => {
-            const { status } = data;
-            if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-              setRun(false);
-            }
-          }}
-        />
-      )}
       <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
         {Object.entries(filtersConfig).map(([key, config]) => {
           if (key === "offers" && !isVisaCourseSelected) return null;
@@ -303,7 +268,12 @@ function FilterContent({
 
           if (key === "offers") {
             return (
-              <div key={key} ref={offerRef}>
+              <div
+                key={key}
+                ref={offerRef}
+                data-tour="offers-section"
+                className="space-y-2"
+              >
                 <FilterSection title={config.label}>
                   {options?.map(({ id, label }) => (
                     <div key={id} data-tour="offers-checkbox">
