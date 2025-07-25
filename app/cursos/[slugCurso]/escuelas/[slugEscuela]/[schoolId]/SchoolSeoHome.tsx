@@ -114,14 +114,14 @@ const SchoolSeoHome = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <div className="max-w-7xl mx-auto px-4 mt-4">
+      {/* <div className="max-w-7xl mx-auto px-4 mt-4">
         <button
           onClick={() => goBack()}
           className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2"
         >
           ← Volver a resultados
         </button>
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4">
         <SchoolDetail
