@@ -17,27 +17,25 @@ if (!content.includes("unstable_renderSubtreeIntoContainer")) {
   process.exit(0);
 }
 
-// Reemplazar imports rotos de react-dom por una versión compatible con React 19
 content = content.replace(
-  /import\s*\{[^}]+\}\s*from\s*['"]react-dom['"];/,
-  `import { createPortal } from 'react-dom';
-import React from 'react';
-
-// React 19 patch para APIs eliminadas
-const unmountComponentAtNode = (node) => {
-  if (node && node.parentNode) {
-    node.parentNode.removeChild(node);
-  }
-};
-
-const unstable_renderSubtreeIntoContainer = (parentComponent, element, container, callback) => {
-  const portal = createPortal(element, container);
-  if (typeof callback === 'function') {
-    callback(portal);
-  }
-  return portal;
-};`
-);
+    /import\s*\{[^}]+\}\s*from\s*['"]react-dom['"];/,
+    `import { createPortal } from 'react-dom';
+  
+  // React 19 patch para APIs eliminadas (sin duplicar React)
+  const unmountComponentAtNode = (node) => {
+    if (node && node.parentNode) {
+      node.parentNode.removeChild(node);
+    }
+  };
+  
+  const unstable_renderSubtreeIntoContainer = (parentComponent, element, container, callback) => {
+    const portal = createPortal(element, container);
+    if (typeof callback === 'function') {
+      callback(portal);
+    }
+    return portal;
+  };`
+  );
 
 writeFileSync(file, content, "utf-8");
 console.log("✅ react-joyride 2.9.3 parcheado para React 19.");
