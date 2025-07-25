@@ -1,6 +1,7 @@
 import { DatePicker } from "@/components/common/DatePicker";
 import { isValidMonday } from "@/lib/helpers/calendar";
 import { irishHolidays } from "@/lib/constants/holidays";
+import { toast } from "sonner";
 
 interface StartDatePickerProps {
   value: Date | undefined;
@@ -13,7 +14,9 @@ function getFirstValidMonday(from: Date, holidays: Date[]): Date {
   const date = new Date(from);
   while (true) {
     const isMonday = date.getDay() === 1;
-    const isHoliday = holidays.some(h => h.toDateString() === date.toDateString());
+    const isHoliday = holidays.some(
+      (h) => h.toDateString() === date.toDateString()
+    );
     if (isMonday && !isHoliday) return new Date(date);
     date.setDate(date.getDate() + 1);
   }
@@ -25,21 +28,44 @@ const StartDatePicker = ({
   label = "Inicio de clases",
   disabled = false,
 }: StartDatePickerProps) => {
-  const minSelectableDate = new Date();
+  const today = new Date();
+  const minSelectableDate = new Date(today);
   minSelectableDate.setDate(minSelectableDate.getDate() + 42); // hoy + 6 semanas
 
-  const firstValidMonday = getFirstValidMonday(minSelectableDate, irishHolidays);
+  const firstValidMonday = getFirstValidMonday(
+    minSelectableDate,
+    irishHolidays
+  );
+
+  const selectedDate =
+    !value || value < firstValidMonday ? firstValidMonday : value;
+
+  const handleChange = (date: Date | undefined) => {
+    if (!date || date < firstValidMonday) {
+      toast.warning(
+        `Solo puedes reservar a partir del ${firstValidMonday.toLocaleDateString(
+          "es-ES"
+        )}`
+      );
+      onChange(firstValidMonday);
+    } else {
+      onChange(date);
+    }
+  };
+
   return (
     <div className="w-full">
-      <label className="block text-sm text-gray-600 mb-2">
-        {label}
-      </label>
+      <label className="block text-sm text-gray-600 mb-2">{label}</label>
       <DatePicker
-       value={value ?? firstValidMonday}
-        onChange={onChange}
+        value={selectedDate}
+        onChange={handleChange}
         disabled={(date) =>
-          disabled || !isValidMonday(date, irishHolidays, minSelectableDate)
+          disabled ||
+          date < firstValidMonday ||
+          !isValidMonday(date, irishHolidays, minSelectableDate)
         }
+        fromDate={firstValidMonday}
+        defaultMonth={firstValidMonday}
       />
     </div>
   );

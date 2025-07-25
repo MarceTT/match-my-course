@@ -60,5 +60,7 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     offer: typeof data.offer === "string" ? parseFloat(data.offer) : data.offer,
     startDate: data.startDate,
     accommodation: data.accommodation || null,
+    fechaLimiteReserva: data.fechaLimiteReserva || undefined,
+    fechaTerminoReserva: data.fechaTerminoReserva || undefined,
   };
 }

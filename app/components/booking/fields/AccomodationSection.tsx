@@ -17,7 +17,7 @@ const AccommodationSection = ({ value, onChange, disabled = false }: Accommodati
     <div>
       <div className="flex justify-between">
         <label className="block text-sm text-gray-600 mb-1">
-          Alojamiento de la escuela para tus primeras semanas.
+          Alojamiento.
         </label>
       </div>
       <div className="flex gap-2">
@@ -41,8 +41,7 @@ const AccommodationSection = ({ value, onChange, disabled = false }: Accommodati
         </Select>
       </div>
       <p className="text-xs text-gray-500 mt-1">
-        El valor semanal de un alojamiento es de €250 - €350 euros semanales y
-        adicional al valor del curso de inglés.
+        Valor semanal: entre €250 - €350.
       </p>
     </div>
   );

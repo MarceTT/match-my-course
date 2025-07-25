@@ -16,4 +16,6 @@ export interface Reservation {
   weeks: number;
   offer?: number;
   accommodation?: "si" | "no" | "posterior" | null;
+  fechaLimiteReserva?: string;
+  fechaTerminoReserva?: string;
 };

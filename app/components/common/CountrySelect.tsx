@@ -1,6 +1,6 @@
 'use client'
 
-import Select, { StylesConfig } from "react-select"
+import Select, { StylesConfig, GroupBase } from "react-select"
 import React from 'react'
 
 interface Country {
@@ -8,21 +8,57 @@ interface Country {
   label: string
   code: string
   flag: string
+  order?: number
 }
 
+interface CountryGroup extends GroupBase<Country> {
+  label: string
+  options: Country[]
+}
+
+// Lista completa con orden
 const countries: Country[] = [
-  { value: "CL", label: "Chile", code: "+56", flag: "🇨🇱" },
+  { value: "CL", label: "Chile", code: "+56", flag: "🇨🇱", order: 1 },
+  { value: "AR", label: "Argentina", code: "+54", flag: "🇦🇷", order: 2 },
+  { value: "MX", label: "México", code: "+52", flag: "🇲🇽", order: 3 },
+  { value: "BR", label: "Brasil", code: "+55", flag: "🇧🇷", order: 4 },
+  { value: "UY", label: "Uruguay", code: "+598", flag: "🇺🇾", order: 5 },
+  { value: "PY", label: "Paraguay", code: "+595", flag: "🇵🇾", order: 6 },
+  { value: "CR", label: "Costa Rica", code: "+506", flag: "🇨🇷" },
+  { value: "SV", label: "El Salvador", code: "+503", flag: "🇸🇻" },
+  { value: "GT", label: "Guatemala", code: "+502", flag: "🇬🇹" },
+  { value: "NI", label: "Nicaragua", code: "+505", flag: "🇳🇮" },
+  { value: "PA", label: "Panamá", code: "+507", flag: "🇵🇦" },
   { value: "ES", label: "España", code: "+34", flag: "🇪🇸" },
-  { value: "BR", label: "Brasil", code: "+55", flag: "🇧🇷" },
-  { value: "AR", label: "Argentina", code: "+54", flag: "🇦🇷" },
-  { value: "PE", label: "Perú", code: "+51", flag: "🇵🇪" },
-  { value: "CO", label: "Colombia", code: "+57", flag: "🇨🇴" },
-  { value: "MX", label: "México", code: "+52", flag: "🇲🇽" },
-  { value: "EC", label: "Ecuador", code: "+593", flag: "🇪🇨" },
-  { value: "UY", label: "Uruguay", code: "+598", flag: "🇺🇾" },
-  { value: "PY", label: "Paraguay", code: "+595", flag: "🇵🇾" },
-  { value: "BO", label: "Bolivia", code: "+591", flag: "🇧🇴" },
-  { value: "VE", label: "Venezuela", code: "+58", flag: "🇻🇪" },
+  { value: "FR", label: "Francia", code: "+33", flag: "🇫🇷" },
+  { value: "DE", label: "Alemania", code: "+49", flag: "🇩🇪" },
+  { value: "SE", label: "Suecia", code: "+46", flag: "🇸🇪" },
+  { value: "CH", label: "Suiza", code: "+41", flag: "🇨🇭" },
+  { value: "PL", label: "Polonia", code: "+48", flag: "🇵🇱" }
+]
+
+// Ordenamos primero por "order", luego alfabéticamente
+const orderedCountries = [...countries].sort((a, b) => {
+  if (a.order && b.order) return a.order - b.order
+  if (a.order) return -1
+  if (b.order) return 1
+  return a.label.localeCompare(b.label)
+})
+
+// Agrupamos por región
+const groupedOptions: CountryGroup[] = [
+  {
+    label: "América",
+    options: orderedCountries.filter(c =>
+      ["CL","AR","MX","BR","UY","PY","CR","SV","GT","NI","PA"].includes(c.value)
+    )
+  },
+  {
+    label: "Europa",
+    options: orderedCountries.filter(c =>
+      ["ES","FR","DE","SE","CH","PL"].includes(c.value)
+    )
+  }
 ]
 
 interface CountrySelectProps {
@@ -30,7 +66,7 @@ interface CountrySelectProps {
   onChange: (value: Country | null) => void
 }
 
-// Definir correctamente los estilos con Typescript
+// Estilos para react-select
 const customStyles: StylesConfig<Country, false> = {
   control: (provided) => ({
     ...provided,
@@ -57,10 +93,10 @@ const customStyles: StylesConfig<Country, false> = {
   }),
 }
 
-const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
+const GroupedCountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   return (
     <Select
-      options={countries}
+      options={groupedOptions}
       value={value}
       onChange={onChange}
       placeholder="+56"
@@ -76,4 +112,4 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   )
 }
 
-export default CountrySelect
+export default GroupedCountrySelect

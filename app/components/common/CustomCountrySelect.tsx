@@ -8,6 +8,7 @@ export interface Country {
   value: string;
   flag: string;
   code: string;
+  order?: number;
 }
 
 interface CountrySelectProps {
@@ -32,12 +33,18 @@ export function CustomCountrySelect({
   className,
 }: CountrySelectProps) {
   const allowedCountries = [
-    "CL", "ES", "AR", "BR", "PE", "EC", "CO", "UY", "MX"
+    "CL", "ES", "AR", "BR", "UY", "MX", "PA", "NI",
+    "CR", "SV", "GT", "PY", "FR", "DE", "SE", "CH", "PL"
   ];
 
-  const filteredOptions = options.filter((country) =>
-    allowedCountries.includes(country.value)
-  );
+  const filteredOptions = options
+    .filter((country) => allowedCountries.includes(country.value))
+    .sort((a, b) => {
+      if (a.order && b.order) return a.order - b.order;
+      if (a.order) return -1;
+      if (b.order) return 1;
+      return a.label.localeCompare(b.label);
+    });
 
   return (
     <div className={className}>

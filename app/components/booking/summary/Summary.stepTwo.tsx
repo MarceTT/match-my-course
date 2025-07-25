@@ -216,7 +216,7 @@ export default function SummaryStepTwo({ form, onSubmit, onBack, disabled }: Con
             ← Ver detalles
           </Button>
 
-          <Button type="submit" className="bg-red-500 hover:bg-red-600" disabled={disabled}>
+          <Button type="submit" className="bg-[#FF385C] hover:bg-[#E51D58] text-white" disabled={disabled}>
             {disabled && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {disabled ? "Enviando..." : "Enviar solicitud"}
           </Button>

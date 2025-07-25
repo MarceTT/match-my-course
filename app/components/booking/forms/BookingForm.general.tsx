@@ -44,6 +44,7 @@ export default function GeneralBooking({
   weeksBySchoolInfo,
   disabled,
 }: FormProps) {
+  console.log("reservation reserva",reservation);
   const [step, setStep] = useState<1 | 2>(1);
   const getCourseType = (): CourseKey | undefined => {
     return (
@@ -53,16 +54,16 @@ export default function GeneralBooking({
         : undefined)
     );
   };
-  console.log("Reservation", reservation);
   const bookingAmound = 100;
   const helperText =
     "Pagada tu reserva, tendrás acceso a todos nuestros beneficios";
     const priceText = "El precio no incluye matrícula ni materiales(para todos los otros cursos)";
+    const typeCourse = "General"
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <CoursePrice amount={reservation?.total ?? 0} text={priceText} />
+        <CoursePrice amount={reservation?.total ?? 0} text={priceText} type={typeCourse} />
         {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
 
@@ -76,9 +77,9 @@ export default function GeneralBooking({
           >
             <div className="flex justify-between">
               <label className="block text-sm text-gray-600">Curso</label>
-              <div className="text-sm text-gray-900 font-semibold">
+              {/* <div className="text-sm text-gray-900 font-semibold">
                 €{(reservation?.total ?? 0) - bookingAmound}
-              </div>
+              </div> */}
             </div>
             <CourseSection
               selectedCourse={getCourseType()}
@@ -113,7 +114,7 @@ export default function GeneralBooking({
             />
             <Button
               onClick={() => setStep(2)}
-              className="w-full mt-4 bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
+              className="w-full mt-4 bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
             >
               <span className="mr-2">Continuar con tu reserva</span>
               <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
@@ -150,7 +151,7 @@ export default function GeneralBooking({
               onChange={(val) => onChangeFormData({ accommodation: val })}
               disabled={disabled}
             />
-            <ReserveSection onReserve={onReserve} disabled={disabled} />
+            <ReserveSection onReserve={onReserve} disabled={disabled} reservation={{total: reservation?.total ?? 0, offer: reservation?.offer ?? 0}} />
           </motion.div>
         )}
       </div>

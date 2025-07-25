@@ -28,6 +28,15 @@ type DatePickerProps = {
    * Función que define qué fechas deben estar deshabilitadas.
    */
   disabled?: boolean | ((date: Date) => boolean);
+
+  /**
+   * Fecha mínima visible y seleccionable.
+   */
+  fromDate?: Date;
+  /**
+   * Mes inicial en el que se abre el calendario.
+   */
+  defaultMonth?: Date;
 };
 
 /**
@@ -39,7 +48,7 @@ type DatePickerProps = {
  * - Se cierra automáticamente al seleccionar una fecha válida.
  * - Localizado en español (`date-fns/locale/es`).
  */
-export function DatePicker({ value, onChange, disabled }: DatePickerProps) {
+export function DatePicker({ value, onChange, disabled, fromDate, defaultMonth }: DatePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(value);
   const [open, setOpen] = React.useState(false);
 
@@ -70,7 +79,9 @@ export function DatePicker({ value, onChange, disabled }: DatePickerProps) {
           selected={date}
           onSelect={handleSelect}
           disabled={disabled}
-        />
+          fromDate={fromDate}
+          defaultMonth={defaultMonth}
+          />
       </PopoverContent>
     </Popover>
   );

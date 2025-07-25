@@ -6,6 +6,7 @@ import Hero from "./components/features/Hero/Hero";
 import dynamic from "next/dynamic";
 import SuspenseLoader from "./admin/components/SuspenseLoader";
 import { Suspense, useState } from "react";
+import PopupOferta from "./ui/promotional-popup";
 
 const SchoolPage = dynamic(() => import("./school/SchoolPage"), { ssr: false });
 
@@ -14,6 +15,7 @@ export default function HomeClient() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      <PopupOferta scrollTrigger={200} />
       <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
         <Hero />
       </Suspense>

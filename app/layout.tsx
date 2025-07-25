@@ -6,6 +6,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
 import Script from "next/script";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
+import { GoogleTagManager } from "@next/third-parties/google";
+import { GTMPageViewTracker } from "./ui/GTMPageViewTracker";
+import PromotionalPopup from "./ui/promotional-popup";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -109,6 +112,8 @@ export default function RootLayout({
             src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"
           />
         </noscript>
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!} />
+        <GTMPageViewTracker />
         <ReactQueryProvider>
           {children}
           <Toaster position="top-center" richColors closeButton />

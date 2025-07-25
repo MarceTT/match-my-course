@@ -43,45 +43,40 @@ const School = ({
   courseTypes = [],
   generalEnglishPrice,
   seoCourses = [],
-  // specificSchedule,
-  //offer
-}: SchoolCardProps) => {
+}: // specificSchedule,
+//offer
+SchoolCardProps) => {
   const prefetchSchool = usePrefetchSchoolDetails();
   const handlePrefetch = () => prefetchSchool(_id);
-  
+
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const handleClick = () => {
-    const seoEntry = seoCourses.find((c: any) => c.subcategoria === "Inglés General");
-    if (!seoEntry?.url) return;
 
-    const schoolId = _id.toString();
-    const course = "ingles-general";
-    const semanas = Number(searchParams.get("weeksMin") ?? 1);
-    const ciudad = location;
-    const horario = generalEnglishPrice?.horario ?? "PM";
+  const seoEntry = seoCourses.find(
+    (c: any) => c.subcategoria === "Inglés General"
+  );
+  const schoolId = _id.toString();
+  const course = "ingles-general";
+  const semanas = Number(searchParams.get("weeksMin") ?? 1);
+  const ciudad = location;
+  const horario = generalEnglishPrice?.horario ?? "PM";
 
-    const fullUrl = buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
-      schoolId,
-      curso: course,
-      semanas,
-      ciudad,
-      horario,
-    });
-
-    prefetchSchool(schoolId);
-    router.push(fullUrl);
-  };
+  const fullUrl = seoEntry
+    ? buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
+        schoolId,
+        curso: course,
+        semanas,
+        ciudad,
+        horario,
+      })
+    : "#";
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">
       <Link
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          handleClick();
-        }}
+        href={fullUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         onMouseEnter={handlePrefetch}
         onTouchStart={handlePrefetch}
         className="flex flex-col h-full"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useDebounce } from "@/app/hooks/useDebounce"; // 💥 Vamos a crearlo
+import { useDebounce } from "@/app/hooks/useDebounce";
 import { useSearchParams, useRouter } from "next/navigation";
 import filtersConfig from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
@@ -16,26 +16,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { CircularWeekSlider } from "./CircularSlider";
 import dynamic from "next/dynamic";
+import Joyride, { Step, CallBackProps, STATUS } from "react-joyride";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
 });
-
-const visaCities: string[] = [
-  "Dublín",
-  "Bray",
-  "Galway",
-  "Naas",
-  "Tralee",
-  "Cork",
-  "Donegal",
-  "Drogheda",
-  "Limerick",
-  "Athlone",
-  "Waterford",
-  "Killarney",
-  "Wexford",
-];
 
 const normalize = (str: string) =>
   str
@@ -58,7 +43,6 @@ const courseCitiesMap: Record<string, string[]> = {
     "Tralee",
     "Cork",
     "Limerick",
-    //"Donegal",
     "Athlone",
     "Waterford",
     "Killarney",
@@ -75,15 +59,16 @@ const courseCitiesMap: Record<string, string[]> = {
     "Bray",
     "Wexford",
     "Tralee",
-    //"Schull",
   ],
-  "ingles-general-mas-sesiones-individuales": [
+  "ingles-general-mas-sesiones-individuales": ["Dublín", "Galway", "Wexford"],
+  "ingles-general-intensivo": [
     "Dublín",
     "Galway",
-    "Wexford",
-    //"Schull",
+    "Cork",
+    "Bray",
+    "Limerick",
+    "Tralee",
   ],
-  "ingles-general-intensivo": ["Dublín", "Galway", "Cork", "Bray", "Limerick", "Tralee"],
   "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
 };
 
@@ -103,7 +88,7 @@ const Filter = ({
   onResetFilters,
 }: FilterProps) => {
   const searchParams = useSearchParams();
-  const debouncedSearchParams = useDebounce(searchParams.toString(), 150); // 💥 debounce 150ms
+  const debouncedSearchParams = useDebounce(searchParams.toString(), 150);
   const router = useRouter();
 
   useEffect(() => {
@@ -113,9 +98,7 @@ const Filter = ({
 
     setFilters((prev) => {
       const prevCourse = prev.course?.[0] || "";
-      if (prevCourse === normalizedCourse) {
-        return prev;
-      }
+      if (prevCourse === normalizedCourse) return prev;
 
       const citiesFromUrl = params.get("cities");
       const normalizedCities = citiesFromUrl
@@ -163,38 +146,31 @@ const Filter = ({
   };
 
   const handleSliderChange = (category: string, value: number[]) => {
-    setFilters((prev) => ({
-      ...prev,
-      [category]: value,
-    }));
+    setFilters((prev) => ({ ...prev, [category]: value }));
   };
 
   const handleReset = () => {
     const resetFilters: Record<string, any> = {};
-    
     Object.entries(filtersConfig).forEach(([key, config]) => {
       if (config.type === "slider" && config.slider) {
-        resetFilters[key] = [config.slider.min]; // Valor mínimo como array
+        resetFilters[key] = [config.slider.min];
       } else {
         resetFilters[key] = [];
       }
     });
-  
-    // Mantener solo el curso actual
+
     if (filters.course?.length > 0) {
       resetFilters.course = [...filters.course];
     }
-  
+
     setFilters(resetFilters);
-    
-    // Limpiar parámetros de URL
     const params = new URLSearchParams(window.location.search);
     params.delete("weeksMin");
     router.replace(`?${params.toString()}`);
   };
 
-  const isDefaultFilters = () => {
-    return Object.entries(filtersConfig).every(([key, config]) => {
+  const isDefaultFilters = () =>
+    Object.entries(filtersConfig).every(([key, config]) => {
       const currentValue = filters[key];
       if (config.type === "slider" && config.slider) {
         return Array.isArray(currentValue)
@@ -204,7 +180,6 @@ const Filter = ({
         return !currentValue || currentValue.length === 0;
       }
     });
-  };
 
   return (
     <div className="w-full lg:w-64 flex-shrink-0">
@@ -241,43 +216,97 @@ function FilterContent({
   isDefaultFilters,
 }: any) {
   const selectedCourse = filters.course || [];
-  const selectedCourseName = selectedCourse[0]; // solo se permite uno
+  const selectedCourseName = selectedCourse[0];
   const isVisaCourseSelected = selectedCourseName === "ingles-visa-de-trabajo";
   const customCities = courseCitiesMap[selectedCourseName] || [];
 
+  const [run, setRun] = useState(false);
+  const offerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isVisaCourseSelected) return;
+  
+    const lastShown = localStorage.getItem("offerTourLastShown");
+    const now = Date.now();
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+  
+    if (!lastShown || now - parseInt(lastShown, 10) > sevenDays) {
+      localStorage.setItem("offerTourLastShown", now.toString());
+  
+      // Centrar el checkbox ANTES de que empiece Joyride
+      setTimeout(() => {
+        offerRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 200);
+  
+      // Iniciar Joyride después de que terminó el scroll
+      setTimeout(() => {
+        setRun(true);
+      }, 1000);
+    }
+  }, [isVisaCourseSelected]);
+  
+
+  const steps: Step[] = [
+    {
+      target: '[data-tour="offers-checkbox"]',
+      content: "Filtra aquí los cursos en oferta y encuentra los mejores precios",
+      placement: "right",
+      disableBeacon: true,
+      hideCloseButton: true,
+      locale: {
+        close: 'Cerrar',
+      },
+    },
+  ];
+
   return (
-    <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-      {Object.entries(filtersConfig).map(([key, config]) => {
-        if (key === "offers" && !isVisaCourseSelected) return null;
-        const isCities = key === "cities";
-        const options =
-          isCities && customCities.length
-            ? customCities.map((label) => ({ id: normalize(label), label }))
-            : config.options;
+    <>
+      {isVisaCourseSelected && (
+        <Joyride
+          steps={steps}
+          run={run}
+          continuous={false}
+          showSkipButton={false}
+          showProgress={false}
+          spotlightClicks={false}
+          disableOverlayClose={false}
+          disableScrolling
+          disableScrollParentFix
+          styles={{
+            options: {
+              zIndex: 10000,
+              primaryColor: "#5371FF",
+              textColor: "#000",
+              backgroundColor: "#fff",
+            },
+          }}
+          callback={(data: CallBackProps) => {
+            const { status } = data;
+            if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
+              setRun(false);
+            }
+          }}
+        />
+      )}
+      <div className="border rounded-md p-4 space-y-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        {Object.entries(filtersConfig).map(([key, config]) => {
+          if (key === "offers" && !isVisaCourseSelected) return null;
 
-        if (config.type === "slider" && config.slider) {
-          const value = filters[key] || config.slider.default;
-          return (
-            <FilterSection title={config.label} key={key}>
-              <SliderSection
-                value={
-                  Array.isArray(filters[key]) ? filters[key] : [filters[key]]
-                }
-                config={config.slider!}
-                onChange={(val) => onSliderChange(key, val)}
-                disabled={isVisaCourseSelected}
-              />
-            </FilterSection>
-          );
-        }
+          const isCities = key === "cities";
+          const options =
+            isCities && customCities.length
+              ? customCities.map((label) => ({ id: normalize(label), label }))
+              : config.options;
 
-        return (
-          <FilterSection title={config.label} key={key}>
-            {options?.map(({ id, label }) => (
-              <TooltipProvider key={id}>
-                <Tooltip delayDuration={200}>
-                  <TooltipTrigger asChild>
-                    <div>
+          if (key === "offers") {
+            return (
+              <div key={key} ref={offerRef}>
+                <FilterSection title={config.label}>
+                  {options?.map(({ id, label }) => (
+                    <div key={id} data-tour="offers-checkbox">
                       <CheckboxItem
                         id={id}
                         label={label}
@@ -285,28 +314,65 @@ function FilterContent({
                         onChange={() => onCheckboxChange(key, id)}
                       />
                     </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    <p>Solo se puede seleccionar un curso a la vez</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-          </FilterSection>
-        );
-      })}
+                  ))}
+                </FilterSection>
+              </div>
+            );
+          }
 
-      {!isDefaultFilters() && (
-        <Button
-          variant="outline"
-          onClick={onReset}
-          className="w-full flex items-center justify-center gap-2"
-        >
-          <RotateCcw className="h-4 w-4" />
-          Limpiar filtros
-        </Button>
-      )}
-    </div>
+          if (config.type === "slider" && config.slider) {
+            const value = filters[key] || config.slider.default;
+            return (
+              <FilterSection title={config.label} key={key}>
+                <SliderSection
+                  value={
+                    Array.isArray(filters[key]) ? filters[key] : [filters[key]]
+                  }
+                  config={config.slider!}
+                  onChange={(val) => onSliderChange(key, val)}
+                  disabled={isVisaCourseSelected}
+                />
+              </FilterSection>
+            );
+          }
+
+          return (
+            <FilterSection title={config.label} key={key}>
+              {options?.map(({ id, label }) => (
+                <TooltipProvider key={id}>
+                  <Tooltip delayDuration={200}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <CheckboxItem
+                          id={id}
+                          label={label}
+                          checked={(filters[key] || []).includes(id)}
+                          onChange={() => onCheckboxChange(key, id)}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>Solo se puede seleccionar un curso a la vez</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+            </FilterSection>
+          );
+        })}
+
+        {!isDefaultFilters() && (
+          <Button
+            variant="outline"
+            onClick={onReset}
+            className="w-full flex items-center justify-center gap-2"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Limpiar filtros
+          </Button>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -326,6 +392,7 @@ function FilterSection({
 }
 
 function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
+  const isOfferCheckbox = label.toLowerCase().includes("promociones");
   return (
     <div className="flex items-center space-x-2">
       <Checkbox
@@ -337,6 +404,12 @@ function CheckboxItem({ id, label, checked, onChange, disabled }: any) {
       <label htmlFor={id} className="text-sm">
         {label}
       </label>
+
+      {isOfferCheckbox && (
+        <span className="ml-2 inline-block px-2 py-0.5 text-xs font-bold bg-yellow-400 text-black rounded-full animate-bounce shadow-md lg:hidden">
+          ¡Ofertas!
+        </span>
+      )}
     </div>
   );
 }

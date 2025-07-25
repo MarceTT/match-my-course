@@ -59,6 +59,16 @@ const filtersConfig: Record<string, FilterConfig> = {
     })),
   },
 
+  offers: {
+    label: "Cursos en oferta",
+    options: [
+      {
+        id: normalize("Ver promociones"),
+        label: "Ver promociones",
+      },
+    ],
+  },
+
   cities: {
     label: "Ciudad",
     options: ["Dublín", "Cork", "Galway", "Limerick"].map((label) => ({
@@ -114,15 +124,7 @@ const filtersConfig: Record<string, FilterConfig> = {
   //   })),
   // },
 
-  offers: {
-    label: "Cursos en oferta",
-    options: [
-      {
-        id: normalize("Ver promociones"),
-        label: "Ver promociones",
-      },
-    ],
-  },
+  
 };
 
 export default filtersConfig;

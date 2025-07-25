@@ -1,6 +1,8 @@
 import { Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import { raleway } from "@/app/ui/fonts";
+import { GoogleTagManager } from "@next/third-parties/google";
+import { GTMPageViewTracker } from "@/app/ui/GTMPageViewTracker";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -8,7 +10,7 @@ const geistMono = Geist_Mono({
 });
 
 export const dynamicParams = true;
-export const dynamic = 'auto';
+export const dynamic = "auto";
 
 export default function SchoolDetailLayout({
   children,
@@ -17,6 +19,8 @@ export default function SchoolDetailLayout({
 }>) {
   return (
     <div className={`${raleway.className} ${geistMono.variable} antialiased`}>
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!} />
+      <GTMPageViewTracker />
       {children}
     </div>
   );

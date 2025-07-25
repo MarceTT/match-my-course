@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +33,19 @@ interface ReservationSummaryModalProps {
   disabled?: boolean;
 }
 
+function normalizeDate(date: string | Date | undefined): Date | null {
+  if (!date) return null;
+  if (date instanceof Date) return date;
+
+  const parts = date.split("-");
+  if (parts.length === 3) {
+    const [d, m, y] = parts;
+    const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+  return null;
+}
+
 export default function SummaryModal({
   open,
   onClose,
@@ -42,6 +55,11 @@ export default function SummaryModal({
   disabled,
 }: ReservationSummaryModalProps) {
   const [step, setStep] = useState<"summary" | "contact">("summary");
+  const [finalPrice, setFinalPrice] = useState<number>(
+    reservation?.offer && reservation.offer > 0
+      ? reservation.offer
+      : reservation?.basePrice ?? 0
+  );
 
   const form = useForm<ReservationFormData>({
     resolver: zodResolver(reservationFormSchema),
@@ -63,8 +81,15 @@ export default function SummaryModal({
     }
   }, [open, form]);
 
+  function handleNextFromZero(price: number) {
+    setFinalPrice(price);
+    setStep("summary");
+  }
+
   function handleNext() {
-    setStep("contact");
+    if (step === "summary") {
+      setStep("contact");
+    }
   }
 
   const { handleSubmit, ...restForm } = form;
@@ -73,6 +98,7 @@ export default function SummaryModal({
     const finalData = {
       ...formData,
       ...data,
+      finalPrice,
     };
     try {
       onSubmitContact(finalData);
@@ -86,7 +112,7 @@ export default function SummaryModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-full">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-center">
+        <DialogTitle className="text-xl font-bold text-center">
             {step === "summary"
               ? "Detalle de tu reserva"
               : "Tus datos de contacto"}
@@ -103,7 +129,7 @@ export default function SummaryModal({
             >
               <BookingSummaryStepOne
                 reservation={reservation}
-                formData={formData}
+                formData={{ ...formData, finalPrice }}
                 onNext={handleNext}
               />
             </motion.div>
@@ -120,7 +146,6 @@ export default function SummaryModal({
                 onSubmit={onSubmit}
                 onBack={() => setStep("summary")}
                 disabled={disabled}
-                
               />
             </motion.div>
           )}

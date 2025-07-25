@@ -17,8 +17,12 @@ export function getInitialStartDate(today: Date, holidays: Date[]): Date | null 
     const isMonday = date.getDay() === 1;
     const isHoliday = holidays.some(h => h.toDateString() === date.toDateString());
 
+    // Si cae justo en "6 semanas exactas" y es lunes, saltamos al próximo lunes
     if (isMonday && !isHoliday) {
-      return date;
+      if (date.getTime() === sixWeeksLater.getTime()) {
+        date.setDate(date.getDate() + 7); // ir al lunes siguiente
+      }
+      return new Date(date);
     }
 
     date.setDate(date.getDate() + 1);
