@@ -21,6 +21,8 @@ const CoursePrice = ({
   type,
 }: CoursePriceProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  console.log("CoursePrice -> amount:", amount);
+  console.log("CoursePrice -> offer:", offer);
 
   return (
     <div
@@ -39,7 +41,7 @@ const CoursePrice = ({
       {/* Precio actual */}
       {offer ? (
         <span className="text-3xl font-extrabold text-[#16A349]">
-          €{(offer ?? amount).toLocaleString("es-ES")}
+          €{offer.toLocaleString("es-ES")}
         </span>
       ) : (
         <span className="text-3xl font-extrabold text-black">

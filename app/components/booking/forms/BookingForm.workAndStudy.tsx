@@ -58,7 +58,7 @@ export default function WorkAndStudyBooking({
     );
 
   const amount = reservation?.basePrice ?? 0;
-  const offer = reservation?.offer ?? 0;
+  const offer = reservation?.offer && reservation.offer > 0 ? reservation.offer : undefined;
   const typeCourse = "Work";
 
   return (

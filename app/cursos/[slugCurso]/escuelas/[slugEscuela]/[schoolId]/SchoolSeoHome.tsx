@@ -123,7 +123,7 @@ const SchoolSeoHome = ({
         </button>
       </div> */}
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 mt-8">
         <SchoolDetail
           images={(school.galleryImages || []).map(rewriteToCDN)}
           city={school.city!}
