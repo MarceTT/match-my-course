@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --no-lint",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "bun run scripts/fix-react-joyride.ts"
   },
   "dependencies": {
     "@fseehawer/react-circular-slider": "^3.2.7",
@@ -76,6 +77,9 @@
     "vaul": "^1.1.2",
     "xlsx": "^0.18.5",
     "zod": "^3.24.1"
+  },
+  "overrides": {
+    "react-joyride": "2.9.3"
   },
   "devDependencies": {
     "typescript": "^5",
