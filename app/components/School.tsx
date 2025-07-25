@@ -1,3 +1,5 @@
+"use client";
+
 import { Star } from "lucide-react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
