@@ -94,8 +94,6 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
               ? Number(school.prices[0].horarios.precio)
               : 0;
 
-              console.log('SchoolPage --> school: ', school.cursosEos);
-
           // const courseTypes = (school.courseTypes || []).join(", ");
 
           return (
