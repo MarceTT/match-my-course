@@ -44,7 +44,6 @@ export default function GeneralBooking({
   weeksBySchoolInfo,
   disabled,
 }: FormProps) {
-  console.log("reservation reserva",reservation);
   const [step, setStep] = useState<1 | 2>(1);
   const getCourseType = (): CourseKey | undefined => {
     return (

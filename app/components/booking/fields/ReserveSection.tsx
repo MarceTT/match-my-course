@@ -25,7 +25,6 @@ const ReserveSection = ({
   disabled = false,
   reservation,
 }: ReserveSectionProps) => {
-  console.log("reservation reserva",reservation);
   return (
     <div className="pt-2">
       <hr className="my-2 border-gray-300 mb-4" />
