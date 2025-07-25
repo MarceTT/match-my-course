@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { notFound } from "next/navigation"
 import Carousel from "@/app/components/features/Carousel/Carousel"
 import { getAllServices } from "@/app/lib/api/services"
@@ -37,7 +37,9 @@ export default async function ServiceDetail({ params }: {
           </div>
         </div>
       </div>
-      <Carousel />
+      <Suspense fallback={null}>
+        <Carousel />
+      </Suspense>
       <PersonalizedAdviceSection />
       <TestimonialHighlightSection />
       <h2 className={`text-5xl font-black text-center mb-12 mt-10 ${raleway.className}`}>
