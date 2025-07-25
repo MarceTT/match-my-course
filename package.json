@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --no-lint",
+    "fix:joyride": "bun run scripts/fix-react-joyride.ts",
+    "build": "bun run fix:joyride && next build --no-lint",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "bun run scripts/fix-react-joyride.ts"
