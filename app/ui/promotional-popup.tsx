@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Megaphone, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { sendGTMEvent } from "../lib/gtm";
 
 const POPUP_KEY = "popupOfertaDismissed";
 const POPUP_INTERVAL_DAYS = 1; // Cada cuántos días reaparece
@@ -25,11 +26,20 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
   };
 
   const markAsDismissed = () => {
+    sendGTMEvent("popup_dismissed", {
+        popup_name: "special_offer",
+        page_path: window.location.pathname,
+      });
     localStorage.setItem(POPUP_KEY, new Date().toISOString());
     setIsOpen(false);
   };
 
   const handleClickSchools = () => {
+    sendGTMEvent("popup_cta_clicked", {
+        popup_name: "special_offer",
+        page_path: window.location.pathname,
+        target_url: "/school-search?course=ingles-visa-de-trabajo",
+      });
     markAsDismissed();
     router.push("/school-search?course=ingles-visa-de-trabajo");
   };
@@ -41,6 +51,10 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
     const handleScroll = () => {
       if (window.scrollY > scrollTrigger) {
         setIsOpen(true);
+        sendGTMEvent("popup_shown", {
+            popup_name: "special_offer",
+            page_path: window.location.pathname,
+          });
         window.removeEventListener("scroll", handleScroll);
       }
     };

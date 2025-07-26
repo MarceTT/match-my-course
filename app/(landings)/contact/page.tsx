@@ -55,7 +55,9 @@ export default function ContactPage() {
         confetti();
         sendGTMEvent("formSubmit", {
           formName: "contactForm",
-          ...transformedData,
+          nationality: transformedData.nationality,
+          reason: transformedData.reason,
+          page_path: window.location.pathname,
         });
       } else {
         alert("Hubo un error al enviar el formulario");
@@ -71,6 +73,8 @@ export default function ContactPage() {
   const trackButtonClick = () => {
     sendGTMEvent("cta_click", {
       label: "Enviar Contacto",
+      formName: "contactForm",
+      page_path: window.location.pathname,
     });
   };
 
