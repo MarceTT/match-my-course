@@ -19,6 +19,7 @@ import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { useRouter } from "next/navigation";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import { subcategoriaToCursoSlug } from "@/lib/courseMap";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 function slugify(str: string): string {
   return str
@@ -43,6 +44,12 @@ export default function SchoolSearch() {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query.trim());
+      if (query.trim()) {
+        sendGTMEvent("school_search_query", {
+          search_term: query.trim(),
+          result_count: schools.length,
+        });
+      }
     }, 400);
     return () => clearTimeout(handler);
   }, [query]);
@@ -77,6 +84,9 @@ export default function SchoolSearch() {
 
   useEffect(() => {
     if (open) {
+      sendGTMEvent("school_search_opened", {
+        timestamp: new Date().toISOString(),
+      });
       const last = localStorage.getItem("selected_course");
       if (last) {
         const { query: lastQuery, scroll } = JSON.parse(last);
@@ -153,6 +163,14 @@ export default function SchoolSearch() {
     const schedule = curso.horario ?? "PM";
     const seoEntry = curso.courseseo;
     if (!seoEntry?.url) return;
+
+    sendGTMEvent("school_selected", {
+      school_id: schoolId,
+      school_name: curso.escuela,
+      course_name: curso.nombre,
+      city,
+      price: curso.oferta ?? curso.precio ?? null,
+    });
 
     localStorage.setItem("selected_course", JSON.stringify({
       id: schoolId,

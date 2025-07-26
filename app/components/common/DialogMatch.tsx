@@ -29,6 +29,7 @@ import { transformReservationData } from "@/lib/helpers/transformReservation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { launchConfettiBurst } from "@/lib/confetti";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -66,7 +67,9 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
   });
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
+      sendGTMEvent("reserva_asesoria_form_opened", { timestamp: new Date().toISOString() });
+    } else {
       form.reset();
     }
   }, [open, form]);
@@ -92,6 +95,12 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
         launchConfettiBurst();
         toast.success("¡Mensaje enviado, revisa tu correo electrónico!");
         onOpenChange(false);
+        sendGTMEvent("reserva_asesoria_form_submitted", {
+          name: values.name,
+          email_domain: values.email.split("@")[1], // Solo dominio, no correo completo
+          nationality: values.nationality,
+          phone_code: values.country.code,
+        });
       } else {
         toast.error("Hubo un error al enviar el formulario");
       }

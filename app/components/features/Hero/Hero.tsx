@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { motion } from "framer-motion";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 const courseLabelToIdMap: Record<string, string> = {
   "Inglés general": "ingles-general",
@@ -29,8 +30,21 @@ const Hero = () => {
     }
   }, [courseFromUrl]);
 
+  const handleCourseChange = (value: string) => {
+    setCourseType(value);
+    const courseId = courseLabelToIdMap[value] ?? null;
+    sendGTMEvent("hero_course_selected", {
+      course_name: value,
+      course_id: courseId,
+    });
+  };
+
   const handleSearch = () => {
     const normalizedId = courseLabelToIdMap[courseType];
+    sendGTMEvent("hero_search_clicked", {
+      selected_course: courseType,
+      course_id: normalizedId ?? null,
+    });
     if (normalizedId) {
       router.push(`/school-search?course=${encodeURIComponent(normalizedId)}`);
     }
@@ -101,7 +115,7 @@ const Hero = () => {
               <select
                 value={courseType}
                 className="w-full px-6 py-3 bg-transparent text-gray-700 appearance-none focus:outline-none"
-                onChange={(e) => setCourseType(e.target.value)}
+                onChange={(e) => handleCourseChange(e.target.value)}
               >
                 <option>Tipo de curso de inglés</option>
                 {Object.keys(courseLabelToIdMap).map((label) => (

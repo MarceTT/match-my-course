@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { SchoolDetails } from "@/app/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 interface SchoolCardProps {
   school: SchoolDetails;
@@ -77,12 +78,40 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
     setSelectedOptionIndex(0);
   }, [school._id]);
 
+  const handleClick = () => {
+    sendGTMEvent("school_card_clicked", {
+      school_id: schoolId,
+      school_name: school.name,
+      city: school.city,
+      price: selected?.oferta ?? selected?.precio ?? null,
+      has_discount: !!hasDiscount,
+      course_slug: course,
+      view_type: viewType,
+    });
+  };
+
+  const handleHover = () => {
+    prefetchSchool(`${school._id}`);
+    sendGTMEvent("school_card_hovered", {
+      school_id: schoolId,
+      school_name: school.name,
+      city: school.city,
+      price: selected?.oferta ?? selected?.precio ?? null,
+      has_discount: !!hasDiscount,
+      course_slug: course,
+      view_type: viewType,
+    });
+  };
+
+
   return (
     <Link
       href={fullUrl}
       target="_blank"
       rel="noopener noreferrer"
-      onMouseEnter={() => prefetchSchool(`${school._id}`)}
+      onMouseEnter={handleHover}
+      onMouseLeave={() => prefetchSchool(`${school._id}`)}
+      onClick={handleClick}
       className="block" // Hace que todo el card sea clickeable como un bloque
     >
       <motion.div

@@ -9,6 +9,7 @@ import { IoMdClose } from "react-icons/io";
 import Logo from "@/public/logos/final-logo.png";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import SchoolSearch from "./SchoolSearch";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 const navItems = [
   { name: "Asesorías gratis", href: "/servicios" },
@@ -46,6 +47,14 @@ const Header = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [isMenuOpen]);
 
+  const handleLinkClick = (label: string, href: string) => {
+    sendGTMEvent("link_click", {
+      label,
+      destination: href,
+      location: "header",
+    });
+  };
+
   return (
     <header className="w-full py-8 px-6 bg-white transition-all duration-300 ease-in-out shadow-sm sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
@@ -53,6 +62,7 @@ const Header = () => {
           <Link
             href="/"
             className="flex items-center text-2xl font-bold lg:ml-6 group"
+            onClick={() => handleLinkClick("Logo", "/")}
           >
             <div className="relative">
               <Image
@@ -73,6 +83,7 @@ const Header = () => {
                 key={item.name}
                 href={item.href}
                 className="relative px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-lg"
+                onClick={() => handleLinkClick(item.name, item.href)}
               >
                 {item.name}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
@@ -131,7 +142,10 @@ const Header = () => {
               key={item.name}
               href={item.href}
               className="text-2xl text-gray-600 hover:text-blue-600 transition-all duration-200 transform hover:translate-x-2 font-semibold"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                setIsMenuOpen(false);
+                handleLinkClick(item.name, item.href);
+              }}
               style={{ animationDelay: `${index * 50}ms` }}
             >
               {item.name}

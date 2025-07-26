@@ -17,6 +17,7 @@ import { Slider } from "@/components/ui/slider";
 import { CircularWeekSlider } from "./CircularSlider";
 import dynamic from "next/dynamic";
 import { useTour } from "@reactour/tour"; // <--- NUEVO
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
   ssr: false,
@@ -141,15 +142,36 @@ const Filter = ({
           ? current.filter((item: string) => item !== value)
           : [...current, value];
       }
+
+      sendGTMEvent("filter_toggled", {
+        filter_category: category,
+        filter_value: value,
+        is_checked: !isChecked,
+        selected_course: prev.course?.[0] ?? null,
+      });
       return updatedFilters;
     });
   };
 
   const handleSliderChange = (category: string, value: number[]) => {
     setFilters((prev) => ({ ...prev, [category]: value }));
+    sendGTMEvent("filter_slider_changed", {
+      filter_category: category,
+      slider_value: value[0],
+      selected_course: filters.course?.[0] ?? null,
+    });
   };
 
   const handleReset = () => {
+    const activeFiltersCount = Object.values(filters).reduce(
+      (count, val) => count + (Array.isArray(val) ? val.length : 0),
+      0
+    );
+
+    sendGTMEvent("filters_reset", {
+      selected_course: filters.course?.[0] ?? null,
+      active_filters_count: activeFiltersCount,
+    });
     const resetFilters: Record<string, any> = {};
     Object.entries(filtersConfig).forEach(([key, config]) => {
       if (config.type === "slider" && config.slider) {
