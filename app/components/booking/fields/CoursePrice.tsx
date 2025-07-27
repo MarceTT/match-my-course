@@ -57,7 +57,7 @@ const CoursePrice = ({
       )}
 
       {/* Icono de información con tooltip */}
-      {type === "Work" && offer && (
+      {type === "Work" && (
         <div className="absolute right-0 top-0">
           <div
             className="relative flex items-center"
