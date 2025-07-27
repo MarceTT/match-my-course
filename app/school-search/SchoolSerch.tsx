@@ -77,74 +77,83 @@ const SchoolSearch = () => {
   const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);
   const schools = Array.isArray(schoolsData) ? schoolsData : [];
 
-  return (
-    <TourProvider
-      steps={[]}
-      padding={8}
-      showBadge={false}
-      showNavigation={false}
-      disableInteraction // Solo muestra el tooltip
-      styles={{
-        popover: (base) => ({
-          ...base,
-          borderRadius: 12,
-          padding: "1rem 1.5rem",
-          backgroundColor: "#FFF", // Gris oscuro (Tailwind: gray-800)
-          color: "#1F2937", // Texto blanco
-          boxShadow: "0px 4px 20px rgba(0,0,0,0.3)",
-          maxWidth: 280,
-        }),
-        maskWrapper: (base) => ({
-          ...base,
-          color: "rgba(0,0,0,0.6)", // Fondo oscuro
-        }),
-        maskArea: (base) => ({
-          ...base,
-          rx: 6,
-          stroke: '#fff',          // Borde blanco
-          strokeWidth: 3,
-          filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.8))' // Efecto de resplandor
-        }),
-      }}
-    >
-      <div className="min-h-screen bg-gray-50 relative">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {!isOpen && (
-              <div className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start min-h-[600px]">
-                <Filter
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                  filters={filters}
-                  setFilters={setFilters}
-                />
-              </div>
-            )}
-            {isOpen && (
+  const pageContent = (
+    <div className="min-h-screen bg-gray-50 relative">
+      <Header />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {!isOpen && (
+            <div className="hidden lg:block w-64 flex-shrink-0 sticky top-24 self-start min-h-[600px]">
               <Filter
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 filters={filters}
                 setFilters={setFilters}
               />
-            )}
-            <div ref={listRef} className="flex-1 pr-1">
-              <InfiniteSchoolFiltered filters={filters} isFilterOpen={isOpen} />
             </div>
+          )}
+          {isOpen && (
+            <Filter
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          )}
+          <div ref={listRef} className="flex-1 pr-1">
+            <InfiniteSchoolFiltered filters={filters} isFilterOpen={isOpen} />
           </div>
         </div>
-        <Footer />
-
-        {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="lg:hidden fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full bg-[#fe6361] text-white font-semibold shadow-lg hover:bg-[#fe6361] transition"
-          >
-            Filtros
-          </button>
-        )}
       </div>
+      <Footer />
+
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="lg:hidden fixed bottom-6 left-6 z-40 px-4 py-3 rounded-full bg-[#fe6361] text-white font-semibold shadow-lg hover:bg-[#fe6361] transition"
+        >
+          Filtros
+        </button>
+      )}
+    </div>
+  );
+
+  // Mostrar TourProvider SOLO si es escritorio (>=1024px)
+  if (typeof window !== "undefined" && window.innerWidth < 1024) {
+    return pageContent;
+  }
+
+  return (
+    <TourProvider
+      steps={[]} // Aquí defines tus pasos si los necesitas
+      padding={8}
+      showBadge={false}
+      showNavigation={false}
+      disableInteraction
+      styles={{
+        popover: (base) => ({
+          ...base,
+          borderRadius: 12,
+          padding: "1rem 1.5rem",
+          backgroundColor: "#FFF",
+          color: "#1F2937",
+          boxShadow: "0px 4px 20px rgba(0,0,0,0.3)",
+          maxWidth: 280,
+        }),
+        maskWrapper: (base) => ({
+          ...base,
+          color: "rgba(0,0,0,0.6)",
+        }),
+        maskArea: (base) => ({
+          ...base,
+          rx: 6,
+          stroke: "#fff",
+          strokeWidth: 3,
+          filter: "drop-shadow(0 0 10px rgba(255,255,255,0.8))",
+        }),
+      }}
+    >
+      {pageContent}
     </TourProvider>
   );
 };

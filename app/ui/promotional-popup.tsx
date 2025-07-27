@@ -71,7 +71,7 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 40 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="fixed bottom-6 right-6 z-50 w-80 max-w-[90vw] rounded-lg shadow-xl border bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-6"
+          className="fixed bottom-16 right-9 z-50 w-80 max-w-[90vw] rounded-lg shadow-xl border bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-6 md:bottom-6 md:right-6 lg:bottom-6 lg:right-6 xl:bottom-6 xl:right-6 "
         >
           {/* Botón cerrar */}
           <button
