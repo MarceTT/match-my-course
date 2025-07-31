@@ -1,9 +1,6 @@
 "use client";
 
 import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeSanitize from "rehype-sanitize";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Share2, User } from "lucide-react";
