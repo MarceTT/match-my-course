@@ -4,8 +4,8 @@ import ReactQueryProvider from "@/app/blog/providers";
 import CategoryClient from "./CategoryClient";
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const slug = params.slug;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const site = "MatchMyCourse - Blog";
   const baseDesc = `Artículos en la categoría ${slug}.`;
 
@@ -33,18 +33,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["posts", 1, 12, params.slug, undefined],
-    queryFn: () => usePosts(1, 12, params.slug),
+    queryKey: ["posts", 1, 12, undefined, slug],
+    queryFn: () => usePosts(1, 12, undefined, slug),
   });
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <CategoryClient slug={params.slug} />
+      <CategoryClient slug={slug} />
     </ReactQueryProvider>
   );
 }

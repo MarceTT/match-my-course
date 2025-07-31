@@ -4,8 +4,8 @@ import ReactQueryProvider from "@/app/blog/providers";
 import TagClient from "./TagClient";
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const slug = params.slug;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const site = "MatchMyCourse - Blog";
   const baseDesc = `Artículos con la etiqueta ${slug}.`;
 
@@ -33,18 +33,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function TagPage({ params }: { params: { slug: string } }) {
+export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ["posts", 1, 12, undefined, params.slug],
-    queryFn: () => usePosts(1, 12, undefined, params.slug),
+    queryKey: ["posts", 1, 12, undefined, slug],
+    queryFn: () => usePosts(1, 12, undefined, slug),
   });
 
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <TagClient slug={params.slug} />
+      <TagClient slug={slug} />
     </ReactQueryProvider>
   );
 }
