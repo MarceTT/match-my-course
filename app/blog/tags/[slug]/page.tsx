@@ -3,6 +3,7 @@ import { usePosts } from "@/app/hooks/blog/useGetPosts";
 import ReactQueryProvider from "@/app/blog/providers";
 import TagClient from "./TagClient";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -45,7 +46,9 @@ export default async function TagPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <TagClient slug={slug} />
+      <Suspense fallback={<div>Cargando...</div>}>
+        <TagClient slug={slug} />
+      </Suspense>
     </ReactQueryProvider>
   );
 }

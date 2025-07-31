@@ -3,6 +3,7 @@ import { usePosts } from "@/app/hooks/blog/useGetPosts";
 import ReactQueryProvider from "@/app/blog/providers";
 import CategoryClient from "./CategoryClient";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -45,7 +46,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <CategoryClient slug={slug} />
+      <Suspense fallback={<div>Cargando...</div>}>
+        <CategoryClient slug={slug} />
+      </Suspense>
     </ReactQueryProvider>
   );
 }

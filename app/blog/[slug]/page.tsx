@@ -1,17 +1,20 @@
 import { Metadata } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
-import {
-  fetchPostBySlug,
-} from "@/app/hooks/blog/useGetPostBySlug";
+import { fetchPostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import ReactQueryProvider from "@/app/blog/providers";
 import PostClient from "@/app/blog/[slug]/PostClient";
+import { Suspense } from "react";
 
 type Props = {
-    params: Promise<{ slug: string }>;
-  };
+  params: Promise<{ slug: string }>;
+};
 
-  export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
   try {
     const post = await fetchPostBySlug(slug);
     const site = "MatchMyCourse - Blog";
@@ -46,7 +49,9 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <PostClient slug={slug} />
+      <Suspense fallback={<div>Cargando...</div>}>
+        <PostClient slug={slug} />
+      </Suspense>
     </ReactQueryProvider>
   );
 }
