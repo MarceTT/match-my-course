@@ -5,7 +5,12 @@ import TagClient from "./TagClient";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+
+type Props = {
+    params: Promise<{ slug: string }>;
+  };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const site = "MatchMyCourse - Blog";
   const baseDesc = `Artículos con la etiqueta ${slug}.`;
@@ -34,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-export default async function TagPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function TagPage({ params }: Props) {
   const { slug } = await params;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
