@@ -1,0 +1,50 @@
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { usePosts } from "@/app/hooks/blog/useGetPosts";
+import ReactQueryProvider from "@/app/blog/providers";
+import CategoryClient from "./CategoryClient";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const slug = params.slug;
+  const site = "MatchMyCourse - Blog";
+  const baseDesc = `Artículos en la categoría ${slug}.`;
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?category=${slug}&page=1&limit=1`, {
+      cache: "no-store",
+    });
+    const data = await res.json();
+    const featured = data.posts?.[0];
+    return {
+      title: `Categoría: ${slug} | ${site}`,
+      description: featured?.metaDescription || featured?.excerpt || baseDesc,
+      openGraph: {
+        title: `Categoría: ${slug} | ${site}`,
+        description: featured?.metaDescription || featured?.excerpt || baseDesc,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/categories/${slug}`,
+        images: featured?.coverImage ? [featured.coverImage] : [],
+      },
+    };
+  } catch {
+    return {
+      title: `Categoría: ${slug} | ${site}`,
+      description: baseDesc,
+    };
+  }
+}
+
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["posts", 1, 12, params.slug, undefined],
+    queryFn: () => usePosts(1, 12, params.slug),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+
+  return (
+    <ReactQueryProvider state={dehydratedState}>
+      <CategoryClient slug={params.slug} />
+    </ReactQueryProvider>
+  );
+}

@@ -98,6 +98,25 @@ const data = {
         }
       ],
     },
+    {
+      title: "Blog",
+      url: "#",
+      icon: BookOpen,
+      items: [
+        {
+          title: "Ver Blog",
+          url: "/admin/blog",
+        },
+        {
+          title: "Ver Categorias",
+          url: "/admin/blog/categorias",
+        },
+        {
+          title: "Ver Tags",
+          url: "/admin/blog/tags",
+        },
+      ],
+    }
   ],
   projects: [
     {

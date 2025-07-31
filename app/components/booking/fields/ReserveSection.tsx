@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Reservation } from "@/types";
 import { Loader2 } from "lucide-react";
+import ContactButtonWhatsApp from "../forms/ContactButtonWhatsApp";
 
 interface ReserveSectionProps {
   onReserve: () => void;
@@ -11,6 +12,7 @@ interface ReserveSectionProps {
   buttonText?: string;
   disabled?: boolean;
   reservation?: {total: number, offer: number};
+  reservationData?: Reservation;
 }
 
 const ReserveSection = ({
@@ -24,7 +26,10 @@ const ReserveSection = ({
   buttonText = "Finalizar reserva",
   disabled = false,
   reservation,
+  reservationData,
 }: ReserveSectionProps) => {
+
+
   return (
     <div className="pt-2">
       <hr className="my-2 border-gray-300 mb-4" />
@@ -56,6 +61,7 @@ const ReserveSection = ({
           buttonText
         )}
       </Button>
+      <ContactButtonWhatsApp reservation={reservationData!} />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { ReservationFormData } from "@/types/reservationForm";
 import ScheduleSelect from "../fields/ScheduleSection";
 import CoursePrice from "../fields/CoursePrice";
-// import InfoButton from "../fields/InfoButton";
+import { FaWhatsapp } from "react-icons/fa";
 import CourseSection from "../fields/CourseSelection";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
@@ -18,6 +18,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import ContactButtonWhatsApp from "./ContactButtonWhatsApp";
 
 interface FormProps {
   reservation: Reservation | null;
@@ -56,13 +57,18 @@ export default function GeneralBooking({
   const bookingAmound = 100;
   const helperText =
     "Pagada tu reserva, tendrás acceso a todos nuestros beneficios";
-    const priceText = "El precio no incluye matrícula ni materiales(para todos los otros cursos)";
-    const typeCourse = "General"
+  const priceText =
+    "El precio no incluye matrícula ni materiales(para todos los otros cursos)";
+  const typeCourse = "General";
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
-        <CoursePrice amount={reservation?.total ?? 0} text={priceText} type={typeCourse} />
+        <CoursePrice
+          amount={reservation?.total ?? 0}
+          text={priceText}
+          type={typeCourse}
+        />
         {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
 
@@ -118,6 +124,7 @@ export default function GeneralBooking({
               <span className="mr-2">Continuar con tu reserva</span>
               <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
             </Button>
+            <ContactButtonWhatsApp reservation={reservation!} />
           </motion.div>
         )}
 
@@ -150,7 +157,15 @@ export default function GeneralBooking({
               onChange={(val) => onChangeFormData({ accommodation: val })}
               disabled={disabled}
             />
-            <ReserveSection onReserve={onReserve} disabled={disabled} reservation={{total: reservation?.total ?? 0, offer: reservation?.offer ?? 0}} />
+            <ReserveSection
+              onReserve={onReserve}
+              disabled={disabled}
+              reservation={{
+                total: reservation?.total ?? 0,
+                offer: reservation?.offer ?? 0,
+              }}
+              reservationData={reservation!}
+            />
           </motion.div>
         )}
       </div>

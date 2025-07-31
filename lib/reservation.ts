@@ -62,5 +62,7 @@ export function createReservationFromApiResponse(data: ApiReservationResponse): 
     accommodation: data.accommodation || null,
     fechaLimiteReserva: data.fechaLimiteReserva || undefined,
     fechaTerminoReserva: data.fechaTerminoReserva || undefined,
+    ofertaBruta: data.ofertaBruta || undefined,
+    precioBruto: data.precioBruto || undefined,
   };
 }

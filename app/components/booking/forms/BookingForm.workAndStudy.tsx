@@ -12,6 +12,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import ContactButtonWhatsApp from "./ContactButtonWhatsApp";
 
 interface FormProps {
   reservation: Reservation | null;
@@ -57,9 +58,11 @@ export default function WorkAndStudyBooking({
       </>
     );
 
-  const amount = reservation?.basePrice ?? 0;
-  const offer = reservation?.offer && reservation.offer > 0 ? reservation.offer : undefined;
+  const amount = reservation?.precioBruto ? parseFloat(reservation.precioBruto) : 0;
+  const offer = reservation?.ofertaBruta ? parseFloat(reservation.ofertaBruta) : undefined;
   const typeCourse = "Work";
+
+  //console.log("Reserva para ver datos",reservation);
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -116,6 +119,7 @@ export default function WorkAndStudyBooking({
               <span className="mr-2">Continuar con tu reserva</span>
               <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
             </Button>
+            <ContactButtonWhatsApp reservation={reservation!} />
           </motion.div>
         )}
         {step === 2 && (
@@ -176,6 +180,7 @@ export default function WorkAndStudyBooking({
                 total: reservation?.total ?? 0,
                 offer: reservation?.offer ?? 0,
               }}
+              reservationData={reservation!}
             />
           </motion.div>
         )}

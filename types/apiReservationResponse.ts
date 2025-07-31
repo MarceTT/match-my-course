@@ -17,4 +17,6 @@ export interface ApiReservationResponse {
   accommodation?: "si" | "no" | "posterior" | null;
   fechaLimiteReserva?: string | null;
   fechaTerminoReserva?: string | null;
+  ofertaBruta?: string;
+  precioBruto?: string;
 }

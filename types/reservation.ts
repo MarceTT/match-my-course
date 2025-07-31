@@ -18,4 +18,6 @@ export interface Reservation {
   accommodation?: "si" | "no" | "posterior" | null;
   fechaLimiteReserva?: string;
   fechaTerminoReserva?: string;
+  ofertaBruta?: string;
+  precioBruto?: string;
 };
