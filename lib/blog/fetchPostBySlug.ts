@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 
 export interface Post {
@@ -16,17 +15,7 @@ export interface Post {
   author?: { name: string; slug: string };
 }
 
-export async function fetchPostBySlug(slug: string): Promise<Post | null> {
+export async function fetchPostBySlug(slug: string): Promise<Post> {
   const { data } = await axiosInstance.get(`/blog/post/${slug}`);
   return data.data;
-}
-
-export function usePostBySlug(slug?: string) {
-  return useQuery<Post | null>({
-    queryKey: ["post", slug],
-    queryFn: () => fetchPostBySlug(slug!),
-    enabled: !!slug,
-    staleTime: 1000 * 60 * 5,
-    retry: 1,
-  });
 }
