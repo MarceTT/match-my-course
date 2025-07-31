@@ -1,8 +1,9 @@
+import { Metadata } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import ReactQueryProvider from "@/app/blog/providers";
 import PostClient from "@/app/blog/[slug]/PostClient";
-import type { Metadata } from "next";
+
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
