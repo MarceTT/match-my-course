@@ -4,8 +4,14 @@ import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import ReactQueryProvider from "@/app/blog/providers";
 import PostClient from "@/app/blog/[slug]/PostClient";
 
+type Props = {
+    params: {
+      slug: string;
+    };
+};
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blog/post/${params.slug}`, {
       cache: "no-store",
@@ -31,7 +37,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({ params }: Props) {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ["post", params.slug],
