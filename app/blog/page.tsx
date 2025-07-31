@@ -3,16 +3,21 @@ import { usePosts } from "@/app/hooks/blog/useGetPosts";
 import ReactQueryProvider from "@/app/blog/providers";
 import BlogHomeClient from "@/app/blog/BlogHomeClient";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/blog/post?page=1&limit=1`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/blog/post?page=1&limit=1`,
+      {
+        cache: "no-store",
+      }
+    );
     const data = await res.json();
     const featured = data.data.posts?.[0];
     const site = "Mi Proyecto - Blog";
-    const baseDesc = "Últimos artículos sobre tecnología, desarrollo web y programación.";
+    const baseDesc =
+      "Últimos artículos sobre tecnología, desarrollo web y programación.";
 
     return {
       title: featured ? `${featured.title} | ${site}` : site,
@@ -27,7 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {
     return {
       title: "Blog | Mi Proyecto",
-      description: "Últimos artículos sobre tecnología, desarrollo web y programación.",
+      description:
+        "Últimos artículos sobre tecnología, desarrollo web y programación.",
     };
   }
 }
@@ -44,7 +50,9 @@ export default async function BlogHomePage() {
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <BlogHomeClient />
+      <Suspense fallback={<div>Cargando blog...</div>}>
+        <BlogHomeClient />
+      </Suspense>
     </ReactQueryProvider>
   );
 }
