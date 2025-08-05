@@ -16,16 +16,17 @@ export interface Post {
   author?: { name: string; slug: string };
 }
 
-export async function fetchPostBySlug(slug: string): Promise<Post | null> {
-  const { data } = await axiosInstance.get(`/blog/post/slug/${slug}`);
+export async function fetchPostById(id: string): Promise<Post | null> {
+  console.log("🔍 URL que se llama:", `/blog/post/${id}`);
+  const { data } = await axiosInstance.get(`/blog/post/${id}`);
   return data.data;
 }
 
-export function usePostBySlug(slug?: string) {
+export function usePostById(id?: string) {
   return useQuery<Post | null>({
-    queryKey: ["post", slug],
-    queryFn: () => fetchPostBySlug(slug!),
-    enabled: !!slug,
+    queryKey: ["post", id],
+    queryFn: () => fetchPostById(id!),
+    enabled: !!id,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });

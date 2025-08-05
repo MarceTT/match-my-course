@@ -4,13 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { usePosts } from "@/app/hooks/blog/useGetPosts";
 import PostCard from "@/app/components/blog/PostCard";
 import Pagination from "@/app/components/blog/Pagination";
+import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 
 export default function CategoryClient({ slug }: { slug: string }) {
   const params = useSearchParams();
   const page = Number(params.get("page")) || 1;
   const { data, isLoading, isError } = usePosts(page, 12, slug);
 
-  if (isLoading) return <p className="text-center py-10">Cargando categoría...</p>;
+  if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
   if (isError || !data?.posts) return <p className="text-center py-10">Error al cargar posts</p>;
 
   return (

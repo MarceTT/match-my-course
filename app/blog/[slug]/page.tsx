@@ -4,6 +4,8 @@ import { fetchPostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import ReactQueryProvider from "@/app/blog/providers";
 import PostClient from "@/app/blog/[slug]/PostClient";
 import { Suspense } from "react";
+import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -25,8 +27,16 @@ export async function generateMetadata({
       openGraph: {
         title: post?.metaTitle || post?.title,
         description: post?.metaDescription || post?.excerpt,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${slug}`,
-        images: post?.coverImage ? [post.coverImage] : [],
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/blog/${slug}`,
+        type: "article",
+        siteName: site,
+        images: post?.coverImage ? [rewriteToCDN(post.coverImage)] : [],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post?.metaTitle || post?.title,
+        description: post?.metaDescription || post?.excerpt,
+        images: post?.coverImage ? [rewriteToCDN(post.coverImage)] : [],
       },
     };
   } catch {
@@ -36,6 +46,8 @@ export async function generateMetadata({
     };
   }
 }
+
+
 
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
@@ -49,7 +61,7 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <Suspense fallback={<div>Cargando...</div>}>
+      <Suspense fallback={<FullScreenLoader isLoading={true} />}>
         <PostClient slug={slug} />
       </Suspense>
     </ReactQueryProvider>

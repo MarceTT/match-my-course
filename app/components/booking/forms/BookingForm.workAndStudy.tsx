@@ -49,25 +49,49 @@ export default function WorkAndStudyBooking({
   const helperText =
     "Pagada tu reserva, te explicaremos cómo debes solicitar tu permiso de residencia de 8 meses";
 
-    const priceText = (
-      <>
-        Válido para reservas hechas hasta el{" "}
-        <span className="underline text-blue-600 font-semibold">{reservation?.fechaLimiteReserva}</span>, con
-        inicio de clases antes del{" "}
-        <span className="underline text-blue-600 font-semibold">{reservation?.fechaTerminoReserva}</span>
-      </>
-    );
+  const priceText = (
+    <>
+      Válido para reservas hechas hasta el{" "}
+      <span className="underline text-blue-600 font-semibold">
+        {reservation?.fechaLimiteReserva}
+      </span>
+      , con inicio de clases antes del{" "}
+      <span className="underline text-blue-600 font-semibold">
+        {reservation?.fechaTerminoReserva}
+      </span>
+    </>
+  );
 
-  const amount = reservation?.precioBruto ? parseFloat(reservation.precioBruto) : 0;
-  const offer = reservation?.ofertaBruta ? parseFloat(reservation.ofertaBruta) : undefined;
+  const amount = reservation?.precioBruto
+    ? parseFloat(reservation.precioBruto)
+    : 0;
+  const offer = reservation?.ofertaBruta
+    ? parseFloat(reservation.ofertaBruta)
+    : undefined;
   const typeCourse = "Work";
 
-  //console.log("Reserva para ver datos",reservation);
+  const oferta = Number(reservation?.ofertaBruta);
+  const precio = Number(reservation?.precioBruto);
+
+  const baseMonto = oferta > 0 ? oferta : precio;
+
+  const pendingToPay = "Pendiente por pagar";
+  const notes = ["Con tu reserva aseguras tu cupo y tu matricula."];
+  const restaMonto = 100;
+  const totalPagar = baseMonto - restaMonto;
+  const reserveLabel = "Reserva ahora con solo";
+
+  console.log("Reserva para ver datos", reservation);
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-3">
-        <CoursePrice amount={amount} offer={offer} htmlText={priceText} type={typeCourse} />
+        <CoursePrice
+          amount={amount}
+          offer={offer}
+          htmlText={priceText}
+          type={typeCourse}
+        />
         {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
       </div>
       <div>
@@ -112,6 +136,33 @@ export default function WorkAndStudyBooking({
               placeholder="Selecciona horario"
               disabled={disabled}
             />
+
+            <div>
+              <hr className="my-2 border-gray-300 mb-4" />
+              <div className="flex justify-between text-sm">
+                <span className="font-semibold text-gray-500 italic">
+                  {reserveLabel}
+                </span>
+                <span className="text-xl font-bold text-[#1F2937]">
+                  €{restaMonto}
+                </span>
+              </div>
+
+              <div className="flex justify-between text-sm mb-2">
+                <p className="text-sm text-gray-500 mb-2 font-semibold italic">
+                  {pendingToPay}
+                </p>
+                <p className="text-xl font-bold text-[#1F2937]">
+                  €{totalPagar}
+                </p>
+              </div>
+              {notes.map((text, index) => (
+                <p key={index} className="text-xs text-gray-500 mb-4 italic">
+                  {text}
+                </p>
+              ))}
+            </div>
+
             <Button
               onClick={() => setStep(2)}
               className="w-full mt-4 bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
@@ -130,13 +181,13 @@ export default function WorkAndStudyBooking({
             className="space-y-4"
           >
             {!disabled && (
-            <button
-              type="button"
-              onClick={() => setStep(1)}
-              className="text-sm text-blue-600 underline hover:text-blue-800 transition-colors duration-150"
-            >
-              ← Volver al paso anterior
-            </button>
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="text-sm text-blue-600 underline hover:text-blue-800 transition-colors duration-150"
+              >
+                ← Volver al paso anterior
+              </button>
             )}
             <StartDatePicker
               value={formData.startDate}
@@ -177,8 +228,8 @@ export default function WorkAndStudyBooking({
               onReserve={onReserve}
               disabled={disabled}
               reservation={{
-                total: reservation?.total ?? 0,
-                offer: reservation?.offer ?? 0,
+                total: Number(reservation?.precioBruto) ?? 0,
+                offer: Number(reservation?.ofertaBruta) ?? 0,
               }}
               reservationData={reservation!}
             />

@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "lucide-react";
 
 type PostCardProps = {
   post: {
@@ -17,7 +20,7 @@ export default function PostCard({ post }: PostCardProps) {
     <article className="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden flex flex-col">
       {post.coverImage && (
         <img
-          src={post.coverImage}
+          src={rewriteToCDN(post.coverImage)}
           alt={post.title}
           className="w-full h-48 object-cover"
         />
@@ -32,10 +35,11 @@ export default function PostCard({ post }: PostCardProps) {
           </Link>
         )}
         {post.publishedAt && (
-          <span className="text-xs text-gray-400 mb-1">
+          <span className="text-xs text-gray-600 mb-1 flex items-center gap-1">
+            <Calendar className="w-4 h-4" />
             {new Date(post.publishedAt).toLocaleDateString("es-ES", {
               year: "numeric",
-              month: "short",
+              month: "long",
               day: "numeric",
             })}
           </span>
@@ -44,12 +48,13 @@ export default function PostCard({ post }: PostCardProps) {
         {post.excerpt && (
           <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
         )}
+        <Button variant="default" size="sm" asChild className="bg-[#5175FE] text-white hover:bg-[#5175FE]/80">
         <Link
           href={`/blog/${post.slug}`}
-          className="mt-auto inline-block text-blue-600 hover:underline"
         >
-          Leer más →
+          Leer artículo
         </Link>
+        </Button>
       </div>
     </article>
   );

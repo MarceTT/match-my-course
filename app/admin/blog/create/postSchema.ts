@@ -12,15 +12,15 @@ export const postSchema = z.object({
     .optional(),
   content: z.string().min(10, "El contenido debe tener al menos 10 caracteres"),
   category: z.string().min(1, "Debe seleccionar una categoría"),
-  tags: z.array(z.string()).default([]), // Se envía como texto, backend debe dividir en array
+  tags: z.array(z.string()).max(5, "Máximo 5 etiquetas").default([]), // Se envía como texto, backend debe dividir en array
   metaTitle: z
     .string()
     .max(70, "El título SEO no puede superar 70 caracteres")
     .optional(),
   metaDescription: z
     .string()
-    .max(160, "La descripción SEO no puede superar 160 caracteres")
-    .optional(),
+    .min(10, "La descripción SEO debe tener al menos 10 caracteres")
+    .max(160, "La descripción SEO no puede superar 160 caracteres"),
   coverImage: z
     .instanceof(File)
     .optional()

@@ -84,7 +84,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
                 <Link href="https://www.linkedin.com/company/matchmycourse/about/" target="_blank"><FaLinkedin className="h-5 w-5 text-[#535353]" /></Link>
               </div>
               <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
-                <Link href="https://www.instagram.com/your.abroad.experience/?hl=es-la" target="_blank"><FaInstagram className="h-5 w-5 text-[#535353]" /></Link>
+                <Link href="https://www.instagram.com/match.my.course/" target="_blank"><FaInstagram className="h-5 w-5 text-[#535353]" /></Link>
               </div>
               <div className="p-2 bg-white rounded-md hover:bg-gray-50 transition-colors cursor-pointer">
                 <Link href="https://www.youtube.com/@matchmycourse" target="_blank"><FaYoutube className="h-5 w-5 text-[#535353]" /></Link>
@@ -229,8 +229,8 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
               <div>
                 <h3 className="font-semibold mt-4 text-[#535353] underline">Teléfonos</h3>
                 <div className="space-y-1 text-sm">
-                  <p>Irlanda: +353925210018</p>
-                  <p>Chile: +56931714541</p>
+                  <p>+393925210018</p>
+                  <p>+56931714541</p>
                 </div>
               </div>
             </div>

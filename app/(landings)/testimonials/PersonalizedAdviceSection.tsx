@@ -1,5 +1,5 @@
-import React from 'react'
-import DialogSection from '@/app/components/servicios/DialogSection'
+import React from "react";
+import DialogSection from "@/app/components/servicios/DialogSection";
 
 const PersonalizedAdviceSection = () => {
   return (
@@ -27,11 +27,13 @@ const PersonalizedAdviceSection = () => {
             title="Asesoría personalizada para estudiar y trabajar en Irlanda - Matchmycourse"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PersonalizedAdviceSection
+export default PersonalizedAdviceSection;

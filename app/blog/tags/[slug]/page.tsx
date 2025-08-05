@@ -4,6 +4,7 @@ import ReactQueryProvider from "@/app/blog/providers";
 import TagClient from "./TagClient";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 
 
 type Props = {
@@ -51,7 +52,7 @@ export default async function TagPage({ params }: Props) {
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <Suspense fallback={<div>Cargando...</div>}>
+      <Suspense fallback={<FullScreenLoader isLoading={true} />}>
         <TagClient slug={slug} />
       </Suspense>
     </ReactQueryProvider>

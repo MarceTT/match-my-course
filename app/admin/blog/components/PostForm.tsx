@@ -1,23 +1,13 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostFormValues } from "@/app/admin/blog/create/postSchema";
 import { slugify } from "@/app/utils/slugify";
 import { useTags } from "@/app/hooks/blog/useTags";
 import { useCategories } from "@/app/hooks/blog/useCategories";
 import { useState, useEffect } from "react";
-import {
-  Upload,
-  X,
-  Eye,
-  List,
-  Heading1,
-  Heading2,
-  Quote,
-  Link,
-  Loader2,
-} from "lucide-react";
+import { Upload, X, Eye, Loader2 } from "lucide-react";
 
 import {
   Form,
@@ -47,9 +37,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSubmitPost } from "@/app/hooks/blog/useSubmitPost";
-import TagsInput from "./TagsInput";
 import { toast } from "sonner";
-import TagSelector from "./TagsInput";
+import CreatableSelect from "react-select/creatable";
+import { rewriteToCDN } from "../../../utils/rewriteToCDN";
 
 interface PostFormProps {
   post?: any;
@@ -58,8 +48,14 @@ interface PostFormProps {
 
 export default function PostForm({ post, onSave }: PostFormProps) {
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>(post?.tags || []);
-  const [category, setCategory] = useState<string>(post?.category || "");
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    Array.isArray(post?.tags) ? post.tags.map((tag: any) => tag._id || tag) : []
+  );
+  const [category, setCategory] = useState<string>(
+    typeof post?.category === "object"
+      ? post.category._id
+      : post?.category || ""
+  );
 
   const { data: categoriesData, isLoading: loadingCategories } =
     useCategories();
@@ -74,8 +70,13 @@ export default function PostForm({ post, onSave }: PostFormProps) {
       slug: post?.slug || "",
       excerpt: post?.excerpt || "",
       content: post?.content || "",
-      category: post?.category || "",
-      tags: post?.tags?.join(", ") || "",
+      category:
+        typeof post?.category === "object"
+          ? post.category._id
+          : post?.category || "",
+      tags: Array.isArray(post?.tags)
+        ? post.tags.map((tag: any) => tag._id || tag)
+        : [],
       metaTitle: post?.metaTitle || "",
       metaDescription: post?.metaDescription || "",
       coverImage: null,
@@ -84,8 +85,8 @@ export default function PostForm({ post, onSave }: PostFormProps) {
 
   const title = form.watch("title");
   const excerpt = form.watch("excerpt");
+  const descripcion = form.watch("metaDescription") ?? "";
 
-  // Generar slug automáticamente a partir del título si es nuevo
   useEffect(() => {
     if (!post) {
       form.setValue("slug", slugify(title));
@@ -94,7 +95,6 @@ export default function PostForm({ post, onSave }: PostFormProps) {
 
   const content = form.watch("content");
 
-  // Generar excerpt automático si no hay uno manual
   useEffect(() => {
     if (!excerpt && content) {
       const plain = content.replace(/<[^>]+>/g, "");
@@ -107,12 +107,10 @@ export default function PostForm({ post, onSave }: PostFormProps) {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validar tipo de archivo
       if (!file.type.match("image.*")) {
         toast.error("Por favor, sube solo imágenes");
         return;
       }
-      // Validar tamaño (ejemplo: máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error("La imagen no puede ser mayor a 5MB");
         return;
@@ -126,14 +124,14 @@ export default function PostForm({ post, onSave }: PostFormProps) {
       toast.error("Debes subir una imagen de portada");
       return;
     }
+    const tags = form.getValues("tags");
     submitPost({
       postId: post?._id,
       values: {
         ...values,
-        tags: "", // no duplicamos, enviamos los seleccionados
+        tags,
       },
       coverImage,
-      selectedTags,
       publish,
       onSuccessCallback: onSave,
     });
@@ -142,17 +140,23 @@ export default function PostForm({ post, onSave }: PostFormProps) {
   const safeCategories = categoriesData ?? [];
   const safeTags = tagsData ?? [];
 
+  const tagOptions = safeTags.map((tag: any) => ({
+    label: tag.name,
+    value: tag._id,
+  }));
+  const selectedTagObjects = tagOptions.filter((opt) =>
+    selectedTags.includes(opt.value)
+  );
+
   return (
     <Form {...form}>
       <form
         className="grid grid-cols-1 md:grid-cols-3 gap-6"
         onSubmit={(e) => e.preventDefault()}
       >
-        {/* Columna izquierda */}
         <div className="col-span-2 space-y-6">
           <Card>
             <CardContent className="space-y-6 mt-6">
-              {/* Título */}
               <FormField
                 control={form.control}
                 name="title"
@@ -170,7 +174,6 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                 )}
               />
 
-              {/* Slug */}
               <FormField
                 control={form.control}
                 name="slug"
@@ -185,7 +188,6 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                 )}
               />
 
-              {/* Extracto */}
               <FormField
                 control={form.control}
                 name="excerpt"
@@ -203,7 +205,39 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                 )}
               />
 
-              {/* Contenido (Tiptap) */}
+              <FormField
+                control={form.control}
+                name="metaDescription"
+                render={({ field }) => {
+                  const length = field.value?.length || 0;
+                  const max = 160;
+                  const exceeded = length > max;
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Meta description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Descripción para motores de búsqueda..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <div className="mt-1 flex justify-between items-center">
+                        <p className="text-sm text-gray-500">
+                          {length}/{max} caracteres
+                        </p>
+                        {exceeded && (
+                          <span className="text-xs font-medium bg-red-100 text-red-600 px-2 py-0.5 rounded">
+                            Límite superado
+                          </span>
+                        )}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+
               <FormField
                 control={form.control}
                 name="content"
@@ -228,15 +262,12 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                   </FormItem>
                 )}
               />
-              {/* Estadísticas */}
               <PostStats content={content} />
             </CardContent>
           </Card>
         </div>
 
-        {/* Columna derecha */}
         <div className="space-y-6">
-          {/* Botón de Publicar */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-bold">Configuración</CardTitle>
@@ -260,63 +291,81 @@ export default function PostForm({ post, onSave }: PostFormProps) {
             </CardContent>
           </Card>
 
-          {/* Categoría */}
           <Card>
             <CardHeader>
               <CardTitle>Categoría</CardTitle>
-              <CardDescription>Selecciona una categoría</CardDescription>
             </CardHeader>
             <CardContent>
               {loadingCategories ? (
                 <p className="text-sm text-gray-500">Cargando categorías...</p>
               ) : (
-                <Select
-                  value={category}
-                  onValueChange={(value) => {
-                    setCategory(value);
-                    form.setValue("category", value);
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona una categoría" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {safeCategories.length > 0 ? (
-                      safeCategories.map((cat: any) => (
-                        <SelectItem key={cat._id} value={cat._id}>
-                          {cat.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <p className="p-2 text-sm text-gray-500">
-                        No hay categorías
-                      </p>
-                    )}
-                  </SelectContent>
-                </Select>
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Selecciona una categoría" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {safeCategories.length > 0 ? (
+                            safeCategories.map((cat: any) => (
+                              <SelectItem key={cat._id} value={cat._id}>
+                                {cat.name}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <p className="p-2 text-sm text-gray-500">
+                              No hay categorías
+                            </p>
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
             </CardContent>
           </Card>
 
-          {/* Tags */}
           <Card>
             <CardHeader>
               <CardTitle>Tags</CardTitle>
               <CardDescription>Agrega o selecciona etiquetas</CardDescription>
             </CardHeader>
             <CardContent>
-              <TagSelector
-                value={selectedTags}
-                onChange={(tags) => {
-                  setSelectedTags(tags);
-                  form.setValue("tags", tags); // <-- tags ya como string[]
+              <Controller
+                name="tags"
+                control={form.control}
+                render={({ field }) => {
+                  const selected = tagOptions.filter((opt) =>
+                    field.value?.includes(opt.value)
+                  );
+                  return (
+                    <FormItem>
+                      <CreatableSelect
+                        isMulti
+                        options={tagOptions}
+                        value={selected}
+                        onChange={(selected) =>
+                          field.onChange(selected.map((opt) => opt.value))
+                        }
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  );
                 }}
-                options={safeTags.map((tag: any) => tag.name)}
               />
             </CardContent>
           </Card>
 
-          {/* Imagen */}
           <Card>
             <CardHeader>
               <CardTitle>Imagen Destacada</CardTitle>
@@ -340,10 +389,14 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                   </label>
                 </div>
 
-                {coverImage && (
+                {(coverImage || post?.coverImage) && (
                   <div className="relative">
                     <img
-                      src={URL.createObjectURL(coverImage)}
+                      src={
+                        coverImage
+                          ? URL.createObjectURL(coverImage)
+                          : rewriteToCDN(post.coverImage)
+                      }
                       alt="Vista previa"
                       className="w-full h-32 object-cover rounded-lg"
                     />

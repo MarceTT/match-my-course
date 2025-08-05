@@ -112,7 +112,7 @@ SchoolCardProps) => {
           </div>
 
           <p className="text-sm text-gray-900 line-clamp-1 font-semibold">
-            <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded-md">
+            <span className="bg-blue-200 text-blue-700 px-2 py-1 rounded-md">
               {location}
             </span>
           </p>

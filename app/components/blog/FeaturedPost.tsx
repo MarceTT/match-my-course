@@ -1,6 +1,7 @@
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 
 type FeaturedPostProps = {
@@ -19,7 +20,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
   return (
     <section className="py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Artículo Destacado</h2>
+          <h1 className="text-2xl font-bold mb-8 text-center md:text-4xl lg:text-5xl">Blog MatchMyCourse</h1>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <img
@@ -30,16 +31,18 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
               <div className="p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <Badge variant="default">{post.category?.name}</Badge>
-                  <span className="text-sm text-muted-foreground">{post.publishedAt && new Date(post.publishedAt).toLocaleDateString("es-ES", {
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {post.publishedAt && new Date(post.publishedAt).toLocaleDateString("es-ES", {
                     year: "numeric",
-                    month: "short",
+                    month: "long",
                     day: "numeric",
                   })}</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">{post.title}</h3>
-                <p className="text-muted-foreground mb-6">{post.excerpt}</p>
-                <Button asChild>
-                  <Link href={`/blog/${post.slug}`}>Leer Más</Link>
+                <h3 className="text-2xl font-bold mb-4 md:text-5xl lg:text-5xl">{post.title}</h3>
+                <p className="text-muted-foreground mb-6 md:text-lg lg:text-xl">{post.excerpt}</p>
+                <Button className="w-full md:w-auto bg-[#5175FE] text-white hover:bg-[#5175FE]/80" asChild>
+                  <Link href={`/blog/${post.slug}`} >Leer Más</Link>
                 </Button>
               </div>
             </div>

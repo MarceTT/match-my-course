@@ -98,7 +98,7 @@ const Hero = () => {
 
           <div className="flex flex-col sm:flex-row bg-white rounded-2xl sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl">
             <div className="relative flex-1 sm:border-r border-gray-200">
-              <select className="w-full px-6 py-3 rounded-l-full bg-transparent text-gray-700 appearance-none focus:outline-none">
+              <select className="w-full px-6 py-3 rounded-l-full bg-transparent text-gray-700 appearance-none focus:outline-none" aria-label="Selecciona un destino">
                 <option>Irlanda</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">

@@ -4,6 +4,8 @@ import ReactQueryProvider from "@/app/blog/providers";
 import BlogHomeClient from "@/app/blog/BlogHomeClient";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import FullScreenLoader from "../admin/components/FullScreenLoader";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -25,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: {
         title: featured?.metaTitle || featured?.title || site,
         description: featured?.metaDescription || featured?.excerpt || baseDesc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog`,
+        url: `${rewriteToCDN(featured?.coverImage)}/blog`,
         images: featured?.coverImage ? [featured.coverImage] : [],
       },
     };
@@ -50,7 +52,7 @@ export default async function BlogHomePage() {
 
   return (
     <ReactQueryProvider state={dehydratedState}>
-      <Suspense fallback={<div>Cargando blog...</div>}>
+      <Suspense fallback={<FullScreenLoader isLoading={true} />}>
         <BlogHomeClient />
       </Suspense>
     </ReactQueryProvider>

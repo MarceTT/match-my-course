@@ -4,9 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { usePosts } from "@/app/hooks/blog/useGetPosts";
 import FeaturedPost from "@/app/components/blog/FeaturedPost";
 import RecentPosts from "@/app/components/blog/RecentPosts";
-import CategoryFilter from "@/app/components/blog/CategoryFilter";
-import TagFilter from "@/app/components/blog/TagFilter";
-import Pagination from "@/app/components/blog/Pagination";
+import FullScreenLoader from "../admin/components/FullScreenLoader";
 
 export default function BlogHomeClient() {
   const params = useSearchParams();
@@ -14,24 +12,17 @@ export default function BlogHomeClient() {
   const category = params.get("category") || undefined;
   const tag = params.get("tag") || undefined;
 
-  const { data, isLoading, isError } = usePosts(page, 6, category, tag);
+  const { data, isLoading, isError } = usePosts();
 
-  if (isLoading)
-    return <p className="text-center py-10">Cargando artículos...</p>;
+  if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
   if (isError || !data?.posts)
     return <p className="text-center py-10">Error al cargar el blog</p>;
 
   const [featured, ...recent] = data.posts;
 
   return (
-    <section className="container mx-auto p-6">
-      {/* Filtros */}
-      <div className="max-w-4xl mx-auto mb-8 px-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <CategoryFilter />
-          <TagFilter />
-        </div>
-      </div>
+    <div className="container mx-auto px-4">
+
 
       {/* Post destacado */}
       {featured && (
@@ -43,15 +34,9 @@ export default function BlogHomeClient() {
       {/* Posts recientes */}
       {recent.length > 0 && (
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Artículos Recientes
-          </h2>
           <RecentPosts posts={recent} />
         </div>
       )}
-
-      {/* Paginación */}
-      <Pagination page={data.page} pages={data.pages} />
-    </section>
+    </div>
   );
 }

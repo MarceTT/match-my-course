@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/acerca-de-nosotros',
+        destination: '/about-us',
+      },
+      {
         source: '/escuelas-socias',
         destination: '/partners',
       },
@@ -55,6 +59,20 @@ const nextConfig: NextConfig = {
       {
         source: '/contacto',
         destination: '/contact',
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value:
+              "frame-src 'self' https://www.youtube.com https://www.google.com https://player.vimeo.com;",
+          },
+        ],
       },
     ];
   },

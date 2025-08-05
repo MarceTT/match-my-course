@@ -54,11 +54,12 @@ export default function SummaryModal({
   onSubmitContact,
   disabled,
 }: ReservationSummaryModalProps) {
+  console.log("Reserva para ver datos", reservation);
   const [step, setStep] = useState<"summary" | "contact">("summary");
   const [finalPrice, setFinalPrice] = useState<number>(
-    reservation?.offer && reservation.offer > 0
-      ? reservation.offer
-      : reservation?.basePrice ?? 0
+    reservation?.ofertaBruta && Number(reservation.ofertaBruta) > 0
+      ? Number(reservation.ofertaBruta)
+      : Number(reservation?.precioBruto ?? 0)
   );
 
   const form = useForm<ReservationFormData>({

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Edit, Trash2, Plus } from "lucide-react";
 import Link from "next/link";
+import FullScreenLoader from "../components/FullScreenLoader";
 
 async function fetchAdminPosts() {
   const { data } = await axiosInstance.get("/blog/post");
@@ -29,7 +30,7 @@ export default function AdminPostsPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["posts"] }),
   });
 
-  if (isLoading) return <p className="text-center py-10">Cargando posts...</p>;
+  if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
 
   return (
     <div className="w-full p-8">
@@ -53,7 +54,7 @@ export default function AdminPostsPage() {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" asChild size="sm">
-                  <Link href={`/admin/blog/edit/${post._id}`}>
+                  <Link href={`/admin/blog/${post._id}`}>
                     <Edit className="w-4 h-4" />
                   </Link>
                 </Button>

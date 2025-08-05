@@ -32,8 +32,10 @@ export function useSubmitPost() {
       });
 
       // Asegurar que los tags se envíen en JSON
-      formData.delete("tags"); // por si "values" ya lo traía como string
-      formData.append("tags", JSON.stringify(selectedTags));
+      formData.delete("tags");
+      values.tags.forEach((tagId: string) => {
+        formData.append("tags", tagId);
+      });
 
       // Adjuntar imagen solo si existe (nombre debe coincidir con multer.fields)
       if (coverImage) {
