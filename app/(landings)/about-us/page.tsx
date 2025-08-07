@@ -4,6 +4,7 @@ import FindSchoolSection from "./FindSchoolSection";
 import AdvantageSection from "./AdvantageSection";
 import FilterWorksSection from "./FilterWorksSection";
 import TestomonialSection from "./TestomonialSection";
+import ChooseSchool from "./ChooseSchool";
 
 const AboutUs = () => {
   return (
@@ -13,6 +14,7 @@ const AboutUs = () => {
       <AdvantageSection />
       <FilterWorksSection />
       <TestomonialSection />
+      <ChooseSchool />
     </>
   );
 };

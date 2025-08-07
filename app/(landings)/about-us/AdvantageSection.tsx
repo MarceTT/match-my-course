@@ -61,8 +61,8 @@ const AdvantageSection = () => {
             {/* Card 3 - Precios y ofertas */}
             <div className="bg-white rounded-xl p-6 shadow-lg transition hover:shadow-xl">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-[#2F343D] rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-[#2F343D]" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                     <path
                       fillRule="evenodd"
@@ -73,7 +73,7 @@ const AdvantageSection = () => {
                 </div>
                 <h3 className="text-lg font-bold text-[#2F343D]">PRECIOS Y OFERTAS</h3>
               </div>
-              <p className="text-gray-800">
+              <p className="text-[#2F343D]">
                 Podrás conocer cuáles son los cursos de inglés que ofrece cada escuela y los precios por cada curso.
                 Además, podrás acceder a las ofertas que tiene cada escuela
               </p>
@@ -91,7 +91,7 @@ const AdvantageSection = () => {
                 />
                 <h3 className="text-lg font-bold text-[#2F343D]">FECHAS Y HORARIOS</h3>
               </div>
-              <p className="text-gray-800">
+              <p className="text-[#2F343D]">
                 Podrás ver los horarios de clases de los cursos de inglés ofrecidos por las escuelas, la cantidad de
                 horas a la semana de clases y los días a la semana que se imparten
               </p>
@@ -109,7 +109,7 @@ const AdvantageSection = () => {
                 />
                 <h3 className="text-lg font-bold text-[#2F343D]">ALOJAMIENTO</h3>
               </div>
-              <p className="text-gray-800">
+              <p className="text-[#2F343D]">
                 Podrás ver qué tipo de alojamiento ofrece la escuela para los estudiantes internacionales, y podrás
                 reservar cupo de manera directa e inmediata con la escuela
               </p>
@@ -118,7 +118,7 @@ const AdvantageSection = () => {
             {/* Card 6 - Reserva inmediata */}
             <div className="bg-white rounded-xl p-6 shadow-lg transition hover:shadow-xl">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-[#2F343D] rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
@@ -129,7 +129,7 @@ const AdvantageSection = () => {
                 </div>
                 <h3 className="text-lg font-bold text-[#2F343D]">RESERVA INMEDIATA</h3>
               </div>
-              <p className="text-gray-800">
+              <p className="text-[#2F343D]">
                 Tienes la posibilidad de reservar tu inicio de clases de manera fácil, segura e inmediata para que no
                 pierdas tu cupo en la fecha que quieres iniciar tus clases
               </p>

@@ -6,19 +6,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePostById } from "@/app/hooks/blog/useGetPostById";
+import FullScreenLoader from "../../components/FullScreenLoader";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditPostPage() {
   const params = useParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const postId = params?.id as string;
 
   const { data: postById, isLoading } = usePostById(postId);
 
-  console.log("postById", postById);
+  const handleSave = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["post", postId] });
+    router.push("/admin/blog");
+  };
 
   if (isLoading) {
-    return <p className="text-center py-10">Cargando post...</p>;
+    return <FullScreenLoader isLoading={isLoading} />;
   }
 
   if (!postById) {
@@ -35,7 +41,7 @@ export default function EditPostPage() {
           </Link>
         </div>
 
-        <PostForm post={postById} onSave={() => router.push("/admin/blog")} />
+        <PostForm post={postById} onSave={handleSave} />
       </CardContent>
 
   );

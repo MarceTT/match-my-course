@@ -59,7 +59,7 @@ export default function PostForm({ post, onSave }: PostFormProps) {
 
   const { data: categoriesData, isLoading: loadingCategories } =
     useCategories();
-  const { data: tagsData, isLoading: loadingTags } = useTags();
+  const { data: tagsData, isLoading: loadingTags, refetch: refetchTags } = useTags();
 
   const { mutate: submitPost, isPending } = useSubmitPost();
 
@@ -133,7 +133,10 @@ export default function PostForm({ post, onSave }: PostFormProps) {
       },
       coverImage,
       publish,
-      onSuccessCallback: onSave,
+      onSuccessCallback: async () => {
+        await refetchTags();
+        onSave?.();
+      },
     });
   };
 
@@ -345,15 +348,15 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                 name="tags"
                 control={form.control}
                 render={({ field }) => {
-                  const selected = tagOptions.filter((opt) =>
-                    field.value?.includes(opt.value)
-                  );
+                    const selectedOptions = tagOptions.filter((opt) =>
+                      field.value?.includes(opt.value)
+                    );
                   return (
                     <FormItem>
                       <CreatableSelect
                         isMulti
                         options={tagOptions}
-                        value={selected}
+                        value={selectedOptions}
                         onChange={(selected) =>
                           field.onChange(selected.map((opt) => opt.value))
                         }

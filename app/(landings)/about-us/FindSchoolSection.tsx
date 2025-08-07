@@ -17,18 +17,18 @@ const FindSchoolSection = () => {
             />
 
             {/* Find School Button */}
-            <button className="mx-auto block px-6 py-2 bg-[#5174FC] hover:bg-[#5174FC] text-white text-sm font-semibold rounded-lg mt-4 shadow transition">
+            <button className="mx-auto block px-6 py-2 bg-[#5174FC] hover:bg-[#5174FC] text-white text-sm font-semibold rounded-md mt-4 shadow transition">
               Encuentra tu escuela
             </button>
           </div>
 
           {/* Right Column - Benefits */}
           <div className="lg:pl-2">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2F343D] mb-6">
               Utiliza nuestro filtro para buscar tu escuela de inglés ideal
             </h2>
 
-            <p className="text-lg font-bold text-gray-700 mb-8">
+            <p className="text-lg font-bold text-[#2F343D] mb-8">
               Elige la escuela de inglés que{" "}
               <strong>
                 más se ajuste a tus gustos, necesidades y requisitos
@@ -44,7 +44,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   <strong>Explora libremente</strong> más de 38 escuelas de
                   inglés certificadas y acreditadas
                 </p>
@@ -58,7 +58,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   <strong>Nuestros precios</strong> son los mismos precios que
                   manejan las escuelas de inglés o{" "}
                 </p>
@@ -71,7 +71,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   <strong>Nuestros precios</strong> son los mismos precios que
                   manejan las escuelas de inglés o <strong>más baratos</strong>
                 </p>
@@ -85,7 +85,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   Podrás elegir de forma autónoma,{" "}
                   <strong>sin depender de agencias o vendedores</strong>
                 </p>
@@ -99,7 +99,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   Manejamos información real y completa para que puedas{" "}
                   <strong>decidir con confianza</strong>
                 </p>
@@ -113,7 +113,7 @@ const FindSchoolSection = () => {
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
                 />
-                <p className="text-gray-700 font-bold">
+                <p className="text-[#2F343D] font-semibold">
                   Nos puedes <strong>contactar gratuitamente</strong> para salir
                   de cualquier duda o consulta respecto a qué escuela de inglés
                   escoger

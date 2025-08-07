@@ -32,7 +32,7 @@ const FilterWorksSection = () => {
                     height={24}
                     className="mt-1 w-8 h-8 object-contain"
                   />
-                  <p className="text-gray-700 text-lg">
+                  <p className="text-[#2F343D] text-lg font-semibold">
                     {text
                       .split(" ")
                       .map((word, i) =>
@@ -58,7 +58,7 @@ const FilterWorksSection = () => {
               className="w-full h-auto"
             />
 
-            <button className="mx-auto block px-6 py-2 bg-[#5174FC] hover:bg-[#5174FC] text-white text-sm font-semibold rounded-lg mt-1 shadow transition">
+            <button className="mx-auto block px-6 py-2 bg-[#5174FC] hover:bg-[#5174FC] text-white text-sm font-semibold rounded-md shadow transition">
               Quiero buscar mi escuela
             </button>
           </div>
