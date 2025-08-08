@@ -12,7 +12,7 @@ export default function HeaderSection() {
       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-white text-3xl md:text-5xl font-extrabold text-center px-4 text-shadow">
+            <h1 className="text-white text-3xl md:text-6xl font-extrabold text-center px-4 text-shadow">
               Encuentra tu escuela de inglés <br />de forma fácil, rápida y sin intermediarios
             </h1>
           </div>
