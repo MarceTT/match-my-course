@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const FilterWorksSection = () => {
   return (
@@ -7,8 +9,12 @@ const FilterWorksSection = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#2F343D] mb-6">
-            ¿Cómo funciona el filtro de Matchmycourse?
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#2F343D] mb-6 leading-tight">
+            ¿Cómo funciona el filtro de
+            <br />
+            <span className="text-3xl md:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              MatchMyCourse?
+            </span>
           </h2>
         </div>
 
@@ -58,9 +64,14 @@ const FilterWorksSection = () => {
               className="w-full h-auto"
             />
 
-            <button className="mx-auto block px-6 py-2 bg-[#5174FC] hover:bg-[#5174FC] text-white text-sm font-semibold rounded-md shadow transition">
-              Quiero buscar mi escuela
-            </button>
+            <Button
+              asChild
+              className="block mx-auto w-fit items-center justify-center px-6 py-2 bg-[#5174fc] hover:bg-[#4257FF] text-white text-sm font-semibold rounded-md shadow transition"
+            >
+              <Link href="/school-search?course=ingles-general" target="_blank">
+                Quiero buscar mi escuela
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

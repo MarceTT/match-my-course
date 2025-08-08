@@ -100,6 +100,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   onLoad={() => setLoaded(true)}
                   onError={() => setLoaded(true)}
                   loading="lazy"
+                  onContextMenu={(e) => e.preventDefault()}
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition">

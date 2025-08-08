@@ -53,7 +53,6 @@ const SchoolSeoHome = ({
   const router = useRouter();
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
- 
 
   const seo = subcategoria
     ? seoCourses.find((c) => c.subcategoria === subcategoria) ?? seoCourses[0]
@@ -85,8 +84,6 @@ const SchoolSeoHome = ({
   if (isError || !data) return notFound();
 
   const school = data.data.school;
-
-  console.log("reservation", reservation);
 
   const getTransportIcon = (name: string) => {
     const norm = name.toLowerCase();
@@ -193,8 +190,9 @@ const SchoolSeoHome = ({
                     alt="School logo"
                     width={160}
                     height={120}
-                    className="object-contain"
+                    className="object-contain select-none pointer-events-none"
                     quality={75}
+                    onContextMenu={(e) => e.preventDefault()}
                     loading="lazy"
                     fetchPriority="high"
                     placeholder="blur"
@@ -295,7 +293,7 @@ const SchoolSeoHome = ({
         </button>
       )}
 
-      <Footer />
+      <Footer showWhatsApp={false} />
     </div>
   );
 };

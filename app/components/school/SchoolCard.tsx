@@ -137,9 +137,10 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
             src={rewriteToCDN(school.mainImage)}
             alt={school.name}
             fill
-            className="object-cover"
+            className="object-cover select-none pointer-events-none"
             loading="lazy"
             placeholder="empty"
+            onContextMenu={(e) => e.preventDefault()}
           />
         </div>
 
@@ -197,9 +198,10 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
                 alt="Logo"
                 width={120}
                 height={60}
-                className="object-contain"
+                className="object-contain select-none pointer-events-none"
                 loading="lazy"
                 placeholder="empty"
+                onContextMenu={(e) => e.preventDefault()}
               />
             )}
 

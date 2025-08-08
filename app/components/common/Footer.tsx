@@ -10,9 +10,10 @@ import { raleway } from "@/app/ui/fonts";
 
 interface FooterProps {
   avoidOverlap?: boolean;
+  showWhatsApp?: boolean;
 }
 
-const Footer = ({ avoidOverlap = false }: FooterProps) => {
+const Footer = ({ avoidOverlap = false, showWhatsApp = true }: FooterProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const controls = useAnimation();
 
@@ -239,6 +240,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
       </div>
 
       {/* Botón flotante de WhatsApp */}
+      {showWhatsApp && (
       <motion.div
         className={`fixed ${bottomOffset} right-4 z-50`}
         initial={{ scale: 0, opacity: 0 }}
@@ -262,6 +264,7 @@ const Footer = ({ avoidOverlap = false }: FooterProps) => {
           </motion.div>
         </motion.div>
       </motion.div>
+      )}
     </footer>
   );
 };

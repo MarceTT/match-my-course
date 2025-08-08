@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/acerca-de-nosotros',
+        source: '/como-funciona-matchmycourse',
         destination: '/about-us',
       },
       {
