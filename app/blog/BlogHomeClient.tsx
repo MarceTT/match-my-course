@@ -11,27 +11,22 @@ export default function BlogHomeClient() {
   const page = Number(params.get("page")) || 1;
   const category = params.get("category") || undefined;
   const tag = params.get("tag") || undefined;
+  const limit = 6;
 
-  const { data, isLoading, isError } = usePosts();
+  const { data, isLoading, isError } = usePosts(page, limit, category, tag);
 
-  if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
-  if (isError || !data?.posts)
-    return <p className="text-center py-10">Error al cargar el blog</p>;
+  if (isLoading) return <FullScreenLoader isLoading />;
+  if (isError || !data?.posts) return <p className="text-center py-10">Error al cargar el blog</p>;
 
   const [featured, ...recent] = data.posts;
 
   return (
     <div className="container mx-auto px-4">
-
-
-      {/* Post destacado */}
       {featured && (
         <div className="mb-12">
           <FeaturedPost post={featured} />
         </div>
       )}
-
-      {/* Posts recientes */}
       {recent.length > 0 && (
         <div>
           <RecentPosts posts={recent} />

@@ -3,22 +3,13 @@
 import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, Clock, Linkedin, User } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useMemo } from "react";
 import parse from "html-react-parser";
-import { toast } from "sonner";
 import DOMPurify from "dompurify";
 import { useRouter } from "next/navigation";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  LinkedinShareButton,
-  WhatsappIcon,
-} from "react-share";
-import { FacebookIcon, LinkedinIcon, TwitterIcon, Send } from "lucide-react";
 import ShareButtons from "./ShareButtons";
 
 export default function PostClient({ slug }: { slug: string }) {
@@ -32,15 +23,25 @@ export default function PostClient({ slug }: { slug: string }) {
     return `${Math.max(1, Math.ceil(wordCount / 200))} min`;
   }, [post?.content]);
 
-  const author = post?.author?.name || "MatchMyCourse";
-
+  const author = (post as any)?.author?.name || post?.author || "MatchMyCourse";
   const cleanHtml = post?.content ? DOMPurify.sanitize(post.content) : "";
 
-  if (isLoading) return <FullScreenLoader isLoading={isLoading} />;
-  if (isError || !post)
-    return <p className="text-center py-10">Post no encontrado</p>;
+  if (isLoading) return <FullScreenLoader isLoading />;
+  if (isError || !post) return <p className="text-center py-10">Post no encontrado</p>;
 
-  const shareUrl = `https://www.matchmycourse.com/blog/${post.slug}`;
+  // ✅ URL absoluta desde env (no hardcodees producción si estás en dev)
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.matchmycourse.com";
+  const shareUrl = `${baseUrl.replace(/\/$/, "")}/blog/${post.slug}`;
+
+  // Hashtags (sin "#", 2–3 máx, limpiar espacios)
+  const hashtags =
+    post.tags
+      ?.map((t: any) => (t?.name || t)?.toString().trim())
+      .filter(Boolean)
+      .map((s: string) => s.toLowerCase().replace(/\s+/g, "")) // "Inglés Irlanda" -> "inglésirlanda" (o "inglesirlanda" si quieres quitar tildes)
+      .slice(0, 3) ?? [];
+
+  const summary = post.metaDescription || post.excerpt || undefined;
 
   return (
     <article className="py-16">
@@ -57,14 +58,15 @@ export default function PostClient({ slug }: { slug: string }) {
             </Button>
           </div>
 
-          {/* Post Header */}
+          {/* Header */}
           <header className="mb-12">
-           
             <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
             <div className="flex items-center gap-6 text-muted-foreground mb-8">
+              {post.category?.name && (
                 <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-lg shadow-sm">
-              {post.category?.name}
-            </span> 
+                  {post.category.name}
+                </span>
+              )}
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
                 <span>{author}</span>
@@ -85,20 +87,23 @@ export default function PostClient({ slug }: { slug: string }) {
                 <span>{readTime}</span>
               </div>
             </div>
-            <img
-              src={rewriteToCDN(post.coverImage)}
-              alt={post.title}
-              className="w-full h-64 object-cover rounded-lg"
-            />
+            {post.coverImage && (
+              <img
+                src={rewriteToCDN(post.coverImage)}
+                alt={post.title}
+                className="w-full h-64 object-cover rounded-lg"
+                loading="eager"
+              />
+            )}
           </header>
 
-          {/* Post Content */}
+          {/* Contenido */}
           <div className="prose prose-lg max-w-none">
-            <p className="text-xl text-muted-foreground mb-8">{post.excerpt}</p>
+            {post.excerpt && <p className="text-xl text-muted-foreground mb-8">{post.excerpt}</p>}
             <div>{parse(cleanHtml)}</div>
           </div>
 
-          {/* Post Footer */}
+          {/* Footer */}
           <footer className="mt-16 pt-8 border-t">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex gap-2 flex-wrap">
@@ -110,8 +115,16 @@ export default function PostClient({ slug }: { slug: string }) {
                   ) : null
                 )}
               </div>
+
               <div className="flex gap-2 items-center">
-                <ShareButtons url={shareUrl} title={post.title} />
+                <ShareButtons
+                  url={shareUrl}
+                  title={post.title}
+                  summary={summary}
+                  hashtags={hashtags}
+                  via="matchmycourse"    // opcional: tu usuario de X/Twitter sin @
+                  source="MatchMyCourse" // opcional: fuente en LinkedIn
+                />
               </div>
             </div>
           </footer>

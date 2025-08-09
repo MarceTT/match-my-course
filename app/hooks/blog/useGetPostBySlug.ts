@@ -10,6 +10,7 @@ export interface Post {
   content?: string;
   category?: { name: string; slug: string };
   tags?: { name: string; slug: string }[];
+  published?: boolean;
   publishedAt?: string;
   metaTitle?: string;
   metaDescription?: string;

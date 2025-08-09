@@ -1,17 +1,21 @@
 "use client";
 
 import { ReactNode } from "react";
-import { QueryClient, QueryClientProvider, HydrationBoundary } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  HydrationBoundary,
+  DehydratedState,
+} from "@tanstack/react-query";
 
 const client = new QueryClient();
 
-export default function ReactQueryProvider({
-  children,
-  state,
-}: {
+type Props = {
   children: ReactNode;
-  state?: unknown;
-}) {
+  state?: DehydratedState;
+};
+
+export default function ReactQueryProvider({ children, state }: Props) {
   return (
     <QueryClientProvider client={client}>
       <HydrationBoundary state={state}>{children}</HydrationBoundary>
