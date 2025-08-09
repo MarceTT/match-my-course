@@ -54,6 +54,10 @@ const navItems: NavItem[] = [
       },
     ],
   },
+  {
+    name: "Blog",
+    href: "/blog",
+  },
 ];
 
 const Header = () => {
