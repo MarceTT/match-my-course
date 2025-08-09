@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import ShareButtons from "./ShareButtons";
 
+type Tag = { _id: string; name: string; slug: string };
+
 export default function PostClient({ slug }: { slug: string }) {
   const { data: post, isLoading, isError } = usePostBySlug(slug);
   const router = useRouter();
@@ -27,18 +29,18 @@ export default function PostClient({ slug }: { slug: string }) {
   const cleanHtml = post?.content ? DOMPurify.sanitize(post.content) : "";
 
   if (isLoading) return <FullScreenLoader isLoading />;
-  if (isError || !post) return <p className="text-center py-10">Post no encontrado</p>;
+  if (isError || !post)
+    return <p className="text-center py-10">Post no encontrado</p>;
 
-  // ✅ URL absoluta desde env (no hardcodees producción si estás en dev)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.matchmycourse.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.matchmycourse.com";
   const shareUrl = `${baseUrl.replace(/\/$/, "")}/blog/${post.slug}`;
 
-  // Hashtags (sin "#", 2–3 máx, limpiar espacios)
   const hashtags =
     post.tags
       ?.map((t: any) => (t?.name || t)?.toString().trim())
       .filter(Boolean)
-      .map((s: string) => s.toLowerCase().replace(/\s+/g, "")) // "Inglés Irlanda" -> "inglésirlanda" (o "inglesirlanda" si quieres quitar tildes)
+      .map((s: string) => s.toLowerCase().replace(/\s+/g, ""))
       .slice(0, 3) ?? [];
 
   const summary = post.metaDescription || post.excerpt || undefined;
@@ -99,7 +101,11 @@ export default function PostClient({ slug }: { slug: string }) {
 
           {/* Contenido */}
           <div className="prose prose-lg max-w-none">
-            {post.excerpt && <p className="text-xl text-muted-foreground mb-8">{post.excerpt}</p>}
+            {post.excerpt && (
+              <p className="text-xl text-muted-foreground mb-8">
+                {post.excerpt}
+              </p>
+            )}
             <div>{parse(cleanHtml)}</div>
           </div>
 
@@ -107,13 +113,11 @@ export default function PostClient({ slug }: { slug: string }) {
           <footer className="mt-16 pt-8 border-t">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex gap-2 flex-wrap">
-                {post.tags?.map((tag: any) =>
-                  typeof tag === "object" && tag.name ? (
-                    <Badge key={tag._id || tag} variant="outline">
-                      {tag.name}
-                    </Badge>
-                  ) : null
-                )}
+                {(post.tags as Tag[] | undefined)?.map((tag) => (
+                  <Badge key={tag._id} variant="outline">
+                    {tag.name}
+                  </Badge>
+                ))}
               </div>
 
               <div className="flex gap-2 items-center">
@@ -122,7 +126,7 @@ export default function PostClient({ slug }: { slug: string }) {
                   title={post.title}
                   summary={summary}
                   hashtags={hashtags}
-                  via="matchmycourse"    // opcional: tu usuario de X/Twitter sin @
+                  via="matchmycourse" // opcional: tu usuario de X/Twitter sin @
                   source="MatchMyCourse" // opcional: fuente en LinkedIn
                 />
               </div>
