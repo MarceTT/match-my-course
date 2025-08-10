@@ -66,17 +66,22 @@ export default function PostClient({ slug }: { slug: string }) {
           <div className="mb-6">
             <Button
               onClick={() => router.back()}
-              className="px-5 py-2 rounded-full text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium shadow-sm transition-all flex items-center gap-2 w-fit"
+              className="w-full md:w-fit px-5 py-3 md:py-2 rounded-full text-base md:text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium shadow-sm transition-all flex items-center justify-center gap-2"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-5 h-5 md:w-4 md:h-4" />
               Volver a artículos
             </Button>
           </div>
 
           {/* Header */}
           <header className="mb-12">
-            <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
-            <div className="flex items-center gap-6 text-muted-foreground mb-8">
+            {/* Título */}
+            <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center md:text-left">
+              {post.title}
+            </h1>
+
+            {/* Metadatos */}
+            <div className="flex flex-col items-center text-center gap-4 text-muted-foreground mb-8 md:flex-row md:items-center md:gap-6 md:text-left">
               {post.category?.name && (
                 <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-lg shadow-sm">
                   {post.category.name}
@@ -102,18 +107,20 @@ export default function PostClient({ slug }: { slug: string }) {
                 <span>{readTime}</span>
               </div>
             </div>
+
+            {/* Imagen de portada */}
             {post.coverImage && (
               <img
                 src={rewriteToCDN(post.coverImage)}
                 alt={post.title}
-                className="w-full h-64 object-cover rounded-lg"
+                className="w-full h-52 sm:h-64 object-cover rounded-lg"
                 loading="eager"
               />
             )}
           </header>
 
           {/* Contenido */}
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg max-w-none [&_p]:text-justify sm:[&_p]:text-left">
             {post.excerpt && (
               <p className="text-xl text-muted-foreground mb-8">
                 {post.excerpt}
@@ -124,8 +131,9 @@ export default function PostClient({ slug }: { slug: string }) {
 
           {/* Footer */}
           <footer className="mt-16 pt-8 border-t">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
+              {/* Tags */}
+              <div className="flex flex-wrap justify-center gap-2 text-center">
                 {(post.tags as Tag[] | undefined)?.map((tag) => (
                   <Badge key={tag._id} variant="outline">
                     {tag.name}
@@ -133,7 +141,8 @@ export default function PostClient({ slug }: { slug: string }) {
                 ))}
               </div>
 
-              <div className="flex gap-2 items-center">
+              {/* Share buttons */}
+              <div className="flex flex-wrap justify-center gap-2">
                 <ShareButtons
                   url={baseShareUrl}
                   urlLinkedin={liShareUrl}
