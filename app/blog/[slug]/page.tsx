@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { fetchPostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
-import { getPostBySlugServer } from "@/app/blog/_server/getPosts.server"; // <- FIX del import
+import { getPostBySlugServer } from "@/app/blog/_server/getPosts.server";
 import ReactQueryProvider from "@/app/blog/providers";
 import PostClient from "@/app/blog/[slug]/PostClient";
 import { Suspense } from "react";
@@ -25,8 +25,12 @@ export async function generateMetadata(
     const title = post?.metaTitle || `${post?.title} | ${SITE_NAME}`;
     const description = post?.metaDescription || post?.excerpt || "";
     const url = `${BASE_URL}/blog/${slug}`;
-    const cover = post?.coverImage ? rewriteToCDN(post.coverImage) : undefined;
     const published = post?.published ?? true;
+
+    // Imagen OG/Twitter ABSOLUTA + VERSIONADA (cache-buster)
+    const cover = post?.coverImage ? rewriteToCDN(post.coverImage) : undefined;
+    const vTs = new Date(post?.updatedAt || post?.publishedAt || Date.now()).getTime();
+    const coverVersioned = cover ? `${cover}${cover.includes("?") ? "&" : "?"}v=${vTs}` : undefined;
 
     const keywords: string[] =
       post?.tags?.map((t: any) => t?.name).filter(Boolean).slice(0, 8) ?? [];
@@ -45,8 +49,8 @@ export async function generateMetadata(
         url,
         title: post?.metaTitle || post?.title || "",
         description,
-        images: cover
-          ? [{ url: cover, width: 1200, height: 630, alt: post?.title ?? "Cover" }]
+        images: coverVersioned
+          ? [{ url: coverVersioned, width: 1200, height: 630, alt: post?.title ?? "Cover" }]
           : [],
         locale: "es_ES",
       },
@@ -54,7 +58,7 @@ export async function generateMetadata(
         card: "summary_large_image",
         title: post?.metaTitle || post?.title || "",
         description,
-        images: cover ? [cover] : [],
+        images: coverVersioned ? [coverVersioned] : [],
       },
     };
   } catch {

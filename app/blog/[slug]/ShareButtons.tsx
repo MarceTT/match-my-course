@@ -19,6 +19,7 @@ type ShareButtonsProps = {
   hashtags?: string[];       // Sin "#", ej: ["ingles","irlanda"]
   via?: string;              // Usuario de X/Twitter (sin @)
   source?: string;           // Fuente para LinkedIn (ej: "MatchMyCourse")
+  urlLinkedin?: string;      // URL para LinkedIn (con cache-buster)
 };
 
 export default function ShareButtons({
@@ -28,6 +29,7 @@ export default function ShareButtons({
   hashtags = [],
   via,
   source,
+  urlLinkedin,
 }: ShareButtonsProps) {
   // Facebook usa quote y un solo hashtag con '#'
   const fbHashtag = hashtags[0] ? `#${hashtags[0]}` : undefined;
@@ -56,7 +58,7 @@ export default function ShareButtons({
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-        <LinkedinShareButton url={url} title={title} summary={summary} source={source}>
+        <LinkedinShareButton url={urlLinkedin || url} title={title} summary={summary} source={source}>
           <LinkedinIcon round size={40} />
         </LinkedinShareButton>
       </motion.div>

@@ -32,9 +32,22 @@ export default function PostClient({ slug }: { slug: string }) {
   if (isError || !post)
     return <p className="text-center py-10">Post no encontrado</p>;
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "https://www.matchmycourse.com";
-  const shareUrl = `${baseUrl.replace(/\/$/, "")}/blog/${post.slug}`;
+  const origin =
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_BASE_URL || "https://www.matchmycourse.com";
+
+  const baseShareUrl = `${origin.replace(/\/$/, "")}/blog/${post.slug}`;
+
+  // versión = updatedAt | publishedAt | ahora (ms)
+  const versionTs = new Date(
+    (post as any).updatedAt || post.publishedAt || Date.now()
+  ).getTime();
+
+  // cache-buster SOLO para LinkedIn
+  const liShareUrl = `${baseShareUrl}${
+    baseShareUrl.includes("?") ? "&" : "?"
+  }v=${versionTs}`;
 
   const hashtags =
     post.tags
@@ -122,12 +135,13 @@ export default function PostClient({ slug }: { slug: string }) {
 
               <div className="flex gap-2 items-center">
                 <ShareButtons
-                  url={shareUrl}
+                  url={baseShareUrl}
+                  urlLinkedin={liShareUrl}
                   title={post.title}
                   summary={summary}
                   hashtags={hashtags}
-                  via="matchmycourse" // opcional: tu usuario de X/Twitter sin @
-                  source="MatchMyCourse" // opcional: fuente en LinkedIn
+                  via="matchmycourse"
+                  source="MatchMyCourse"
                 />
               </div>
             </div>
