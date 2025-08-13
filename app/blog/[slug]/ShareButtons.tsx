@@ -1,30 +1,86 @@
 "use client";
 
 import { motion } from "framer-motion";
-// Usamos sólo los íconos de react-share (no sus botones)
 import { FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from "react-share";
 
 type Props = {
   url: string;
   title: string;
   summary?: string;
-  hashtags?: string[]; // sin '#'
-  via?: string;        // usuario de X/Twitter (sin @)
-  source?: string;     // LinkedIn "source"
-  urlLinkedin?: string; // tu URL con cache-buster para LinkedIn (opcional)
+  hashtags?: string[];
+  via?: string;
+  source?: string;
+  urlLinkedin?: string;
 };
-
-const isMobile = () =>
-  typeof navigator !== "undefined" &&
-  /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 
 const enc = encodeURIComponent;
 
-const openWeb = (webUrl: string) => {
-  // intenta nueva pestaña; si el navegador bloquea, navega en la misma
-  const win = window.open(webUrl, "_blank", "noopener,noreferrer");
-  if (!win) window.location.href = webUrl;
+const isIOS = () =>
+  typeof navigator !== "undefined" &&
+  /iphone|ipad|ipod/i.test(navigator.userAgent);
+
+const isAndroid = () =>
+  typeof navigator !== "undefined" &&
+  /android/i.test(navigator.userAgent);
+
+const tryWebShare = async (title?: string, text?: string, url?: string) => {
+  try {
+    if (navigator.share) {
+      await navigator.share({ title, text, url });
+      return true;
+    }
+  } catch {
+    // user cancelled or not available
+  }
+  return false;
 };
+
+// Intenta abrir la app. Si la página NO se oculta (no app abierta), hace fallback web.
+// Evita “doble apertura” cancelando el fallback cuando hay visibilitychange/pagehide.
+function openAppThenMaybeWeb(appUrl: string, webUrl: string, timeoutMs: number) {
+  let fallbackFired = false;
+
+  const clear = () => {
+    window.removeEventListener("visibilitychange", onHide, true);
+    window.removeEventListener("pagehide", onHide, true);
+    window.removeEventListener("blur", onBlur, true);
+  };
+
+  const fallback = () => {
+    if (fallbackFired) return;
+    fallbackFired = true;
+    clear();
+    // Abrimos en nueva pestaña; si el navegador bloquea, navegamos en la misma
+    const win = window.open(webUrl, "_blank", "noopener,noreferrer");
+    if (!win) window.location.href = webUrl;
+  };
+
+  const onHide = () => {
+    // Si la app se abrió, la página suele ir a background => cancelamos fallback
+    if (document.hidden) {
+      fallbackFired = true;
+      clear();
+    }
+  };
+
+  const onBlur = () => {
+    // Algunos navegadores no disparan hidden pero sí blur
+    fallbackFired = true;
+    clear();
+  };
+
+  window.addEventListener("visibilitychange", onHide, true);
+  window.addEventListener("pagehide", onHide, true);
+  window.addEventListener("blur", onBlur, true);
+
+  // Lanzamos deep link
+  window.location.href = appUrl;
+
+  // Solo si seguimos en foreground pasado el timeout, abrimos web
+  setTimeout(() => {
+    if (!fallbackFired) fallback();
+  }, timeoutMs);
+}
 
 export default function ShareButtons({
   url,
@@ -36,58 +92,54 @@ export default function ShareButtons({
   urlLinkedin,
 }: Props) {
   // --- Facebook ---
-  const onShareFacebook = () => {
+  const onShareFacebook = async () => {
+    // 1) Web Share API (mejor UX en mobile)
+    if (await tryWebShare(title, summary, url)) return;
+
+    // 2) Deep link con fallback inteligente
     const web = `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`;
-    if (isMobile()) {
-      const app = `fb://facewebmodal/f?href=${enc(web)}`;
-      // intenta app; si no existe, tras un breve delay va al sharer web
-      window.location.href = app;
-      setTimeout(() => openWeb(web), 800);
-    } else {
-      openWeb(web);
-    }
+    // fb suele requerir un wrapper con el sharer
+    const app = `fb://facewebmodal/f?href=${enc(web)}`;
+
+    const timeout = isIOS() ? 1200 : isAndroid() ? 700 : 800;
+    openAppThenMaybeWeb(app, web, timeout);
   };
 
   // --- Twitter/X ---
-  const hashtagsStr = hashtags.length ? ` ${hashtags.map(h => `#${h}`).join(" ")}` : "";
+  const hashtagsStr = hashtags.length ? ` ${hashtags.map((h) => `#${h}`).join(" ")}` : "";
   const tweetText = `${title}${hashtagsStr} ${url}${via ? ` via @${via}` : ""}`;
-  const onShareTwitter = () => {
+
+  const onShareTwitter = async () => {
+    if (await tryWebShare(title, summary, url)) return;
+
     const web = `https://twitter.com/intent/tweet?text=${enc(tweetText)}`;
-    if (isMobile()) {
-      const app = `twitter://post?message=${enc(tweetText)}`;
-      window.location.href = app;
-      setTimeout(() => openWeb(web), 700);
-    } else {
-      openWeb(web);
-    }
+    const app = `twitter://post?message=${enc(tweetText)}`;
+
+    const timeout = isIOS() ? 1000 : 700;
+    openAppThenMaybeWeb(app, web, timeout);
   };
 
   // --- WhatsApp ---
   const waText = summary ? `${title} — ${summary} ${url}` : `${title} ${url}`;
-  const onShareWhatsApp = () => {
+
+  const onShareWhatsApp = async () => {
+    if (await tryWebShare(title, summary, url)) return;
+
     const web = `https://api.whatsapp.com/send?text=${enc(waText)}`;
-    if (isMobile()) {
-      const app = `whatsapp://send?text=${enc(waText)}`;
-      window.location.href = app;
-      setTimeout(() => openWeb(web), 500);
-    } else {
-      openWeb(web);
-    }
+    const app = `whatsapp://send?text=${enc(waText)}`;
+
+    const timeout = isIOS() ? 900 : 500;
+    openAppThenMaybeWeb(app, web, timeout);
   };
 
   // --- LinkedIn ---
-  // Intento de deep link (mejor en Android); si falla, sharer web. Usa tu urlLinkedin con ?v= para cache-buster
-  const liUrl = urlLinkedin || url;
-  const liText = summary || title;
-  const onShareLinkedIn = () => {
+  // LinkedIn deep link es inestable; preferimos Web Share API y, si no, sharer web.
+  const onShareLinkedIn = async () => {
+    if (await tryWebShare(title, summary, url)) return;
+    const liUrl = urlLinkedin || url;
     const web = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(liUrl)}`;
-    if (isMobile()) {
-      const app = `linkedin://shareArticle?mini=true&url=${enc(liUrl)}&title=${enc(title)}&summary=${enc(liText)}${source ? `&source=${enc(source)}` : ""}`;
-      window.location.href = app;
-      setTimeout(() => openWeb(web), 800);
-    } else {
-      openWeb(web);
-    }
+    const win = window.open(web, "_blank", "noopener,noreferrer");
+    if (!win) window.location.href = web;
   };
 
   return (

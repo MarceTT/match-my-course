@@ -1,88 +1,71 @@
 import type { MetadataRoute } from "next";
 import { fetchAllSeoEntries } from "@/app/actions/seo";
-import {
-  cursoSlugToSubcategoria,
-  subcategoriaToCursoSlug,
-} from "@/lib/courseMap";
+import { subcategoriaToCursoSlug } from "@/lib/courseMap";
 
-// 🔧 Utilidad para extraer el slug de la escuela desde la URL
-function extractSlugEscuelaFromSeoUrl(url: string): string {
-  const parts = url.split("/");
-  const index = parts.indexOf("escuelas");
-  return index !== -1 && parts.length > index + 1 ? parts[index + 1] : "escuela";
+// Usa un origen canónico estable (no NEXTAUTH_URL)
+const CANONICAL_ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || "https://matchmycourse.com").replace(/\/$/, "");
+
+export const revalidate = 86_400; // WHY: sitemap estable (24h)
+
+function normSlug(input: string | undefined | null): string | null {
+  if (!input) return null;
+  return String(input).trim().toLowerCase();
 }
 
-export const revalidate = 3600; // cada hora
-export const dynamic = "force-dynamic";
+function extractSlugEscuelaFromSeoUrl(url: string): string | null {
+  try {
+    const u = new URL(url, CANONICAL_ORIGIN);
+    const parts = u.pathname.split("/").filter(Boolean);
+    const idx = parts.indexOf("escuelas");
+    if (idx >= 0 && parts[idx + 1]) return normSlug(parts[idx + 1]);
+  } catch {}
+  const parts = url.split("/");
+  const idx = parts.indexOf("escuelas");
+  return idx !== -1 && parts[idx + 1] ? normSlug(parts[idx + 1]) : null;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const base = CANONICAL_ORIGIN; // siempre https apex
 
-  const data = await fetchAllSeoEntries();
+  const urls: MetadataRoute.Sitemap = [
+    { url: `${base}/`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    { url: `${base}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/politica-de-privacidad`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/contacto`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/servicios`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
+  ];
+
+  let data: unknown = [];
+  try {
+    data = await fetchAllSeoEntries();
+  } catch {}
+
   const schools = Array.isArray(data) ? data : [data];
-  const urls: MetadataRoute.Sitemap = [];
+  const seen = new Set<string>();
 
-  urls.push(
-    {
-      url: `${base}/`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${base}/terminos-y-condiciones`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${base}/politica-de-privacidad`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${base}/contacto`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${base}/servicios`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${base}/testimonios`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
+  for (const entry of schools as Array<any>) {
+    const subcat = entry?.subcategoria as string | undefined;
+    const schoolId = entry?.schoolId as string | undefined;
+    const slugCurso = normSlug(subcategoriaToCursoSlug[subcat as keyof typeof subcategoriaToCursoSlug]);
+    const escuelaSlug = extractSlugEscuelaFromSeoUrl(String(entry?.url ?? ""));
+
+    // WHY: sólo emitimos si existen todos los slugs requeridos
+    if (!slugCurso || !escuelaSlug || !schoolId) continue;
+
+    const path = `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(escuelaSlug)}/${encodeURIComponent(schoolId)}`;
+    const absolute = `${base}${path}`; // SIN query → canónico
+
+    if (!seen.has(absolute)) {
+      seen.add(absolute);
+      urls.push({
+        url: absolute,
+        lastModified: new Date(), // si tienes updatedAt en tu BD, úsalo aquí
+        changeFrequency: "weekly",
+        priority: 0.8,
+      });
     }
-  );
-
-  schools.forEach((entry) => {
-    const slugCurso = subcategoriaToCursoSlug[entry.subcategoria];
-    if (!slugCurso) return; // Si no hay mapeo, evitar errores
-
-    const escuelaSlug = extractSlugEscuelaFromSeoUrl(entry.url);
-    const path = `/cursos/${slugCurso}/escuelas/${escuelaSlug}/${entry.schoolId}`;
-
-    const params = new URLSearchParams({
-      curso: slugCurso,
-      schoolId: entry.schoolId,
-      semanas: "1",
-      ciudad: entry.ciudad || "Dublin",
-      horario: "PM",
-    });
-
-    urls.push({
-      url: `${base}${path}?${params.toString()}`.replace(/&/g, "&amp;"),
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    });
-  });
+  }
 
   return urls;
 }

@@ -1,44 +1,56 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+const ADMIN_PREFIX = "/admin";
+const KNOWN_QUERY_PARAMS = new Set([
+  "curso",
+  "schoolId",
+  "semanas",
+  "ciudad",
+  "horario",
+]);
 
-  const ADMIN_ROUTES = ["/admin", "/admin/dashboard"];
+export async function middleware(req: NextRequest) {
+  const url = req.nextUrl.clone();
+  const { pathname } = url;
 
-  const isAdminRoute = ADMIN_ROUTES.some((route) =>
-    pathname.startsWith(route)
-  );
+  // --- Admin auth (solo si visita /admin) ---
+  if (pathname.startsWith(ADMIN_PREFIX)) {
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+      secureCookie: req.nextUrl.protocol === 'https:',
+    });
 
-  if (!isAdminRoute) return NextResponse.next();
+    if (!token) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
 
-  // const token = await getToken({
-  //   req: request,
-  //   secret: process.env.NEXTAUTH_SECRET,
-  //   secureCookie: process.env.NODE_ENV === "production",
-  // });
+    if ((token as any).role !== "admin") {
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    }
 
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: true,
-  });
-
-  if (!token) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.next();
   }
 
-  const userRole = token.role;
-
-  if (userRole !== "admin") {
-    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  // --- SEO canonical: detalle de curso sin query ---
+  const isCourseDetail =
+    /^\/cursos\/[^/]+\/escuelas\/[^/]+\/[A-Za-z0-9]+$/.test(pathname);
+  if (isCourseDetail) {
+    const hasKnownParams = Array.from(url.searchParams.keys()).some((k) =>
+      KNOWN_QUERY_PARAMS.has(k)
+    );
+    if (hasKnownParams) {
+      url.search = "";
+      return NextResponse.redirect(url, 301); // WHY: consolidar señales en URL sin query
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/cursos/:path*"],
 };
