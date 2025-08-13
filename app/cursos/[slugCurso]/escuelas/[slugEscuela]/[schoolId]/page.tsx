@@ -6,34 +6,26 @@ import SchoolSeoHome from './SchoolSeoHome';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
 import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMap';
 
-// Tipos de props (App Router)
-export type PageParams = { slugCurso: string; slugEscuela: string; schoolId: string };
-export type PageSearch = Record<string, string | string[] | undefined>;
+type PageParams = { slugCurso: string; slugEscuela: string; schoolId: string };
+type PageSearch = Record<string, string | string[] | undefined>;
+type Props = { params: Promise<PageParams>; searchParams: Promise<PageSearch> };
 
-type Props = {
-  params: PageParams;
-  searchParams: PageSearch;
-};
-
-export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { slugCurso, slugEscuela, schoolId } = params;
+export async function generateMetadata(ctx: Props): Promise<Metadata> {
+  const { slugCurso, slugEscuela, schoolId } = await ctx.params;
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
-  if (!subcategoria) {
-    return { title: 'No encontrado', robots: { index: false, follow: false } };
-  }
+  if (!subcategoria) return { title: 'No encontrado', robots: { index: false, follow: false } };
 
   const seoCourses = await fetchSeoSchoolById(schoolId);
   const seoEntry = seoCourses.find((c: any) => c.subcategoria === subcategoria);
-  if (!seoEntry) {
-    return { title: 'No encontrado', robots: { index: false, follow: false } };
-  }
+  if (!seoEntry) return { title: 'No encontrado', robots: { index: false, follow: false } };
 
-  // Canónico SIN query; usa slugs esperados si difieren
-  const expectedSlugCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
-  const expectedSlugEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
+  const expectedCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
+  const expectedEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
 
-  const canonicalPath = `/cursos/${encodeURIComponent(expectedSlugCurso)}/escuelas/${encodeURIComponent(expectedSlugEscuela)}/${encodeURIComponent(schoolId)}`;
+  const canonicalPath =
+    `/cursos/${encodeURIComponent(expectedCurso)}` +
+    `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
 
   return {
     title: seoEntry.metaTitle,
@@ -41,21 +33,17 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
     keywords: seoEntry.keywordPrincipal,
     alternates: { canonical: canonicalPath },
     robots: { index: true, follow: true },
-    openGraph: {
-      title: seoEntry.metaTitle,
-      description: seoEntry.metaDescription,
-      url: canonicalPath,
-      type: 'website',
-    },
+    openGraph: { title: seoEntry.metaTitle, description: seoEntry.metaDescription, url: canonicalPath, type: 'website' },
   };
 }
 
 export default async function Page({ params, searchParams }: Props) {
-  const { slugCurso, slugEscuela, schoolId } = params;
+  const { slugCurso, slugEscuela, schoolId } = await params;
 
-  // Defaults para no depender de query
-  const weeks = Number.parseInt((searchParams.semanas as string) ?? '1', 10) || 1;
-  const schedule = (searchParams.horario as string) ?? 'PM';
+  // Defaults internos → no dependas de query para render
+  const sp = await searchParams;
+  const weeks = Number.parseInt((sp.semanas as string) ?? '1', 10) || 1;
+  const schedule = (sp.horario as string) ?? 'PM';
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
   if (!subcategoria) return notFound();
@@ -64,12 +52,14 @@ export default async function Page({ params, searchParams }: Props) {
   const seoEntry = seoCourses.find((c: any) => c.subcategoria === subcategoria);
   if (!seoEntry) return notFound();
 
-  // Si los slugs no coinciden, redirige a la canónica SIN query
-  const expectedSlugCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
-  const expectedSlugEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
+  // 301 si los slugs no son los esperados → canónica SIN query
+  const expectedCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
+  const expectedEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
 
-  if (slugCurso !== expectedSlugCurso || slugEscuela !== expectedSlugEscuela) {
-    const canonicalPath = `/cursos/${encodeURIComponent(expectedSlugCurso)}/escuelas/${encodeURIComponent(expectedSlugEscuela)}/${encodeURIComponent(schoolId)}`;
+  if (slugCurso !== expectedCurso || slugEscuela !== expectedEscuela) {
+    const canonicalPath =
+      `/cursos/${encodeURIComponent(expectedCurso)}` +
+      `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
     return redirect(canonicalPath);
   }
 
