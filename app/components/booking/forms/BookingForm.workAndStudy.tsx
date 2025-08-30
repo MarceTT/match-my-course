@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import ContactButtonWhatsApp from "./ContactButtonWhatsApp";
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 interface FormProps {
   reservation: Reservation | null;
@@ -23,6 +24,7 @@ interface FormProps {
   onReserve: () => void;
   href?: string;
   disabled?: boolean;
+  schoolId?: string;
 }
 
 // Función para convertir cualquier fecha a string (DD-MM-YYYY)
@@ -43,6 +45,7 @@ export default function WorkAndStudyBooking({
   reservation,
   scheduleInfo,
   disabled,
+  schoolId,
 }: FormProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const bookingAmound = 100;
@@ -82,6 +85,13 @@ export default function WorkAndStudyBooking({
   const reserveLabel = "Reserva ahora con solo";
 
   console.log("Reserva para ver datos", reservation);
+
+  const handleContinueClick = () => {
+    if(reservation?.schoolName === "University of Limerick Language Centre"){
+      sendGTMEvent('click_whatsapp_limerick_ad');
+    }
+    setStep(2);
+  };
 
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
@@ -164,7 +174,7 @@ export default function WorkAndStudyBooking({
             </div>
 
             <Button
-              onClick={() => setStep(2)}
+              onClick={handleContinueClick}
               className="w-full mt-4 bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
             >
               <span className="mr-2">Continuar con tu reserva</span>

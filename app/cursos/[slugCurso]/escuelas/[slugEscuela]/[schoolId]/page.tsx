@@ -10,6 +10,9 @@ type PageParams = { slugCurso: string; slugEscuela: string; schoolId: string };
 type PageSearch = Record<string, string | string[] | undefined>;
 type Props = { params: Promise<PageParams>; searchParams: Promise<PageSearch> };
 
+// Origen canónico absoluto (sin barra final) — evita relativas en <link rel="canonical">
+const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
+
 export async function generateMetadata(ctx: Props): Promise<Metadata> {
   const { slugCurso, slugEscuela, schoolId } = await ctx.params;
 
@@ -26,14 +29,20 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
   const canonicalPath =
     `/cursos/${encodeURIComponent(expectedCurso)}` +
     `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
+  const canonicalUrl = `${ORIGIN}${canonicalPath}`;
 
   return {
     title: seoEntry.metaTitle,
     description: seoEntry.metaDescription,
     keywords: seoEntry.keywordPrincipal,
-    alternates: { canonical: canonicalPath },
+    alternates: { canonical: canonicalUrl },
     robots: { index: true, follow: true },
-    openGraph: { title: seoEntry.metaTitle, description: seoEntry.metaDescription, url: canonicalPath, type: 'website' },
+    openGraph: {
+      title: seoEntry.metaTitle,
+      description: seoEntry.metaDescription,
+      url: canonicalUrl,
+      type: 'website',
+    },
   };
 }
 

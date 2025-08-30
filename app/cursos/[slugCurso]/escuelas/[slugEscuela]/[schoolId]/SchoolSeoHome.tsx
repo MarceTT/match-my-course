@@ -277,6 +277,7 @@ const SchoolSeoHome = ({
               reservation={reservation}
               scheduleInfo={scheduleInfo}
               weeksBySchoolInfo={weeksBySchoolInfo}
+              schoolId={schoolId}
             />
           </div>
         </div>

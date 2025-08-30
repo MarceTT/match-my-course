@@ -49,6 +49,7 @@
     "@tiptap/extension-table-header": "2.26.1",
     "@tiptap/extension-table-row": "2.26.1",
     "@tiptap/extension-text-align": "2.26.1",
+    "@tiptap/extension-youtube": "^3.2.0",
     "@tiptap/react": "2.26.1",
     "@tiptap/starter-kit": "2.26.1",
     "@types/canvas-confetti": "^1.9.0",

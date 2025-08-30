@@ -7,7 +7,7 @@ const FindSchoolSection = () => {
   return (
     <section className="py-16 bg-white lg:py-24">
       <div className="container mx-auto px-4">
-        <div className="grid gap-12 items-start lg:grid-cols-[5fr_7fr]">
+        <div className="grid gap-12 items-center lg:grid-cols-[5fr_7fr]">
           {/* Right Column - Benefits (Shown first on mobile) */}
           <div className="order-1 lg:order-2 lg:pl-2">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2F343D] mb-6">
@@ -45,17 +45,17 @@ const FindSchoolSection = () => {
           </div>
 
           {/* Left Column - Image and Button (Shown second on mobile) */}
-          <div className="order-2 lg:order-1 space-y-4">
+          <div className="order-2 lg:order-1 flex flex-col justify-center items-center space-y-4 h-full">
             <Image
-              src="/images/schools-for-partners.png"
+              src="/about-us/Utiliza-nuestro-filtro-para-buscar-tu-escuela-de-ingles-ideal.png"
               alt="Encuentra tu escuela"
               width={400}
               height={400}
-              className="rounded-sm w-[95%] max-w-sm h-auto mx-auto"
+              className="rounded-sm w-[95%] max-w-sm h-auto"
             />
             <Button
               asChild
-              className="block mx-auto w-fit px-6 py-2 bg-[#5174fc] hover:bg-[#4257FF] text-white text-sm font-semibold rounded-md mt-4 shadow transition"
+              className="w-fit px-6 py-2 bg-[#5174fc] hover:bg-[#4257FF] text-white text-sm font-semibold rounded-md shadow transition"
             >
               <Link
                 href="/school-search?course=ingles-visa-de-trabajo"

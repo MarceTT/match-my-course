@@ -29,11 +29,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const urls: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
-    { url: `${base}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/politica-de-privacidad`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/como-funciona-matchmycourse`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/escuelas-socias`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
+    { url: `${base}/servicios-matchmycourse`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/contacto`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/servicios`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
+    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/ebook-estudiar-y-trabajar-extranjero`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
+    { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
+    { url: `${base}/quienes-somos`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.4 },
+    { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    
+    // PÁGINAS LEGALES (menor prioridad)
+    { url: `${base}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/politica-de-privacidad`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
   ];
 
   let data: unknown = [];

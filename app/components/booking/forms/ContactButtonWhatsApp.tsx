@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { FaWhatsapp } from 'react-icons/fa'
 import { Reservation } from '@/types';
+import { sendGTMEvent } from "@/app/lib/gtm";
 
 interface ContactButtonWhatsAppProps {
     reservation: Reservation;
@@ -10,6 +11,8 @@ interface ContactButtonWhatsAppProps {
 
 
 const ContactButtonWhatsApp = ({ reservation }: ContactButtonWhatsAppProps) => {
+
+  console.log("reservation", reservation);
 
     const handleOpenWhatsApp = () => {
         const phone = "+56931714541"; // Número destino
@@ -23,6 +26,9 @@ const ContactButtonWhatsApp = ({ reservation }: ContactButtonWhatsAppProps) => {
       
         const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
+        if(reservation?.schoolName === "University of Limerick Language Centre"){
+          sendGTMEvent('click_whatsapp_limerick_ad');
+        }
       };
   return (
     <Button

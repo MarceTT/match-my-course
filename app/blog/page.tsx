@@ -7,32 +7,62 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { getPostBySlugServer } from "@/app/blog/_server/getPosts.server";
 import ReactQueryProvider from "@/app/blog/providers";
 
-// Ajusta tu dominio base (ponlo también como metadataBase en el root layout)
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-const SITE_NAME = "MatchMyCourse";
+// ORIGIN absoluto (sin barra final)
+const ORIGIN =
+  (process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    "http://localhost:3000").replace(/\/$/, "");
 
-export const revalidate = 900; // opcional (ISR 15 min)
+const SITE_NAME = "MatchMyCourse";
+export const revalidate = 900;
+
+// WHY: absolutiza paths e imágenes
+const absUrl = (u: string) => (u.startsWith("http") ? u : `${ORIGIN}${u}`);
+
+// WHY: snippet limpio de MD/HTML para meta description
+function extractTextSnippet(raw?: string, max = 160): string {
+  if (!raw) return "";
+  let s = raw
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1 ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/^>+\s*/gm, "")
+    .replace(/^#{1,6}\s*/gm, "")
+    .replace(/[*_~]+/g, " ")
+    .replace(/^[\-\+\*]\s+/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (s.length <= max) return s;
+  s = s.slice(0, max + 1);
+  const cut = Math.max(s.lastIndexOf(". "), s.lastIndexOf(" "));
+  return (cut > 80 ? s.slice(0, cut) : s.slice(0, max)).trim() + "…";
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const { posts } = await getPostBySlugServer("test");
     const featured = posts?.[0];
-    const baseDesc =
-      "Últimos artículos sobre tecnología, desarrollo web y programación.";
-    const url = `${BASE_URL}/blog`;
+    const url = absUrl("/blog");
 
-    const title = featured ? `${featured.title} | ${SITE_NAME}` : SITE_NAME;
+    const title = featured ? `${featured.title} | ${SITE_NAME}` : `Blog | ${SITE_NAME}`;
+
     const description =
-      featured?.metaDescription || featured?.excerpt || baseDesc;
+      featured?.metaDescription ||
+      featured?.seo?.description ||
+      extractTextSnippet(featured?.excerpt || featured?.content || featured?.body) ||
+      "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.";
 
     const cover = featured?.coverImage
-      ? rewriteToCDN(featured.coverImage)
+      ? absUrl(rewriteToCDN(featured.coverImage))
       : undefined;
 
     return {
       title,
       description,
       alternates: { canonical: url },
+      robots: { index: true, follow: true },
       openGraph: {
         type: "website",
         siteName: SITE_NAME,
@@ -50,35 +80,47 @@ export async function generateMetadata(): Promise<Metadata> {
         description,
         images: cover ? [cover] : [],
       },
-      robots: { index: true, follow: true, googleBot: "index,follow" },
     };
   } catch {
-    const url = `${BASE_URL}/blog`;
+    const url = absUrl("/blog");
     return {
       title: `Blog | ${SITE_NAME}`,
       description:
-        "Últimos artículos sobre tecnología, desarrollo web y programación.",
+        "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
       alternates: { canonical: url },
       robots: { index: true, follow: true },
+      openGraph: {
+        type: "website",
+        siteName: SITE_NAME,
+        url,
+        title: `Blog | ${SITE_NAME}`,
+        description:
+          "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `Blog | ${SITE_NAME}`,
+        description:
+          "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
+      },
     };
   }
 }
 
 export default async function BlogHomePage() {
-    const queryClient = new QueryClient();
-    await queryClient.prefetchQuery({
-      queryKey: ["post", "test"],
-      queryFn: () => getPostBySlugServer("test"),
-    });
-  
-    const dehydratedState = dehydrate(queryClient);
-  
-    // Aquí pasas el state al provider
-    return (
-      <ReactQueryProvider state={dehydratedState}>
-        <Suspense fallback={<FullScreenLoader isLoading />}>
-          <BlogHomeClient />
-        </Suspense>
-      </ReactQueryProvider>
-    );
-  }
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["post", "test"],
+    queryFn: () => getPostBySlugServer("test"),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+
+  return (
+    <ReactQueryProvider state={dehydratedState}>
+      <Suspense fallback={<FullScreenLoader isLoading />}>
+        <BlogHomeClient />
+      </Suspense>
+    </ReactQueryProvider>
+  );
+}

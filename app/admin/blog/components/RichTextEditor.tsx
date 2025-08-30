@@ -4,6 +4,7 @@ import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
+import Youtube from "@tiptap/extension-youtube";
 import { Table } from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
@@ -11,6 +12,8 @@ import TableHeader from "@tiptap/extension-table-header";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
+import { Node, mergeAttributes } from '@tiptap/core';
+import type { Range } from '@tiptap/core';
 
 import {
   Bold,
@@ -23,9 +26,14 @@ import {
   Image as ImageIcon,
   Table as TableIcon,
   Link as LinkIcon,
+  Youtube as YoutubeIcon,
+  Anchor,
+  Hash,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import axiosInstance from "@/app/utils/axiosInterceptor";
 import { ObjectId } from "bson";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -38,6 +46,56 @@ interface RichTextEditorProps {
   maxChars?: number;
 }
 
+// Extensión personalizada para anclas - Versión simplificada
+const AnchorExtension = Node.create({
+  name: 'anchor',
+  
+  group: 'inline',
+  inline: true,
+  atom: true,
+
+  addAttributes() {
+    return {
+      id: {
+        default: null,
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'span[data-anchor]',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['span', {
+      ...HTMLAttributes,
+      'data-anchor': '',
+      'class': 'inline-flex items-center gap-1 bg-blue-100 hover:bg-blue-200 px-2 py-1 rounded text-blue-800 text-xs font-medium cursor-pointer'
+    }, '🔗 ' + (HTMLAttributes.id || 'anchor')]
+  },
+
+  addCommands() {
+    return {
+      insertAnchor: (options) => ({ commands }) => {
+        return commands.insertContent(`<span data-anchor id="${options.id}">🔗 ${options.id}</span>`)
+      },
+    }
+  },
+});
+
+// Declarar el tipo para el comando personalizado
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    anchor: {
+      insertAnchor: (options: { id: string }) => ReturnType
+    }
+  }
+}
+
 const isValidUrl = (url: string) => {
   try {
     const u = new URL(url);
@@ -47,6 +105,13 @@ const isValidUrl = (url: string) => {
   }
 };
 
+// Función para extraer ID del video de YouTube
+const getYouTubeVideoId = (url: string) => {
+  const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};
+
 export default function RichTextEditor({
   value = "",
   onChange,
@@ -54,6 +119,12 @@ export default function RichTextEditor({
 }: RichTextEditorProps) {
   const [generatedPostId] = useState(() => new ObjectId().toString());
   const editorRef = useRef<ReturnType<typeof useEditor> | null>(null);
+  
+  // Estados para los diálogos
+  const [showYoutubeDialog, setShowYoutubeDialog] = useState(false);
+  const [showAnchorDialog, setShowAnchorDialog] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [anchorId, setAnchorId] = useState('');
 
   // Debounce simple para onUpdate
   const debouncedOnChange = useMemo(() => {
@@ -85,6 +156,17 @@ export default function RichTextEditor({
         allowBase64: false,
         HTMLAttributes: { class: "rounded-md" },
       }),
+      Youtube.configure({
+        controls: true,
+        nocookie: true,
+        modestBranding: true,
+        HTMLAttributes: {
+          class: 'rounded-lg shadow-lg my-4',
+        },
+        inline: false,
+        allowFullscreen: true,
+      }),
+      AnchorExtension,
       Table.configure({ resizable: true }),
       TableRow,
       TableCell,
@@ -171,6 +253,58 @@ export default function RichTextEditor({
     editor?.chain().focus().unsetLink().run();
   };
 
+  // Función para insertar video de YouTube
+  const addYoutubeVideo = () => {
+    if (!youtubeUrl.trim()) {
+      toast.error("Por favor ingresa una URL de YouTube");
+      return;
+    }
+
+    const videoId = getYouTubeVideoId(youtubeUrl);
+    if (!videoId) {
+      toast.error("URL de YouTube inválida");
+      return;
+    }
+
+    // Usar nocookie domain para evitar problemas de CORS
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`;
+    
+    editor?.chain().focus().setYoutubeVideo({
+      src: embedUrl,
+    }).run();
+
+    setYoutubeUrl('');
+    setShowYoutubeDialog(false);
+    toast.success("Video de YouTube agregado correctamente");
+  };
+
+  // Función para insertar ancla
+  const addAnchor = () => {
+    if (!anchorId.trim()) {
+      toast.error("Por favor ingresa un ID para el ancla");
+      return;
+    }
+
+    // Limpiar el ID (remover espacios, caracteres especiales, etc.)
+    const cleanId = anchorId
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\-_]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    if (!cleanId) {
+      toast.error("ID de ancla inválido");
+      return;
+    }
+
+    editor?.chain().focus().insertAnchor({ id: cleanId }).run();
+    
+    setAnchorId('');
+    setShowAnchorDialog(false);
+    toast.success(`Ancla "${cleanId}" agregada correctamente`);
+  };
+
   // acepta string o objeto (para textAlign)
   const isActive = (nameOrAttrs: any, attrs?: any) => editor?.isActive(nameOrAttrs, attrs);
 
@@ -252,6 +386,9 @@ export default function RichTextEditor({
           <Quote className="h-4 w-4" />
         </Button>
 
+        {/* Separador */}
+        <div className="w-px bg-gray-300 mx-1" />
+
         <Button size="sm" variant="ghost" onClick={insertLink} title="Insertar enlace">
           <LinkIcon className="h-4 w-4" />
         </Button>
@@ -268,6 +405,28 @@ export default function RichTextEditor({
           <ImageIcon className="h-4 w-4" />
         </Button>
 
+        {/* NUEVOS BOTONES */}
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          onClick={() => setShowYoutubeDialog(true)} 
+          title="Insertar video de YouTube"
+        >
+          <YoutubeIcon className="h-4 w-4" />
+        </Button>
+
+        <Button 
+          size="sm" 
+          variant="ghost" 
+          onClick={() => setShowAnchorDialog(true)} 
+          title="Insertar ancla"
+        >
+          <Anchor className="h-4 w-4" />
+        </Button>
+
+        {/* Separador */}
+        <div className="w-px bg-gray-300 mx-1" />
+
         <Button
           size="sm"
           variant={isActive("table") ? "secondary" : "ghost"}
@@ -282,6 +441,9 @@ export default function RichTextEditor({
         >
           <TableIcon className="h-4 w-4" />
         </Button>
+
+        {/* Separador */}
+        <div className="w-px bg-gray-300 mx-1" />
 
         <Button
           size="sm"
@@ -342,6 +504,64 @@ export default function RichTextEditor({
           )}
         </>
       )}
+
+      {/* DIÁLOGO PARA YOUTUBE */}
+      <Dialog open={showYoutubeDialog} onOpenChange={setShowYoutubeDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Agregar video de YouTube</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">URL del video</label>
+              <Input
+                placeholder="https://www.youtube.com/watch?v=..."
+                value={youtubeUrl}
+                onChange={(e) => setYoutubeUrl(e.target.value)}
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Acepta URLs de YouTube y Youtu.be
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowYoutubeDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={addYoutubeVideo}>Agregar Video</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* DIÁLOGO PARA ANCLAS */}
+      <Dialog open={showAnchorDialog} onOpenChange={setShowAnchorDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Agregar ancla</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">ID del ancla</label>
+              <Input
+                placeholder="mi-seccion"
+                value={anchorId}
+                onChange={(e) => setAnchorId(e.target.value)}
+                className="mt-1"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                {anchorId ? `Se creará el ancla: #${anchorId.toLowerCase().replace(/[^a-z0-9\-_]/g, '-')}` : 'Solo letras, números, guiones y guiones bajos'}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAnchorDialog(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={addAnchor}>Agregar Ancla</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

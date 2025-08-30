@@ -29,6 +29,7 @@ export type BookingPannelProps = {
   onChangeTypeOfCourse: (updatedData: Partial<ReservationFormData>) => void;
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
+  schoolId?: string;
 };
 
 const BookingPannel = ({
@@ -41,7 +42,8 @@ const BookingPannel = ({
   loading,
   courseInfo,
   scheduleInfo,
-  weeksBySchoolInfo
+  weeksBySchoolInfo,
+  schoolId
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -97,6 +99,7 @@ const BookingPannel = ({
           onChangeFormData={onFormDataChange}
           onReserve={handleOpenModal}
           disabled={isSending}
+          schoolId={schoolId}
         />
       );
     }

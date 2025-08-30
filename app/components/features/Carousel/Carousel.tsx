@@ -30,14 +30,14 @@ const Carousel = () => {
     }, [controls, isInView]);
 
   return (
-    <div className="bg-gray-100 py-12 overflow-hidden relative" ref={containerRef}>
-        <h1 className="text-xl md:text-xl text-center mb-12 text-gray-900 font-bold">
+    <div className="hidden md:block bg-white py-4 overflow-hidden relative" ref={containerRef}>
+        {/* <h1 className="text-xl md:text-xl text-center mb-12 text-gray-900 font-bold">
           Trabajamos con más de 30 escuelas de inglés a nivel mundial y seguimos creciendo
-        </h1>
+        </h1> */}
       <div className="container mx-auto px-4">
         <div className="relative">
-          <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
-          <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
+          <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
+          <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
           <div className="overflow-hidden">
             <motion.div 
               className="flex min-h-[120px]"
