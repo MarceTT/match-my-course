@@ -27,7 +27,7 @@ const GeneralEnglish = () => {
 
             {/* Content Card - Positioned relative to the container */}
             <div className="container mx-auto px-4 -mt-20 md:-mt-32 relative z-10">
-              <div className="grid lg:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
                 <Card className="bg-[#41B93B] text-white border-none">
                   <CardHeader className="pb-4 px-6 pt-6">
                     <CardTitle className="text-2xl md:text-3xl font-bold text-center md:text-left leading-tight">
