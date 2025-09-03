@@ -121,7 +121,7 @@ const IndividualLessons = () => {
                         Requisito de ingreso
                       </h3>
                       <p className="text-sm leading-relaxed text-gray-700 text-center md:text-justify">
-                        Tener un inglés nivel B2 a C2 dependiendo de la escuela
+                      Tener un inglés nivel A1 a A2 mínimo dependiendo de la escuela.
                       </p>
                     </div>
                   </div>
@@ -151,7 +151,7 @@ const IndividualLessons = () => {
                     </div>
                     <div>
                       <Button className="bg-[#F1B607] w-full md:w-auto hover:bg-[#e6c35a] text-white">
-                        <Link href="/school-search?course=ingles-general" className="flex items-center justify-center">
+                        <Link href="/school-search?course=ingles-general-mas-sesiones-individuales" className="flex items-center justify-center">
                           <Search className="h-5 w-5 mr-2" />
                           Buscar cursos
                         </Link>

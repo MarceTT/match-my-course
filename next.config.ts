@@ -38,60 +38,108 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Legacy URL redirects
+      {
+        source: '/mision-y-vision',
+        destination: '/mision-vision-matchmycourse',
+        permanent: true,
+      },
       {
         source: '/ebook-estudiar-y-trabajar-extranjero',
         destination: '/ebook',
         permanent: true,
       },
+      // English to Spanish redirects (Spanish URLs are canonical)
+      {
+        source: '/services',
+        destination: '/servicios-matchmycourse',
+        permanent: true,
+      },
+      {
+        source: '/about-us',
+        destination: '/quienes-somos',
+        permanent: true,
+      },
+      {
+        source: '/english-school-courses',
+        destination: '/cursos-ingles-extranjero',
+        permanent: true,
+      },
+      {
+        source: '/how-works',
+        destination: '/como-funciona-matchmycourse',
+        permanent: true,
+      },
+      {
+        source: '/partners',
+        destination: '/escuelas-socias',
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/terminos-y-condiciones',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy',
+        destination: '/politica-de-privacidad',
+        permanent: true,
+      },
+      {
+        source: '/testimonials',
+        destination: '/testimonios',
+        permanent: true,
+      },
+      {
+        source: '/contact',
+        destination: '/contacto',
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      // Rewrite Spanish canonical URLs to their English page implementations
+      // This allows Spanish URLs to be canonical while using English page files
       {
         source: '/servicios-matchmycourse',
         destination: '/services',
-        permanent: true,
       },
       {
         source: '/mision-vision-matchmycourse',
         destination: '/mision-vision',
-        permanent: true,
       },
       {
         source: '/quienes-somos',
         destination: '/about-us',
-        permanent: true,
       },
       {
         source: '/cursos-ingles-extranjero',
         destination: '/english-school-courses',
-        permanent: true,
       },
       {
         source: '/como-funciona-matchmycourse',
         destination: '/how-works',
-        permanent: true,
       },
       {
         source: '/escuelas-socias',
         destination: '/partners',
-        permanent: true,
       },
       {
         source: '/terminos-y-condiciones',
         destination: '/terms',
-        permanent: true,
       },
       {
         source: '/politica-de-privacidad',
         destination: '/privacy-policy',
-        permanent: true,
       },
       {
         source: '/testimonios',
         destination: '/testimonials',
-        permanent: true,
       },
       {
         source: '/contacto',
         destination: '/contact',
-        permanent: true,
       },
     ];
   },

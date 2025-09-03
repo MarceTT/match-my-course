@@ -31,15 +31,14 @@ const IntensiveEnglish = () => {
                 <Card className="bg-[#5170FF] text-white border-none">
                   <CardHeader className="pb-4 px-6 pt-6">
                     <CardTitle className="text-2xl md:text-3xl font-bold text-center md:text-left leading-tight">
-                      Preparación de exámenes IELTS/Cambridge
+                      Programas de inglés general short-term intensivo
                     </CardTitle>
                   </CardHeader>
 
                   <CardContent className="space-y-6 px-6 pb-6">
                     <p className="text-white leading-relaxed opacity-90 text-md md:text-lg text-center md:text-justify">
-                      Estudia inglés general en Irlanda visitando el país con
-                      estadía corta máxima de 3 meses.
-                      <br /> Revisa si tu país necesita visa de ingreso.
+                      Este programa combina conversación, comprensión auditiva, lectura y escritura,
+                      permitiéndote avanzar de forma acelerada y alcanzar tus objetivos en el menor tiempo posible.
                     </p>
 
                     <div className="space-y-4">
@@ -107,10 +106,9 @@ const IntensiveEnglish = () => {
                         Modalidad de las clases
                       </h2>
                       <p className="text-sm leading-relaxed text-gray-700 text-center md:text-justify">
-                      Todos los cursos son bajo la modalidad{" "}
-                        <strong>ESL (English as a Second Language)</strong>, en
-                        donde estarás rodeado de personas de otros países en un
-                        ambiente multicultural.
+                      Las clases son presenciales y se imparten en grupos reducidos de 8 a 12 estudiantes,
+                      lo que permite una atención mas personalizada.El curso tiene un enfoque
+                      intensivo en las cuatro habilidades del idioma: speaking, writing, reading y listening.
                       </p>
                     </div>
 
@@ -120,7 +118,7 @@ const IntensiveEnglish = () => {
                         Requisito de ingreso
                       </h3>
                       <p className="text-sm leading-relaxed text-gray-700 text-center md:text-justify">
-                        Tener un inglés nivel B2 a C2 dependiendo de la escuela
+                        Tener un inglés nivel A1 a A2 mínimo dependiendo de la escuela
                       </p>
                     </div>
                   </div>
@@ -134,7 +132,7 @@ const IntensiveEnglish = () => {
                       </h3>
                       <p className="text-sm leading-relaxed text-gray-700 text-center md:text-justify">
                         Los cursos pueden ser por la mañana o por la tarde, y
-                        son de 15, 18 o 20 horas de clase a la semana por la
+                        son de 22, 23, 25 y 30 horas de clase a la semana por la
                         mañana.
                       </p>
                     </div>
@@ -150,7 +148,7 @@ const IntensiveEnglish = () => {
                     </div>
                     <div>
                     <Button className="bg-[#5271FF] w-full md:w-auto hover:bg-[#5271FF] text-white">
-                      <Link href="/school-search?course=ingles-general" target="_blank" className="flex items-center justify-center">
+                      <Link href="/school-search?course=ingles-general-intensivo" target="_blank" className="flex items-center justify-center">
                           <Search className="mr-2 h-4 w-4" />
                         Buscar curso
                       </Link>

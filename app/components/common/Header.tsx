@@ -29,20 +29,25 @@ const navItems: NavItem[] = [
     href: "/como-funciona-matchmycourse",
   },
   {
-    name: "Servicios",
+    name: "Cursos",
+    href: "/cursos-ingles-extranjero",
+  },
+  {
+    name: "Nosotros",
     dropdown: [
       {
-        name: "Asesoría gratis",
-        href: "/servicios",
+        name: "Quiénes somos",
+        href: "/quienes-somos",
       },
       {
-        name: "Testimonios",
-        href: "/testimonios",
+        name: "Misión y visión",
+        href: "/mision-vision-matchmycourse",
       },
       {
-        name: "Contacto",
-        href: "/contacto",
-      },
+        name: "Nuestros servicios",
+        href: "/servicios-matchmycourse",
+      }
+      
     ],
   },
   {
@@ -57,6 +62,10 @@ const navItems: NavItem[] = [
   {
     name: "Blog",
     href: "/blog",
+  },
+  {
+    name: "Contacto",
+    href: "/contacto",
   },
 ];
 

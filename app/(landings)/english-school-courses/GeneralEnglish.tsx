@@ -120,7 +120,7 @@ const GeneralEnglish = () => {
                         Requisito de ingreso
                       </h3>
                       <p className="text-sm leading-relaxed text-gray-700 text-center md:text-justify">
-                        Tener un inglés nivel B2 a C2 dependiendo de la escuela
+                      Tener un inglés nivel A1 a A2 mínimo dependiendo de la escuela.
                       </p>
                     </div>
                   </div>
