@@ -37,7 +37,21 @@ export const metadata: Metadata = {
     locale: "es_ES",
     type: "website",
   },
-
+  authors: [{ name: 'MatchMyCourse', url: 'https://matchmycourse.com' }],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://matchmycourse.com/como-funciona-matchmycourse'
+  },
   // Twitter Card
   twitter: {
     card: "summary_large_image",
@@ -46,13 +60,6 @@ export const metadata: Metadata = {
       "Conoce más sobre nuestra misión de ayudarte a encontrar la escuela perfecta.",
     images: [ogImage],
   },
-
-  // Metadatos adicionales
-  robots: {
-    index: true,
-    follow: true,
-  },
-  authors: [{ name: "MatchMyCourse" }],
   keywords: ["educación", "escuelas", "como funciona", "misión", "valores"],
 };
 
