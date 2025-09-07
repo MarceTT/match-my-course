@@ -77,6 +77,7 @@ const Header = () => {
   }>({});
   const isMobile = useMediaQuery("(max-width: 768px)");
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -103,8 +104,25 @@ const Header = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("mousedown", handleClickOutside);
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, [isMenuOpen, activeDropdown]);
+
+  const handleMouseEnter = (itemName: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setActiveDropdown(itemName);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150);
+  };
 
   const handleLinkClick = (label: string, href: string) => {
     sendGTMEvent("link_click", {
@@ -158,10 +176,12 @@ const Header = () => {
                 }}
               >
                 {item.dropdown ? (
-                  <div>
+                  <div
+                    onMouseEnter={() => handleMouseEnter(item.name)}
+                    onMouseLeave={handleMouseLeave}
+                  >
                     <button
                       className="relative px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-lg flex items-center space-x-1"
-                      onMouseEnter={() => setActiveDropdown(item.name)}
                       onClick={() =>
                         setActiveDropdown(
                           activeDropdown === item.name ? null : item.name
@@ -178,9 +198,7 @@ const Header = () => {
                     </button>
 
                     {activeDropdown === item.name && (
-                      <div
-                        className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 animate-in fade-in-0 zoom-in-95 duration-200"
-                        onMouseLeave={() => setActiveDropdown(null)}
+                      <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 animate-in fade-in-0 zoom-in-95 duration-200"
                       >
                         {item.dropdown.map((dropdownItem) => (
                           <Link
