@@ -57,7 +57,7 @@ const FilterWorksSection = () => {
           {/* Left Column - Filter Demo (se muestra abajo en mobile) */}
           <div className="order-2 md:order-1 space-y-6">
             <Image
-              src="/about-us/¿Cómo funciona el filtro de MatchMyCourse.png"
+              src="/about-us/Como_funciona_el_filtro_de_MatchMyCourse.png"
               alt="Fotos Google Business"
               width={1000}
               height={1000}
