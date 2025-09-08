@@ -1,35 +1,46 @@
 "use client";
 import React from "react";
-import Header from "@/app/components/common/Header";
-import Footer from "@/app/components/common/Footer";
+// Shared components
+import { Header, Footer } from "@/app/shared";
+
+// School feature components and hooks
+import { 
+  SchoolDetail,
+  Certifications,
+  Facilities,
+  Accommodation,
+  SchoolStat,
+  SchoolInclusion,
+  Location,
+  useSchoolDetails 
+} from "@/app/features/school";
+
+// Booking feature components and hooks
+import { BookingPannelContainer, useBooking } from "@/app/features/booking";
+
+// Next.js and external libraries
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { useSchoolDetails } from "@/app/hooks/useSchoolDetails";
 import { ArrowUp, Star } from "lucide-react";
 import { FaWalking, FaBus, FaTrain } from "react-icons/fa";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+
+// Utils and other imports
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
-import dynamic from "next/dynamic";
-import { useBooking } from "@/app/components/booking/hooks/useBooking";
 import { raleway } from "@/app/ui/fonts";
 import LoadingSkeleton from "./LoadingSkeleton";
-import { useRouter } from "next/navigation";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
-import Certifications from "@/app/components/school/Certifications";
-import Facilities from "@/app/components/school/Facilities";
-import Accommodation from "@/app/components/school/Accommodation";
-import SchoolStat from "@/app/components/school/SchoolStat";
-import SchoolInclusion from "@/app/components/school/SchoolInclusion";
-import Location from "@/app/components/school/Location";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
 
-const SchoolDetail = dynamic(
-  () => import("@/app/components/school/SchoolDetail"),
+const SchoolDetailDynamic = dynamic(
+  () => import("@/app/features/school").then(mod => ({ default: mod.SchoolDetail })),
   { ssr: false }
 );
 const BookingPannel = dynamic(
-  () => import("@/app/components/booking/BookingPannel.container"),
+  () => import("@/app/features/booking").then(mod => ({ default: mod.BookingPannelContainer })),
   { ssr: false }
 );
 
@@ -121,7 +132,7 @@ const SchoolSeoHome = ({
       </div> */}
 
       <div className="max-w-7xl mx-auto px-4 mt-8">
-        <SchoolDetail
+        <SchoolDetailDynamic
           images={(school.galleryImages || []).map(rewriteToCDN)}
           city={school.city!}
         />

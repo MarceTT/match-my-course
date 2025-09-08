@@ -2,8 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { usePosts } from "@/app/hooks/blog/useGetPosts";
-import FeaturedPost from "@/app/components/blog/FeaturedPost";
-import RecentPosts from "@/app/components/blog/RecentPosts";
+import { FeaturedPost, RecentPosts } from "@/app/features/blog";
 import FullScreenLoader from "../admin/components/FullScreenLoader";
 
 export default function BlogHomeClient() {
