@@ -16,11 +16,11 @@ import {
 import { countries } from "@/lib/constants/countries";
 import { transformCountryFormData } from "@/lib/helpers/countryHelper";
 import { ContactFormData } from "@/app/lib/types";
-import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect";
+import { CustomCountrySelect } from "@/app/shared";
+import { BookingPannelSubmit } from "@/app/features/booking";
 
 import { sendGTMEvent } from "@/app/lib/gtm";
 import confetti from "canvas-confetti";
-import BookingPannelSubmit from "@/app/components/booking/BookingPannel.submit";
 import { Loader2 } from "lucide-react";
 
 export default function ContactPage() {
