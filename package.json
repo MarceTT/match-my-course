@@ -99,7 +99,7 @@
     "recharts": "^2.15.1",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "sharp": "0.33.5",
+    "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
     "sonner": "^2.0.1",
     "sortablejs": "^1.15.6",
@@ -116,8 +116,7 @@
     "cmdk": {
       "react": "^19.0.0",
       "react-dom": "^19.0.0"
-    },
-    "sharp": "0.33.5"
+    }
   },
   "engines": {
     "node": ">=18.0.0",
