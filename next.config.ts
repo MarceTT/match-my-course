@@ -4,6 +4,24 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
   images: {
+    // Formatos modernos para mejor compresión
+    formats: ['image/avif', 'image/webp'],
+    
+    // Tamaños de dispositivo optimizados
+    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920],
+    
+    // Tamaños de imagen para componentes
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512],
+    
+    // Cache TTL mínimo de 24 horas
+    minimumCacheTTL: 86400,
+    
+    // Límite de transformaciones concurrentes
+    dangerouslyAllowSVG: false,
+    
+    // Límites de seguridad
+    unoptimized: false,
+    
     remotePatterns: [
       {
         protocol: 'https',
@@ -160,8 +178,12 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: https: http: blob:",
               // Permitir media de fuentes seguras
               "media-src 'self' https:",
-              // Permitir conexiones según el entorno
-              `connect-src 'self' ${isDev ? 'http://localhost:* ' : ''}https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://tagmanager.google.com https:`,
+              // Permitir conexiones según el entorno (incluyendo Service Workers)
+              `connect-src 'self' http://localhost:8500 ${isDev ? 'http://localhost:* ' : ''}https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://tagmanager.google.com https:`,
+              // Permitir Service Workers hacer requests
+              `worker-src 'self' blob:`,
+              // CSP específico para Service Workers
+              `child-src 'self'`,
               // Permitir estilos inline
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               // Permitir fuentes de Google Fonts

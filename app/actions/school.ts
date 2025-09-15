@@ -21,7 +21,7 @@ export async function fetchSchoolsWithDetails() {
 
   export async function fetchSchools(courseType: string): Promise<SchoolDetailsResponse> {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools-by-type?course=${courseType}`;
-    console.log("FETCH URL:", url);
+//     console.log("FETCH URL:", url);
   
     const res = await fetch(url, { cache: "no-store" });
   
@@ -30,7 +30,7 @@ export async function fetchSchoolsWithDetails() {
       throw new Error("Error al obtener escuelas");
     }
 
-    console.log("Response:", res);
+//     console.log("Response:", res);
   
     const json = await res.json();
   

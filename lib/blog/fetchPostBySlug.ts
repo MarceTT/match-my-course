@@ -1,4 +1,4 @@
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 
 export interface Post {
   _id: string;

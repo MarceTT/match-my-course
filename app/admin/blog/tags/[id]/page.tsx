@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { useParams, useRouter } from "next/navigation";
 import TagForm from "@/app/admin/blog/tags/create/TagForm";
 

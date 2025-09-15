@@ -1,17 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { LuHeart } from "react-icons/lu";
-import { IoShareOutline } from "react-icons/io5";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { toast } from "sonner";
+import { ShareButtons } from "@/app/components/common/social";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PhotoSlider } from "react-photo-view";
 import type { StaticImageData } from "next/image";
@@ -27,17 +18,15 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success("¡Enlace copiado al portapapeles!");
-  };
 
   const openSlider = (i: number) => {
     setIndex(i);
     setVisible(true);
   };
 
-  const imageUrls = images.map((img) => (typeof img === "string" ? img : img.src));
+  const imageUrls = images.map((img) =>
+    typeof img === "string" ? img : img.src
+  );
 
   useEffect(() => {
     imageUrls.forEach((url) => {
@@ -49,30 +38,28 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div className="lg:col-span-3">
-        <TooltipProvider delayDuration={0}>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-            <h2 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-black">Estudiar inglés en {city}, Irlanda</h2>
-            <div className="flex flex-wrap items-center gap-4 mt-2 sm:mt-0">
-              <div className="flex items-center gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="rounded-full w-8 h-8 p-0"
-                      onClick={handleShare}
-                    >
-                      <IoShareOutline className="w-5 h-5 fill-gray-600" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Compartir</TooltipContent>
-                </Tooltip>
-                <span className="text-sm text-gray-600 font-semibold">
-                  Compartir
-                </span>
-              </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+          <h2 className="text-xl md:text-2xl lg:text-2xl xl:text-3xl font-black">
+            Estudiar inglés en {city}, Irlanda
+          </h2>
+          <div className="flex flex-wrap items-center gap-4 mt-2 sm:mt-0">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600 font-semibold lg:hidden">
+                Compartir:
+              </span>
+              <ShareButtons
+                url={typeof window !== "undefined" ? window.location.href : ""}
+                title={`Estudiar inglés en ${city}, Irlanda`}
+                summary={`Descubre esta increíble escuela de inglés en ${city}. ¡Vive una experiencia única estudiando en el extranjero!`}
+                hashtags={['StudyAbroad', 'English', city.replace(/\s+/g, '')]}
+                via="matchmycourse"
+                variant="minimal"
+                platforms={['facebook', 'twitter', 'whatsapp']}
+                size="sm"
+              />
             </div>
           </div>
-        </TooltipProvider>
+        </div>
 
         <div className="grid grid-cols-6 grid-rows-1 gap-2">
           {imageUrls.slice(0, 5).map((url, i) => {

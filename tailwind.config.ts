@@ -3,9 +3,29 @@ import type { Config } from "tailwindcss";
 export default {
     darkMode: ["class"],
     content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "!./node_modules/**/*",
+    "!./app/api/**/*",
+  ],
+  // Agressive CSS purging and optimization
+  experimental: {
+    optimizeUniversalDefaults: true,
+  },
+  // Enable future CSS optimizations
+  future: {
+    hoverOnlyWhenSupported: true,
+    respectDefaultRingColorOpacity: true,
+    disableColorOpacityUtilitiesByDefault: true,
+    relativeContentPathsByDefault: true,
+  },
+  // Safelist only critical dynamic classes
+  safelist: [
+    'bg-yellow-400',
+    'text-yellow-900',
+    'animate-pulse',
+    { pattern: /^(h|w)-(12|16|20|24|32|48|64|72|96)$/ },
+    { pattern: /^text-(xs|sm|base|lg|xl|2xl|3xl)$/ },
   ],
   theme: {
   	extend: {

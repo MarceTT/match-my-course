@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin conexión - Match My Course</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .retry-btn {
+            background: #5371FF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+        
+        .retry-btn:hover {
+            background: #FCCC02;
+            color: #5371FF;
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            margin-top: 2rem;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin: 0.8rem 0;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        
+        .feature-icon {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Sin conexión</h1>
+        <p>
+            Parece que no tienes conexión a internet en este momento. 
+            Algunas páginas y contenido están disponibles offline gracias a nuestro sistema de caché.
+        </p>
+        
+        <button class="retry-btn" onclick="window.location.reload()">
+            🔄 Intentar de nuevo
+        </button>
+        
+        <button class="retry-btn" onclick="window.history.back()">
+            ← Volver atrás
+        </button>
+        
+        <div class="features">
+            <h3 style="margin-bottom: 1rem; text-align: center;">Disponible offline:</h3>
+            
+            <div class="feature">
+                <span class="feature-icon">🏫</span>
+                <span>Escuelas visitadas recientemente</span>
+            </div>
+            
+            <div class="feature">
+                <span class="feature-icon">📚</span>
+                <span>Artículos del blog guardados</span>
+            </div>
+            
+            <div class="feature">
+                <span class="feature-icon">🖼️</span>
+                <span>Imágenes en caché</span>
+            </div>
+            
+            <div class="feature">
+                <span class="feature-icon">⚡</span>
+                <span>Navegación rápida</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-retry cuando regrese la conexión
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+        
+        // Mostrar status de conexión
+        if (navigator.onLine) {
+            document.querySelector('p').innerHTML = 
+                'Conexión restaurada. <strong>Recargando página...</strong>';
+            setTimeout(() => window.location.reload(), 1000);
+        }
+    </script>
+</body>
+</html>

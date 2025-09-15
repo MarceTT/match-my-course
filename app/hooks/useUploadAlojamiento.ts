@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "../utils/axiosInterceptor";
+import axiosInstance from "../utils/apiClient";
 
 export function useUploadAlojamiento() {
   return useMutation({

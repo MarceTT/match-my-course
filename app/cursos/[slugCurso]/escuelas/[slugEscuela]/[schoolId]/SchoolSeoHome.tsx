@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 // Shared components
 import { Header, Footer } from "@/app/shared";
 
 // School feature components and hooks
-import { 
+import {
   SchoolDetail,
   Certifications,
   Facilities,
@@ -12,7 +12,7 @@ import {
   SchoolStat,
   SchoolInclusion,
   Location,
-  useSchoolDetails 
+  useSchoolDetails,
 } from "@/app/features/school";
 
 // Booking feature components and hooks
@@ -36,11 +36,17 @@ import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
 
 const SchoolDetailDynamic = dynamic(
-  () => import("@/app/features/school").then(mod => ({ default: mod.SchoolDetail })),
+  () =>
+    import("@/app/features/school").then((mod) => ({
+      default: mod.SchoolDetail,
+    })),
   { ssr: false }
 );
 const BookingPannel = dynamic(
-  () => import("@/app/features/booking").then(mod => ({ default: mod.BookingPannelContainer })),
+  () =>
+    import("@/app/features/booking").then((mod) => ({
+      default: mod.BookingPannelContainer,
+    })),
   { ssr: false }
 );
 
@@ -133,12 +139,13 @@ const SchoolSeoHome = ({
 
       <div className="max-w-7xl mx-auto px-4 mt-8">
         <SchoolDetailDynamic
-          images={(school.galleryImages || []).map(rewriteToCDN)}
+          images={(school.galleryImages || []).map((url) => rewriteToCDN(url))}
           city={school.city!}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           <div className="lg:col-span-2">
+            {/* Header section crítico - render inmediato */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-4">
               <div className="flex flex-col flex-1">
                 <h1
@@ -194,7 +201,7 @@ const SchoolSeoHome = ({
                   )}
                 </div>
               </div>
-              <div className="w-32 sm:w-40 h-auto self-center sm:self-start sm:mt-1 lg:mt-0">
+              <div className="hidden md:block lg:block w-32 sm:w-40 h-auto self-center sm:self-start sm:mt-1 lg:mt-0">
                 {school.logo && (
                   <Image
                     src={rewriteToCDN(school.logo)}
@@ -213,6 +220,7 @@ const SchoolSeoHome = ({
               </div>
             </div>
 
+            {/* Descripción crítica - render inmediato */}
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -222,74 +230,108 @@ const SchoolSeoHome = ({
               {school.description?.detalleEscuela}
             </motion.p>
 
+            {/* Secciones con Suspense streaming */}
             {school.nationalities?.continentes && (
-              <SchoolStat
-                data={[
-                  {
-                    name: "Latinoamérica",
-                    value:
-                      (school.nationalities.continentes.latinoamerica || 0) *
-                      100,
-                  },
-                  {
-                    name: "Europa",
-                    value: (school.nationalities.continentes.europa || 0) * 100,
-                  },
-                  {
-                    name: "Asia",
-                    value: (school.nationalities.continentes.asia || 0) * 100,
-                  },
-                  {
-                    name: "Otros",
-                    value: (school.nationalities.continentes.otros || 0) * 100,
-                  },
-                ]}
-                averageAge={school.nationalities.edadPromedio || 0}
-                nacionalidades={
-                  typeof school.nationalities.nacionalidades === "number"
-                    ? school.nationalities.nacionalidades
-                    : Object.keys(school.nationalities.nacionalidades).length
-                }
-              />
+              <Suspense fallback={<div className="animate-pulse bg-gray-200 h-40 rounded-lg mb-6" />}>
+                <SchoolStat
+                  data={[
+                    {
+                      name: "Latinoamérica",
+                      value:
+                        (school.nationalities.continentes.latinoamerica || 0) *
+                        100,
+                    },
+                    {
+                      name: "Europa",
+                      value: (school.nationalities.continentes.europa || 0) * 100,
+                    },
+                    {
+                      name: "Asia",
+                      value: (school.nationalities.continentes.asia || 0) * 100,
+                    },
+                    {
+                      name: "Otros",
+                      value: (school.nationalities.continentes.otros || 0) * 100,
+                    },
+                  ]}
+                  averageAge={school.nationalities.edadPromedio || 0}
+                  nacionalidades={
+                    typeof school.nationalities.nacionalidades === "number"
+                      ? school.nationalities.nacionalidades
+                      : Object.keys(school.nationalities.nacionalidades).length
+                  }
+                />
+              </Suspense>
             )}
 
-            {!!school.qualities && <Certifications school={school.qualities} />}
-            {!!school.installations && (
-              <Facilities installations={school.installations} />
+            {!!school.qualities && (
+              <Suspense fallback={<div className="animate-pulse bg-gray-200 h-32 rounded-lg mb-6" />}>
+                <Certifications school={school.qualities} />
+              </Suspense>
             )}
+            
+            {!!school.installations && (
+              <Suspense fallback={<div className="animate-pulse bg-gray-200 h-48 rounded-lg mb-6" />}>
+                <Facilities installations={school.installations} />
+              </Suspense>
+            )}
+            
             {Array.isArray(school.accommodation) &&
               school.accommodation.length > 0 && (
-                <Accommodation
-                  accommodations={school.accommodation}
-                  detailAccomodation={school.accomodationDetail || []}
-                  school={school.name}
-                />
+                <Suspense fallback={<div className="animate-pulse bg-gray-200 h-64 rounded-lg mb-6" />}>
+                  <Accommodation
+                    accommodations={school.accommodation}
+                    detailAccomodation={school.accomodationDetail || []}
+                    school={school.name}
+                  />
+                </Suspense>
               )}
-            <SchoolInclusion />
-            <Location
-              schoolName={school.name}
-              city={school.city!}
-              minutesToCenter={school.description?.minutosAlCentro || 0}
-              transportIcon={getTransportIcon(school.name)}
-            />
+              
+            <Suspense fallback={<div className="animate-pulse bg-gray-200 h-24 rounded-lg mb-6" />}>
+              <SchoolInclusion />
+            </Suspense>
+            
+            <Suspense fallback={<div className="animate-pulse bg-gray-200 h-56 rounded-lg mb-6" />}>
+              <Location
+                schoolName={school.name}
+                city={school.city!}
+                minutesToCenter={school.description?.minutosAlCentro || 0}
+                transportIcon={getTransportIcon(school.name)}
+              />
+            </Suspense>
           </div>
 
+          {/* Panel de booking con Suspense */}
           <div className="lg:col-span-1" id="booking-pannel">
-            <BookingPannel
-              courseInfo={courseInfo}
-              error={hasBookingError}
-              errorMessage={errorMessage}
-              formData={formData}
-              loading={isBookingLoading}
-              onChangeTypeOfCourse={onChangeTypeOfCourse}
-              onFormDataChange={onFormDataChange}
-              onSubmitReservation={onSubmitReservation}
-              onUpdateReservation={onUpdateReservation}
-              reservation={reservation}
-              scheduleInfo={scheduleInfo}
-              weeksBySchoolInfo={weeksBySchoolInfo}
-              schoolId={schoolId}
-            />
+            <Suspense fallback={
+              <div className="bg-white rounded-lg border p-6 sticky top-4">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-6 bg-gray-200 rounded w-40" />
+                  <div className="space-y-3">
+                    <div className="h-10 bg-gray-200 rounded" />
+                    <div className="h-10 bg-gray-200 rounded" />
+                    <div className="h-10 bg-gray-200 rounded" />
+                  </div>
+                  <div className="h-12 bg-gray-200 rounded mt-6" />
+                </div>
+              </div>
+            }>
+              <BookingPannel
+                courseInfo={courseInfo}
+                error={hasBookingError}
+                errorMessage={errorMessage}
+                formData={formData}
+                loading={isBookingLoading}
+                onChangeTypeOfCourse={onChangeTypeOfCourse}
+                onFormDataChange={onFormDataChange}
+                onSubmitReservation={onSubmitReservation}
+                onUpdateReservation={onUpdateReservation}
+                reservation={reservation}
+                scheduleInfo={scheduleInfo}
+                weeksBySchoolInfo={weeksBySchoolInfo}
+                schoolId={schoolId}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

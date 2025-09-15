@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { toast } from "sonner";
 
 interface UploadNationalityArgs {

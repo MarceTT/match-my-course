@@ -62,7 +62,7 @@ const detectMessageType = (content: string): 'school_list' | 'course_info' | 'pr
 const parseSchoolInfo = (content: string): School[] => {
   const schools: School[] = []
   
-  console.log('🔍 Full content to parse:', content) // Debug
+//   console.log('🔍 Full content to parse:', content) // Debug
 
   // Nuevo formato basado en la respuesta real de la API
   // Buscar patrón: "1. **Nombre de Escuela**" seguido de detalles
@@ -74,7 +74,7 @@ const parseSchoolInfo = (content: string): School[] => {
     const name = match[2].trim()
     const details = match[3]
     
-    console.log(`🏫 Processing school #${schoolNumber}: ${name}`) // Debug
+//     console.log(`🏫 Processing school #${schoolNumber}: ${name}`) // Debug
 
     // Extraer precio - buscar "💰 Precio: €756"
     const priceMatch = details.match(/💰\s*Precio:\s*€(\d+)/i)
@@ -121,12 +121,12 @@ const parseSchoolInfo = (content: string): School[] => {
       prices
     })
     
-    console.log(`✅ Added school: ${name}, Price: €${price}, Schedule: ${period} - ${schedule}`) // Debug
+//     console.log(`✅ Added school: ${name}, Price: €${price}, Schedule: ${period} - ${schedule}`) // Debug
   }
 
   // Si no encontramos escuelas con el formato anterior, intentar formato simplificado
   if (schools.length === 0) {
-    console.log('🔄 Trying line-by-line format...') // Debug
+//     console.log('🔄 Trying line-by-line format...') // Debug
     
     const lines = content.split('\n').filter(line => line.trim() !== '')
     let currentSchool: School | null = null
@@ -155,7 +155,7 @@ const parseSchoolInfo = (content: string): School[] => {
           }
         }
         
-        console.log(`🏫 Found school: ${currentSchool.name}`) // Debug
+//         console.log(`🏫 Found school: ${currentSchool.name}`) // Debug
         continue
       }
       
@@ -179,7 +179,7 @@ const parseSchoolInfo = (content: string): School[] => {
           const imageUrl = imageMatch[1].trim()
           currentSchool.mainImage = imageUrl
           currentSchool.logo = imageUrl // También como logo
-          console.log(`🖼️ Found image: ${imageUrl}`) // Debug
+//           console.log(`🖼️ Found image: ${imageUrl}`) // Debug
           continue
         }
         
@@ -193,7 +193,7 @@ const parseSchoolInfo = (content: string): School[] => {
             schedule: amMatch[2],
             hours: '15'
           }
-          console.log(`💰 Found AM price: €${amMatch[1]} (${amMatch[2]})`) // Debug
+//           console.log(`💰 Found AM price: €${amMatch[1]} (${amMatch[2]})`) // Debug
         }
         
         if (pmMatch) {
@@ -202,7 +202,7 @@ const parseSchoolInfo = (content: string): School[] => {
             schedule: pmMatch[2],
             hours: '15'
           }
-          console.log(`💰 Found PM price: €${pmMatch[1]} (${pmMatch[2]})`) // Debug
+//           console.log(`💰 Found PM price: €${pmMatch[1]} (${pmMatch[2]})`) // Debug
         }
       }
     }
@@ -213,8 +213,8 @@ const parseSchoolInfo = (content: string): School[] => {
     }
   }
 
-  console.log(`🎯 Total schools parsed: ${schools.length}`) // Debug
-  console.log(`📊 Schools data:`, schools) // Debug
+//   console.log(`🎯 Total schools parsed: ${schools.length}`) // Debug
+//   console.log(`📊 Schools data:`, schools) // Debug
   return schools
 }
 
@@ -230,7 +230,7 @@ const SchoolCard: React.FC<{ school: School; index: number }> = ({ school, index
           fill
           className="object-cover"
           onError={(e) => {
-            console.log('❌ Image failed to load:', school.mainImage)
+//             console.log('❌ Image failed to load:', school.mainImage)
             e.currentTarget.style.display = 'none'
           }}
         />
@@ -246,7 +246,7 @@ const SchoolCard: React.FC<{ school: School; index: number }> = ({ school, index
               height={24}
               className="w-full h-full object-contain"
               onError={(e) => {
-                console.log('❌ Logo failed to load:', school.logo)
+//                 console.log('❌ Logo failed to load:', school.logo)
               }}
             />
           </div>

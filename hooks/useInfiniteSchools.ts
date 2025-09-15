@@ -24,7 +24,7 @@ export const useInfiniteSchools = ({ filters, limit = 10 }: UseInfiniteSchoolsPa
   return useInfiniteQuery<SchoolApiResponse>({
     queryKey: ['schools', filters],
     queryFn: async ({ pageParam }: { pageParam: unknown }) => {
-        console.log("Calling backend with filters", filters, "and page", pageParam);
+        // console.log("Calling backend with filters", filters, "and page", pageParam);
       const currentPage = typeof pageParam === 'number' ? pageParam : 1;
 
       const params = new URLSearchParams();
@@ -47,7 +47,7 @@ export const useInfiniteSchools = ({ filters, limit = 10 }: UseInfiniteSchoolsPa
     getNextPageParam: (lastPage) => {
       return lastPage.hasNextPage ? lastPage.currentPage + 1 : undefined;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 15, // 15 minutos para búsquedas
     refetchOnWindowFocus: false,
   });
 };

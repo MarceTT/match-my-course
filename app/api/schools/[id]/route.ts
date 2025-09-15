@@ -17,7 +17,7 @@ const { id } = params;
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
-    console.log("🔐 Enviando token:", token);
+//     console.log("🔐 Enviando token:", token);
 
     // 2. Obtener FormData directamente
     const formData = await req.formData();

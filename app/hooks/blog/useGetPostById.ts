@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 
 export interface Post {
   _id: string;
@@ -17,7 +17,7 @@ export interface Post {
 }
 
 export async function fetchPostById(id: string): Promise<Post | null> {
-  console.log("🔍 URL que se llama:", `/blog/post/${id}`);
+//   console.log("🔍 URL que se llama:", `/blog/post/${id}`);
   const { data } = await axiosInstance.get(`/blog/post/${id}`);
   return data.data;
 }

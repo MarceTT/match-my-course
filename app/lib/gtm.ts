@@ -13,6 +13,6 @@ export function sendGTMEvent(
   
     window.dataLayer.push(payload);
   
-    console.log(`[GTM] Event sent: ${event}`, payload);
+//     console.log(`[GTM] Event sent: ${event}`, payload);
   }
   

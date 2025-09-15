@@ -27,7 +27,7 @@ export function GTMPageViewTracker() {
       page_title: document.title,
     })
 
-    console.log("[GTM] Page view tracked:", url)
+//     console.log("[GTM] Page view tracked:", url)
   }, [pathname, searchParams])
 
   return null

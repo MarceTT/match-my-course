@@ -26,7 +26,6 @@ const FilterWorksSection = () => {
                 "Primero ingresa al buscador de escuelas de inglés desde tu móvil, tablet o laptop",
                 "Selecciona el curso de inglés que quieres realizar, puedes elegir los cursos de inglés general para corta o larga estadía y también cursos especializados",
                 "Si lo deseas, selecciona la ciudad donde te gustaría estudiar inglés, hay más de 10 opciones",
-                "Si lo deseas, selecciona la ciudad donde te gustaría estudiar inglés, hay más de 10 opciones",
                 "Finalmente, selecciona cualquiera de las escuelas que ofrece tu curso de inglés",
                 "En el detalle de la escuela, puedes conocer todos los detalles de tu curso y reservar tu inicio de clases",
               ].map((text, idx) => (

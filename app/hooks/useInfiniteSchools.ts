@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "@/app/utils/axiosInterceptor";
+import axios from "@/app/utils/apiClient";
 
 const LIMIT = 8;
 

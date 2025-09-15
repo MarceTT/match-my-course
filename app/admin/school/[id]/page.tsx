@@ -93,6 +93,7 @@ const EditSchoolPage = () => {
       logo: null,
       mainImage: null,
       galleryImages: [],
+      urlVideo: "",
     },
   });
 
@@ -151,6 +152,7 @@ const EditSchoolPage = () => {
           url: img,
           isNew: false,
         })) || [],
+        urlVideo: schoolData.urlVideo || "",
       });
     }
   }, [schoolData, form]);
@@ -331,7 +333,7 @@ const EditSchoolPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
-            console.log("📦 Datos a enviar:", data);
+//             console.log("📦 Datos a enviar:", data);
             mutation.mutate(data);
           })}
           className="space-y-6"
@@ -383,6 +385,20 @@ const EditSchoolPage = () => {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="urlVideo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>URL de Video</FormLabel>
+                      <FormControl>
+                        <Input placeholder="URL de video" {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

@@ -5,6 +5,7 @@ import { fetchSeoSchoolById } from '@/app/actions/seo';
 import SchoolSeoHome from './SchoolSeoHome';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
 import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMap';
+import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
 
 type PageParams = { slugCurso: string; slugEscuela: string; schoolId: string };
 type PageSearch = Record<string, string | string[] | undefined>;
@@ -31,6 +32,10 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
     `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
   const canonicalUrl = `${ORIGIN}${canonicalPath}`;
 
+  const ogImage = rewriteToCDN(
+    seoEntry.imageOpenGraph
+  );
+
   return {
     title: seoEntry.metaTitle,
     description: seoEntry.metaDescription,
@@ -42,6 +47,14 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
       description: seoEntry.metaDescription,
       url: canonicalUrl,
       type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: seoEntry.metaTitle,
+        },
+      ],
     },
   };
 }

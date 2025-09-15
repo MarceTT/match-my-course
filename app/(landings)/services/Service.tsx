@@ -7,7 +7,7 @@ const Service = () => {
   return (
     <div className="grid lg:grid-cols-2 gap-12 mb-16 items-center">
       {/* Left Side - School Cards */}
-      <div className="space-y-4">
+      <div className="hidden lg:block space-y-4">
         {/* School Card 1 */}
         <div className="rounded-lg p-4 flex items-center gap-4">
           <img

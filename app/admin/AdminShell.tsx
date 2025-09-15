@@ -1,6 +1,6 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
+import dynamic from "next/dynamic";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,19 +15,32 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { ThemeProvider } from "@/app/admin/components/theme-provider";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "../providers";
 import { AuthProvider } from "../context/AuthContext";
-import { usePathname, useRouter } from "next/navigation";
-import { SessionProvider, useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 import ClientOnly from "./client-only";
 
+// Dynamic imports for heavy components
+const AppSidebar = dynamic(() => import("@/components/app-sidebar").then(mod => ({ default: mod.AppSidebar })), {
+  loading: () => <div className="w-64 h-screen bg-sidebar animate-pulse" />,
+  ssr: false
+});
+
+const ThemeProvider = dynamic(() => import("@/app/admin/components/theme-provider").then(mod => ({ default: mod.ThemeProvider })), {
+  loading: () => <div />,
+  ssr: false
+});
+
+const ModeToggle = dynamic(() => import("@/components/mode-toggle").then(mod => ({ default: mod.ModeToggle })), {
+  loading: () => <div className="w-8 h-8 rounded bg-gray-200 animate-pulse" />,
+  ssr: false
+});
+
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const { data: session, status } = useSession();
 
   useEffect(() => {

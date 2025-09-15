@@ -40,6 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#claude
+# claude y archivos de documentación
 Claude.md
+CLAUDE.md
 .claude
+PERFORMANCE-TESTING.md
+*.md
+!README.md
+
+# windsurf
+.windsurf/

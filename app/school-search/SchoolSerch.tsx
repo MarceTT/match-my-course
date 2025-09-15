@@ -45,7 +45,7 @@ const SchoolSearch = () => {
   const [filters, setFilters] = useState<Record<string, any>>(
     generateInitialFilters(normalizedCourse)
   );
-  const debouncedFilters = useDebounce(filters, 600);
+  const debouncedFilters = useDebounce(filters, 700); // Optimizado: 700ms vs 600ms original
 
   useEffect(() => {
     setFilters(generateInitialFilters(normalizedCourse));

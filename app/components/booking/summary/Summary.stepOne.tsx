@@ -122,10 +122,10 @@ export default function SummaryStepOne({
   };
 
   // Debug para verificar
-  console.log("Curso:", reservation?.course);
-  console.log("Es de 25 semanas?", isWorkStudy);
-  console.log("Fecha inicio:", fechaInicio);
-  console.log("Precio final:", finalPrice);
+//   console.log("Curso:", reservation?.course);
+//   console.log("Es de 25 semanas?", isWorkStudy);
+//   console.log("Fecha inicio:", fechaInicio);
+//   console.log("Precio final:", finalPrice);
 
   return (
     <motion.div

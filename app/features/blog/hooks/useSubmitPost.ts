@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 
 interface SubmitPostArgs {
   postId?: string;

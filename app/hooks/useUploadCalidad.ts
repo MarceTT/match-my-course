@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 
 export function useUploadCalidad() {
   return useMutation({
@@ -20,7 +20,7 @@ export function useUploadCalidad() {
       console.error("❌ Error al subir archivo de calidad:", error);
     },
     onSuccess: (data) => {
-      console.log("✅ Archivo de calidad subido correctamente:", data);
+//       console.log("✅ Archivo de calidad subido correctamente:", data);
     },
   });
 } 

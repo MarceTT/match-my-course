@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import axios from "@/app/utils/axiosInterceptor";
+import axios from "@/app/utils/apiClient";
 import { SchoolEditValues, GalleryImage } from "@/app/admin/school/[id]/SchoolEditSchema";
 
 export function useUpdateSchool(
@@ -15,6 +15,7 @@ export function useUpdateSchool(
       formData.append("name", data.name);
       formData.append("city", data.city);
       formData.append("status", String(data.status));
+      formData.append("urlVideo", data.urlVideo || "");
 
       // 2. Logo - manejo seguro de tipos
       if (data.logo instanceof File) {

@@ -95,7 +95,7 @@ const HistorialArchivos = <T,>({
     fetchDetails
   );
 
-  console.log(fileDetails);
+//   console.log(fileDetails);
 
   const handleViewDetails = (fileId: string) => {
     setSelectedFileId(fileId);

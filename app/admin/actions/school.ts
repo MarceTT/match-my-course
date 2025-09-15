@@ -1,7 +1,7 @@
 "use server";
 
 import { School, SchoolResponse } from "@/app/types";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { refreshAccessToken } from "@/app/utils/requestServer";
 import { cookies } from "next/headers";
 
@@ -63,7 +63,7 @@ export async function createSchool(formData: FormData) {
     }
 
     const responseData = await res.json();
-    console.log("🚀 Response:", responseData);
+//     console.log("🚀 Response:", responseData);
     if (!res.ok) {
         return { error: responseData.message || "Error al crear la escuela" };
       }

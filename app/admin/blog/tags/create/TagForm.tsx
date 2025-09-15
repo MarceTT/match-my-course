@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TagFormValues, tagSchema } from "./tagSchema";
 import { slugify } from "@/app/utils/slugify";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { useEffect } from "react";
 import {
   Form, FormField, FormItem, FormLabel, FormControl, FormMessage,

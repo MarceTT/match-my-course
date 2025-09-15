@@ -12,7 +12,7 @@ interface ContactButtonWhatsAppProps {
 
 const ContactButtonWhatsApp = ({ reservation }: ContactButtonWhatsAppProps) => {
 
-  console.log("reservation", reservation);
+//   console.log("reservation", reservation);
 
     const handleOpenWhatsApp = () => {
         const phone = "+56931714541"; // Número destino

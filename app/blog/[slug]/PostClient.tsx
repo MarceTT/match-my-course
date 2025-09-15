@@ -10,7 +10,7 @@ import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useRouter } from "next/navigation";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
-import ShareButtons from "./ShareButtons";
+import { ShareButtons } from "@/app/components/common/social";
 
 type Tag = { _id: string; name: string; slug: string };
 

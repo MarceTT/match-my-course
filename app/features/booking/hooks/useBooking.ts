@@ -201,7 +201,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     }
 
     if (!schoolId || !course || !weeks || !schedule) {
-      console.log('Faltan parámetros para recalcular la reserva');
+//       console.log('Faltan parámetros para recalcular la reserva');
       return;
     }
 
@@ -261,7 +261,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     }
 
     if (!schoolId || !course) {
-      console.log('Faltan parámetros para recalcular la reserva');
+//       console.log('Faltan parámetros para recalcular la reserva');
       return;
     }
 

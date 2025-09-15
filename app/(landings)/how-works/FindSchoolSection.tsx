@@ -24,7 +24,6 @@ const FindSchoolSection = () => {
             <div className="space-y-6">
               {[
                 "Explora libremente más de 38 escuelas de inglés certificadas y acreditadas",
-                "Nuestros precios son los mismos precios que manejan las escuelas de inglés o",
                 "Nuestros precios son los mismos precios que manejan las escuelas de inglés o más baratos",
                 "Podrás elegir de forma autónoma, sin depender de agencias o vendedores",
                 "Manejamos información real y completa para que puedas decidir con confianza",

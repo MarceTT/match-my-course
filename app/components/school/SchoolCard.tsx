@@ -1,19 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { BadgePercent } from "lucide-react";
 import { FaStar } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { SchoolDetails } from "@/app/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { sendGTMEvent } from "@/app/lib/gtm";
+
+// Lazy load Framer Motion solo cuando sea necesario
+const MotionDiv = dynamic(
+  () => import("framer-motion").then(mod => ({ default: mod.motion.div })),
+  { 
+    ssr: false,
+    loading: () => <div /> // Fallback estático mientras carga
+  }
+);
 
 interface SchoolCardProps {
   school: SchoolDetails;
@@ -35,16 +44,27 @@ function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
   return [];
 }
 
-export default function SchoolCard({ school, viewType }: SchoolCardProps) {
+const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCardProps) {
   const searchParams = useSearchParams();
   const prefetchSchool = usePrefetchSchoolDetails();
-  const rating = Number(school.qualities?.ponderado ?? 0);
-  const antiguedad = school.description?.añoFundacion
-    ? new Date().getFullYear() - school.description.añoFundacion
-    : null;
+  
+  // Memoizar cálculos costosos
+  const rating = useMemo(() => Number(school.qualities?.ponderado ?? 0), [school.qualities?.ponderado]);
+  
+  const antiguedad = useMemo(() => 
+    school.description?.añoFundacion
+      ? new Date().getFullYear() - school.description.añoFundacion
+      : null, 
+    [school.description?.añoFundacion]
+  );
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
-  const priceOptions = filtrarPrecioMasBarato(school.prices);
+  
+  // Memoizar filtrado de precios
+  const priceOptions = useMemo(
+    () => filtrarPrecioMasBarato(school.prices),
+    [school.prices]
+  );
 
   const selected = priceOptions[selectedOptionIndex] ?? null;
   const hasDiscount = selected?.oferta && selected.oferta < selected.precio;
@@ -78,7 +98,8 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
     setSelectedOptionIndex(0);
   }, [school._id]);
 
-  const handleClick = () => {
+  // Memoizar event handlers
+  const handleClick = useCallback(() => {
     sendGTMEvent("school_card_clicked", {
       school_id: schoolId,
       school_name: school.name,
@@ -88,9 +109,9 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       course_slug: course,
       view_type: viewType,
     });
-  };
+  }, [schoolId, school.name, school.city, selected, hasDiscount, course, viewType]);
 
-  const handleHover = () => {
+  const handleHover = useCallback(() => {
     prefetchSchool(`${school._id}`);
     sendGTMEvent("school_card_hovered", {
       school_id: schoolId,
@@ -101,7 +122,11 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       course_slug: course,
       view_type: viewType,
     });
-  };
+  }, [prefetchSchool, school._id, school.name, school.city, selected, hasDiscount, course, viewType, schoolId]);
+
+  const handlePrefetch = useCallback(() => {
+    prefetchSchool(`${school._id}`);
+  }, [prefetchSchool, school._id]);
 
 
   return (
@@ -110,11 +135,11 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       onMouseEnter={handleHover}
-      onMouseLeave={() => prefetchSchool(`${school._id}`)}
+      onMouseLeave={handlePrefetch}
       onClick={handleClick}
       className="block" // Hace que todo el card sea clickeable como un bloque
     >
-      <motion.div
+      <MotionDiv
         whileHover={{ scale: 1.02, y: -4 }}
         className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 group cursor-pointer ${
           isGrid
@@ -134,13 +159,27 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
             </div>
           )}
           <Image
-            src={rewriteToCDN(school.mainImage)}
-            alt={school.name}
-            fill
-            className="object-cover select-none pointer-events-none"
-            loading="lazy"
-            placeholder="empty"
+            {...getResponsiveImageProps(
+              school.mainImage || '',
+              `${school.name} - Escuela de inglés en ${school.city}`,
+              {
+                sizes: isGrid 
+                  ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  : "(max-width: 640px) 100vw, (max-width: 768px) 40vw, 25vw",
+                priority: false,
+                fill: true,
+                fallbackSrc: "/placeholder.svg"
+              }
+            )}
+            className="object-cover select-none pointer-events-none transition-opacity duration-300"
             onContextMenu={(e) => e.preventDefault()}
+            onLoad={(e) => {
+              // Mejorar UX con fade-in suave
+              e.currentTarget.style.opacity = '1';
+            }}
+            onLoadStart={(e) => {
+              e.currentTarget.style.opacity = '0.7';
+            }}
           />
         </div>
 
@@ -194,14 +233,23 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
           <div className="mt-4 flex items-center justify-between lg:mt-0 xl:mt-0">
             {!isMobile && (
               <Image
-                src={rewriteToCDN(school.logo)}
-                alt="Logo"
-                width={120}
-                height={60}
-                className="object-contain select-none pointer-events-none"
-                loading="lazy"
-                placeholder="empty"
+                {...getResponsiveImageProps(
+                  school.logo || '',
+                  `Logo de ${school.name}`,
+                  {
+                    sizes: "120px",
+                    priority: false,
+                    width: 120,
+                    height: 60,
+                    fallbackSrc: "/placeholder.svg"
+                  }
+                )}
+                className="object-contain select-none pointer-events-none transition-opacity duration-200"
                 onContextMenu={(e) => e.preventDefault()}
+                onError={(e) => {
+                  // Si falla el logo, ocultar el elemento
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             )}
 
@@ -232,7 +280,9 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </MotionDiv>
     </Link>
   );
-}
+});
+
+export default SchoolCard;

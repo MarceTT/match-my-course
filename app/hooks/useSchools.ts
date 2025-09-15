@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { School } from "@/app/types";
-import axiosInstance from "../utils/axiosInterceptor";
+import axiosInstance from "../utils/apiClient";
 
 export function useSchools() {
   return useQuery<School[]>({

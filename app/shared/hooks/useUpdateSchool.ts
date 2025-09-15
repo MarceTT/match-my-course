@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import axios from "@/app/utils/axiosInterceptor";
+import axios from "@/app/utils/apiClient";
 import { SchoolEditValues, GalleryImage } from "@/app/admin/school/[id]/SchoolEditSchema";
 
 export function useUpdateSchool(

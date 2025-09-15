@@ -51,7 +51,7 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    name: "Escuelas socias",
+    name: "Escuelas",
     dropdown: [
       {
         name: "Escuelas",
@@ -76,12 +76,13 @@ const Header = () => {
     [key: string]: boolean;
   }>({});
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1024px)");
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isMenuOpen) {
+      if (window.innerWidth >= 1025 && isMenuOpen) {
         setIsMenuOpen(false);
       }
     };
@@ -142,12 +143,12 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full py-8 px-6 bg-white transition-all duration-300 ease-in-out shadow-sm sticky top-0 z-50">
+    <header className="w-full py-6 md:py-8 px-4 md:px-6 bg-white transition-all duration-300 ease-in-out shadow-sm sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4 md:space-x-6">
           <Link
             href="/"
-            className="flex items-center text-2xl font-bold lg:ml-6 group"
+            className="flex items-center text-2xl font-bold md:lg:ml-6 group"
             onClick={() => handleLinkClick("Logo", "/")}
           >
             <div className="relative">
@@ -157,6 +158,8 @@ const Header = () => {
                 className={
                   isMobile
                     ? "h-8 w-auto mr-2"
+                    : isTablet
+                    ? "h-10 w-auto mr-2 group-hover:scale-105 transition-transform duration-300"
                     : "h-12 w-auto mr-2 group-hover:scale-105 transition-transform duration-300"
                 }
                 width={200}
@@ -166,7 +169,7 @@ const Header = () => {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-4 ml-12">
+          <nav className="hidden xl:flex items-center space-x-4 ml-12">
             {navItems.map((item) => (
               <div
                 key={item.name}
@@ -181,7 +184,7 @@ const Header = () => {
                     onMouseLeave={handleMouseLeave}
                   >
                     <button
-                      className="relative px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-lg flex items-center space-x-1"
+                      className="relative px-2 lg:px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-base lg:text-lg flex items-center space-x-1"
                       onClick={() =>
                         setActiveDropdown(
                           activeDropdown === item.name ? null : item.name
@@ -198,7 +201,7 @@ const Header = () => {
                     </button>
 
                     {activeDropdown === item.name && (
-                      <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 animate-in fade-in-0 zoom-in-95 duration-200"
+                      <div className="absolute top-full left-0 mt-2 w-72 lg:w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 animate-in fade-in-0 zoom-in-95 duration-200"
                       >
                         {item.dropdown.map((dropdownItem) => (
                           <Link
@@ -228,7 +231,7 @@ const Header = () => {
                 ) : (
                   <Link
                     href={item.href!}
-                    className="relative px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-lg"
+                    className="relative px-2 lg:px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-base lg:text-lg"
                     onClick={() => handleLinkClick(item.name, item.href!)}
                   >
                     {item.name}
@@ -240,13 +243,17 @@ const Header = () => {
           </nav>
         </div>
 
-        <div className="hidden md:block ml-auto">
+        <div className="hidden md:flex xl:hidden items-center ml-auto mr-4">
+          <SchoolSearch />
+        </div>
+        
+        <div className="hidden xl:block ml-auto">
           <SchoolSearch />
         </div>
 
         <div className="flex items-center">
           <button
-            className="md:hidden focus:outline-none"
+            className="xl:hidden focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
           >
@@ -266,9 +273,9 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile/Tablet Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-50 bg-white transform transition-all duration-300 ease-in-out ${
+        className={`xl:hidden fixed inset-0 z-50 bg-white transform transition-all duration-300 ease-in-out ${
           isMenuOpen
             ? "translate-x-0 opacity-100"
             : "translate-x-full opacity-0"
@@ -284,7 +291,7 @@ const Header = () => {
           </button>
         </div>
 
-        <div className="px-6 mb-4 flex items-center justify-center">
+        <div className="md:hidden px-6 mb-4 flex items-center justify-center">
           <SchoolSearch />
         </div>
 

@@ -31,7 +31,7 @@ export default function SummaryStepTwo({ form, onSubmit, onBack, disabled }: Con
       <form
   onSubmit={form.handleSubmit(
     (data) => {
-      console.log("✔ FORM OK", data);
+//       console.log("✔ FORM OK", data);
       onSubmit(data);
     },
     (errors) => {

@@ -6,9 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build --no-lint",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:performance": "node scripts/performance-test.mjs",
+    "test:performance:dev": "node scripts/performance-test.mjs --url=http://localhost:3000",
+    "test:performance:prod": "node scripts/performance-test.mjs --url=https://matchmycourse.com",
+    "test:performance:json": "node scripts/performance-test.mjs --output=json",
+    "analyze:bundle": "ANALYZE=true npm run build",
+    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html"
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
     "@fseehawer/react-circular-slider": "^3.2.7",
     "@hookform/resolvers": "^4.0.0",
     "@next/third-parties": "^15.4.3",
@@ -108,14 +115,17 @@
     "@tiptap/pm": "2.26.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.1.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
-    "@eslint/eslintrc": "^3"
+    "lighthouse": "^11.4.0",
+    "playwright": "^1.55.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }

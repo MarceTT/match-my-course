@@ -2,18 +2,18 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { SchoolDetails } from "@/app/types";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 
 export function useSchoolById(schoolId: string) {
   return useQuery<SchoolDetails>({
     queryKey: ["school", schoolId],
     queryFn: async () => {
       const { data } = await axiosInstance.get(`/schools/${schoolId}`);
-      console.log("📦 [useSchoolById] response:", data);
+//       console.log("📦 [useSchoolById] response:", data);
       return data.data.school;
     },
     enabled: !!schoolId,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 45, // 45 minutos para detalles de escuela
     retry: 1,
   });
 }

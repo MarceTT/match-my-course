@@ -1,4 +1,4 @@
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { School, SchoolDetails } from "@/app/types";
 import axios from "axios";
 

@@ -34,7 +34,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import axiosInstance from "@/app/utils/apiClient";
 import { ObjectId } from "bson";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";

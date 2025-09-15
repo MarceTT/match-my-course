@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Reservation } from "@/types";
 import {
   createReservationFromApiResponse,
@@ -201,7 +201,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     }
 
     if (!schoolId || !course || !weeks || !schedule) {
-      console.log('Faltan parámetros para recalcular la reserva');
+//       console.log('Faltan parámetros para recalcular la reserva');
       return;
     }
 
@@ -261,7 +261,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     }
 
     if (!schoolId || !course) {
-      console.log('Faltan parámetros para recalcular la reserva');
+//       console.log('Faltan parámetros para recalcular la reserva');
       return;
     }
 
@@ -293,7 +293,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     }
   };
 
-  const onSubmitReservation = async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
+  const onSubmitReservation = useCallback(async (formData: ReservationFormData, extras: ExtraReservationData = {}) => {
     if (!reservation) {
       return { success: false, message: "Reserva no inicializada" };
     }
@@ -332,9 +332,9 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       console.error(error);
       return { success: false, message: "Error al conectar con el servidor" };
     }
-  };
+  }, [reservation]);
 
-  return {
+  return useMemo(() => ({
     reservation,
     loading,
     error,
@@ -360,5 +360,11 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       loading: loadingWeeksBySchool,
       error: !!errorWeeksBySchool
     }
-  };
+  }), [
+    reservation, loading, error, errorMessage, submitted, formData,
+    onFormDataChange, onUpdateReservation, onChangeTypeOfCourse, onSubmitReservation,
+    courses, loadingCourses, errorCourses,
+    schedules, loadingSchedules, errorSchedules,
+    weeksBySchool, loadingWeeksBySchool, errorWeeksBySchool
+  ]);
 }

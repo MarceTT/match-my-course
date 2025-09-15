@@ -199,7 +199,7 @@ const TestimonialSection = () => {
                     itemsPerView === 2 ? 'w-1/2' : 'w-full'
                   }`}
                 >
-                  <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 h-full group relative overflow-hidden">
+                  <div className="bg-white rounded-2xl p-8 transition-all duration-300 h-full group relative overflow-hidden">
                     {/* Card background decoration */}
                     <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full -translate-y-10 translate-x-10 opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
                     

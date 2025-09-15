@@ -505,7 +505,7 @@ export async function fetchFileAccommodationDetails() {
 
     const jsonResponse = await response.json();
 
-    console.log("respuesta desde accommodation detalle",jsonResponse);
+//     console.log("respuesta desde accommodation detalle",jsonResponse);
 
     if (jsonResponse?.data?.length > 0) {
       return jsonResponse.data;
@@ -588,7 +588,7 @@ export async function fetchNationality () {
 
     const jsonResponse = await response.json();
 
-    console.log("respuesta desde nacionalidades detalle",jsonResponse);
+//     console.log("respuesta desde nacionalidades detalle",jsonResponse);
 
     if (jsonResponse?.data?.nationalitiesDetail?.length > 0) {
       return jsonResponse.data.nationalitiesDetail;
@@ -617,7 +617,7 @@ export async function fetchPriceDetails() {
 
     const jsonResponse = await response.json();
 
-    console.log("respuesta desde precio detalle",jsonResponse);
+//     console.log("respuesta desde precio detalle",jsonResponse);
 
     if (jsonResponse?.data?.priceDetail?.length > 0) {
       return jsonResponse.data.priceDetail;
@@ -646,7 +646,7 @@ export async function fetchWeekRangeDetails() {
 
     const jsonResponse = await response.json();
 
-    console.log("respuesta desde rango de semanas detalle",jsonResponse);
+//     console.log("respuesta desde rango de semanas detalle",jsonResponse);
 
     if (jsonResponse?.data?.weekRangeDetail?.length > 0) {
       return jsonResponse.data.weekRangeDetail;
@@ -675,7 +675,7 @@ export async function fetchWeekPriceDetails() {
 
     const jsonResponse = await response.json();
 
-    console.log("respuesta desde rango de semanas detalle",jsonResponse);
+//     console.log("respuesta desde rango de semanas detalle",jsonResponse);
 
     if (jsonResponse?.data?.weekPrice?.length > 0) {
       return jsonResponse.data.weekPrice;

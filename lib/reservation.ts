@@ -40,7 +40,7 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
   const courseKey: CourseKey | undefined = courseLabelToIdMap[data.course];
 
-  console.log("data nueva de prices", data);
+  // console.log("data nueva de prices", data);
 
   return {
     basePrice: data.basePrice,

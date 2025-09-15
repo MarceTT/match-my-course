@@ -100,7 +100,7 @@ export async function logoutAction(): Promise<
   );
 
   const responseData = await res.json();
-  console.log("📥 Respuesta del backend:", responseData);
+//   console.log("📥 Respuesta del backend:", responseData);
   const cookieStore = await cookies();
   cookieStore.delete("refreshToken");
   return { success: true };

@@ -2,14 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { SchoolDetails } from "@/app/types";
-import axiosInstance from "@/app/utils/axiosInterceptor";
+import clientAxios from "@/app/utils/apiClient";
 
 export function useSchoolById(schoolId: string) {
   return useQuery<SchoolDetails>({
     queryKey: ["school", schoolId],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/schools/${schoolId}`);
-      console.log("📦 [useSchoolById] response:", data);
+      const { data } = await clientAxios.get(`/schools/${schoolId}`);
       return data.data.school;
     },
     enabled: !!schoolId,
