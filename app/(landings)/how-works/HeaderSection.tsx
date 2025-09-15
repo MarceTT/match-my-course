@@ -9,9 +9,11 @@ export default function HeaderSection() {
     <section className="relative h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
-        style={{ backgroundImage: `url(${bgUrl})` }}
+        style={{ 
+          backgroundImage: `url(${bgUrl})`
+        }}
       ></div>
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-45"></div>
       <div className="relative z-10 flex items-center justify-center h-full">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center">

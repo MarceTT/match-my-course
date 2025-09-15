@@ -16,7 +16,7 @@ export default {
   future: {
     hoverOnlyWhenSupported: true,
     respectDefaultRingColorOpacity: true,
-    disableColorOpacityUtilitiesByDefault: true,
+    disableColorOpacityUtilitiesByDefault: false,
     relativeContentPathsByDefault: true,
   },
   // Safelist only critical dynamic classes
@@ -24,8 +24,21 @@ export default {
     'bg-yellow-400',
     'text-yellow-900',
     'animate-pulse',
+    // Header background classes
+    'absolute',
+    'inset-0',
+    'bg-cover',
+    'bg-center',
+    'filter',
+    'blur-sm',
+    'scale-105',
+    'bg-black',
+    'bg-opacity-30',
+    'bg-opacity-45',
+    'bg-opacity-50',
     { pattern: /^(h|w)-(12|16|20|24|32|48|64|72|96)$/ },
     { pattern: /^text-(xs|sm|base|lg|xl|2xl|3xl)$/ },
+    { pattern: /^bg-opacity-(10|20|30|40|50|60|70|80|90)$/ },
   ],
   theme: {
   	extend: {

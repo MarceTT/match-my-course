@@ -7,9 +7,7 @@ import { ReactQueryProvider } from "./providers";
 // import Script from "next/script"; // Commented out since SW is disabled
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import { GoogleTagManager } from "@next/third-parties/google";
-import { GTMPageViewTracker } from "./ui/GTMPageViewTracker";
 import PromotionalPopup from "./ui/promotional-popup";
-import { Suspense } from "react";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -21,6 +19,10 @@ const geistMono = Geist_Mono({
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
+);
+
+const heroImage = rewriteToCDN(
+  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina inicial.webp"
 );
 
 export const metadata: Metadata = {
@@ -111,7 +113,7 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina%2Binicial.webp"
+          href={heroImage}
         />
         <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="Match My Course" />
@@ -126,9 +128,6 @@ export default function RootLayout({
         style={{ fontFamily: 'var(--font-raleway)' }}
       >
        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
-        <Suspense fallback={null}>
-        <GTMPageViewTracker />
-        </Suspense>
         <ReactQueryProvider>
           {children}
           <Toaster position="top-center" richColors closeButton />
