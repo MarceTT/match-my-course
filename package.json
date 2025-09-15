@@ -112,7 +112,15 @@
   "overrides": {
     "react-joyride": "2.9.3",
     "@tiptap/core": "2.26.1",
-    "@tiptap/pm": "2.26.1"
+    "@tiptap/pm": "2.26.1",
+    "cmdk": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
