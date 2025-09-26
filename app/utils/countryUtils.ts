@@ -1,4 +1,4 @@
-import { SchoolDetails, Country, SchoolSettings } from "@/app/lib/types";
+import { SchoolDetails } from "@/app/lib/types";
 
 /**
  * Utility functions for handling multi-country support
