@@ -7,6 +7,13 @@ import { useForm } from "react-hook-form";
 import { ImagePlus, Loader2, UploadCloud, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import {
   Card,
@@ -36,6 +43,7 @@ import { useUpdateSchool } from "@/app/hooks/useUpdateSchool";
 import { deleteSchoolImage } from "@/app/lib/api/schools";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { ReactSortable, ItemInterface } from "react-sortablejs";
+import { getSupportedCountries } from "@/app/utils/countryUtils";
 
 const MAX_GALLERY_IMAGES = 15;
 
@@ -90,6 +98,7 @@ const EditSchoolPage = () => {
       name: "",
       city: "",
       status: true,
+      country: undefined,
       logo: null,
       mainImage: null,
       galleryImages: [],
@@ -97,38 +106,41 @@ const EditSchoolPage = () => {
     },
   });
 
-  const normalizeGalleryImages = useCallback((images: any[]): SortableImage[] => {
-    return images.map((img, index) => {
-      if (typeof img === "string") {
+  const normalizeGalleryImages = useCallback(
+    (images: any[]): SortableImage[] => {
+      return images.map((img, index) => {
+        if (typeof img === "string") {
+          return {
+            id: img.split("/").pop() || `img-${index}`,
+            url: img,
+            isNew: false,
+          };
+        }
+        if (img instanceof File) {
+          return {
+            id: `new-${index}-${Date.now()}`,
+            url: URL.createObjectURL(img),
+            file: img,
+            isNew: true,
+          };
+        }
         return {
-          id: img.split('/').pop() || `img-${index}`,
-          url: img,
-          isNew: false
+          id: img.id || img.url.split("/").pop() || `img-${index}`,
+          url: img.url,
+          file: img.file,
+          isNew: img.isNew || false,
         };
-      }
-      if (img instanceof File) {
-        return {
-          id: `new-${index}-${Date.now()}`,
-          url: URL.createObjectURL(img),
-          file: img,
-          isNew: true
-        };
-      }
-      return {
-        id: img.id || img.url.split('/').pop() || `img-${index}`,
-        url: img.url,
-        file: img.file,
-        isNew: img.isNew || false
-      };
-    });
-  }, []);
+      });
+    },
+    []
+  );
 
   const denormalizeGalleryImages = (images: SortableImage[]): any[] => {
-    return images.map(img => ({
+    return images.map((img) => ({
       id: img.id,
       url: img.url,
       file: img.file,
-      isNew: img.isNew
+      isNew: img.isNew,
     }));
   };
 
@@ -141,17 +153,30 @@ const EditSchoolPage = () => {
 
   useEffect(() => {
     if (schoolData) {
+      // Derivar país si existe en datos de backend
+      let derivedCountry: string | undefined = undefined;
+      const rawCountry: any = (schoolData as any).country;
+      if (rawCountry) {
+        if (typeof rawCountry === "object" && "code" in rawCountry) {
+          derivedCountry = rawCountry.code as string;
+        } else if (typeof rawCountry === "string") {
+          derivedCountry = rawCountry;
+        }
+      }
+
       form.reset({
         name: schoolData.name,
         city: schoolData.city,
         status: schoolData.status,
+        country: derivedCountry,
         logo: schoolData.logo || null,
         mainImage: schoolData.mainImage || null,
-        galleryImages: schoolData.galleryImages?.map((img: string, index: number) => ({
-          id: img.split('/').pop() || `img-${index}`,
-          url: img,
-          isNew: false,
-        })) || [],
+        galleryImages:
+          schoolData.galleryImages?.map((img: string, index: number) => ({
+            id: img.split("/").pop() || `img-${index}`,
+            url: img,
+            isNew: false,
+          })) || [],
         urlVideo: schoolData.urlVideo || "",
       });
     }
@@ -189,16 +214,25 @@ const EditSchoolPage = () => {
         const compressedSizeMB = processedFile.size / (1024 * 1024);
 
         toast.success(`Imagen optimizada a ${compressedSizeMB.toFixed(2)}MB`, {
-          description: `Reducción de ${(fileSizeMB - compressedSizeMB).toFixed(2)}MB (${((fileSizeMB - compressedSizeMB) / fileSizeMB * 100).toFixed(0)}%)`,
+          description: `Reducción de ${(fileSizeMB - compressedSizeMB).toFixed(
+            2
+          )}MB (${(
+            ((fileSizeMB - compressedSizeMB) / fileSizeMB) *
+            100
+          ).toFixed(0)}%)`,
         });
       } else {
-        toast.info(`Subiendo imagen sin compresión (${fileSizeMB.toFixed(2)}MB)`);
+        toast.info(
+          `Subiendo imagen sin compresión (${fileSizeMB.toFixed(2)}MB)`
+        );
       }
 
       field.onChange(processedFile);
     } catch (error) {
       console.error("Error comprimiendo imagen:", error);
-      toast.error(error instanceof Error ? error.message : "Error al procesar la imagen");
+      toast.error(
+        error instanceof Error ? error.message : "Error al procesar la imagen"
+      );
       field.onChange(null);
     } finally {
       setLoading(false);
@@ -245,7 +279,9 @@ const EditSchoolPage = () => {
           });
         } catch (error) {
           console.error(`Error procesando imagen:`, error);
-          toast.error(error instanceof Error ? error.message : `Error al procesar imagen`);
+          toast.error(
+            error instanceof Error ? error.message : `Error al procesar imagen`
+          );
         }
       }
 
@@ -279,12 +315,12 @@ const EditSchoolPage = () => {
 
     const imageIdentifier = imageUrl || imageType;
 
-    setRemovingImages(prev => ({
+    setRemovingImages((prev) => ({
       ...prev,
-      [imageType === "galleryImages" ? "gallery" : imageType]: 
-        imageType === "galleryImages" 
-          ? { ...prev.gallery, [imageUrl!]: true } 
-          : true
+      [imageType === "galleryImages" ? "gallery" : imageType]:
+        imageType === "galleryImages"
+          ? { ...prev.gallery, [imageUrl!]: true }
+          : true,
     }));
 
     try {
@@ -295,8 +331,10 @@ const EditSchoolPage = () => {
         const currentGallery = form.getValues("galleryImages");
         form.setValue(
           "galleryImages",
-          currentGallery.filter(img => 
-            typeof img === "string" ? img !== imageUrl : (img as { url: string }).url !== imageUrl
+          currentGallery.filter((img) =>
+            typeof img === "string"
+              ? img !== imageUrl
+              : (img as { url: string }).url !== imageUrl
           )
         );
       } else {
@@ -308,12 +346,12 @@ const EditSchoolPage = () => {
       console.error("❌ Error al eliminar imagen:", error);
       toast.error(error.message || "No se pudo eliminar la imagen");
     } finally {
-      setRemovingImages(prev => ({
+      setRemovingImages((prev) => ({
         ...prev,
-        [imageType === "galleryImages" ? "gallery" : imageType]: 
-          imageType === "galleryImages" 
-            ? { ...prev.gallery, [imageUrl!]: false } 
-            : false
+        [imageType === "galleryImages" ? "gallery" : imageType]:
+          imageType === "galleryImages"
+            ? { ...prev.gallery, [imageUrl!]: false }
+            : false,
       }));
 
       if (imageUrl?.startsWith("blob:")) {
@@ -333,7 +371,7 @@ const EditSchoolPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
-//             console.log("📦 Datos a enviar:", data);
+            console.log("📦 Datos a enviar:", data);
             mutation.mutate(data);
           })}
           className="space-y-6"
@@ -368,6 +406,41 @@ const EditSchoolPage = () => {
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>País</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar país" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {getSupportedCountries().map((country) => (
+                            <SelectItem key={country.code} value={country.code}>
+                              <div className="flex items-center space-x-2">
+                                <span>{country.flag}</span>
+                                <span>{country.name}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        País donde se encuentra la escuela
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="status"
@@ -398,6 +471,9 @@ const EditSchoolPage = () => {
                       <FormControl>
                         <Input placeholder="URL de video" {...field} />
                       </FormControl>
+                      <FormDescription>
+                        Enlace a video de presentación (YouTube, Vimeo, etc.)
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -422,7 +498,9 @@ const EditSchoolPage = () => {
                           accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
                           className="hidden"
                           id="logo"
-                          onChange={(e) => handleFileChange(e, field, setLoadingLogo, false)}
+                          onChange={(e) =>
+                            handleFileChange(e, field, setLoadingLogo, false)
+                          }
                         />
                         <label htmlFor="logo" className="cursor-pointer block">
                           {loadingLogo ? (
@@ -451,7 +529,11 @@ const EditSchoolPage = () => {
                                 title="Eliminar Logo"
                                 description="¿Estás seguro de eliminar el logo?"
                                 onConfirm={() =>
-                                  handleRemoveImage("logo", undefined, form.getValues("logo") as string)
+                                  handleRemoveImage(
+                                    "logo",
+                                    undefined,
+                                    form.getValues("logo") as string
+                                  )
                                 }
                               >
                                 <Button
@@ -504,7 +586,9 @@ const EditSchoolPage = () => {
                           accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
                           className="hidden"
                           id="mainImage"
-                          onChange={(e) => handleFileChange(e, field, setLoadingMainImage)}
+                          onChange={(e) =>
+                            handleFileChange(e, field, setLoadingMainImage)
+                          }
                         />
                         <label
                           htmlFor="mainImage"
@@ -533,7 +617,11 @@ const EditSchoolPage = () => {
                                 title="Eliminar Imagen"
                                 description="¿Estás seguro de eliminar esta imagen?"
                                 onConfirm={() =>
-                                  handleRemoveImage("mainImage", undefined, form.getValues("mainImage") as string)
+                                  handleRemoveImage(
+                                    "mainImage",
+                                    undefined,
+                                    form.getValues("mainImage") as string
+                                  )
                                 }
                               >
                                 <Button
@@ -575,7 +663,8 @@ const EditSchoolPage = () => {
             <CardHeader>
               <CardTitle>Galería de Imágenes</CardTitle>
               <CardDescription>
-                Puedes subir hasta {MAX_GALLERY_IMAGES} imágenes. Arrástralas para cambiar el orden.
+                Puedes subir hasta {MAX_GALLERY_IMAGES} imágenes. Arrástralas
+                para cambiar el orden.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -583,8 +672,10 @@ const EditSchoolPage = () => {
                 control={form.control}
                 name="galleryImages"
                 render={({ field }) => {
-                  const normalizedImages = normalizeGalleryImages(field.value || []);
-                  
+                  const normalizedImages = normalizeGalleryImages(
+                    field.value || []
+                  );
+
                   return (
                     <FormItem>
                       <FormControl>
@@ -609,13 +700,17 @@ const EditSchoolPage = () => {
                               <UploadCloud className="h-10 w-10 text-muted-foreground" />
                               <span className="font-medium">
                                 {loadingGallery
-                                  ? `Procesando... ${uploadProgress.toFixed(0)}%`
-                                  : normalizedImages.length >= MAX_GALLERY_IMAGES
+                                  ? `Procesando... ${uploadProgress.toFixed(
+                                      0
+                                    )}%`
+                                  : normalizedImages.length >=
+                                    MAX_GALLERY_IMAGES
                                   ? `Máximo ${MAX_GALLERY_IMAGES} imágenes`
                                   : "Arrastra o selecciona imágenes"}
                               </span>
                               <span className="text-xs text-muted-foreground">
-                                Formatos: JPG, PNG, WEBP, SVG. Se optimizarán automáticamente
+                                Formatos: JPG, PNG, WEBP, SVG. Se optimizarán
+                                automáticamente
                               </span>
                             </label>
                           </div>
@@ -654,7 +749,11 @@ const EditSchoolPage = () => {
                                   title="Eliminar Imagen"
                                   description="¿Estás seguro de eliminar esta imagen?"
                                   onConfirm={() =>
-                                    handleRemoveImage("galleryImages", image.id, image.url)
+                                    handleRemoveImage(
+                                      "galleryImages",
+                                      image.id,
+                                      image.url
+                                    )
                                   }
                                 >
                                   <Button

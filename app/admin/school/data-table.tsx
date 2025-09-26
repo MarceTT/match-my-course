@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,6 +56,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
@@ -118,14 +119,30 @@ export function DataTable<TData, TValue>({
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
-                          className="px-4 py-3 text-left"
+                          className={`px-4 py-3 text-left ${header.column.getCanSort() ? "cursor-pointer select-none" : ""}`}
+                          onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : undefined}
+                          aria-sort={
+                            header.column.getIsSorted() === "asc"
+                              ? "ascending"
+                              : header.column.getIsSorted() === "desc"
+                              ? "descending"
+                              : "none"
+                          }
                         >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
+                          {header.isPlaceholder ? null : (
+                            <div className="inline-flex items-center gap-1">
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                              {header.column.getCanSort() && (
+                                header.column.getIsSorted() === "asc" ? (
+                                  <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
+                                ) : header.column.getIsSorted() === "desc" ? (
+                                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                                ) : (
+                                  <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" />
+                                )
                               )}
+                            </div>
+                          )}
                         </TableHead>
                       ))}
                     </TableRow>

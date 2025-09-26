@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "@/app/utils/apiClient";
 import { SchoolEditValues, GalleryImage } from "@/app/admin/school/[id]/SchoolEditSchema";
@@ -7,6 +7,7 @@ export function useUpdateSchool(
   schoolId: string,
   onSuccessCallback?: () => void
 ) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: SchoolEditValues) => {
       const formData = new FormData();
@@ -16,6 +17,9 @@ export function useUpdateSchool(
       formData.append("city", data.city);
       formData.append("status", String(data.status));
       formData.append("urlVideo", data.urlVideo || "");
+      if (data.country) {
+        formData.append("country", data.country);
+      }
 
       // 2. Logo - manejo seguro de tipos
       if (data.logo instanceof File) {
@@ -78,6 +82,8 @@ export function useUpdateSchool(
     },
     onSuccess: () => {
       toast.success("Escuela actualizada exitosamente ✅");
+      // Ensure admin list reflects latest changes
+      queryClient.invalidateQueries({ queryKey: ["schools"] });
       onSuccessCallback?.();
     },
     onError: (error: any) => {

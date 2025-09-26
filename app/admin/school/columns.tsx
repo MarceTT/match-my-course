@@ -12,6 +12,7 @@ import { toggleSchoolStatus } from "../actions/school";
 import React from "react";
 import LoadingImage from "../components/LoadTableImage";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { getSupportedCountries } from "@/app/utils/countryUtils";
 
 export const columns: ColumnDef<School>[] = [
   {
@@ -24,6 +25,33 @@ export const columns: ColumnDef<School>[] = [
   {
     accessorKey: "city",
     header: "Ciudad",
+  },
+  {
+    accessorKey: "country",
+    header: "País",
+    enableSorting: false,
+    cell: ({ row }) => {
+      const countryCode = row.original.country?.code;
+      if (!countryCode) {
+        return (
+          <span className="text-gray-400 text-sm">Sin país</span>
+        );
+      }
+      
+      const countryInfo = getSupportedCountries().find(c => c.code === countryCode);
+      if (!countryInfo) {
+        return (
+          <span className="text-gray-400 text-sm">{countryCode}</span>
+        );
+      }
+      
+      return (
+        <div className="flex items-center space-x-2">
+          <span className="text-lg">{countryInfo.flag}</span>
+          <span className="font-medium">{countryInfo.name}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -43,6 +71,7 @@ export const columns: ColumnDef<School>[] = [
   {
     accessorKey: "logo",
     header: "Logo",
+    enableSorting: false,
     cell: ({ row }) => (
       <LoadingImage
       src={rewriteToCDN(row.original.logo)}
@@ -53,18 +82,37 @@ export const columns: ColumnDef<School>[] = [
   {
     accessorKey: "actions",
     id: "actions",
+    enableSorting: false,
     cell: ({ row }) => {
         const queryClient = useQueryClient();
       const school = row.original;
 
       const mutation = useMutation({
         mutationFn: () => toggleSchoolStatus(school._id, school.status),
-        onSuccess: () => {
-          toast.success(`Escuela ${school.status ? "desactivada" : "activada"} con éxito`);
-          queryClient.invalidateQueries({ queryKey: ["schools"] });
+        onMutate: async () => {
+          const newStatus = !school.status;
+          await queryClient.cancelQueries({ queryKey: ["schools"] });
+          const previous = queryClient.getQueryData<School[]>(["schools"]);
+          if (previous) {
+            const updated = previous.map((s) =>
+              s._id === school._id ? { ...s, status: newStatus } : s
+            );
+            queryClient.setQueryData(["schools"], updated);
+          }
+          return { previous };
         },
-        onError: () => {
+        onError: (_err, _vars, context) => {
+          if (context?.previous) {
+            queryClient.setQueryData(["schools"], context.previous);
+          }
           toast.error("Error al cambiar el estado");
+        },
+        onSuccess: () => {
+          const toggled = !school.status;
+          toast.success(`Escuela ${toggled ? "activada" : "desactivada"} con éxito`);
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: ["schools"] });
         },
       });
       return (

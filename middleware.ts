@@ -22,7 +22,10 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
     if ((token as any).role !== 'admin') {
-      return NextResponse.redirect(new URL('/unauthorized', req.url));
+      return new NextResponse('Forbidden', {
+        status: 403,
+        headers: { 'X-Robots-Tag': 'noindex, nofollow' },
+      });
     }
     return NextResponse.next();
   }

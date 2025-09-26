@@ -26,7 +26,8 @@ export const schoolEditSchema = z.object({
   name: z.string().min(3).max(100),
   city: z.string().min(3).max(50),
   status: z.boolean().default(true),
-  urlVideo: z.string().url().optional(),
+  urlVideo: z.string().url().optional().or(z.literal('')),
+  country: z.string().min(1, "Debes seleccionar un país"),
   
   logo: z.union([
     z.string().url(),

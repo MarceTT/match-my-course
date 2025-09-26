@@ -26,13 +26,14 @@ const heroImage = rewriteToCDN(
 );
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com'),
   title: "MatchMyCourse | Encuentra tu curso de inglés",
   description:
     "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
   openGraph: {
     title: "MatchMyCourse | Encuentra tu curso de inglés",
     description: "Compara escuelas, cursos y reserva fácil y segura.",
-    url: "https://www.matchmycourse.com",
+    url: "https://matchmycourse.com",
     siteName: "MatchMyCourse",
     images: [
       {
@@ -60,7 +61,7 @@ export default function RootLayout({
 }>) {
   const GTM_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!;
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         {/* Resource hints for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />

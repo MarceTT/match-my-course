@@ -14,6 +14,7 @@ import {
   fetchWeeksBySchool
 } from "../components/services/booking.services";
 import { Schedule } from "@/lib/types/scheduleInfo";
+import { BookingResponse } from "@/app/lib/types";
 
 // Datos adicionales que no participan del cálculo de reserva,
 // pero sí se envían al backend
@@ -35,6 +36,9 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  
+  // New state for handling advisor contact requirement (Nueva Zelanda)
+  const [advisorInfo, setAdvisorInfo] = useState<BookingResponse | null>(null);
 
   const [courses, setCourses] = useState<string[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
@@ -80,8 +84,18 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
           data = await fetchReservationCalculation(schoolId, course, weeks, schedule || 'PM', signal);
         }
 
+        // Check if response indicates advisor contact is required (Nueva Zelanda)
+        if (data && typeof data === 'object' && 'requiresAdvisor' in data) {
+          setAdvisorInfo(data as BookingResponse);
+          setReservation(null);
+          setError(false);
+          setErrorMessage("");
+          return;
+        }
+
         const reservation = createReservationFromApiResponse(data);
         setReservation(reservation);
+        setAdvisorInfo(null);
         setError(false);
         setErrorMessage("");
       } catch (error) {
@@ -133,8 +147,19 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     const loadSchedules = async () => {
       try {
         setLoadingSchedules(true);
-        const schedules = await fetchSchedulesByCourse(schoolId, course);
-        setSchedules(schedules);
+        const raw = await fetchSchedulesByCourse(schoolId, course);
+        const normalized = Array.isArray(raw)
+          ? raw
+          : typeof raw === 'object' && raw !== null
+          ? Object.values(raw as any)
+          : typeof raw === 'string'
+          ? raw.split(',').map((s) => ({ horario: s.trim(), precioMinimo: 0 }))
+          : [];
+        // Asegurar shape { horario, precioMinimo }
+        const items = normalized.map((it: any) =>
+          typeof it === 'string' ? { horario: it, precioMinimo: 0 } : it
+        );
+        setSchedules(items);
       } catch (error) {
         setErrorSchedules(error as Error);
       } finally {
@@ -192,8 +217,18 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       schoolId
     ) {
       // Cargar los horarios cuando cambia el tipo de curso
-      const newSchedules = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
-      setSchedules(newSchedules);
+      const raw = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
+      const normalized = Array.isArray(raw)
+        ? raw
+        : typeof raw === 'object' && raw !== null
+        ? Object.values(raw as any)
+        : typeof raw === 'string'
+        ? raw.split(',').map((s) => ({ horario: s.trim(), precioMinimo: 0 }))
+        : [];
+      const items = normalized.map((it: any) =>
+        typeof it === 'string' ? { horario: it, precioMinimo: 0 } : it
+      );
+      setSchedules(items);
 
       // Carga semanas nuevas al cambiar curso
       const newWeeks = await fetchWeeksBySchool(schoolId.toString(), updatedFormData.courseType);
@@ -217,8 +252,18 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       const signal = controller.signal;
       const data = await fetchReservationCalculation(schoolId, course, weeks, schedule, signal);
 
+      // Check if response indicates advisor contact is required (Nueva Zelanda)
+      if (data && typeof data === 'object' && 'requiresAdvisor' in data) {
+        setAdvisorInfo(data as BookingResponse);
+        setReservation(null);
+        setError(false);
+        setErrorMessage("");
+        return;
+      }
+
       const reservation = createReservationFromApiResponse(data);
       setReservation(reservation);
+      setAdvisorInfo(null);
       setError(false);
       setErrorMessage("");
     } catch (err) {
@@ -272,6 +317,15 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       const signal = controller.signal;
       const data = await fetchCheapestCourseBySchool(schoolId, course, signal);
 
+      // Check if response indicates advisor contact is required (Nueva Zelanda)
+      if (data && typeof data === 'object' && 'requiresAdvisor' in data) {
+        setAdvisorInfo(data as BookingResponse);
+        setReservation(null);
+        setError(false);
+        setErrorMessage("");
+        return;
+      }
+
       const reservation = createReservationFromApiResponse(data);
 
       setFormData((prev) => ({
@@ -281,6 +335,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       }));
 
       setReservation(reservation);
+      setAdvisorInfo(null);
       setError(false);
       setErrorMessage("");
     } catch (err) {
@@ -345,6 +400,9 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     onUpdateReservation,
     onChangeTypeOfCourse,
     onSubmitReservation,
+    // New: advisor contact information for Nueva Zelanda
+    advisorInfo,
+    requiresAdvisor: !!advisorInfo?.requiresAdvisor,
     courseInfo: {
       list: courses,
       loading: loadingCourses,

@@ -63,8 +63,17 @@ export const courseMetadataMap: Record<CourseKey, CourseMetadata> = {
  * Utilidad para transformar los nombres de curso que llegan del backend (string[])
  * al enum Course[] para lógica interna en el frontend.
  */
-export function parseCoursesFromApi(labels: string[]): CourseKey[] {
-  return labels
-    .map(label => courseLabelToIdMap[label])
+function toStringArray(input: unknown): string[] {
+  if (!input) return [];
+  if (Array.isArray(input)) return input.map((v) => String(v));
+  if (typeof input === "string") return input.split(",").map((s) => s.trim()).filter(Boolean);
+  if (typeof input === "object") return Object.values(input as Record<string, unknown>).map((v) => String(v));
+  return [];
+}
+
+export function parseCoursesFromApi(labels: unknown): CourseKey[] {
+  const arr = toStringArray(labels);
+  return arr
+    .map((label) => courseLabelToIdMap[label])
     .filter((courseId): courseId is CourseKey => Boolean(courseId));
 }

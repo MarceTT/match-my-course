@@ -22,6 +22,7 @@ import { BookingPannelSubmit } from "@/app/features/booking";
 import { sendGTMEvent } from "@/app/lib/gtm";
 import confetti from "canvas-confetti";
 import { Loader2 } from "lucide-react";
+import Link from 'next/link'
 
 export default function ContactPage() {
   const methods = useForm<ContactFormData>();
@@ -254,7 +255,7 @@ export default function ContactPage() {
                       onCheckedChange={field.onChange}
                     />
                     <label htmlFor="terms" className="text-sm">
-                      Acepto los términos y condiciones.
+                      Acepto los <Link href="/terminos-y-condiciones" target="_blank" className="cursor-pointer hover:underline text-blue-600">términos y condiciones</Link>.
                     </label>
                   </div>
                 )}
@@ -281,7 +282,7 @@ export default function ContactPage() {
                     />
                     <label htmlFor="policy" className="text-sm">
                       Doy mi consentimiento para el tratamiento de mis datos
-                      personales de acuerdo con la Política de Privacidad.
+                      personales de acuerdo con la <Link href="/politica-de-privacidad" target="_blank" className="cursor-pointer hover:underline text-blue-600">Política de Privacidad</Link>.
                     </label>
                   </div>
                 )}

@@ -12,6 +12,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Match My Course",
   description: "Match My Course - Servicios",
+  robots: { index: false, follow: false },
 };
 
 export default function SchoolSearchLayout({

@@ -28,18 +28,36 @@ export interface DataTableFilterOption<TData> {
   isMulti?: boolean;
 }
 
+export interface CountryMetadata {
+  country?: string;
+  countryService?: string;
+  serviceMode?: 'legacy' | 'country-service' | 'hybrid';
+  features?: Record<string, boolean>;
+}
+
+export interface BookingResponse {
+  requiresAdvisor?: boolean;
+  canBookInstantly?: boolean;
+  countryCode?: string;
+  advisorContact?: {
+    email: string;
+    advisorName: string;
+  };
+  message?: string;
+}
+
 export interface SchoolDetailsResponse {
   message: string;
   data: {
     school: SchoolDetails;
-  };
+  } & CountryMetadata;
 }
 
 export interface SchoolDetailsSearchResponse {
   message: string;
   data: {
     schools: SchoolDetails[];
-  };
+  } & CountryMetadata;
 }
 
 export interface SchoolDetails {
@@ -50,6 +68,19 @@ export interface SchoolDetails {
   mainImage?: string | null;
   galleryImages: string[];
   status: boolean;
+  urlVideo?: string | null;
+  country?: {
+    value: string;
+    label: string;
+    code: string;
+    flag: string;
+  };
+  settings?: {
+    allowInstantBooking?: boolean;
+    accommodationAvailable?: boolean;
+    currency?: 'EUR' | 'NZD' | 'USD';
+    contactOnly?: boolean;
+  };
   installations?: Installations;
   qualities?: Qualities;
   nationalities?: Nationalities;

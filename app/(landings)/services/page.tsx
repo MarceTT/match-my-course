@@ -1,13 +1,14 @@
 import React from "react";
 import type { Metadata } from 'next';
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
-import Service from "./Service";
-import Inscription from "./Inscription";
-import Preparation from "./Preparation";
-import Support from "./Support";
-import Experience from "./Experience";
-import Testimonial from "./Testimonial";
-import HeaderSection from "./HeaderSection";
+import Service from "./components/Service";
+import Inscription from "./components/Inscription";
+import Preparation from "./components/Preparation";
+import Support from "./components/Support";
+import Experience from "./components/Experience";
+import Testimonial from "./components/Testimonial";
+import HeaderSection from "./components/HeaderSection";
+import WrapperForm from "./form/WrapperForm";
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Servicios+Matchmycourse.png"
@@ -119,11 +120,12 @@ function Services() {
       />
       <div className="min-h-screen bg-white overflow-x-hidden">
         <HeaderSection />
-        <main className="max-w-6xl mx-auto px-6 py-12">
+        <main className="max-w-7xl mx-auto px-6 py-12">
           <Service />
           <Inscription />
           <Preparation />
           <Support />
+          <WrapperForm />
           <Experience />
           <Testimonial />
         </main>
