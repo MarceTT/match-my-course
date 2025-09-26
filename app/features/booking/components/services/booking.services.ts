@@ -60,6 +60,18 @@ export const fetchReservationCalculation = async (
   }
 
   const json = await res.json();
+  
+  // Check if response includes advisor contact requirement (Nueva Zelanda)
+  if (json.requiresAdvisor) {
+    return {
+      requiresAdvisor: true,
+      canBookInstantly: json.canBookInstantly || false,
+      countryCode: json.countryCode,
+      advisorContact: json.advisorContact,
+      message: json.message
+    };
+  }
+  
   return json.data;
 };
 

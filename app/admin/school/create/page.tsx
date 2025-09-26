@@ -23,12 +23,14 @@ import {
 } from "@/components/ui/form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { schoolFormSchema, SchoolFormValues } from "./SchoolSchema";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import compressImage from "@/app/hooks/useResizeImage";
 import { ReactSortable } from "react-sortablejs";
 import { useUploadSchoolImages } from "@/app/hooks/useUploadImagesSchool";
+import { getSupportedCountries } from "@/app/utils/countryUtils";
 
 interface GalleryItem {
   id: string;
@@ -48,6 +50,7 @@ const CreateSchoolPage = () => {
     defaultValues: {
       name: "",
       city: "",
+      urlVideo: "",
       status: true,
       logo: null,
       mainImage: null,
@@ -113,7 +116,13 @@ const CreateSchoolPage = () => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("city", data.city);
+    formData.append("urlVideo", data.urlVideo || "");
     formData.append("status", data.status.toString());
+    
+    // Country information
+    if (data.country) {
+      formData.append("country", data.country);
+    }
   
     if (data.logo) formData.append("logo", data.logo);
     if (data.mainImage) formData.append("mainImage", data.mainImage);
@@ -161,6 +170,54 @@ const CreateSchoolPage = () => {
                       </FormControl>
                       <FormDescription>
                         Ciudad donde se encuentra la escuela
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="urlVideo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>URL de Video</FormLabel>
+                      <FormControl>
+                        <Input type="url" placeholder="https://..." {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Enlace a video de presentación (YouTube, Vimeo, etc.)
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>País</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar país" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {getSupportedCountries().map((country) => (
+                            <SelectItem key={country.code} value={country.code}>
+                              <div className="flex items-center space-x-2">
+                                <span>{country.flag}</span>
+                                <span>{country.name}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        País donde se encuentra la escuela
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -398,6 +455,7 @@ const CreateSchoolPage = () => {
     />
   </CardContent>
 </Card>
+
 
           <div className="flex justify-end gap-4">
             <Button

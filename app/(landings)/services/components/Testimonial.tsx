@@ -31,7 +31,7 @@ const Testimonial = () => {
           </div>
         </div>
 
-      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
+      <Button className="bg-[#5174fc] hover:bg-[#4257FF] text-white px-8 py-3 text-lg font-semibold">
         Quiero buscar mi escuela
       </Button>
     </div>

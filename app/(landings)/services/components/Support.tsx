@@ -4,7 +4,7 @@ import React from "react";
 
 const Support = () => {
   return (
-    <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#4B55A5] text-white py-16 mb-16">
+    <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-[#4B55A5] text-white py-16 mb-2">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
           <p className="text-2xl md:text-3xl lg:text-4xl mb-2">Durante el viaje</p>

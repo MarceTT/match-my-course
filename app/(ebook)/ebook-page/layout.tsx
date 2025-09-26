@@ -2,6 +2,7 @@ import { Geist_Mono } from 'next/font/google'
 import { raleway } from '@/app/ui/fonts'
 import type { Metadata } from 'next'
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN'
+import { Toaster } from "@/components/ui/toaster";
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Ebook+Estudia+y+Trabaja+en+el+Extranjero.png"
@@ -101,6 +102,7 @@ export default function EbookLayout({ children }: { children: React.ReactNode })
       />
       <main className={`${raleway.className} ${geistMono.variable} antialiased`}>
         {children}
+        <Toaster />
       </main>
     </>
   );

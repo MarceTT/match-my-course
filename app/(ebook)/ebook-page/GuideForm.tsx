@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { subYears } from "date-fns/subYears";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +23,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DatePickerEbook } from "@/components/common/DatePickerEbook";
+import { format as formatDate } from "date-fns";
 import Image from "next/image";
-import { CustomCountrySelect } from "../shared";
+import { CustomCountrySelect } from "../../shared";
 import { countries } from "@/lib/constants/countries";
+import { toast } from "sonner";
+import axiosInstance from "@/app/utils/apiClient";
+import { useRouter } from "next/navigation";
+
+// Helper para parsear dd/MM/yyyy a Date
+const parseDDMMYYYY = (s: string): Date | undefined => {
+  if (!s || typeof s !== "string") return undefined;
+  const parts = s.split("/");
+  if (parts.length !== 3) return undefined;
+  const [dd, mm, yyyy] = parts;
+  const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+  return isNaN(d.getTime()) ? undefined : d;
+};
 
 // 1. Define el esquema de validación con Zod
 const formSchema = z.object({
@@ -32,7 +48,23 @@ const formSchema = z.object({
   apellido: z.string().min(2, "Rellena este campo obligatorio"),
   email: z.string().email("El correo no es válido"),
   nacionalidad: z.string().min(1, "Selecciona tu nacionalidad"),
-  nacimiento: z.string().min(1, "Ingresa tu fecha de nacimiento"),
+  nacimiento: z
+    .string()
+    .min(1, "Ingresa tu fecha de nacimiento")
+    .refine((val) => /^\d{2}\/\d{2}\/\d{4}$/.test(val), {
+      message: "Formato inválido. Usa dd/mm/yyyy",
+    })
+    .refine(
+      (val) => {
+        const d = parseDDMMYYYY(val);
+        if (!d) return false;
+        const max = subYears(new Date(), 16);
+        return d <= max; // Debe ser igual o anterior a hoy - 16 años
+      },
+      {
+        message: "Debes ser mayor de 16 años",
+      }
+    ),
   motivacion: z.string().min(1, "Selecciona una opción"),
   aceptaTerminos: z.boolean().refine((val) => val === true, {
     message: "Debes aceptar los términos y condiciones",
@@ -55,12 +87,37 @@ export function GuideForm() {
   });
 
   const isLoading = form.formState.isSubmitting;
+const resetForm = form.reset;
+  const router = useRouter();
 
   // 3. Define la función de envío
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Aquí manejarías el envío del formulario (p. ej. a una API)
-//     console.log(values);
-    alert("¡Formulario enviado! Revisa la consola para ver los datos.");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("GuideForm payload:", values);
+    try {
+      const response = await axiosInstance.post("/ebook/download-ebook", values);
+      if (response.data.success) {
+        // Marca en la sesión que el usuario completó el formulario para habilitar la descarga automática
+        try {
+          if (typeof window !== "undefined") {
+            sessionStorage.setItem("EBOOK_DL_READY", "1");
+          }
+        } catch {}
+        // Redirige a la página de gracias (App Router). Incluye ?dl=1 como respaldo
+        router.push("/thankyou-page?dl=1");
+        resetForm();
+        toast.success("Formulario enviado correctamente");
+      } else {
+        console.warn("Respuesta 200 sin success=true:", response.data);
+        const msg = response.data?.message || "Error al enviar el formulario. Por favor, intenta de nuevo.";
+        toast.error(msg);
+      }
+    } catch (error: any) {
+      const status = error?.response?.status;
+      const data = error?.response?.data;
+      console.error("[GuideForm] Error al enviar:", { status, data, error });
+      const msg = data?.message || data?.error || `Error ${status || ""}. Por favor, revisa los datos e intenta nuevamente.`;
+      toast.error(msg);
+    }
   }
 
   return (
@@ -82,10 +139,10 @@ export function GuideForm() {
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-semibold text-base sm:text-lg leading-relaxed">
+                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
                     Dos de los mejores destinos para vivir tu experiencia;
                   </p>
-                  <p className="text-gray-600 text-sm sm:text-base mt-1">
+                  <p className="text-gray-600 text-sm sm:text-base mt-1 lg:text-xl">
                     Canadá, Irlanda y Nueva Zelanda
                   </p>
                 </div>
@@ -99,7 +156,7 @@ export function GuideForm() {
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-semibold text-base sm:text-lg leading-relaxed">
+                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
                     Opciones de programas de estudio y visados disponibles en
                     cada país.
                   </p>
@@ -115,7 +172,7 @@ export function GuideForm() {
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-semibold text-base sm:text-lg leading-relaxed">
+                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
                     Puestos de trabajo para estudiantes.
                   </p>
                 </div>
@@ -123,7 +180,7 @@ export function GuideForm() {
             </div>
 
             <div className="mt-8 sm:mt-10 p-4 sm:p-5 bg-gray-50 rounded-lg">
-              <p className="text-gray-900 text-sm sm:text-base lg:text-lg text-left leading-relaxed">
+              <p className="text-gray-900 text-sm sm:text-base text-left leading-relaxed lg:text-xl">
                 Una vez llenes y envíes el formulario, recibirás un email con el
                 ebook adjunto para que puedas leerlo cuando quieras. ¡Asegúrate
                 de diligenciarlo correctamente!
@@ -241,20 +298,21 @@ export function GuideForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm sm:text-base font-medium text-gray-700">
-                          mes-día-año
+                          Fecha de nacimiento
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            type="date"
-                            placeholder="Fecha de nacimiento"
-                            className={`mt-1 h-10 sm:h-11 text-sm sm:text-base ${
-                              form.formState.errors.nacimiento
-                                ? "border-red-500"
-                                : ""
-                            }`}
-                            {...field}
+                          <DatePickerEbook
+                            value={parseDDMMYYYY(field.value)}
+                            onChange={(d) =>
+                              field.onChange(
+                                d ? formatDate(d, "dd/MM/yyyy") : ""
+                              )
+                            }
                           />
                         </FormControl>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Formato: dd/mm/yyyy
+                        </p>
                         <FormMessage className="text-xs text-red-500 mt-1" />
                       </FormItem>
                     )}
@@ -286,16 +344,14 @@ export function GuideForm() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="estudios">Estudios</SelectItem>
-                          <SelectItem value="trabajo">Trabajo</SelectItem>
-                          <SelectItem value="ambas">
-                            Estudiar y trabajar
+                          <SelectItem value="aprender-ingles">
+                            Aprender inglés
                           </SelectItem>
-                          <SelectItem value="experiencia">
-                            Experiencia cultural
+                          <SelectItem value="vivir-experiencia-cultural">
+                            Vivir la experiencia cultural
                           </SelectItem>
-                          <SelectItem value="idioma">
-                            Aprender idioma
+                          <SelectItem value="trabajar-mientras-estudio">
+                            Trabajar mientras estudio
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -346,7 +402,7 @@ export function GuideForm() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 sm:py-4 text-base sm:text-lg font-semibold transition-colors duration-200 min-h-[44px] sm:min-h-[48px]"
+                  className="w-full bg-[#5174fc] hover:bg-[#4257FF] text-white py-3 sm:py-4 text-base sm:text-lg font-semibold transition-colors duration-200 min-h-[44px] sm:min-h-[48px]"
                 >
                   {isLoading ? "Enviando..." : "Descargar Guía"}
                 </Button>

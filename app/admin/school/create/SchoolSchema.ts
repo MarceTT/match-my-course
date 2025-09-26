@@ -19,7 +19,9 @@ export const schoolFormSchema = z.object({
     .string()
     .min(3, "La ciudad debe tener al menos 3 caracteres")
     .max(50, "La ciudad no puede tener más de 50 caracteres"),
+  urlVideo: z.union([z.string().url("Debe ser una URL válida"), z.literal("")]).optional(),
   status: z.boolean().default(true),
+  country: z.string().min(1, "Debes seleccionar un país"),
   logo: z
     .any()
     .refine((file) => {

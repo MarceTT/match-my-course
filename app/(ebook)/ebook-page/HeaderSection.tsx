@@ -65,7 +65,7 @@ const HeaderSection = () => {
                   />
                   <div className="flex justify-center mt-6">
                     <Button
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
+                      className="bg-[#5174fc] hover:bg-[#4257FF] text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
                       onClick={() => {
                         const formulario =
                           document.getElementById("formulario-guia");
@@ -107,7 +107,7 @@ const HeaderSection = () => {
               />
               <div className="flex justify-center mt-6">
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
+                  className="bg-[#5174fc] hover:bg-[#4257FF] text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
                   onClick={() => {
                     const formulario =
                       document.getElementById("formulario-guia");

@@ -1,6 +1,6 @@
 import React from "react";
 import { BookUser } from "lucide-react";
-import { extractSlugEscuelaFromSeoUrl } from "../../../lib/helpers/buildSeoSchoolUrl";
+import { extractSlugEscuelaFromSeoUrl } from "../../../../lib/helpers/buildSeoSchoolUrl";
 
 const Inscription = () => {
   return (

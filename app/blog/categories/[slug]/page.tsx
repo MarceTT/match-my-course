@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const site = "MatchMyCourse - Blog";
   const baseDesc = `Artículos en la categoría ${slug}.`;
+  const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?category=${slug}&page=1&limit=1`, {
@@ -24,10 +25,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `Categoría: ${slug} | ${site}`,
       description: featured?.metaDescription || featured?.excerpt || baseDesc,
+      alternates: { canonical: `${ORIGIN}/blog/categories/${slug}` },
+      robots: { index: true, follow: true },
       openGraph: {
         title: `Categoría: ${slug} | ${site}`,
         description: featured?.metaDescription || featured?.excerpt || baseDesc,
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/categories/${slug}`,
+        url: `${ORIGIN}/blog/categories/${slug}`,
         images: featured?.coverImage ? [featured.coverImage] : [],
       },
     };
@@ -35,6 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: `Categoría: ${slug} | ${site}`,
       description: baseDesc,
+      alternates: { canonical: `${ORIGIN}/blog/categories/${slug}` },
+      robots: { index: true, follow: true },
     };
   }
 }

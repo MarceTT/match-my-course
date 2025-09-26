@@ -58,13 +58,18 @@ const nextConfig: NextConfig = {
     return [
       // Legacy URL redirects
       {
+        source: '/nueva-zelanda',
+        destination: '/estudiar-ingles-nueva-zelanda',
+        permanent: true,
+      },
+      {
         source: '/mision-y-vision',
         destination: '/mision-vision-matchmycourse',
         permanent: true,
       },
       {
-        source: '/ebook-estudiar-y-trabajar-extranjero',
-        destination: '/ebook',
+        source: '/ebook-page',
+        destination: '/ebook-estudiar-y-trabajar-extranjero',
         permanent: true,
       },
       // English to Spanish redirects (Spanish URLs are canonical)
@@ -117,6 +122,11 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      // Canonical Spanish URL for ebook -> serves existing ebook page implementation
+      {
+        source: '/ebook-estudiar-y-trabajar-extranjero',
+        destination: '/ebook-page',
+      },
       // Rewrite Spanish canonical URLs to their English page implementations
       // This allows Spanish URLs to be canonical while using English page files
       {
@@ -159,6 +169,11 @@ const nextConfig: NextConfig = {
         source: '/contacto',
         destination: '/contact',
       },
+      {
+        // Canonical Spanish URL for New Zealand page -> serves the existing route
+        source: '/estudiar-ingles-nueva-zelanda',
+        destination: '/nueva-zelanda',
+      }
     ];
   },
   async headers() {
@@ -171,9 +186,9 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               // Permitir scripts de Google Analytics, GTM y YouTube
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.youtube.com https://www.youtube-nocookie.com https://tagmanager.google.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.youtube.com https://www.youtube-nocookie.com https://tagmanager.google.com https://assets.calendly.com",
               // Permitir frames/iframes de YouTube, Google y Vimeo
-              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://player.vimeo.com",
+              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://player.vimeo.com https://calendly.com https://assets.calendly.com",
               // Permitir imágenes de cualquier fuente
               "img-src 'self' data: https: http: blob:",
               // Permitir media de fuentes seguras
@@ -199,6 +214,12 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Etiquetado defensivo para evitar indexación de rutas privadas o utilitarias
+      { source: '/admin/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/login', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/unauthorized', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/thankyou-page', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
     ];
   },
 };

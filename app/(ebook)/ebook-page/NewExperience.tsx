@@ -40,23 +40,23 @@ const NewExperience = () => {
 
           {/* Textos tercero en móvil y tablet */}
           <div className="text-center">
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-lg text-gray-700 mb-6 lg:text-xl">
               ¿Te imaginas salir de tu zona de confort, conocer personas de
               distintas culturas y trabajar en otro país?
             </p>
-            <p className="text-lg font-semibold text-gray-900 mb-6">
+            <p className="text-lg font-semibold text-gray-900 mb-6 lg:text-xl">
               ¡Todo esto es posible!
             </p>
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-700 mb-4 lg:text-xl">
               Si estás pensando en vivir una experiencia en el extranjero y no
               sabes por dónde empezar, esta guía gratuita tiene la respuesta a
               esas preguntas que están rondando por tu cabeza.
             </p>
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-700 mb-4 lg:text-xl">
               Nuestros growers que han vivido en varios destinos, junto con el
               Content Team de GrowPro, han preparado esta guía para ti.
             </p>
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-gray-900 lg:text-xl">
               ¡Entérate de todo lo que tienen para contarte!
             </p>
           </div>
@@ -67,23 +67,23 @@ const NewExperience = () => {
             <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-6 text-center lg:text-left">
               Vive una experiencia en el extranjero
             </h2>
-            <p className="text-lg text-gray-700 mb-6 text-center lg:text-justify">
+            <p className="text-lg text-gray-700 mb-6 text-center lg:text-justify lg:text-xl">
               ¿Te imaginas salir de tu zona de confort, conocer personas de
               distintas culturas y trabajar en otro país?
             </p>
-            <p className="text-lg font-semibold text-gray-900 mb-6 text-center lg:text-justify">
+            <p className="text-lg font-semibold text-gray-900 mb-6 text-center lg:text-justify lg:text-xl">
               ¡Todo esto es posible!
             </p>
-            <p className="text-gray-700 mb-4 text-center lg:text-justify">
+            <p className="text-gray-700 mb-4 text-center lg:text-justify lg:text-xl">
               Si estás pensando en vivir una experiencia en el extranjero y no
               sabes por dónde empezar, esta guía gratuita tiene la respuesta a
               esas preguntas que están rondando por tu cabeza.
             </p>
-            <p className="text-gray-700 mb-4 text-center lg:text-justify">
+            <p className="text-gray-700 mb-4 text-center lg:text-justify lg:text-xl">
               Nuestros growers que han vivido en varios destinos, junto con el
-              Content Team de GrowPro, han preparado esta guía para ti.
+              Content Team de <strong>MatchMyCourse</strong>, han preparado esta guía para ti.
             </p>
-            <p className="text-lg font-semibold text-gray-900 text-center lg:text-justify">
+            <p className="text-lg font-semibold text-gray-900 mb-6 text-center lg:text-justify lg:text-xl">
               ¡Entérate de todo lo que tienen para contarte!
             </p>
           </div>

@@ -22,12 +22,28 @@ export type UserResponse = {
 
 
 
+export type Country = {
+  value: string;
+  label: string;
+  code: string;
+  flag: string;
+};
+
+export type SchoolSettings = {
+  allowInstantBooking?: boolean;
+  accommodationAvailable?: boolean;
+  currency?: 'EUR' | 'NZD' | 'USD';
+  contactOnly?: boolean;
+};
+
 export type School = {
     _id: string;
     name: string;
     city: string;
     logo: string;
     status: boolean;
+    country?: Country;
+    settings?: SchoolSettings;
   };
 
   export type SchoolResponse = {

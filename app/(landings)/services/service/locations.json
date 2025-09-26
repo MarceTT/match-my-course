@@ -1,0 +1,30 @@
+{
+    "countries": [
+      {
+        "code": "irlanda",
+        "name": "Irlanda",
+        "cities": [
+          { "code": "dublin", "name": "Dublín" },
+          { "code": "cork", "name": "Cork" },
+          { "code": "limerick", "name": "Limerick" },
+          { "code": "galway", "name": "Galway" },
+          { "code": "bray", "name": "Bray" },
+          { "code": "naas", "name": "Naas" },
+          { "code": "tralee", "name": "Tralee" },
+          { "code": "athlone", "name": "Athlone" },
+          { "code": "waterford", "name": "Waterford" },
+          { "code": "killarney", "name": "Killarney" },
+          { "code": "wexford", "name": "Wexford" }
+        ]
+      },
+      {
+        "code": "nueva-zelanda",
+        "name": "Nueva Zelanda",
+        "cities": [
+          { "code": "auckland", "name": "Auckland" },
+          { "code": "rotorua", "name": "Rotorua" },
+          { "code": "tauranga", "name": "Tauranga" }
+        ]
+      }
+    ]
+  }

@@ -50,7 +50,7 @@ const FindSchoolSection = () => {
               alt="Encuentra tu escuela"
               width={400}
               height={400}
-              className="rounded-sm w-[95%] max-w-sm h-auto"
+              className="rounded-sm w-[95%] max-w-xl h-auto"
             />
             <Button
               asChild

@@ -20,7 +20,7 @@ const FilterWorksSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-[6fr_6fr] gap-12 items-start">
           {/* Right Column - Process Steps (se muestra arriba en mobile) */}
-          <div className="order-1 md:order-2 md:pl-8">
+          <div className="order-1 md:order-2 md:pl-8 lg:mt-12">
             <div className="space-y-6">
               {[
                 "Primero ingresa al buscador de escuelas de inglés desde tu móvil, tablet o laptop",
@@ -37,7 +37,7 @@ const FilterWorksSection = () => {
                     height={24}
                     className="mt-1 w-8 h-8 object-contain"
                   />
-                  <p className="text-[#2F343D] text-lg font-semibold">
+                  <p className="text-[#2F343D] text-lg font-semibold lg:text-2xl">
                     {text
                       .split(" ")
                       .map((word, i) =>
