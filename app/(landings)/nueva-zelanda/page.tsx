@@ -1,5 +1,6 @@
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { Metadata } from "next";
+import { Suspense } from "react";
 import WhyNZ from "./WhyNZ";
 import HeaderSection from "./HeaderSection";
 import StetpsToStudy from "./StetpsToStudy";
@@ -66,7 +67,9 @@ const NewZealandPage = () => {
     <HeaderSection />
     <WhyNZ />
     <StetpsToStudy />
-    <CalendlyCalendar />
+    <Suspense fallback={null}>
+      <CalendlyCalendar />
+    </Suspense>
     <Requisitos />
     </>
   )
