@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BookingClient from "./BookingClient";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Agendar Asesoría | MatchMyCourse",
@@ -16,9 +17,10 @@ export default function AsesoriaPage() {
             Elige una fecha y hora disponible. La reunión se crea en Zoom automáticamente.
           </p>
         </section>
-        <BookingClient />
+        <Suspense fallback={null}>
+          <BookingClient />
+        </Suspense>
       </div>
     </main>
   );
 }
-
