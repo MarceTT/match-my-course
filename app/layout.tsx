@@ -4,6 +4,7 @@ import "./globals.css";
 import { raleway, nunito } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
+import { Suspense } from "react";
 // import Script from "next/script"; // Commented out since SW is disabled
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import { GoogleTagManager } from "@next/third-parties/google";
@@ -130,7 +131,9 @@ export default function RootLayout({
       >
        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
         <ReactQueryProvider>
-          {children}
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
           <Toaster position="top-center" richColors closeButton />
         </ReactQueryProvider>
         
