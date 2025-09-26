@@ -175,8 +175,13 @@ export function isCountrySupported(countryCode: string): countryCode is Supporte
  * Get all supported countries for display
  */
 export function getSupportedCountries(): Array<{ code: SupportedCountryCode; name: string; currency: string; flag: string }> {
-  return Object.entries(SUPPORTED_COUNTRIES).map(([code, info]) => ({
-    code: code as SupportedCountryCode,
-    ...info,
-  }));
+  return Object.entries(SUPPORTED_COUNTRIES).map(([code, info]) => {
+    const { name, currency, flag } = info;
+    return {
+      code: code as SupportedCountryCode,
+      name,
+      currency,
+      flag,
+    };
+  });
 }
