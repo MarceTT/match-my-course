@@ -52,12 +52,7 @@ const navItems: NavItem[] = [
   },
   {
     name: "Escuelas",
-    dropdown: [
-      {
-        name: "Escuelas",
-        href: "/escuelas-socias",
-      },
-    ],
+    href: "/escuelas-socias",
   },
   {
     name: "Blog",
