@@ -38,7 +38,20 @@ export function parseReservationFromQuery(searchParams: URLSearchParams): Reserv
 }
 
 export function createReservationFromApiResponse(data: ApiReservationResponse): Reservation {
-  const courseKey: CourseKey | undefined = courseLabelToIdMap[data.course];
+  let courseKey: CourseKey | undefined = courseLabelToIdMap[data.course];
+  if (!courseKey) {
+    // Fallback slugify
+    const s = data.course
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\+/g, ' mas ')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    const match = Object.values(CourseKey).find((ck) => ck === s);
+    if (match) courseKey = match as CourseKey;
+  }
 
   // console.log("data nueva de prices", data);
 

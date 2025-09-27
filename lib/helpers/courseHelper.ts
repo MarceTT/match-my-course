@@ -19,6 +19,13 @@ export const courseLabelToIdMap: Record<string, CourseKey> = {
   "Inglés general intensivo": CourseKey.INTENSIVE,
   "Inglés general orientado a negocios": CourseKey.BUSINESS,
   "Programa de estudios y trabajo (25 semenas)": CourseKey.WORK_AND_STUDY,
+  // Sinónimos frecuentes desde backend/SEO
+  "Inglés General": CourseKey.GENERAL,
+  "Inglés General + Sesiones Individuales": CourseKey.GENERAL_PLUS,
+  "Inglés General Intensivo": CourseKey.INTENSIVE,
+  "Inglés de Negocios": CourseKey.BUSINESS,
+  "Programa Estudio y Trabajo (25 semanas)": CourseKey.WORK_AND_STUDY,
+  "Inglés general más trabajo (6 meses)": CourseKey.WORK_AND_STUDY,
 };
 
 export const courseToLabelMap: Record<CourseKey, string> = Object.fromEntries(
@@ -71,9 +78,35 @@ function toStringArray(input: unknown): string[] {
   return [];
 }
 
+function slugifyLabel(label: string): string {
+  const s = label
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quitar acentos
+    .toLowerCase()
+    .replace(/\+/g, ' mas ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  return s;
+}
+
 export function parseCoursesFromApi(labels: unknown): CourseKey[] {
   const arr = toStringArray(labels);
-  return arr
-    .map((label) => courseLabelToIdMap[label])
-    .filter((courseId): courseId is CourseKey => Boolean(courseId));
+  const slugSynonyms: Record<string, CourseKey> = {
+    // Sinónimos a slug del enum
+    'programa-estudio-y-trabajo-25-semanas': CourseKey.WORK_AND_STUDY,
+    'ingles-general-mas-trabajo-6-meses': CourseKey.WORK_AND_STUDY,
+  };
+  const result: CourseKey[] = [];
+  for (const label of arr) {
+    let id = courseLabelToIdMap[label];
+    if (!id) {
+      const slug = slugifyLabel(label);
+      const matchExact = Object.values(CourseKey).find((ck) => ck === slug);
+      if (matchExact) id = matchExact as CourseKey;
+      else if (slugSynonyms[slug]) id = slugSynonyms[slug];
+    }
+    if (id && !result.includes(id)) result.push(id);
+  }
+  return result;
 }
