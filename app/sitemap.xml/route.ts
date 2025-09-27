@@ -13,3 +13,15 @@ export async function GET() {
   });
 }
 
+export async function HEAD() {
+  // Mirror GET for clients (and curl -I) to see the 308 redirect as well
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://matchmycourse.com").replace(/\/$/, "");
+  const target = `${base}/sitemaps/index.xml`;
+  return new Response(null, {
+    status: 308,
+    headers: {
+      Location: target,
+      "Cache-Control": "public, max-age=600, s-maxage=86400",
+    },
+  });
+}

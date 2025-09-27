@@ -10,9 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/login", "/api", "/thankyou-page", "/unauthorized"],
       },
     ],
-    sitemap: [
-      `${base}/sitemap.xml`,
-      `${base}/sitemaps/index.xml`,
-    ],
+    // Unificar referencia al índice principal
+    sitemap: `${base}/sitemaps/index.xml`,
   };
 }
