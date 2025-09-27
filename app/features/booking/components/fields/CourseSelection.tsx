@@ -21,12 +21,17 @@ export default function CourseSection({
   selectedCourse,
   disabled = false,
 }: CourseSectionProps) {
-  const rawLabels: string[] = courseInfo.list;
+  const rawLabels: string[] = Array.isArray(courseInfo?.list) ? courseInfo.list : [];
   const courseValues: CourseKey[] = parseCoursesFromApi(rawLabels);
-  const courseOptions = courseValues.map((course) => ({
+  let courseOptions = courseValues.map((course) => ({
     label: courseToLabelMap[course],
     value: course,
   }));
+
+  // Fallback: si el backend no trajo cursos, muestra al menos el seleccionado
+  if (courseOptions.length === 0 && selectedCourse) {
+    courseOptions = [{ label: courseToLabelMap[selectedCourse], value: selectedCourse }];
+  }
 
   return (
     <div>

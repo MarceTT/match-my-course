@@ -14,6 +14,7 @@ import {
   fetchWeeksBySchool
 } from "../services/booking.services";
 import { Schedule } from "@/lib/types/scheduleInfo";
+import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { BookingResponse } from "@/app/lib/types";
 
 // Datos adicionales que no participan del cálculo de reserva,
@@ -117,7 +118,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       try {
         setLoadingCourses(true);
         const coursesData = await fetchCourses(schoolId);
-        setCourses(coursesData.courses);
+        const list = Array.isArray(coursesData?.courses)
+          ? coursesData.courses
+          : [];
+        setCourses(list);
       } catch (error) {
         setErrorCourses(error as Error);
       } finally {
@@ -128,26 +132,65 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     loadCourses();
   }, [schoolId]);
 
+  // Preseleccionar tipo de curso si viene en la ruta (slug) y aún no hay selección
+  useEffect(() => {
+    if (course && isValidCourse(course as any) && !formData.courseType) {
+      setFormData((prev) => ({ ...prev, courseType: course as CourseKey }));
+    }
+  }, [course]);
+
   /**
    * Cargar los horarios
    */
   useEffect(() => {
     if (!schoolId || !course) return;
 
+    const normalizeSchedules = (raw: any): Schedule[] => {
+      const out: Schedule[] = [];
+      const pushVal = (val: any) => {
+        if (!val) return;
+        if (typeof val === 'string') {
+          const s = val.trim();
+          // Excluir flags o metadatos conocidos
+          const forbidden = /^(legacy|country-service|hybrid)$/i.test(s);
+          if (!forbidden && s.length > 0) out.push({ horario: s, precioMinimo: 0 });
+          return;
+        }
+        if (Array.isArray(val)) {
+          val.forEach(pushVal);
+          return;
+        }
+        if (typeof val === 'object' && val !== null) {
+          if (val.horario) {
+            out.push({ horario: String(val.horario), precioMinimo: Number(val.precioMinimo || 0) });
+            return;
+          }
+          // Si es un objeto genérico { list: [...] }
+          if (Array.isArray((val as any).list)) {
+            (val as any).list.forEach(pushVal);
+            return;
+          }
+          // Explorar valores de objeto plano
+          Object.values(val).forEach(pushVal);
+        }
+      };
+      pushVal(raw);
+      // Unicos + orden simple AM/PM primero
+      const seen = new Set<string>();
+      const uniq = out.filter((it) => {
+        const k = it.horario.toLowerCase();
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
+      return uniq.sort((a,b) => a.horario.localeCompare(b.horario, undefined, { numeric: true }));
+    };
+
     const loadSchedules = async () => {
       try {
         setLoadingSchedules(true);
         const raw = await fetchSchedulesByCourse(schoolId, course);
-        const normalized = Array.isArray(raw)
-          ? raw
-          : typeof raw === 'object' && raw !== null
-          ? Object.values(raw as any)
-          : typeof raw === 'string'
-          ? raw.split(',').map((s) => ({ horario: s.trim(), precioMinimo: 0 }))
-          : [];
-        const items = normalized.map((it: any) =>
-          typeof it === 'string' ? { horario: it, precioMinimo: 0 } : it
-        );
+        const items = normalizeSchedules(raw);
         setSchedules(items);
       } catch (error) {
         setErrorSchedules(error as Error);
@@ -196,7 +239,10 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
 
     const course = newFormData.courseType ?? reservation?.courseKey;
     const weeks = newFormData.studyDuration ?? reservation?.weeks;
-    const schedule = newFormData.schedule ?? reservation?.schedule;
+    let schedule = newFormData.schedule ?? reservation?.schedule;
+    if (!schedule || /^(legacy|country-service|hybrid)$/i.test(schedule)) {
+      schedule = 'PM';
+    }
     const schoolId = reservation?.schoolId;
 
     // Cargar horarios y semanas si cambia el tipo de curso
@@ -207,16 +253,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
     ) {
       // Cargar los horarios cuando cambia el tipo de curso
       const raw = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
-      const normalized = Array.isArray(raw)
-        ? raw
-        : typeof raw === 'object' && raw !== null
-        ? Object.values(raw as any)
-        : typeof raw === 'string'
-        ? raw.split(',').map((s) => ({ horario: s.trim(), precioMinimo: 0 }))
-        : [];
-      const items = normalized.map((it: any) =>
-        typeof it === 'string' ? { horario: it, precioMinimo: 0 } : it
-      );
+      const items = normalizeSchedules(raw);
       setSchedules(items);
 
       // Carga semanas nuevas al cambiar curso

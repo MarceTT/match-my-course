@@ -30,6 +30,7 @@ export default function ScheduleSection({
       return { label: val, value: val };
     })
     .filter(Boolean) as Array<{ label: string; value: string }>;
+  const safeValue = value && options.some((o) => o.value === value) ? value : "";
   return (
     <div>
       <label className="block text-sm text-gray-600 mb-2">
@@ -37,7 +38,7 @@ export default function ScheduleSection({
       </label>
       <Select
         options={options}
-        value={value || ""}
+        value={safeValue}
         onChange={(val) => onChange(val)}
         placeholder={placeholder}
         disabled={disabled}

@@ -84,7 +84,7 @@ export default function WorkAndStudyBooking({
   const totalPagar = baseMonto - restaMonto;
   const reserveLabel = "Reserva ahora con solo";
 
-//   console.log("Reserva para ver datos", reservation);
+   console.log("Reserva para ver datos", reservation);
 
   const handleContinueClick = () => {
     if(reservation?.schoolName === "University of Limerick Language Centre"){
