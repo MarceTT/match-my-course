@@ -1,17 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "50mb", // Permite archivos grandes
-    },
-  },
-};
-
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const formData = await req.formData();
+    const formData = await request.formData();
     const session = await auth();
     const user = (session as any)?.user;
     if (!user || user.role !== "admin") {
