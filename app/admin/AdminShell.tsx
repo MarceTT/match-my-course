@@ -49,6 +49,26 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     }
   }, [status, session?.error]);
 
+  // Gestionar "Mantener sesión iniciada":
+  // - Si el usuario NO marcó recordar (mmc-remember=0) y se abre una nueva sesión de navegador
+  //   (sessionStorage aún no contiene la marca), cerrar sesión automáticamente.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const match = document.cookie.match(/(?:^|; )mmc-remember=([^;]+)/);
+      const remember = match ? decodeURIComponent(match[1]) : null;
+      const sessionAlive = sessionStorage.getItem('mmc-live');
+      if (status === 'authenticated') {
+        if ((remember === '0' || remember === 'false') && !sessionAlive) {
+          signOut({ callbackUrl: '/login' });
+          return;
+        }
+        // Marcar esta sesión de navegador como viva
+        sessionStorage.setItem('mmc-live', '1');
+      }
+    } catch {}
+  }, [status]);
+
   const pathSegments = pathname.split("/").filter((segment) => segment);
 
   return (

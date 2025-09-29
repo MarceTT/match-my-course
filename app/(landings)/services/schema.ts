@@ -33,9 +33,7 @@ export const formSchema = z
     ciudadEstudiar: z.string().min(1, "Selecciona tu ciudad de estudio"),
     nivelProfesional: z.string().min(1, "Selecciona tu nivel profesional"),
     nivelAproximado: z.string().min(1, "Selecciona tu nivel aproximado"),
-    fechaInicioCurso: z
-      .date()
-      .min(new Date(), "Selecciona una fecha futura"),
+    fechaInicioCurso: z.string().min(1, "Selecciona tu fecha de inicio"),
     nacimiento: z
       .string()
       .min(1, "Ingresa tu fecha de nacimiento")

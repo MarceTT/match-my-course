@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
 import { fetchSeoSchoolById } from '@/app/actions/seo';
+import { fetchSchoolById } from '@/app/actions/school';
 import SchoolSeoHome from './SchoolSeoHome';
-import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
+import { extractSlugEscuelaFromSeoUrl, buildCanonicalSeoSchoolPath } from '@/lib/helpers/buildSeoSchoolUrl';
 import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMap';
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
 
@@ -22,7 +23,46 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
 
   const seoCourses = await fetchSeoSchoolById(schoolId);
   const seoEntry = seoCourses.find((c: any) => c.subcategoria === subcategoria);
-  if (!seoEntry) return { title: 'No encontrado', robots: { index: false, follow: false } };
+  if (!seoEntry) {
+    // Fallback: permitir indexación básica cuando no existe entrada SEO específica
+    const canonicalPath = buildCanonicalSeoSchoolPath(slugCurso, slugEscuela, schoolId);
+    const canonicalUrl = `${ORIGIN}${canonicalPath}`;
+
+    try {
+      const schoolData = await fetchSchoolById(schoolId);
+      const school = schoolData?.school || schoolData?.data?.school;
+      const name = school?.name || 'Escuela de inglés';
+      const city = school?.city ? ` en ${school.city}` : '';
+      const ogImage = school?.mainImage ? rewriteToCDN(school.mainImage) : undefined;
+
+      return {
+        title: `${name}${city} | MatchMyCourse`,
+        description: `Compara cursos de inglés${city}. Información de la escuela, precios y opciones de estudio en MatchMyCourse.`,
+        alternates: { canonical: canonicalUrl },
+        robots: { index: true, follow: true },
+        openGraph: {
+          title: `${name}${city} | MatchMyCourse`,
+          description: `Compara cursos de inglés${city}.`,
+          url: canonicalUrl,
+          type: 'website',
+          images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: name }] : [],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: `${name}${city} | MatchMyCourse`,
+          description: `Compara cursos de inglés${city}.`,
+          images: ogImage ? [ogImage] : [],
+        },
+      };
+    } catch {
+      // Si falla el fallback, al menos exponemos la canónica e index
+      return {
+        title: 'Cursos de inglés | MatchMyCourse',
+        alternates: { canonical: canonicalUrl },
+        robots: { index: true, follow: true },
+      };
+    }
+  }
 
   const expectedCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
   const expectedEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
@@ -72,17 +112,17 @@ export default async function Page({ params, searchParams }: Props) {
 
   const seoCourses = await fetchSeoSchoolById(schoolId);
   const seoEntry = seoCourses.find((c: any) => c.subcategoria === subcategoria);
-  if (!seoEntry) return notFound();
 
   // 301 si los slugs no son los esperados → canónica SIN query
-  const expectedCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
-  const expectedEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
-
-  if (slugCurso !== expectedCurso || slugEscuela !== expectedEscuela) {
-    const canonicalPath =
-      `/cursos/${encodeURIComponent(expectedCurso)}` +
-      `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
-    return redirect(canonicalPath);
+  if (seoEntry) {
+    const expectedCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
+    const expectedEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url) || slugEscuela;
+    if (slugCurso !== expectedCurso || slugEscuela !== expectedEscuela) {
+      const canonicalPath =
+        `/cursos/${encodeURIComponent(expectedCurso)}` +
+        `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
+      return redirect(canonicalPath);
+    }
   }
 
   // Build canonical URL (server-side) for JSON-LD
@@ -134,16 +174,63 @@ export default async function Page({ params, searchParams }: Props) {
     ],
   } as const;
 
+  // Course schema (per subcategoría) con fallback básico
+  let schoolName = seoEntry?.escuela as string | undefined;
+  let city = seoEntry?.ciudad as string | undefined;
+  if (!schoolName || !city) {
+    try {
+      const schoolData = !seoEntry ? await fetchSchoolById(schoolId) : null;
+      const school = schoolData?.school || schoolData?.data?.school;
+      schoolName = schoolName || school?.name;
+      city = city || school?.city;
+    } catch {
+      // ignore
+    }
+  }
+
+  const courseTitle = `${cursoSlugToSubcategoria[slugCurso] || 'Curso de inglés'}${
+    schoolName ? ` en ${schoolName}` : ''
+  }`;
+
+  const courseSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: courseTitle,
+    description:
+      (seoEntry as any)?.metaDescription ||
+      (seoEntry as any)?.h1 ||
+      `Información del curso ${cursoSlugToSubcategoria[slugCurso] || ''}${
+        city ? ` en ${city}` : ''
+      }.`,
+    provider: {
+      '@type': 'EducationalOrganization',
+      name: schoolName || undefined,
+      url: canonicalUrl,
+    },
+    courseMode: 'OnSite',
+    inLanguage: ['en'],
+    areaServed: city || undefined,
+  } as const;
+
   return (
     <>
-      {/* Server-rendered JSON-LD for better SEO discovery */}
+      {/* Server-rendered JSON-LD for better SEO discovery (solo si hay entrada SEO) */}
+      {seoEntry && (
+        <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+          />
+        </>
+      )}
+      {/* Course JSON-LD (siempre con fallback) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
       />
       <SchoolSeoHome
         schoolId={schoolId}

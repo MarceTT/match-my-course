@@ -110,7 +110,7 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
             </Button>
 
             <p className="mt-3 text-xs text-gray-500">
-              ⏰ Oferta válida hasta el 31 de agosto
+              ⏰ Oferta válida hasta el 30 de septiembre
             </p>
           </div>
         </motion.div>

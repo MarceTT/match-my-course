@@ -27,7 +27,7 @@ const WhyNZ = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 lg:gap-0 items-stretch">
           {/* Right Column - Process Steps (se muestra arriba en mobile) */}
           <div className="order-1 md:order-2 md:pl-0 lg:pl-0 text-justify h-full flex flex-col justify-center">
-            <div className="space-y-4">
+            <div className="space-y-12">
               {[
                 "Puedes estudiar inglés a tiempo completo con una visa de estudio de 4 a 12 meses de duración.",
                 "Te desarrollarás en un ambiente multicultural ideal para aprender inglés y hacer contactos.",
@@ -75,6 +75,7 @@ const WhyNZ = () => {
         <PillsBadges />
       </div>
     </section>
+
   );
 };
 

@@ -10,20 +10,15 @@ const clientAxios = axios.create({
 
 // Variables para manejo de cola de requests
 let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (value: any) => void;
-  reject: (reason: any) => void;
-}> = [];
+let failedQueue: Array<{ resolve: (value: string) => void; reject: (reason: any) => void }> = [];
 
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) {
-      reject(error);
-    } else {
-      resolve(token);
-    }
-  });
+const processQueue = (error: any, token: string | null) => {
+  const queue = [...failedQueue];
   failedQueue = [];
+  queue.forEach(({ resolve, reject }) => {
+    if (error || !token) reject(error || new Error("No token"));
+    else resolve(token);
+  });
 };
 
 // Request interceptor - solo para cliente
@@ -53,53 +48,29 @@ clientAxios.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then(token => {
-          originalRequest.headers["Authorization"] = `Bearer ${token}`;
-          return clientAxios(originalRequest);
-        }).catch(err => Promise.reject(err));
+        })
+          .then((newToken) => {
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return clientAxios(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
       }
 
       isRefreshing = true;
-
       try {
-        const sessionResponse = await fetch('/api/auth/session');
-        const session = await sessionResponse.json();
-        const refreshToken = session?.user?.refreshToken;
-
-        if (!refreshToken) {
-          processQueue(error, null);
-          if (typeof window !== 'undefined') {
-            window.location.href = '/api/auth/signout?callbackUrl=/login';
-          }
-          return Promise.reject(error);
-        }
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-refresh-token": refreshToken,
-          },
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.data?.accessToken) {
-          throw new Error("Token refresh failed");
-        }
-
-        const newAccessToken = result.data.accessToken;
-        processQueue(null, newAccessToken);
-        
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        // Pedir la sesión: el callback JWT de NextAuth refrescará si venció
+        const res = await fetch('/api/auth/session', { cache: 'no-store' });
+        const data = await res.json();
+        const newToken = data?.user?.accessToken as string | undefined;
+        if (!newToken) throw new Error('No access token in session');
+        processQueue(null, newToken);
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return clientAxios(originalRequest);
-
       } catch (refreshError) {
-        console.error("Error refreshing token:", refreshError);
+        console.error('Error refreshing via NextAuth session:', refreshError);
         processQueue(refreshError, null);
         if (typeof window !== 'undefined') {
           window.location.href = '/api/auth/signout?callbackUrl=/login';

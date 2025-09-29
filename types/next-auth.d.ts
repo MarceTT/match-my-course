@@ -8,7 +8,6 @@ declare module "next-auth" {
       email: string;
       role: string;
       accessToken: string;
-      refreshToken: string;
       emailVerified?: Date | null;
     } & DefaultSession["user"];
     error?: string;
@@ -20,7 +19,7 @@ declare module "next-auth" {
     email: string;
     role: string;
     accessToken: string;
-    refreshToken: string;
+    refreshToken?: string;
     emailVerified?: Date | null;
     accessTokenExpires?: number;
   }

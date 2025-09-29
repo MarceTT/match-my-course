@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
 import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
-import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
+import { buildCanonicalSeoSchoolPathFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -59,26 +59,15 @@ SchoolCardProps) => {
   );
   const schoolId = _id.toString();
   const course = "ingles-general";
-  const semanas = Number(searchParams.get("weeksMin") ?? 1);
-  const ciudad = location;
-  const horario = generalEnglishPrice?.horario ?? "PM";
-
-  const fullUrl = seoEntry
-    ? buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
-        schoolId,
-        curso: course,
-        semanas,
-        ciudad,
-        horario,
-      })
+  // Enlaza directamente a la URL canónica (sin query params) para SEO interno
+  const canonicalPath = seoEntry
+    ? buildCanonicalSeoSchoolPathFromSeoEntry(seoEntry, schoolId)
     : "#";
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">
       <Link
-        href={fullUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={canonicalPath}
         onMouseEnter={handlePrefetch}
         onTouchStart={handlePrefetch}
         className="flex flex-col h-full"

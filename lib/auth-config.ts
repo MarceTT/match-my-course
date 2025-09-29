@@ -55,7 +55,8 @@ export const authConfig: NextAuthConfig = {
               email: user.email,
               role: user.role, 
               accessToken: user.accessToken,
-              refreshToken: user.refreshToken,
+              // Mantener refreshToken solo en el JWT (no exponer en session)
+              refreshToken: (user as any).refreshToken,
               accessTokenExpires: Date.now() + 5 * 60 * 1000,
             };
       }
@@ -70,6 +71,7 @@ export const authConfig: NextAuthConfig = {
       return await refreshAccessToken(token);
     },
     async session({ session, token }) {
+      // Exponer solo los datos necesarios; NO incluir refreshToken en el cliente
       session.user = {
         ...session.user,
         id: token.id as string,
@@ -77,9 +79,8 @@ export const authConfig: NextAuthConfig = {
         email: token.email as string,
         role: token.role as string,
         accessToken: token.accessToken as string,
-        refreshToken: token.refreshToken as string,
-        emailVerified: token.emailVerified as Date | null,
-      };
+        emailVerified: (token as any).emailVerified as Date | null,
+      } as any;
 
       // Añade el error si existe en el token
       if (token.error && typeof token.error === "string") {
@@ -96,7 +97,10 @@ export const authConfig: NextAuthConfig = {
     strategy: "jwt",
   },
   jwt: {
-    maxAge: 60 * 60,
+    // Duración de la sesión (cookie NextAuth). 'Remember me' se gestiona en cliente
+    // para terminar la sesión al cerrar el navegador cuando el usuario NO marca recordar.
+    // Aquí se establece un máximo razonable para sesiones persistentes.
+    maxAge: 60 * 60 * 24 * 30, // 30 días
   } as any,
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
@@ -123,6 +127,7 @@ async function refreshAccessToken(token: any) {
     }
 
     const newAccessToken = result.data?.accessToken;
+    const rotatedRefresh = result.data?.refreshToken as string | undefined;
 
     if (!newAccessToken) {
       console.error("[NextAuth] Formato inesperado. Se esperaba:", {
@@ -136,6 +141,8 @@ async function refreshAccessToken(token: any) {
       ...token,
       accessToken: newAccessToken,
       accessTokenExpires: Date.now() + 5 * 60 * 1000, // 5 minutos
+      // Si el backend rota refreshToken, persistirlo; de lo contrario mantener el actual
+      refreshToken: rotatedRefresh ?? token.refreshToken,
       id: token.id,
       name: token.name,
       email: token.email,

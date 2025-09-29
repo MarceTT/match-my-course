@@ -142,13 +142,17 @@ export default function BookingClient() {
     return () => window.removeEventListener('resize', detect);
   }, []);
 
-  // Mantener el formulario en vista al cambiar de paso
+  // Mantener el formulario en vista SOLO cuando cambia de paso (evitar scroll en carga inicial)
   const mountedRef = useRef(false);
+  const prevStepRef = useRef<1 | 2 | 3 | 4>(1);
   useEffect(() => {
     if (!mountedRef.current) {
       mountedRef.current = true;
+      prevStepRef.current = step;
       return;
     }
+    if (prevStepRef.current === step) return; // no hacer scroll si no cambió el paso
+    prevStepRef.current = step;
     if (typeof window === 'undefined') return;
     const el = containerRef.current;
     if (!el) return;
@@ -160,12 +164,11 @@ export default function BookingClient() {
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     };
-    // Asegurar que el contenido del paso ya está montado
     requestAnimationFrame(() => {
       doScroll();
       setTimeout(doScroll, 50);
     });
-  }, [step, scrollMargin]);
+  }, [step]);
 
   const scrollToStep2Continue = useCallback(() => {
     if (typeof window === 'undefined') return;

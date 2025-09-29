@@ -3,7 +3,6 @@
 import { School, SchoolResponse } from "@/app/types";
 import axiosInstance from "@/app/utils/apiClient";
 import { refreshAccessToken } from "@/app/utils/requestServer";
-import { cookies } from "next/headers";
 
 export async function getSchools(): Promise<School[] | { error: string }> {
   try {
@@ -16,10 +15,8 @@ export async function getSchools(): Promise<School[] | { error: string }> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
     });
 
     if (!res.ok) {
@@ -51,7 +48,6 @@ export async function createSchool(formData: FormData) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
       body: formData,
@@ -86,7 +82,6 @@ export async function updateSchool(id: string, formData: FormData) {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
       body: formData,
     });
 
@@ -119,7 +114,6 @@ export async function toggleSchoolStatus(id: string, status: boolean) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
       body: JSON.stringify({ status: !status }),
     });
 
@@ -151,7 +145,6 @@ export async function getSchoolById(id: string): Promise<{ data?: School; error?
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      credentials: "include",
     });
 
     const responseData = await res.json();
@@ -174,22 +167,17 @@ export async function deleteImageSchool(
   imageType: "galleryImages" | "logo" | "mainImage"
 ) {
   try {
-    const cookieStore = cookies();
-    const token = (await cookieStore).get("token")?.value;
-
-    if (!token) {
-      console.warn("❌ No hay token en cookies");
-      return { error: "No autorizado" };
-    }
+    const token = await refreshAccessToken();
+    if (!token) return { error: "No autorizado" };
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/${id}/deleteImage`,
       {
         method: "DELETE",
         headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-        credentials: "include",
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ imageKey, imageType }),
       }
     );

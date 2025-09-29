@@ -30,9 +30,12 @@ export async function GET() {
       const absolute = `${base}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(escuelaSlug)}/${encodeURIComponent(schoolId)}`;
       if (seen.has(absolute)) continue;
       seen.add(absolute);
+      const lmRaw = (e as any).updatedAt || (e as any).updated_at || (e as any).lastModified || null;
+      const lastmod = lmRaw ? new Date(lmRaw).toISOString() : new Date().toISOString();
       urls.push(xml`
         <url>
           <loc>${absolute}</loc>
+          <lastmod>${lastmod}</lastmod>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
         </url>

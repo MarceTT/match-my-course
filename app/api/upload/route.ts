@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { refreshAccessToken } from "@/app/utils/requestServer";
+import { auth } from "@/auth";
 
 export const config = {
   api: {
@@ -12,19 +12,17 @@ export const config = {
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const token = await refreshAccessToken();
-
-    if (!token) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    const session = await auth();
+    const user = (session as any)?.user;
+    if (!user || user.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-    formData.forEach((value, key) => console.log(`➡️ ${key}:`, value));
+    const token = user.accessToken as string;
     const backendResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/schools`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        credentials: "include",
         body: formData,
       });
 

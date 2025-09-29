@@ -30,13 +30,6 @@ import axiosInstance from "@/app/utils/apiClient";
 import { CustomCountrySelect } from "../../../shared";
 import { countries } from "@/lib/constants/countries";
 import DatePickerEbook from "@/components/common/DatePickerEbook";
-import { Calendar as CalendarIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import Link from "next/link";
 import {
   City,
@@ -48,8 +41,9 @@ import {
 import levelEnglish from "../service/levelEnglish";
 import respaldoEconomico from "../service/respaldoEconomico";
 import professionalLevel from "../service/professionalLevel";
-import StartDatePicker from "@/app/components/booking/fields/StartDateSection";
+import inicioCurso from "../service/inicioCurso";
 import { irishHolidays } from "@/lib/constants/holidays";
+import { FaSpinner } from "react-icons/fa";
 
 const LevelEnglishForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,7 +57,7 @@ const LevelEnglishForm = () => {
       ciudadEstudiar: "",
       nivelProfesional: "",
       nivelAproximado: "",
-      fechaInicioCurso: new Date(),
+      fechaInicioCurso: "",
       nacimiento: "",
       respaldoEconomico: "",
       aceptaTerminos: false,
@@ -83,16 +77,14 @@ const LevelEnglishForm = () => {
       const d = new Date(from);
       while (true) {
         const isMon = d.getDay() === 1;
-        const isHoliday = irishHolidays.some((h) => h.toDateString() === d.toDateString());
+        const isHoliday = irishHolidays.some(
+          (h) => h.toDateString() === d.toDateString()
+        );
         if (isMon && !isHoliday) return new Date(d);
         d.setDate(d.getDate() + 1);
       }
     };
     const firstMonday = getFirstValidMonday(minSelectableDate);
-    const current = form.getValues("fechaInicioCurso") as Date | undefined;
-    if (!current || current < firstMonday) {
-      form.setValue("fechaInicioCurso", firstMonday, { shouldValidate: true });
-    }
   }, [form]);
 
   const selectedCountry = useWatch({
@@ -105,29 +97,24 @@ const LevelEnglishForm = () => {
 
   // 3. Define la función de envío
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Serializar fechaInicioCurso (Date) al formato requerido por el backend
     const payload = {
       ...values,
-      fechaInicioCurso: values.fechaInicioCurso
-        ? formatDate(values.fechaInicioCurso, "dd/MM/yyyy")
-        : undefined,
-    } as any;
-
-    console.log("LevelForm payload ready:", payload);
+    };
+    //console.log("LevelForm payload ready:", payload);
 
     // Descomenta para enviar al backend
-    // try {
-    //   const response = await axiosInstance.post("/ebook/download-ebook", payload);
-    //   if (response.data.success) {
-    //     resetForm();
-    //     toast.success("Formulario enviado correctamente");
-    //   } else {
-    //     toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
-    //   }
-    // } catch (error) {
-    //   console.error("Error al enviar el formulario:", error);
-    //   toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
-    // }
+    try {
+      const response = await axiosInstance.post("/service-form/submit-service-form", payload);
+      if (response.data.success) {
+        resetForm();
+        toast.success("Formulario enviado correctamente");
+      } else {
+        toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
+      }
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+      toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
+    }
   }
   return (
     <div
@@ -396,8 +383,27 @@ const LevelEnglishForm = () => {
                     ¿Cuándo te gustaría iniciar el curso?
                   </FormLabel>
                   <FormControl>
-                    <StartDatePicker value={field.value as Date | undefined} onChange={field.onChange} label="" />
-                  </FormControl>
+                  <Select
+                    value={field.value} onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      className={`mt-1 text-base ${
+                        form.formState.errors.fechaInicioCurso
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Selecciona" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {inicioCurso.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
                   <FormMessage className="text-sm text-red-500 mt-1" />
                 </FormItem>
               )}
@@ -438,8 +444,8 @@ const LevelEnglishForm = () => {
                 </FormLabel>
                 <FormControl>
                   <Select
+                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
                   >
                     <SelectTrigger
                       className={`mt-1 text-base ${
@@ -535,6 +541,9 @@ const LevelEnglishForm = () => {
             disabled={isLoading}
             className="w-full bg-[#ff6f6f] hover:bg-[#ff5a5a] text-white py-3 sm:py-4 text-base sm:text-lg font-semibold transition-colors duration-200 min-h-[44px] sm:min-h-[48px]"
           >
+            {isLoading && (
+              <FaSpinner className="mr-2 animate-spin" />
+            )}
             {isLoading ? "Enviando..." : "Te contactaremos"}
           </Button>
         </form>

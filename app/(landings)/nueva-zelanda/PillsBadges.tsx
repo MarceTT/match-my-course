@@ -1,7 +1,8 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { BookUser } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
 const PillsBadges = () => {
@@ -64,12 +65,28 @@ const PillsBadges = () => {
       </div>
       <div className="flex justify-center mt-12">
         <Button
-          asChild
+          onClick={() => {
+            const el = document.getElementById("asesoria-booking");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+              // Resaltar el contenedor por un instante
+              const card = el.querySelector("div");
+              const target = (card instanceof HTMLElement ? card : el) as HTMLElement;
+              const highlight = [
+                "ring-2",
+                "ring-primary",
+                "ring-offset-2",
+                "ring-offset-white",
+              ];
+              target.classList.add(...highlight);
+              setTimeout(() => {
+                target.classList.remove(...highlight);
+              }, 1200);
+            }
+          }}
           className="block mx-auto w-fit items-center justify-center px-16 py-1 bg-[#5174fc] hover:bg-[#4257FF] text-white text-xl font-semibold rounded-md shadow transition"
         >
-          <Link href="/contacto" target="_blank">
-            Asesoría gratuita
-          </Link>
+          Asesoría gratuita
         </Button>
       </div>
     </>

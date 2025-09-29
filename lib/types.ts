@@ -244,13 +244,12 @@ declare module "next-auth" {
       name: string;
       email: string;
       accessToken: string;
-      refreshToken: string;
     };
   }
 
   interface User {
     accessToken: string;
-    refreshToken: string;
+    refreshToken?: string;
   }
 
   interface JWT {

@@ -26,7 +26,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logoutAction } from "@/app/admin/actions/user";
 import { toast } from "sonner";
 import { signOut } from "next-auth/react";
 

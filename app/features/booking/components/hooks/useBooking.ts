@@ -17,50 +17,6 @@ import { Schedule } from "@/lib/types/scheduleInfo";
 import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { BookingResponse } from "@/app/lib/types";
 
-/**
- * Normaliza la respuesta del backend de horarios a un arreglo de Schedule
- * tolerante a distintos formatos (string[], objetos con distintas claves, etc.)
- */
-function normalizeSchedules(input: any): Schedule[] {
-  const arr = Array.isArray(input)
-    ? input
-    : Array.isArray(input?.data)
-      ? input.data
-      : Array.isArray(input?.list)
-        ? input.list
-        : input
-  ;
-
-  if (!Array.isArray(arr)) return [];
-
-  const toNumber = (v: any): number => {
-    if (v == null) return 0;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : 0;
-  };
-
-  return arr
-    .map((it) => {
-      if (typeof it === 'string') {
-        return { horario: it, precioMinimo: 0 } as Schedule;
-      }
-      if (typeof it === 'object' && it) {
-        const horario = String(
-          (it as any).horario ?? (it as any).schedule ?? (it as any).label ?? (it as any).name ?? ''
-        ).trim();
-        const precioMinimo = toNumber(
-          (it as any).precioMinimo ?? (it as any).priceMin ?? (it as any).minPrice ?? (it as any).precio ?? (it as any).price
-        );
-        const ofertaVal = (it as any).oferta ?? (it as any).offer ?? (it as any).discount;
-        const oferta = ofertaVal != null ? toNumber(ofertaVal) : undefined;
-        if (!horario) return null;
-        return { horario, precioMinimo, ...(oferta != null ? { oferta } : {}) } as Schedule;
-      }
-      return null;
-    })
-    .filter(Boolean) as Schedule[];
-}
-
 // Datos adicionales que no participan del cálculo de reserva,
 // pero sí se envían al backend
 type ExtraReservationData = {

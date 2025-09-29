@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import BookingClient from "@/app/asesoria/BookingClient";
+import BookingClient from "./asesoria/BookingClient";
 
 type Props = {};
 
@@ -19,7 +19,7 @@ const ZoomBookingSection: React.FC<Props> = () => {
           </div>
 
           {/* Right: Zoom booking widget */}
-          <div className="order-2">
+          <div id="asesoria-booking" className="order-2 scroll-mt-28">
             <div className="w-full max-w-xl mx-auto rounded-xl border border-gray-200 shadow-sm p-4 bg-white">
               <BookingClient />
             </div>

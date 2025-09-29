@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { refreshAccessToken } from "@/app/utils/requestServer";
+import { auth } from "@/auth";
 
 export const config = {
   api: {
@@ -7,17 +7,17 @@ export const config = {
   },
 };
 
-export async function PUT(req: NextRequest, context: any) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const params = await context.params;
-const { id } = params;
-    // 1. Verificar autenticación
-    const token = await refreshAccessToken();
-    if (!token) {
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+    const session = await auth();
+    const user = (session as any)?.user;
+    if (!user || user.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-//     console.log("🔐 Enviando token:", token);
+    const { id } = params;
+
+    const token = user.accessToken as string;
 
     // 2. Obtener FormData directamente
     const formData = await req.formData();

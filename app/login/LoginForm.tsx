@@ -31,12 +31,13 @@ const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      remember: false as any,
     },
   });
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof LoginSchema> & { remember?: boolean }) => {
     try {
       const res = await signIn("credentials", {
         email: values.email,
@@ -51,6 +52,16 @@ const LoginForm = () => {
       }
   
       toast.success("Inicio de sesión exitoso 🎉");
+      try {
+        // Guardar preferencia de "Mantener sesión" en cookie (30 días)
+        const remember = values.remember === true;
+        const maxAge = 60 * 60 * 24 * 30;
+        document.cookie = `mmc-remember=${remember ? "1" : "0"}; max-age=${maxAge}; path=/`;
+        // Para sesiones NO persistentes, marcar la sesión actual como viva en sessionStorage
+        if (!remember && typeof window !== 'undefined') {
+          sessionStorage.setItem('mmc-live', '1');
+        }
+      } catch {}
   
       // ⏳ Esperar brevemente para asegurar que las cookies se apliquen correctamente
       setTimeout(() => {
@@ -132,7 +143,11 @@ const LoginForm = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Checkbox id="remember" />
+              <Checkbox
+                id="remember"
+                checked={Boolean(form.watch("remember"))}
+                onCheckedChange={(checked) => form.setValue("remember", Boolean(checked))}
+              />
               <label
                 htmlFor="remember"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

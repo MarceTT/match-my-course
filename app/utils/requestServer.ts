@@ -1,33 +1,15 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { auth } from "@/auth";
 
+// Devuelve el accessToken vigente desde NextAuth (se refresca vía callback jwt).
+// Mantiene la firma para no tocar los call sites existentes.
 export async function refreshAccessToken(): Promise<string | null> {
-  const refreshToken = (await cookies()).get("refreshToken")?.value;
-
-  if (!refreshToken) {
-    console.warn("❌ No hay refreshToken en las cookies.");
-    return null;
-  }
-
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    const data = await res.json();
-
-    if (!res.ok || !data.data?.token) {
-      console.warn("⚠️ Token no renovado. Eliminando cookies.");
-      (await cookies()).delete("refreshToken");
-      (await cookies()).delete("isLoggedIn");
-      return null;
-    }
-
-    return data.data.token;
+    const session = await auth();
+    const token = (session as any)?.user?.accessToken as string | undefined;
+    return token ?? null;
   } catch (err) {
-    console.error("❌ Error al renovar token:", err);
     return null;
   }
 }

@@ -36,6 +36,10 @@ const navItems: NavItem[] = [
     name: "Nosotros",
     dropdown: [
       {
+        name: "Escuelas",
+        href: "/escuelas-socias",
+      },
+      {
         name: "Quiénes somos",
         href: "/quienes-somos",
       },
@@ -46,22 +50,18 @@ const navItems: NavItem[] = [
       {
         name: "Nuestros servicios",
         href: "/servicios-matchmycourse",
+      },
+      {
+        name: "Contacto",
+        href: "/contacto",
       }
       
     ],
   },
   {
-    name: "Escuelas",
-    href: "/escuelas-socias",
-  },
-  {
     name: "Blog",
     href: "/blog",
-  },
-  {
-    name: "Contacto",
-    href: "/contacto",
-  },
+  }
 ];
 
 const Header = () => {

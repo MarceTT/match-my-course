@@ -44,3 +44,29 @@ export function buildSeoSchoolUrlFromSeoEntry(
 
   return baseUrl.pathname + baseUrl.search;
 }
+
+// Devuelve únicamente el path canónico sin query params
+// Ej.: /cursos/{curso}/escuelas/{escuela}/{id}
+export function buildCanonicalSeoSchoolPathFromSeoEntry(
+  seoEntry: { url: string; subcategoria: string },
+  schoolId: string
+) {
+  const slugCurso = subcategoriaToCursoSlug[seoEntry.subcategoria];
+  const slugEscuela = extractSlugEscuelaFromSeoUrl(seoEntry.url);
+  if (!slugCurso || !slugEscuela) return "#";
+  return `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(
+    slugEscuela
+  )}/${encodeURIComponent(schoolId)}`;
+}
+
+// Versión genérica cuando ya conoces los slugs
+export function buildCanonicalSeoSchoolPath(
+  slugCurso: string,
+  slugEscuela: string,
+  schoolId: string
+) {
+  if (!slugCurso || !slugEscuela || !schoolId) return "#";
+  return `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(
+    slugEscuela
+  )}/${encodeURIComponent(schoolId)}`;
+}
