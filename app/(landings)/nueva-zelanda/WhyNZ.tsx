@@ -4,6 +4,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookUser } from "lucide-react";
 import PillsBadges from "./PillsBadges";
+import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+
+const imgWhyNZ = rewriteToCDN("https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/landing-nueva-zelanda/Por+que%CC%81+estudiar+ingle%CC%81s+en+Nueva+Zelanda.jpg");
 
 const WhyNZ = () => {
   return (
@@ -20,10 +23,11 @@ const WhyNZ = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6 lg:gap-8 items-start">
+        {/* Dos columnas iguales en desktop y misma altura */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 lg:gap-0 items-stretch">
           {/* Right Column - Process Steps (se muestra arriba en mobile) */}
-          <div className="order-1 md:order-2 md:pl-4 lg:pl-6 lg:mt-12 text-justify">
-            <div className="space-y-6">
+          <div className="order-1 md:order-2 md:pl-0 lg:pl-0 text-justify h-full flex flex-col justify-center">
+            <div className="space-y-4">
               {[
                 "Puedes estudiar inglés a tiempo completo con una visa de estudio de 4 a 12 meses de duración.",
                 "Te desarrollarás en un ambiente multicultural ideal para aprender inglés y hacer contactos.",
@@ -34,11 +38,11 @@ const WhyNZ = () => {
                   <Image
                     src="/about-us/marca-de-verificacion.png"
                     alt="Marca de verificación"
-                    width={24}
-                    height={24}
-                    className="mt-1 w-8 h-8 object-contain"
+                    width={28}
+                    height={28}
+                    className="mt-1 w-7 h-7 object-contain"
                   />
-                  <p className="text-[#2F343D] text-lg leading-relaxed lg:text-2xl">
+                  <p className="text-[#2F343D] text-lg md:text-xl lg:text-2xl leading-relaxed">
                     {text
                       .split(" ")
                       .map((word, i) =>
@@ -55,14 +59,17 @@ const WhyNZ = () => {
           </div>
 
           {/* Left Column - Filter Demo (se muestra abajo en mobile) */}
-          <div className="order-2 md:order-1 space-y-6 md:pr-2 lg:pr-4 md:max-w-xl">
-            <Image
-              src="/about-us/Como_funciona_el_filtro_de_MatchMyCourse.png"
-              alt="Fotos Google Business"
-              width={1000}
-              height={1000}
-              className="w-full h-auto"
-            />
+          <div className="order-2 md:order-1 space-y-4 md:pr-0 lg:pr-0 h-full flex">
+            <div className="relative w-full h-full">
+              <Image
+                src={imgWhyNZ}
+                alt="Fotos Google Business"
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-contain rounded-lg"
+                priority
+              />
+            </div>
           </div>
         </div>
         <PillsBadges />

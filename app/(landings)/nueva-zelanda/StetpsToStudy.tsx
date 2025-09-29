@@ -1,5 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
+import { rewriteToCDN } from '@/app/utils/rewriteToCDN'
+
+const imgSteps = rewriteToCDN(
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/landing-nueva-zelanda/Pasos+para+estudiar+y+trabajar+en+Nueva+Zelanda.jpg"
+)
 
 const StetpsToStudy = () => {
 
@@ -38,10 +43,10 @@ const StetpsToStudy = () => {
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[6fr_6fr] gap-12 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
         {/* Right Column - Process Steps (se muestra arriba en mobile) */}
-        <div className="order-1 md:order-2 md:pl-8 lg:mt-12 text-justify">
-          <div className="space-y-6">
+        <div className="order-1 md:order-2 md:pl-0 text-justify h-full flex flex-col justify-center">
+          <div className="space-y-4">
             {steps.map((step, idx) => (
               <div key={idx} className="flex items-start gap-3">
                 <Image
@@ -65,14 +70,17 @@ const StetpsToStudy = () => {
         </div>
 
         {/* Left Column - Filter Demo (se muestra abajo en mobile) */}
-        <div className="order-2 md:order-1 space-y-6">
-          <Image
-            src="/about-us/Como_funciona_el_filtro_de_MatchMyCourse.png"
-            alt="Fotos Google Business"
-            width={1000}
-            height={1000}
-            className="w-full h-auto"
-          />
+        <div className="order-2 md:order-1 space-y-4 md:pr-0 h-full flex">
+          <div className="relative w-full h-full">
+            <Image
+              src={imgSteps}
+              alt="Pasos para estudiar y trabajar en Nueva Zelanda"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-contain rounded-lg"
+              priority
+            />
+          </div>
         </div>
       </div>
     </div>

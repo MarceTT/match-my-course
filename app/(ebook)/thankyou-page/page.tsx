@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logos/final-logo.png";
 import bgLilaTypEbookDesktop from "@/app/(ebook)/thankyou-page/bg-lila-typ-ebook-desktop.svg";
-import arrowRedLogo from "@/app/(ebook)/thankyou-page/arrow-red-logo.svg";
+import arrowRedLogo from "@/app/(ebook)/thankyou-page/arrow-red-logo.png";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

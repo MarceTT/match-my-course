@@ -99,6 +99,84 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
 
   const [formData, setFormData] = useState<Partial<ReservationFormData>>({});
   
+  // Normalizador único para cualquier forma que devuelva el backend
+  const normalizeSchedules = (raw: any): Schedule[] => {
+    const out: Schedule[] = [];
+    const pushVal = (val: any) => {
+      if (!val) return;
+      if (typeof val === 'string') {
+        const s = val.trim();
+        const forbidden = /^(legacy|country-service|hybrid)$/i.test(s);
+        if (!forbidden && s.length > 0) out.push({ horario: s, precioMinimo: 0 });
+        return;
+      }
+      if (Array.isArray(val)) {
+        val.forEach(pushVal);
+        return;
+      }
+      if (typeof val === 'object' && val !== null) {
+        if ((val as any).horario) {
+          out.push({ horario: String((val as any).horario), precioMinimo: Number((val as any).precioMinimo || 0) });
+          return;
+        }
+        if (Array.isArray((val as any).list)) {
+          (val as any).list.forEach(pushVal);
+          return;
+        }
+        Object.values(val).forEach(pushVal);
+      }
+    };
+    pushVal(raw);
+    const seen = new Set<string>();
+    const uniq = out.filter((it) => {
+      const k = it.horario.toLowerCase();
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+    return uniq.sort((a,b) => a.horario.localeCompare(b.horario, undefined, { numeric: true }));
+  };
+
+  // Helper: auto-seleccionar primer horario válido si el actual no existe y recalcular
+  const ensureScheduleAndRecalc = async (items: Schedule[]) => {
+    if (!items || items.length === 0) return;
+    const available = new Set(items.map((i) => i.horario.toLowerCase()));
+    const current = (formData.schedule || reservation?.specificSchedule || reservation?.schedule || '').toLowerCase();
+    const hasCurrent = current && available.has(current);
+    if (hasCurrent) return;
+
+    const chosen = items[0].horario;
+    // Actualiza selección visual
+    setFormData((prev) => ({ ...prev, schedule: chosen }));
+
+    // Recalcula reserva con el horario elegido
+    try {
+      const sid = reservation?.schoolId;
+      const courseVal = (formData.courseType || reservation?.courseKey || course) as string;
+      const weeksVal = (formData.studyDuration || reservation?.weeks || 1) as number;
+      if (!sid || !courseVal || !weeksVal) return;
+      setLoading(true);
+      const controller = new AbortController();
+      const data = await fetchReservationCalculation(String(sid), courseVal, weeksVal, chosen, controller.signal);
+      if (data && typeof data === 'object' && 'requiresAdvisor' in data) {
+        setAdvisorInfo(data as any);
+        setReservation(null);
+        setError(false);
+        setErrorMessage("");
+      } else {
+        const r = createReservationFromApiResponse(data);
+        setReservation(r);
+        setAdvisorInfo(null);
+        setError(false);
+        setErrorMessage("");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   /**
    * Realiza la primera carga del curso más económico.
    */
@@ -189,53 +267,14 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
   useEffect(() => {
     if (!schoolId || !course) return;
 
-    const normalizeSchedules = (raw: any): Schedule[] => {
-      const out: Schedule[] = [];
-      const pushVal = (val: any) => {
-        if (!val) return;
-        if (typeof val === 'string') {
-          const s = val.trim();
-          // Excluir flags o metadatos conocidos
-          const forbidden = /^(legacy|country-service|hybrid)$/i.test(s);
-          if (!forbidden && s.length > 0) out.push({ horario: s, precioMinimo: 0 });
-          return;
-        }
-        if (Array.isArray(val)) {
-          val.forEach(pushVal);
-          return;
-        }
-        if (typeof val === 'object' && val !== null) {
-          if (val.horario) {
-            out.push({ horario: String(val.horario), precioMinimo: Number(val.precioMinimo || 0) });
-            return;
-          }
-          // Si es un objeto genérico { list: [...] }
-          if (Array.isArray((val as any).list)) {
-            (val as any).list.forEach(pushVal);
-            return;
-          }
-          // Explorar valores de objeto plano
-          Object.values(val).forEach(pushVal);
-        }
-      };
-      pushVal(raw);
-      // Unicos + orden simple AM/PM primero
-      const seen = new Set<string>();
-      const uniq = out.filter((it) => {
-        const k = it.horario.toLowerCase();
-        if (seen.has(k)) return false;
-        seen.add(k);
-        return true;
-      });
-      return uniq.sort((a,b) => a.horario.localeCompare(b.horario, undefined, { numeric: true }));
-    };
-
     const loadSchedules = async () => {
       try {
         setLoadingSchedules(true);
         const raw = await fetchSchedulesByCourse(schoolId, course);
         const items = normalizeSchedules(raw);
         setSchedules(items);
+        // Auto seleccionar y recalcular si el horario actual no existe
+        await ensureScheduleAndRecalc(items);
       } catch (error) {
         setErrorSchedules(error as Error);
       } finally {
@@ -356,13 +395,17 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       updatedFormData.courseType !== formData.courseType &&
       schoolId
     ) {
-      // Cargar los horarios cuando cambia el tipo de curso
-      const newSchedules = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
-      setSchedules(normalizeSchedules(newSchedules));
+      // Cargar y normalizar horarios cuando cambia el tipo de curso
+      const raw = await fetchSchedulesByCourse(schoolId.toString(), updatedFormData.courseType);
+      const items = normalizeSchedules(raw);
+      setSchedules(items);
 
-      // Carga semanas nuevas al cambiar curso
+      // Cargar semanas nuevas al cambiar curso
       const newWeeks = await fetchWeeksBySchool(schoolId.toString(), updatedFormData.courseType);
       setWeeksBySchool(newWeeks);
+
+      // Asegurar selección válida y coherencia de precio
+      await ensureScheduleAndRecalc(items);
     }
 
     if (!schoolId || !course) {

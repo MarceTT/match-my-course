@@ -12,57 +12,44 @@ const Requisitos = () => {
               </p>
             </div>
     
-            <div className="grid md:grid-cols-5 gap-8">
+            <div className="grid md:grid-cols-4 gap-4">
               {/* Service 1 */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Image src="/images/visa.png" alt="Permiso de residencia temporal" width={150} height={150} className="brightness-0 invert" />
+                <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+                  <Image src="/images/mayor_18.webp" alt="Permiso de residencia temporal" width={200} height={200} className="brightness-0 invert" />
                 </div>
-                <p className="text-sm md:text-base lg:text-lg leading-relaxed">
-                  Acompañamiento en la solicitud del Permiso de Residencia Temporal
-                  de 8 meses
+                <p className="text-sm md:text-base lg:text-xl leading-relaxed">
+                  Mayor de 18 
                 </p>
               </div>
     
               {/* Service 2 */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Image src="/images/bus-alt.svg" alt="Permiso de residencia temporal" width={150} height={150} className="brightness-0 invert" />
+                <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+                  <Image src="/images/seguro_medico.webp" alt="Permiso de residencia temporal" width={200} height={200} className="brightness-0 invert" />
                 </div>
-                <p className="text-sm md:text-base lg:text-lg leading-relaxed">
-                  Ticket gratuito desde el aeropuerto de Dublín a tu ciudad
+                <p className="text-sm md:text-base lg:text-xl leading-relaxed">
+                  Seguro médico
                 </p>
               </div>
     
               {/* Service 3 */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Image src="/images/phone-heart-message.svg" alt="Permiso de residencia temporal" width={150} height={150} className="brightness-0 invert" />
+                <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+                  <Image src="/images/respaldo_economico.webp" alt="Permiso de residencia temporal" width={200} height={200} className="brightness-0 invert" />
                 </div>
-                <p className="text-sm md:text-base lg:text-lg leading-relaxed">
-                  Datos móviles para que llegues a Irlanda con internet desde tu
-                  aterrizaje
+                <p className="text-sm md:text-base lg:text-xl leading-relaxed">
+                  Respaldo económico
                 </p>
               </div>
     
               {/* Service 4 */}
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Image src="/images/atencion-al-cliente.png" alt="Permiso de residencia temporal" width={150} height={150} className="brightness-0 invert" />
+                <div className="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
+                  <Image src="/images/curso_ingles_pagado.webp" alt="Permiso de residencia temporal" width={200} height={200} className="brightness-0 invert" />
                 </div>
-                <p className="text-sm md:text-base lg:text-lg leading-relaxed">
-                  Asistencia virtual 24/7 ante cualquier duda o consulta
-                </p>
-              </div>
-    
-              {/* Service 5 */}
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                  <Image src="/images/libro-de-tapa-negra-cerrado.png" alt="Permiso de residencia temporal" width={150} height={150} className="brightness-0 invert" />
-                </div>
-                <p className="text-sm md:text-base lg:text-lg leading-relaxed">
-                  Apoyo para la emisión y gestión de cuenta bancaria, impuestos, PPS
-                  Number y otros
+                <p className="text-sm md:text-base lg:text-xl leading-relaxed">
+                  Curso de inglés pagado
                 </p>
               </div>
             </div>

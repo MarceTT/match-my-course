@@ -8,7 +8,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
-import { getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
+import { getResponsiveImageProps, rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
 import { SchoolDetails } from "@/app/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
@@ -232,25 +232,35 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
 
           <div className="mt-4 flex items-center justify-between lg:mt-0 xl:mt-0">
             {!isMobile && (
-              <Image
-                {...getResponsiveImageProps(
-                  school.logo || '',
-                  `Logo de ${school.name}`,
-                  {
-                    sizes: "120px",
-                    priority: false,
-                    width: 120,
-                    height: 60,
-                    fallbackSrc: "/placeholder.svg"
-                  }
-                )}
-                className="object-contain select-none pointer-events-none transition-opacity duration-200"
-                onContextMenu={(e) => e.preventDefault()}
-                onError={(e) => {
-                  // Si falla el logo, ocultar el elemento
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
+              isGrid ? (
+                <Image
+                  {...getResponsiveImageProps(
+                    school.logo || '',
+                    `Logo de ${school.name}`,
+                    {
+                      sizes: "120px",
+                      priority: false,
+                      width: 120,
+                      height: 60,
+                      fallbackSrc: "/placeholder.svg"
+                    }
+                  )}
+                  className="object-contain select-none pointer-events-none transition-opacity duration-200 h-12 w-auto"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+              ) : (
+                <div className="h-32 flex items-center justify-start shrink-0">
+                  <Image
+                    src={rewriteToCDN(school.logo || '/placeholder.svg')}
+                    alt={`Logo de ${school.name}`}
+                    width={320}
+                    height={128}
+                    sizes="320px"
+                    className="h-full w-auto object-contain select-none pointer-events-none"
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                </div>
+              )
             )}
 
             <div className="mt-4 w-full flex flex-col items-center sm:items-end text-center sm:text-right space-y-2">
