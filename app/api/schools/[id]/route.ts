@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export async function PUT(request: Request, context: { params: { id: string } }) {
+export async function PUT(request: Request) {
   try {
     const session = await auth();
     const user = (session as any)?.user;
     if (!user || user.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
-
-    const { id } = context.params;
+    // Extraer id desde la URL para evitar conflictos con tipos de rutas
+    const url = new URL(request.url);
+    const parts = url.pathname.split("/");
+    const id = parts[parts.length - 1];
 
     const token = user.accessToken as string;
 
