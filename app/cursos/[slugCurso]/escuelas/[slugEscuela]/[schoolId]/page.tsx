@@ -85,13 +85,73 @@ export default async function Page({ params, searchParams }: Props) {
     return redirect(canonicalPath);
   }
 
+  // Build canonical URL (server-side) for JSON-LD
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
+  const canonicalPath =
+    `/cursos/${encodeURIComponent(slugCurso)}` +
+    `/escuelas/${encodeURIComponent(slugEscuela)}/${encodeURIComponent(schoolId)}`;
+  const canonicalUrl = `${origin}${canonicalPath}`;
+
+  // EducationalOrganization schema using available SEO data
+  const orgSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOrganization',
+    name: seoEntry?.h1 || seoEntry?.escuela,
+    url: canonicalUrl,
+    // Use Open Graph image as a lightweight logo fallback if present
+    ...(seoEntry?.imageOpenGraph
+      ? { logo: rewriteToCDN(seoEntry.imageOpenGraph) }
+      : {}),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: seoEntry?.ciudad || undefined,
+    },
+  } as const;
+
+  // Breadcrumbs schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Inicio',
+        item: `${origin}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: cursoSlugToSubcategoria[slugCurso] || 'Cursos de inglés',
+        item: `${origin}/cursos/${slugCurso}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: seoEntry?.h1 || seoEntry?.escuela,
+        item: canonicalUrl,
+      },
+    ],
+  } as const;
+
   return (
-    <SchoolSeoHome
-      schoolId={schoolId}
-      seoCourses={seoCourses}
-      slugCurso={slugCurso}
-      weeks={weeks}
-      schedule={schedule}
-    />
+    <>
+      {/* Server-rendered JSON-LD for better SEO discovery */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <SchoolSeoHome
+        schoolId={schoolId}
+        seoCourses={seoCourses}
+        slugCurso={slugCurso}
+        weeks={weeks}
+        schedule={schedule}
+      />
+    </>
   );
 }

@@ -55,14 +55,15 @@ export default function SummaryStepOne({
 }: Props) {
   const courseKey = formData.courseType ?? reservation?.courseKey;
 
-  const basePrice = reservation?.precioBruto ?? 0;
-  const offerPrice =
-    reservation?.ofertaBruta && Number(reservation.ofertaBruta) > 0
-      ? Number(reservation.ofertaBruta)
-      : basePrice;
+  // Tomar precio bruto/total y oferta desde la reserva actual
+  const basePrice = Number(
+    reservation?.precioBruto ?? reservation?.total ?? 0
+  );
+  const rawOffer = (reservation as any)?.ofertaBruta ?? (reservation as any)?.offer;
+  const offerPrice = rawOffer && Number(rawOffer) > 0 ? Number(rawOffer) : basePrice;
 
-  let finalPrice = formData.finalPrice ?? offerPrice;
-  let finalBasePrice = basePrice;
+  let finalPrice = Number(formData.finalPrice ?? offerPrice);
+  let finalBasePrice = Number(basePrice);
 
   // Detectar si es curso de 25 semanas (normalizando texto)
   const isWorkStudy = reservation?.course

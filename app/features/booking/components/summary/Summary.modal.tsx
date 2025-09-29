@@ -56,11 +56,14 @@ export default function SummaryModal({
 }: ReservationSummaryModalProps) {
 //   console.log("Reserva para ver datos", reservation);
   const [step, setStep] = useState<"summary" | "contact">("summary");
-  const [finalPrice, setFinalPrice] = useState<number>(
-    reservation?.ofertaBruta && Number(reservation.ofertaBruta) > 0
-      ? Number(reservation.ofertaBruta)
-      : Number(reservation?.precioBruto ?? 0)
-  );
+
+  // Derivar siempre el precio desde la reserva vigente (tipo de curso y horario seleccionados)
+  const computedFinalPrice = useMemo(() => {
+    const rawOffer = (reservation as any)?.ofertaBruta ?? (reservation as any)?.offer;
+    const rawBase = (reservation as any)?.precioBruto ?? (reservation as any)?.total;
+    if (rawOffer && Number(rawOffer) > 0) return Number(rawOffer);
+    return Number(rawBase ?? 0);
+  }, [reservation]);
 
   const form = useForm<ReservationFormData>({
     resolver: zodResolver(reservationFormSchema),
@@ -82,8 +85,8 @@ export default function SummaryModal({
     }
   }, [open, form]);
 
-  function handleNextFromZero(price: number) {
-    setFinalPrice(price);
+  function handleNextFromZero(_price: number) {
+    // ya no se usa estado local; el precio se deriva de la reserva
     setStep("summary");
   }
 
@@ -99,7 +102,7 @@ export default function SummaryModal({
     const finalData = {
       ...formData,
       ...data,
-      finalPrice,
+      finalPrice: computedFinalPrice,
     };
     try {
       onSubmitContact(finalData);
@@ -130,7 +133,7 @@ export default function SummaryModal({
             >
               <BookingSummaryStepOne
                 reservation={reservation}
-                formData={{ ...formData, finalPrice }}
+                formData={{ ...formData, finalPrice: computedFinalPrice }}
                 onNext={handleNext}
               />
             </motion.div>

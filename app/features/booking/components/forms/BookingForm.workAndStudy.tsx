@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import ContactButtonWhatsApp from "./ContactButtonWhatsApp";
 import { sendGTMEvent } from "@/app/lib/gtm";
+ 
 
 interface FormProps {
   reservation: Reservation | null;
@@ -84,7 +85,7 @@ export default function WorkAndStudyBooking({
   const totalPagar = baseMonto - restaMonto;
   const reserveLabel = "Reserva ahora con solo";
 
-   console.log("Reserva para ver datos", reservation);
+  //  console.log("Reserva para ver datos", reservation);
 
   const handleContinueClick = () => {
     if(reservation?.schoolName === "University of Limerick Language Centre"){

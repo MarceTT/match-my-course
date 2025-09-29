@@ -31,6 +31,7 @@ import { countries } from "@/lib/constants/countries";
 import { toast } from "sonner";
 import axiosInstance from "@/app/utils/apiClient";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Helper para parsear dd/MM/yyyy a Date
 const parseDDMMYYYY = (s: string): Date | undefined => {
@@ -378,20 +379,22 @@ const resetForm = form.reset;
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                          He leído y acepto el{" "}
-                          <a
-                            href="#"
+                          He leído y acepto los{" "}
+                          <Link
+                            href="/terminos-y-condiciones"
+                            target="_blank"
                             className="text-blue-600 underline hover:text-blue-800"
                           >
-                            aviso legal
-                          </a>{" "}
+                            términos y condiciones
+                          </Link>{" "}
                           y la{" "}
-                          <a
-                            href="#"
+                          <Link
+                            href="/politica-de-privacidad"
+                            target="_blank"
                             className="text-blue-600 underline hover:text-blue-800"
                           >
                             política de privacidad
-                          </a>
+                          </Link>
                         </FormLabel>
                         <FormMessage className="text-xs text-red-500" />
                       </div>

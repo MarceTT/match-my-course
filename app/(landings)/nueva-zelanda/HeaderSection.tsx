@@ -2,16 +2,16 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 export default function HeaderSection() {
   const bgUrl = rewriteToCDN(
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Fotos-portada-Matchmycourse-us.webp"
+    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/landing-nueva-zelanda/Estudiar+ingle%CC%81s+en+Nueva+Zelanda.jpg"
   );
 
   return (
     <section className="relative h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] overflow-hidden">
       <div
-        className="absolute inset-0 bg-cover bg-center filter blur-sm scale-105"
+        className="absolute inset-0 bg-cover bg-center filter scale-105"
         style={{ backgroundImage: `url(${bgUrl})` }}
       ></div>
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-10"></div>
       <div className="relative z-10 flex items-center justify-center h-full">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center">
