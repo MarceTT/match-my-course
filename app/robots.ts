@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/login", "/api", "/thankyou-page", "/unauthorized"],
       },
     ],
-    // Unificar referencia al índice principal
-    sitemap: `${base}/sitemaps/index.xml`,
+    // Unificar referencia al sitemap principal de Next
+    sitemap: `${base}/sitemap.xml`,
   };
 }

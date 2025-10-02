@@ -58,6 +58,7 @@ type Props = {
   slugCurso: string;
   weeks: number;
   schedule: string;
+  summaryText?: string;
 };
 
 const SchoolSeoHome = ({
@@ -66,10 +67,12 @@ const SchoolSeoHome = ({
   slugCurso,
   weeks,
   schedule,
+  summaryText,
 }: Props) => {
   const { data, isLoading, isError } = useSchoolDetails(schoolId);
   const { visible: showScrollTop, scrollToTop } = useScrollTopButton();
   const router = useRouter();
+  const [summaryExpanded, setSummaryExpanded] = useState(false);
 
   const subcategoria = cursoSlugToSubcategoria[slugCurso];
 
@@ -191,6 +194,27 @@ const SchoolSeoHome = ({
                 >
                   {school.name || "Nombre no disponible"}
                 </h1>
+                {summaryText && (
+                  <>
+                    <p
+                      id="school-summary"
+                      className={`mt-2 text-gray-700 text-base leading-relaxed text-center md:text-left lg:text-left xl:text-left ${
+                        summaryExpanded ? '' : 'clamp-2-md-unset fade-bottom-mobile'
+                      } md:text-base md:leading-6 md:text-slate-500 md:font-normal md:max-w-2xl md:opacity-90`}
+                      >
+                        {summaryText}
+                      </p>
+                    <button
+                      type="button"
+                      aria-controls="school-summary"
+                      aria-expanded={summaryExpanded}
+                      onClick={() => setSummaryExpanded((v) => !v)}
+                      className="mt-1 text-blue-600 hover:text-blue-700 text-sm md:hidden underline"
+                    >
+                      {summaryExpanded ? 'Leer menos' : 'Leer más'}
+                    </button>
+                  </>
+                )}
                 <div className="flex items-center gap-4 mt-1 justify-center md:justify-start lg:justify-start xl:justify-start">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => {

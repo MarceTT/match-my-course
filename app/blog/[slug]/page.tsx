@@ -87,6 +87,11 @@ export async function generateMetadata(
         url,
         title: titleBase,
         description,
+        authors: post?.author ? [post.author] : undefined,
+        section: typeof post?.category === 'string' ? post.category : post?.category?.name,
+        tags: keywords,
+        publishedTime: post?.publishedAt || post?.createdAt,
+        modifiedTime: post?.updatedAt || post?.createdAt,
         images: coverVersioned
           ? [{ url: coverVersioned, width: 1200, height: 630, alt: post?.title ?? "Cover" }]
           : [],
@@ -159,6 +164,18 @@ export default async function Page(
       }
     : null;
 
+  const breadcrumbLd = post
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Inicio", item: absUrl("/") },
+          { "@type": "ListItem", position: 2, name: "Blog", item: absUrl("/blog") },
+          { "@type": "ListItem", position: 3, name: post?.title || slug, item: url },
+        ],
+      }
+    : null;
+
   // 2) Prefetch para el cliente con React Query
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
@@ -174,6 +191,12 @@ export default async function Page(
           type="application/ld+json"
           // WHY: JSON-LD debe ir como texto plano (no SSR props)
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      {breadcrumbLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
         />
       )}
 

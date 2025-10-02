@@ -228,6 +228,28 @@ export default async function Page({ params, searchParams }: Props) {
     areaServed: city || undefined,
   } as const;
 
+  // Texto breve para integrar visualmente debajo del H1 del hero (pasado como prop)
+  const subcat = cursoSlugToSubcategoria[slugCurso] || 'Curso de inglés';
+  const cityName = (seoEntry as any)?.ciudad as string | undefined;
+  const head = `${subcat}${schoolName ? ` en ${schoolName}` : ''}${cityName ? `, ${cityName}` : ''}.`;
+  const subcatLine = (() => {
+    switch (subcat) {
+      case 'Inglés General':
+        return 'Mejora tu inglés del día a día con enfoque comunicativo, grupos reducidos y horarios flexibles.';
+      case 'Inglés General Intensivo':
+        return 'Acelera tu progreso con más horas semanales y práctica intensiva de speaking y listening.';
+      case 'Inglés de Negocios':
+        return 'Desarrolla inglés profesional: presentaciones, reuniones y vocabulario corporativo orientado al trabajo.';
+      case 'Inglés General + Sesiones Individuales':
+        return 'Combina clases grupales con tutorías 1:1 para objetivos específicos y avance personalizado.';
+      case 'Programa Estudio y Trabajo (25 semanas)':
+        return 'Programa ideal para estancias largas en Irlanda: estudia inglés y trabaja con permiso compatible.';
+      default:
+        return 'Enfocado en resultados y experiencia real en aula para avanzar con confianza.';
+    }
+  })();
+  const summaryText = `${head} ${subcatLine} Compara precios, horarios y requisitos y reserva con MatchMyCourse.`;
+
   return (
     <>
       {/* Server-rendered JSON-LD for better SEO discovery (solo si hay entrada SEO) */}
@@ -254,6 +276,7 @@ export default async function Page({ params, searchParams }: Props) {
         slugCurso={slugCurso}
         weeks={weeks}
         schedule={schedule}
+        summaryText={summaryText}
       />
     </>
   );
