@@ -13,6 +13,7 @@ interface ReserveSectionProps {
   disabled?: boolean;
   reservation?: { total: number; offer: number };
   reservationData?: Reservation;
+  horizontalButtons?: boolean;
 }
 
 const ReserveSection = ({
@@ -25,6 +26,7 @@ const ReserveSection = ({
   disabled = false,
   reservation,
   reservationData,
+  horizontalButtons = false,
 }: ReserveSectionProps) => {
   return (
     <div className="pt-2">
@@ -49,21 +51,50 @@ const ReserveSection = ({
           {text}
         </p>
       ))}
-      <Button
-        className="w-full bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-extrabold"
-        onClick={onReserve}
-        disabled={disabled}
-      >
-        {disabled ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Enviando...
-          </>
-        ) : (
-          buttonText
-        )}
-      </Button>
-      <ContactButtonWhatsApp reservation={reservationData!} />
+      {horizontalButtons ? (
+        <div className="mt-2 flex flex-row gap-1 items-stretch">
+          <Button
+            className="flex-1 basis-0 min-w-0 bg-[#FF385C] hover:bg-[#E51D58] text-white px-2 py-2 rounded font-semibold inline-flex items-center justify-center gap-2 group transition-all text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
+            onClick={onReserve}
+            disabled={disabled}
+          >
+            {disabled ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Enviando...</span>
+              </>
+            ) : (
+              <span>{buttonText}</span>
+            )}
+          </Button>
+          {reservationData && (
+            <ContactButtonWhatsApp
+              reservation={reservationData}
+              className="flex-1 basis-0 min-w-0 px-2 py-2 text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <Button
+            className="w-full bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-extrabold"
+            onClick={onReserve}
+            disabled={disabled}
+          >
+            {disabled ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Enviando...
+              </>
+            ) : (
+              buttonText
+            )}
+          </Button>
+          {reservationData && (
+            <ContactButtonWhatsApp reservation={reservationData} />
+          )}
+        </>
+      )}
     </div>
   );
 };

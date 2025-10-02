@@ -174,14 +174,19 @@ export default function WorkAndStudyBooking({
               ))}
             </div>
 
-            <Button
-              onClick={handleContinueClick}
-              className="w-full mt-4 bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
-            >
-              <span className="mr-2">Continuar con tu reserva</span>
-              <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
-            </Button>
-            <ContactButtonWhatsApp reservation={reservation!} />
+            <div className="mt-4 flex flex-row gap-1 items-stretch">
+              <Button
+                onClick={handleContinueClick}
+                className="flex-1 basis-0 min-w-0 bg-[#FF385C] hover:bg-[#E51D58] text-white px-2 py-2 rounded font-semibold inline-flex items-center justify-center gap-2 group transition-all text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
+              >
+                <span className="text-center">Continuar</span>
+                <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
+              </Button>
+              <ContactButtonWhatsApp
+                reservation={reservation!}
+                className="flex-1 basis-0 min-w-0 px-2 py-2 text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
+              />
+            </div>
           </motion.div>
         )}
         {step === 2 && (
@@ -243,6 +248,7 @@ export default function WorkAndStudyBooking({
                 offer: Number(reservation?.ofertaBruta) ?? 0,
               }}
               reservationData={reservation!}
+              horizontalButtons
             />
           </motion.div>
         )}

@@ -95,7 +95,7 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
               ¡Oferta Especial!
             </h3>
             <p className="mt-2 text-sm text-gray-700">
-              Hasta <span className="font-bold text-green-600">500 euros</span>{" "}
+              Hasta <span className="font-bold text-green-600">300 euros</span>{" "}
               de descuento en tu curso de{" "}
               <span className="font-semibold text-purple-600">6 meses</span>.
             </p>
@@ -110,7 +110,7 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
             </Button>
 
             <p className="mt-3 text-xs text-gray-500">
-              ⏰ Oferta válida hasta el 30 de septiembre
+              ⏰ Oferta válida para reservas entre el 6 y 8 de octubre
             </p>
           </div>
         </motion.div>

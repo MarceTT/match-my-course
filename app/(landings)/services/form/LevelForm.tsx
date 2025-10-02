@@ -443,12 +443,9 @@ const LevelEnglishForm = () => {
                   chilenos.
                 </FormLabel>
                 <FormControl>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger
-                      className={`mt-1 text-base ${
+                      className={`mt-1 w-full text-sm sm:text-base h-auto min-h-[2.75rem] py-2 leading-snug [&>span]:whitespace-normal [&>span]:break-words ${
                         form.formState.errors.respaldoEconomico
                           ? "border-red-500"
                           : ""
@@ -456,9 +453,13 @@ const LevelEnglishForm = () => {
                     >
                       <SelectValue placeholder="Selecciona" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="max-w-[calc(100vw-2rem)] w-[var(--radix-select-trigger-width)]">
                       {respaldoEconomico.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          className="whitespace-normal break-words"
+                        >
                           {option.label}
                         </SelectItem>
                       ))}

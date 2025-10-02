@@ -1,7 +1,8 @@
 "use client";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
-// Shared components
-import { Header, Footer } from "@/app/shared";
+// Shared components (usar el Header unificado del sitio)
+import Header from "@/app/components/common/Header";
+import Footer from "@/app/components/common/Footer";
 
 // School feature components and hooks
 import {

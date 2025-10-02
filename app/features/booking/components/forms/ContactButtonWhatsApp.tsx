@@ -5,12 +5,13 @@ import { Reservation } from '@/types';
 import { sendGTMEvent } from "@/app/lib/gtm";
 
 interface ContactButtonWhatsAppProps {
-    reservation: Reservation;
+  reservation: Reservation;
+  className?: string;
 }
 
 
 
-const ContactButtonWhatsApp = ({ reservation }: ContactButtonWhatsAppProps) => {
+const ContactButtonWhatsApp = ({ reservation, className }: ContactButtonWhatsAppProps) => {
 
 //   console.log("reservation", reservation);
 
@@ -32,12 +33,15 @@ const ContactButtonWhatsApp = ({ reservation }: ContactButtonWhatsAppProps) => {
       };
   return (
     <Button
-    onClick={() => handleOpenWhatsApp()}
-    className="w-full mt-4 bg-[#00C851] hover:bg-[#00C851] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
-  >
-    <span className="mr-2">Hablar con un asesor</span>
-    <FaWhatsapp className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
-  </Button>
+      onClick={() => handleOpenWhatsApp()}
+      className={
+        "bg-[#00C851] hover:bg-[#00C851] text-white rounded font-semibold inline-flex items-center justify-center gap-2 group transition-all " +
+        (className ? className : "")
+      }
+    >
+      <span className="text-center">Hablar a asesor</span>
+      <FaWhatsapp className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
+    </Button>
   )
 }
 

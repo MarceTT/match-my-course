@@ -82,7 +82,7 @@ const ScrollToBookingButton = () => {
           onClick={scrollToBooking}
           className="fixed bottom-4 left-4 right-4 z-50 bg-[#fe6361] hover:bg-red-500 text-white text-lg font-semibold py-3 rounded-full shadow-md md:hidden"
         >
-          Reserva aquí
+         Precios
         </motion.button>
       )}
     </AnimatePresence>
