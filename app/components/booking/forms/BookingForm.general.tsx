@@ -121,7 +121,7 @@ export default function GeneralBooking({
               onClick={() => setStep(2)}
               className="w-full mt-4 bg-[#FF385C] hover:bg-[#E51D58] text-white py-2 rounded font-semibold flex items-center justify-center group transition-all"
             >
-              <span className="mr-2">Continuar con tu reserva</span>
+              <span className="mr-2 text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words">Continuar con tu reserva</span>
               <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
             </Button>
             <ContactButtonWhatsApp reservation={reservation!} />

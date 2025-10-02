@@ -27,9 +27,11 @@ const Service = () => {
           <h2 className="text-4xl font-black text-black text-center md:text-right mb-4">
             Reserva
           </h2>
-          <p className="text-xl text-center md:text-right text-black mb-6">
-            a tu inicio de clases en la escuela que más se <br />
-            adapte a tus necesidades
+          <p className="text-xl text-center md:text-right text-black mb-6 md:text-xl">
+            <span className="block md:inline">
+              a tu inicio de clases en la escuela que más se
+            </span>
+            <span className="block md:inline"> adapte a tus necesidades</span>
           </p>
 
           {/* Callout Box */}

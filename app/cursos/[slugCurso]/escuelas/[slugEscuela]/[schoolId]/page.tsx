@@ -32,25 +32,27 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
       const schoolData = await fetchSchoolById(schoolId);
       const school = schoolData?.school || schoolData?.data?.school;
       const name = school?.name || 'Escuela de inglés';
-      const city = school?.city ? ` en ${school.city}` : '';
+      const cityName = school?.city || '';
+      const city = cityName ? ` en ${cityName}` : '';
+      const subcatName = cursoSlugToSubcategoria[slugCurso] || 'Cursos de inglés';
       const ogImage = school?.mainImage ? rewriteToCDN(school.mainImage) : undefined;
 
       return {
-        title: `${name}${city} | MatchMyCourse`,
-        description: `Compara cursos de inglés${city}. Información de la escuela, precios y opciones de estudio en MatchMyCourse.`,
+        title: `${name}${city} | ${subcatName} | MatchMyCourse`,
+        description: `Compara ${subcatName.toLowerCase()}${city}. Información de la escuela, precios y opciones de estudio en MatchMyCourse.`,
         alternates: { canonical: canonicalUrl },
         robots: { index: true, follow: true },
         openGraph: {
-          title: `${name}${city} | MatchMyCourse`,
-          description: `Compara cursos de inglés${city}.`,
+          title: `${name}${city} | ${subcatName} | MatchMyCourse`,
+          description: `Compara ${subcatName.toLowerCase()}${city}.`,
           url: canonicalUrl,
           type: 'website',
           images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: name }] : [],
         },
         twitter: {
           card: 'summary_large_image',
-          title: `${name}${city} | MatchMyCourse`,
-          description: `Compara cursos de inglés${city}.`,
+          title: `${name}${city} | ${subcatName} | MatchMyCourse`,
+          description: `Compara ${subcatName.toLowerCase()}${city}.`,
           images: ogImage ? [ogImage] : [],
         },
       };
@@ -72,29 +74,43 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
     `/escuelas/${encodeURIComponent(expectedEscuela)}/${encodeURIComponent(schoolId)}`;
   const canonicalUrl = `${ORIGIN}${canonicalPath}`;
 
-  const ogImage = rewriteToCDN(
-    seoEntry.imageOpenGraph
-  );
+  const ogImage = rewriteToCDN(seoEntry.imageOpenGraph);
+
+  // Construye título dinámico asegurando nombre de escuela y marca
+  const brand = 'MatchMyCourse';
+  const schoolName = (seoEntry as any)?.escuela || (seoEntry as any)?.h1 || '';
+  const subcatName = cursoSlugToSubcategoria[slugCurso] || '';
+  const city = (seoEntry as any)?.ciudad || '';
+  const baseCandidate = (seoEntry as any)?.metaTitle || '';
+  const lower = (s: string) => s.toLowerCase();
+  let dynamicTitle = baseCandidate || `${schoolName || 'Escuela de inglés'}${city ? ` en ${city}` : ''}${subcatName ? ` | ${subcatName}` : ''}`;
+  if (schoolName && !lower(dynamicTitle).includes(lower(schoolName))) {
+    dynamicTitle = `${schoolName} | ${dynamicTitle}`;
+  }
+  if (!lower(dynamicTitle).includes('matchmycourse')) {
+    dynamicTitle = `${dynamicTitle} | ${brand}`;
+  }
 
   return {
-    title: seoEntry.metaTitle,
+    title: dynamicTitle,
     description: seoEntry.metaDescription,
     keywords: seoEntry.keywordPrincipal,
     alternates: { canonical: canonicalUrl },
     robots: { index: true, follow: true },
     openGraph: {
-      title: seoEntry.metaTitle,
+      title: dynamicTitle,
       description: seoEntry.metaDescription,
       url: canonicalUrl,
       type: 'website',
       images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: seoEntry.metaTitle,
-        },
+        { url: ogImage, width: 1200, height: 630, alt: dynamicTitle },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dynamicTitle,
+      description: seoEntry.metaDescription,
+      images: ogImage ? [ogImage] : [],
     },
   };
 }
