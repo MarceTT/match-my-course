@@ -277,7 +277,7 @@ const SchoolSeoHome = ({
                   {school.description?.minutosAlCentro && (
                     <div className="flex items-center text-sm gap-1">
                       {getTransportIcon(school.name) || (
-                        <FaWalking className="text-base w-5 h-5" />
+                        <Footprints className="text-base w-5 h-5" />
                       )}
                       <span className="text-sm">
                         {school.description.minutosAlCentro} min/centro
