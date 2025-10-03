@@ -40,7 +40,11 @@ type BlogListResp = {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '')
+  const base = (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    'https://matchmycourse.com'
+  ).replace(/\/$/, '')
 
   // Rutas estáticas principales
   const staticUrls: MetadataRoute.Sitemap = [

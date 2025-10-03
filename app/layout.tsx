@@ -63,6 +63,11 @@ export default function RootLayout({
 }>) {
   const GTM_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!;
   const LAZY_GTM = process.env.NEXT_PUBLIC_GTM_LAZY === 'true';
+  const SITE_URL = (
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    'https://matchmycourse.com'
+  ).replace(/\/$/, '');
   return (
     <html lang="es">
       <head>
@@ -132,6 +137,54 @@ export default function RootLayout({
           name="facebook-domain-verification"
           content="r10bqkdz2nziy7vzg7h0cv7qb2upbm"
         />
+
+        {/* Organization JSON-LD */}
+        {(() => {
+          const origin = SITE_URL;
+          const orgLd = {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'MatchMyCourse',
+            url: origin,
+            logo: `${origin}/FlaviconMatchmycourse.png`,
+            sameAs: [
+              'https://www.facebook.com/matchmycourse',
+              'https://www.instagram.com/match.my.course/',
+              'https://www.linkedin.com/company/matchmycourse',
+              'https://www.youtube.com/@matchmycourse',
+            ],
+          };
+          return (
+            <script
+              key="ld-org"
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }}
+            />
+          );
+        })()}
+
+        {/* WebSite + Sitelinks SearchBox JSON-LD */}
+        {(() => {
+          const origin = SITE_URL;
+          const siteLd = {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'MatchMyCourse',
+            url: origin,
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: `${origin}/school-search?course={search_term_string}`,
+              'query-input': 'required name=search_term_string',
+            },
+          };
+          return (
+            <script
+              key="ld-website"
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }}
+            />
+          );
+        })()}
       </head>
       <body
         className={`${raleway.variable} ${nunito.variable} ${geistMono.variable} antialiased`}

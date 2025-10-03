@@ -11,6 +11,12 @@ export default function SchoolSearchPage() {
   );
 }
 
+const ORIGIN = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  'https://matchmycourse.com'
+).replace(/\/$/, '');
 export const metadata: Metadata = {
+  alternates: { canonical: `${ORIGIN}/school-search` },
   robots: { index: false, follow: true },
 };

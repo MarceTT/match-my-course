@@ -13,7 +13,11 @@ type PageSearch = Record<string, string | string[] | undefined>;
 type Props = { params: Promise<PageParams>; searchParams: Promise<PageSearch> };
 
 // Origen canónico absoluto (sin barra final) — evita relativas en <link rel="canonical">
-const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
+const ORIGIN = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  'https://matchmycourse.com'
+).replace(/\/$/, '');
 
 // Permite ISR para mejorar TTFB y mantener contenido fresco
 export const revalidate = 900; // 15 minutos
