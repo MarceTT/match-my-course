@@ -4,6 +4,18 @@ import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl'
 
 export const revalidate = 86_400 // 24h
 
+async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit & { timeoutMs?: number } = {}) {
+  const { timeoutMs = 3000, ...rest } = init as any
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetch(input, { ...rest, signal: controller.signal, next: { revalidate: 86_400 } })
+    return res
+  } finally {
+    clearTimeout(id)
+  }
+}
+
 type SeoEntry = {
   schoolId: string
   url: string
@@ -50,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let schoolEntries: MetadataRoute.Sitemap = []
   try {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/seo/course/schools`
-    const res = await fetch(url, { cache: 'no-store' })
+    const res = await fetchWithTimeout(url, { timeoutMs: 3000 })
     const json = await res.json()
     const entries: SeoEntry[] = Array.isArray(json?.data) ? json.data : []
 
@@ -87,10 +99,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const PAGE_SIZE = 100
     let page = 1
     let pages = 1
+    let loops = 0
     const seen = new Set<string>()
 
     while (page <= pages) {
-      const res = await fetch(`${API_BASE}/blog/post?page=${page}&limit=${PAGE_SIZE}`, { cache: 'no-store' })
+      // Limitar a un máximo de 3 páginas en build para evitar bloqueos
+      if (loops >= 3) break
+      const res = await fetchWithTimeout(`${API_BASE}/blog/post?page=${page}&limit=${PAGE_SIZE}`, { timeoutMs: 3000 })
       const json = (await res.json()) as BlogListResp
       const list = json?.data?.posts || []
       pages = json?.data?.pages || pages
@@ -109,6 +124,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         })
       }
       page += 1
+      loops += 1
       if (list.length < PAGE_SIZE) break
     }
   } catch {

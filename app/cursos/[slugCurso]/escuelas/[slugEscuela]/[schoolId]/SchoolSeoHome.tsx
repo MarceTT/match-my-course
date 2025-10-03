@@ -290,7 +290,7 @@ const SchoolSeoHome = ({
                 {school.logo && (
                   <Image
                     src={rewriteToCDN(school.logo)}
-                    alt="School logo"
+                    alt={school.name}
                     width={160}
                     height={120}
                     className="object-contain select-none pointer-events-none"

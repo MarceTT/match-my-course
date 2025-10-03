@@ -6,6 +6,7 @@ import School from "../components/School";
 import { useInfiniteSchools } from "../hooks/useInfiniteSchools";
 import InfiniteLoaderScroll from "../admin/components/infiniteLoaderScroll";
 import { useInView } from "react-intersection-observer";
+import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { ArrowUp } from "lucide-react";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
@@ -35,6 +36,8 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
     threshold: 0.1,
     rootMargin: "200px"
   });
+  const isSmall = useMediaQuery("(max-width: 640px)");
+  const priorityCount = isSmall ? 2 : 4;
 
   const {
     data,
@@ -87,7 +90,7 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {schools.map((school) => {
+        {schools.map((school, idx) => {
           const price =
             school.prices?.[0]?.horarios?.precio &&
             !isNaN(Number(school.prices[0].horarios.precio))
@@ -113,6 +116,7 @@ const SchoolPage = ({ onScrollTopVisibilityChange }: SchoolPageProps) => {
                 seoCourses={school.cursosEos}
                 generalEnglishPrice={school.generalEnglishPrice}
                 specificSchedule={school.specificSchedule}
+                priority={idx < priorityCount}
               />
             </div>
           );
