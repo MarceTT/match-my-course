@@ -2,7 +2,15 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { BadgePercent } from "lucide-react";
-import { FaStar } from "react-icons/fa6";
+// Inline Star icon to avoid pulling entire react-icons packs
+const Star = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+    <path
+      d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.787 1.401 8.168L12 18.896 4.665 23.166l1.401-8.168L.132 9.211l8.2-1.193L12 .587z"
+      fill="currentColor"
+    />
+  </svg>
+);
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -198,14 +206,14 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
                   const full = i + 1 <= Math.floor(rating);
                   const half = i + 0.5 === Math.round(rating * 2) / 2;
                   return (
-                    <FaStar
+                    <Star
                       key={i}
                       className={`h-4 w-4 ${
                         full
-                          ? "fill-yellow-400"
+                          ? "text-yellow-400"
                           : half
-                          ? "fill-yellow-200"
-                          : "fill-gray-200"
+                          ? "text-yellow-200"
+                          : "text-gray-200"
                       }`}
                     />
                   );

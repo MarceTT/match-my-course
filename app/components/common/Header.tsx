@@ -3,9 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { PiUserCircleFill } from "react-icons/pi";
-import { CiMenuFries } from "react-icons/ci";
-import { IoClose, IoChevronDown } from "react-icons/io5";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Logo from "@/public/logos/final-logo.png";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import SchoolSearch from "./SchoolSearch";
@@ -226,7 +224,7 @@ const Header = () => {
                       }
                     >
                       <span>{item.name}</span>
-                      <IoChevronDown
+                      <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
                           activeDropdown === item.name ? "rotate-180" : ""
                         }`}
@@ -291,12 +289,12 @@ const Header = () => {
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
           >
             <div className="relative w-8 h-8">
-              <CiMenuFries
+              <Menu
                 className={`absolute inset-0 w-8 h-8 text-gray-600 transition-all duration-300 ${
                   isMenuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
                 }`}
               />
-              <IoClose
+              <X
                 className={`absolute inset-0 w-8 h-8 text-gray-600 transition-all duration-300 ${
                   isMenuOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
                 }`}
@@ -320,7 +318,7 @@ const Header = () => {
             className="focus:outline-none"
             aria-label="Cerrar menú"
           >
-            <IoClose className="h-6 w-6 text-gray-600" />
+            <X className="h-6 w-6 text-gray-600" />
           </button>
         </div>
 
@@ -339,7 +337,7 @@ const Header = () => {
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <span>{item.name}</span>
-                    <IoChevronDown
+                    <ChevronDown
                       className={`w-5 h-5 transition-transform duration-200 ${
                         mobileDropdowns[item.name] ? "rotate-180" : ""
                       }`}

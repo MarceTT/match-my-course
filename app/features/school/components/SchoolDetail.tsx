@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { ShareButtons } from "@/app/components/common/social";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PhotoSlider } from "react-photo-view";
 import type { StaticImageData } from "next/image";
-import "react-photo-view/dist/react-photo-view.css";
-import { FiZoomIn } from "react-icons/fi";
+import { ZoomIn } from "lucide-react";
 
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
   city: string;
 }
+
+const PhotoSlider = dynamic(() => import("./PhotoSliderClient"), { ssr: false, loading: () => null });
 
 const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
   const [visible, setVisible] = useState(false);
@@ -24,16 +25,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
     setVisible(true);
   };
 
-  const imageUrls = images.map((img) =>
-    typeof img === "string" ? img : img.src
-  );
-
-  useEffect(() => {
-    imageUrls.forEach((url) => {
-      const img = new window.Image();
-      img.src = url;
-    });
-  }, [imageUrls]);
+  const imageUrls = images.map((img) => (typeof img === "string" ? img : img.src));
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -65,6 +57,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           {imageUrls.slice(0, 5).map((url, i) => {
             const remaining = imageUrls.length - 5;
             const [loaded, setLoaded] = useState(false);
+            const isLcp = i === 0; // primer cuadro grande: candidato a LCP
 
             return (
               <div
@@ -86,12 +79,15 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                   }`}
                   onLoad={() => setLoaded(true)}
                   onError={() => setLoaded(true)}
-                  loading="lazy"
+                  loading={isLcp ? "eager" : "lazy"}
+                  priority={isLcp}
+                  fetchPriority={isLcp ? "high" : undefined}
+                  sizes="100vw"
                   onContextMenu={(e) => e.preventDefault()}
                 />
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition">
-                  <FiZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <ZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
                 {i === 4 && remaining > 0 && (
@@ -106,16 +102,15 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
           })}
         </div>
 
-        <PhotoSlider
-          images={imageUrls.map((src, index) => ({
-            key: `img-${index}`,
-            src,
-          }))}
-          visible={visible}
-          index={index}
-          onClose={() => setVisible(false)}
-          onIndexChange={setIndex}
-        />
+        {visible && (
+          <PhotoSlider
+            images={imageUrls.map((src, index) => ({ key: `img-${index}`, src }))}
+            visible={visible}
+            index={index}
+            onClose={() => setVisible(false)}
+            onIndexChange={setIndex}
+          />
+        )}
       </div>
     </div>
   );

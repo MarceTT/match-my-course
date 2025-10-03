@@ -15,6 +15,9 @@ type Props = { params: Promise<PageParams>; searchParams: Promise<PageSearch> };
 // Origen canónico absoluto (sin barra final) — evita relativas en <link rel="canonical">
 const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
 
+// Permite ISR para mejorar TTFB y mantener contenido fresco
+export const revalidate = 900; // 15 minutos
+
 export async function generateMetadata(ctx: Props): Promise<Metadata> {
   const { slugCurso, slugEscuela, schoolId } = await ctx.params;
 

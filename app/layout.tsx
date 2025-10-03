@@ -8,6 +8,7 @@ import { Suspense } from "react";
 // import Script from "next/script"; // Commented out since SW is disabled
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import { GoogleTagManager } from "@next/third-parties/google";
+import GTMClient from "./ui/GTMClient";
 import PromotionalPopup from "./ui/promotional-popup";
 
 const geistMono = Geist_Mono({
@@ -61,15 +62,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const GTM_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!;
+  const LAZY_GTM = process.env.NEXT_PUBLIC_GTM_LAZY === 'true';
   return (
     <html lang="es">
       <head>
         {/* Resource hints for performance */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        {/* Preconnects condicionados: evita 'Unused preconnect' en rutas que no los usan */}
+        {/* Fonts preconnect: Next/font suele gestionar, evitar duplicados si no es necesario */}
+        {/* CloudFront (imágenes CDN): útil en páginas con imágenes above-the-fold; dejar solo DNS-prefetch por defecto */}
         <link rel="dns-prefetch" href="//d2wv8pxed72bi5.cloudfront.net" />
-        <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* GTM/GA preconnect solo cuando no es lazy */}
+        {!LAZY_GTM && (
+          <>
+            <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+            <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+          </>
+        )}
         
         {/* Critical CSS for above-the-fold content */}
         <style dangerouslySetInnerHTML={{
@@ -129,7 +137,11 @@ export default function RootLayout({
         className={`${raleway.variable} ${nunito.variable} ${geistMono.variable} antialiased`}
         style={{ fontFamily: 'var(--font-raleway)' }}
       >
-       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
+       {GTM_ID && (
+         LAZY_GTM
+           ? <GTMClient gtmId={GTM_ID} lazyOn="both" />
+           : <GoogleTagManager gtmId={GTM_ID} />
+       )}
         <ReactQueryProvider>
           <Suspense fallback={null}>
             {children}
