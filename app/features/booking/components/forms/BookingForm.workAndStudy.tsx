@@ -8,13 +8,12 @@ import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import AccommodationSection from "../fields/AccomodationSection";
 import { ScheduleInfo } from "@/lib/types/scheduleInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import ContactButtonWhatsApp from "./ContactButtonWhatsApp";
 import { sendGTMEvent } from "@/app/lib/gtm";
- 
 
 interface FormProps {
   reservation: Reservation | null;
@@ -49,6 +48,7 @@ export default function WorkAndStudyBooking({
   schoolId,
 }: FormProps) {
   const [step, setStep] = useState<1 | 2>(1);
+
   const bookingAmound = 100;
   const helperText =
     "Pagada tu reserva, te explicaremos cómo debes solicitar tu permiso de residencia de 8 meses";
@@ -85,11 +85,18 @@ export default function WorkAndStudyBooking({
   const totalPagar = baseMonto - restaMonto;
   const reserveLabel = "Reserva ahora con solo";
 
-  //  console.log("Reserva para ver datos", reservation);
+  useEffect(() => {
+    if (
+      reservation?.specificSchedule &&
+      formData.schedule !== reservation.specificSchedule
+    ) {
+      onChangeFormData({ schedule: reservation.specificSchedule });
+    }
+  }, [reservation?.specificSchedule, formData.schedule, onChangeFormData]);
 
   const handleContinueClick = () => {
-    if(reservation?.schoolName === "University of Limerick Language Centre"){
-      sendGTMEvent('click_whatsapp_limerick_ad');
+    if (reservation?.schoolName === "University of Limerick Language Centre") {
+      sendGTMEvent("click_whatsapp_limerick_ad");
     }
     setStep(2);
   };

@@ -30,13 +30,14 @@ export default function ScheduleSection({
       return { label: val, value: val };
     })
     .filter(Boolean) as Array<{ label: string; value: string }>;
-  const safeValue = value && options.some((o) => o.value === value) ? value : "";
+  const safeValue =
+    value && options.some((o) => o.value === value) ? value : "";
+
   return (
     <div>
-      <label className="block text-sm text-gray-600 mb-2">
-        {label}
-      </label>
+      <label className="block text-sm text-gray-600 mb-2">{label}</label>
       <Select
+        key={safeValue}
         options={options}
         value={safeValue}
         onChange={(val) => onChange(val)}

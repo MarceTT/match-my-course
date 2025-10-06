@@ -28,7 +28,9 @@ export type BookingPannelProps = {
   onFormDataChange: (updated: Partial<ReservationFormData>) => void;
   onChangeTypeOfCourse: (updatedData: Partial<ReservationFormData>) => void;
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
-  onSubmitReservation: (formData: ReservationFormData) => Promise<{ success: boolean; message?: string }>;
+  onSubmitReservation: (
+    formData: ReservationFormData
+  ) => Promise<{ success: boolean; message?: string }>;
   schoolId?: string;
 };
 
@@ -43,7 +45,7 @@ const BookingPannel = ({
   courseInfo,
   scheduleInfo,
   weeksBySchoolInfo,
-  schoolId
+  schoolId,
 }: BookingPannelProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -67,6 +69,16 @@ const BookingPannel = ({
     }
   }, [formData.startDate, reservation]);
 
+  useEffect(() => {
+    // Cuando cambia la reserva, sincroniza el schedule
+    if (
+      reservation?.specificSchedule &&
+      formData.schedule !== reservation.specificSchedule
+    ) {
+      onFormDataChange({ schedule: reservation.specificSchedule });
+    }
+  }, [reservation?.specificSchedule, reservation?.schoolId]);
+
   const handleSubmitContact = async (finalData: ReservationFormData) => {
     setIsSending(true);
     const result = await onSubmitReservation(finalData);
@@ -86,7 +98,9 @@ const BookingPannel = ({
   if (loading) return <BookingPannelLoading />;
   if (submitted) return <BookingPannelSubmit />;
 
-  const courseKey = reservation ? courseLabelToIdMap[reservation.course] : undefined;
+  const courseKey = reservation
+    ? courseLabelToIdMap[reservation.course]
+    : undefined;
 
   const renderBookingForm = () => {
     if (courseKey === CourseKey.WORK_AND_STUDY) {
