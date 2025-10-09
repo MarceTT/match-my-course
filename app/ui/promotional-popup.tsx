@@ -110,7 +110,7 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
             </Button>
 
             <p className="mt-3 text-xs text-gray-500">
-              ⏰ Oferta válida para reservas entre el 6 y 8 de octubre
+              ⏰ Oferta válida para reservas hasta el 30 de noviembre
             </p>
           </div>
         </motion.div>
