@@ -61,6 +61,15 @@ export default function GeneralBooking({
     "El precio no incluye matrícula ni materiales(para todos los otros cursos)";
   const typeCourse = "General";
 
+  const handleContinueClick = () => {
+    onChangeFormData({
+      schoolName: reservation?.schoolName,
+      totalPrice: reservation?.total || 0,
+      offerPrice: reservation?.offer || 0,
+    });
+    onReserve();
+  };
+
   return (
     <div className="border rounded-lg p-6 sticky top-4 border-gray-500 lg:top-32 mb-8 lg:mb-16 xl:mb-16">
       <div className="flex justify-between items-start mb-6">
@@ -119,11 +128,11 @@ export default function GeneralBooking({
             />
             <div className="mt-4 flex flex-row gap-1 items-stretch">
               <Button
-                onClick={() => setStep(2)}
+                onClick={handleContinueClick}
                 className="flex-1 basis-0 min-w-0 bg-[#FF385C] hover:bg-[#E51D58] text-white px-2 py-2 rounded font-semibold inline-flex items-center justify-center gap-2 group transition-all text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
               >
-                <span className="text-center">Continuar</span>
-                <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
+                <span className="text-center">Más Información</span>
+                {/* <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" /> */}
               </Button>
               <ContactButtonWhatsApp
                 reservation={reservation!}

@@ -17,6 +17,7 @@ import { Reservation } from "@/types";
 import BookingSummaryStepOne from "./Summary.stepOne";
 import BookingSummaryStepTwo from "./Summary.stepTwo";
 import { AnimatePresence, motion } from "framer-motion";
+import { formatDate } from "date-fns";
 
 
 interface ReservationSummaryModalProps {
@@ -31,6 +32,10 @@ interface ReservationSummaryModalProps {
   >;
   onSubmitContact: (data: ReservationFormData) => void;
   disabled?: boolean;
+  initialStep?: "summary" | "contact";
+  weeks?: number;
+  courseType?: string;
+  schedule?: string;
 }
 
 function normalizeDate(date: string | Date | undefined): Date | null {
@@ -53,9 +58,13 @@ export default function SummaryModal({
   formData,
   onSubmitContact,
   disabled,
+  initialStep = "summary",
+  weeks,
+  courseType,
+  schedule,
 }: ReservationSummaryModalProps) {
 //   console.log("Reserva para ver datos", reservation);
-  const [step, setStep] = useState<"summary" | "contact">("summary");
+  const [step, setStep] = useState<"summary" | "contact">(initialStep);
 
   // Derivar siempre el precio desde la reserva vigente (tipo de curso y horario seleccionados)
   const computedFinalPrice = useMemo(() => {
@@ -72,22 +81,36 @@ export default function SummaryModal({
       lastName: "",
       email: "",
       nationality: "",
-      phone: "",
+      country: "",
+      nivelProfesional: "",
+      nivelAproximado: "",
+      fechaInicioCurso: formData.startDate 
+        ? (typeof formData.startDate === 'string' 
+            ? formData.startDate 
+            : formatDate(formData.startDate, "dd/MM/yyyy"))
+        : "",
+      nacimiento: "",
       consent: false,
       consent2: false,
+      // AGREGAR VALORES INICIALES
+      courseProgram: courseType,
+      weeksToStudy: weeks,
+      schedule: schedule,
     },
   });
 
   useEffect(() => {
-    if (!open) {
-      setStep("summary");
+    if (open) {
+      setStep(initialStep);
+    } else {
+      setStep(initialStep);
       form.reset();
     }
-  }, [open, form]);
+  }, [open, initialStep, form]);
 
   function handleNextFromZero(_price: number) {
     // ya no se usa estado local; el precio se deriva de la reserva
-    setStep("summary");
+    setStep(initialStep);
   }
 
   function handleNext() {
@@ -106,7 +129,7 @@ export default function SummaryModal({
     };
     try {
       onSubmitContact(finalData);
-      onClose(); // cerramos el modal si todo salió bien
+      // NO cerramos el modal aquí - la navegación se manejará desde el container
     } catch (err) {
       console.error("Error en envío de contacto", err);
     }
@@ -150,6 +173,8 @@ export default function SummaryModal({
                 onSubmit={onSubmit}
                 onBack={() => setStep("summary")}
                 disabled={disabled}
+                reservation={reservation}
+                formData={formData}
               />
             </motion.div>
           )}

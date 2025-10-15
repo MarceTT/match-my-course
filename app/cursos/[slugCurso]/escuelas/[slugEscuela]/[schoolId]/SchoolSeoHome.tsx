@@ -184,8 +184,9 @@ const SchoolSeoHome = ({
           city={school.city!}
         />
 
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             {/* Header section crítico - render inmediato */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-4">
               <div className="flex flex-col flex-1">
@@ -252,7 +253,7 @@ const SchoolSeoHome = ({
                           </span>
                         </button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-3xl">
+                      <DialogContent className="max-w-5xl">
                         <DialogHeader>
                           <DialogTitle>Presentación de {school.name}</DialogTitle>
                         </DialogHeader>
@@ -261,7 +262,69 @@ const SchoolSeoHome = ({
                     </Dialog>
                   </div>
                 )}
-                <div className="flex flex-wrap items-center gap-6 text-gray-800 mb-4 mt-4 justify-center md:justify-center lg:justify-start xl:justify-start">
+
+                {/* Mobile school info section - appears after video button on mobile */}
+                <div className="lg:hidden mt-6 mb-4">
+                  <div className="flex flex-wrap items-center gap-6 text-gray-800 justify-center">
+                    {yearsOld !== null && (
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold">Antigüedad:</span>
+                        <span>{yearsOld} años</span>
+                      </div>
+                    )}
+                    {school.city && (
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold">Ciudad:</span>
+                        <span>{school.city}</span>
+                      </div>
+                    )}
+                    {school.description?.minutosAlCentro && (
+                      <div className="flex items-center text-sm gap-1">
+                        {getTransportIcon(school.name) || (
+                          <Footprints className="text-base w-5 h-5" />
+                        )}
+                        <span className="text-sm">
+                          {school.description.minutosAlCentro} min/centro
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Mobile booking panel - appears after school info on mobile */}
+                <div className="lg:hidden mt-6 mb-8">
+                  <Suspense fallback={
+                    <div className="bg-white rounded-lg border p-6">
+                      <div className="animate-pulse space-y-4">
+                        <div className="h-6 bg-gray-200 rounded w-40" />
+                        <div className="space-y-3">
+                          <div className="h-10 bg-gray-200 rounded" />
+                          <div className="h-10 bg-gray-200 rounded" />
+                          <div className="h-10 bg-gray-200 rounded" />
+                        </div>
+                        <div className="h-12 bg-gray-200 rounded mt-6" />
+                      </div>
+                    </div>
+                  }>
+                    <BookingPannel
+                      courseInfo={courseInfo}
+                      error={hasBookingError}
+                      errorMessage={errorMessage}
+                      formData={formData}
+                      loading={isBookingLoading}
+                      onChangeTypeOfCourse={onChangeTypeOfCourse}
+                      onFormDataChange={onFormDataChange}
+                      onSubmitReservation={onSubmitReservation}
+                      onUpdateReservation={onUpdateReservation}
+                      reservation={reservation}
+                      scheduleInfo={scheduleInfo}
+                      weeksBySchoolInfo={weeksBySchoolInfo}
+                      schoolId={schoolId}
+                    />
+                  </Suspense>
+                </div>
+
+                <div className="hidden lg:flex flex-wrap items-center gap-6 text-gray-800 mb-4 mt-4 justify-center md:justify-center lg:justify-start xl:justify-start">
                   {yearsOld !== null && (
                     <div className="flex items-center gap-2">
                       <span className="font-bold">Antigüedad:</span>
@@ -387,8 +450,8 @@ const SchoolSeoHome = ({
             </Suspense>
           </div>
 
-          {/* Panel de booking con Suspense */}
-          <div className="lg:col-span-1" id="booking-pannel">
+          {/* Panel de booking con Suspense - solo desktop */}
+          <div className="hidden lg:block lg:col-span-1 order-1 lg:order-2" id="booking-pannel">
             <Suspense fallback={
               <div className="bg-white rounded-lg border p-6 sticky top-4">
                 <div className="animate-pulse space-y-4">

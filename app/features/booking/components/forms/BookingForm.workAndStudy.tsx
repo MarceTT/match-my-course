@@ -7,7 +7,10 @@ import CoursePrice from "../fields/CoursePrice";
 import StartDatePicker from "../fields/StartDateSection";
 import ReserveSection from "../fields/ReserveSection";
 import AccommodationSection from "../fields/AccomodationSection";
+import CourseSection from "../fields/CourseSelection";
 import { ScheduleInfo } from "@/lib/types/scheduleInfo";
+import { CoursesInfo } from "@/lib/types/coursesInfo";
+import { CourseKey, isValidCourse } from "@/lib/helpers/courseHelper";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -18,9 +21,11 @@ import { sendGTMEvent } from "@/app/lib/gtm";
 interface FormProps {
   reservation: Reservation | null;
   scheduleInfo: ScheduleInfo;
+  courseInfo: CoursesInfo;
   formData: Partial<ReservationFormData>;
   onUpdateReservation: (updatedData: Partial<ReservationFormData>) => void;
   onChangeFormData: (changes: Partial<ReservationFormData>) => void;
+  onChangeTypeOfCourse: (updatedData: Partial<ReservationFormData>) => void;
   onReserve: () => void;
   href?: string;
   disabled?: boolean;
@@ -42,12 +47,23 @@ export default function WorkAndStudyBooking({
   onChangeFormData,
   onReserve,
   onUpdateReservation,
+  onChangeTypeOfCourse,
   reservation,
   scheduleInfo,
+  courseInfo,
   disabled,
   schoolId,
 }: FormProps) {
   const [step, setStep] = useState<1 | 2>(1);
+
+  const getCourseType = (): CourseKey | undefined => {
+    return (
+      formData.courseType ??
+      (isValidCourse(reservation?.courseKey)
+        ? (reservation.courseKey as CourseKey)
+        : undefined)
+    );
+  };
 
   const bookingAmound = 100;
   const helperText =
@@ -94,11 +110,21 @@ export default function WorkAndStudyBooking({
     }
   }, [reservation?.specificSchedule, formData.schedule, onChangeFormData]);
 
+  console.log("formData", formData);
+  console.log("reservation", reservation);
+
   const handleContinueClick = () => {
     if (reservation?.schoolName === "University of Limerick Language Centre") {
       sendGTMEvent("click_whatsapp_limerick_ad");
     }
-    setStep(2);
+
+    onChangeFormData({
+      schoolName: reservation?.schoolName,
+      totalPrice: parseFloat(reservation?.precioBruto || "0") || 0,
+      offerPrice: parseFloat(reservation?.ofertaBruta || "0") || 0,
+    });
+    //setStep(2);\
+    onReserve();
   };
 
   return (
@@ -120,20 +146,19 @@ export default function WorkAndStudyBooking({
             transition={{ duration: 0.3 }}
             className="space-y-4"
           >
-            <div>
-              <div className="flex justify-between">
-                <label className="block text-sm text-gray-600 mb-1">
-                  Curso
-                </label>
-                {/* <div className="text-sm text-gray-900 mb-2 font-semibold">
-                  €{offer - bookingAmound}
-                </div> */}
-              </div>
-              <div className="text-sm text-gray-700 border px-4 py-2 rounded bg-gray-100 mb-1">
-                {reservation?.course}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">{helperText}</p>
+            <div className="flex justify-between">
+              <label className="block text-sm text-gray-600">Curso</label>
             </div>
+            <CourseSection
+              selectedCourse={getCourseType()}
+              courseInfo={courseInfo}
+              onChange={(courseType) => {
+                onChangeFormData({ courseType });
+                onChangeTypeOfCourse({ courseType });
+              }}
+              helperText={helperText}
+              disabled={disabled}
+            />
             <div>
               <label className="block text-sm text-gray-600 mb-1">
                 Semanas a estudiar
@@ -155,7 +180,7 @@ export default function WorkAndStudyBooking({
               disabled={disabled}
             />
 
-            <div>
+            {/* <div>
               <hr className="my-2 border-gray-300 mb-4" />
               <div className="flex justify-between text-sm">
                 <span className="font-semibold text-gray-500 italic">
@@ -179,15 +204,15 @@ export default function WorkAndStudyBooking({
                   {text}
                 </p>
               ))}
-            </div>
+            </div> */}
 
             <div className="mt-4 flex flex-row gap-1 items-stretch">
               <Button
                 onClick={handleContinueClick}
                 className="flex-1 basis-0 min-w-0 bg-[#FF385C] hover:bg-[#E51D58] text-white px-2 py-2 rounded font-semibold inline-flex items-center justify-center gap-2 group transition-all text-[11px] sm:text-sm md:text-base leading-tight text-center whitespace-normal break-words"
               >
-                <span className="text-center">Continuar</span>
-                <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" />
+                <span className="text-center">Más Información</span>
+                {/* <ArrowRight className="h-4 w-4 transform transition-transform group-hover:translate-x-1" /> */}
               </Button>
               <ContactButtonWhatsApp
                 reservation={reservation!}

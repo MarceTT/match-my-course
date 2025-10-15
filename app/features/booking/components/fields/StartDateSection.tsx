@@ -55,7 +55,7 @@ const StartDatePicker = ({
 
   return (
     <div className="w-full">
-      <label className="block text-sm text-gray-600 mb-2">{label}</label>
+      <label className="block text-sm text-gray-900 mb-2">{label}</label>
       <DatePicker
         value={selectedDate}
         onChange={handleChange}

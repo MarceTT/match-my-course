@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ReservationFormData } from "@/types/reservationForm";
 import { Reservation } from "@/types";
 import { CoursesInfo } from "@/lib/types/coursesInfo";
 import BookingPannelLoading from "./BookingPannel.loading";
-import BookingPannelSubmit from "./BookingPannel.submit";
 import WorkAndStudyBooking from "./forms/BookingForm.workAndStudy";
 import SummaryModal from "./summary/Summary.modal";
 import GeneralBooking from "./forms/BookingForm.general";
@@ -47,8 +47,8 @@ const BookingPannel = ({
   weeksBySchoolInfo,
   schoolId,
 }: BookingPannelProps) => {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -84,23 +84,26 @@ const BookingPannel = ({
     const result = await onSubmitReservation(finalData);
 
     if (result.success) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
       setIsSending(false);
+      setIsModalOpen(false);
       launchConfettiBurst();
-      setSubmitted(true);
+      // Navegar a la página de agradecimiento
+      router.push('/thankyou-booking');
     } else {
       setIsSending(false);
       alert(result.message || "Error al enviar la reserva");
     }
-    setIsSending(false);
   };
 
   if (loading) return <BookingPannelLoading />;
-  if (submitted) return <BookingPannelSubmit />;
 
   const courseKey = reservation
     ? courseLabelToIdMap[reservation.course]
     : undefined;
+
+    const weeks = reservation?.weeks;
+  const courseType = reservation?.course;
+  const schedule = formData.schedule || reservation?.specificSchedule;
 
   const renderBookingForm = () => {
     if (courseKey === CourseKey.WORK_AND_STUDY) {
@@ -108,9 +111,11 @@ const BookingPannel = ({
         <WorkAndStudyBooking
           reservation={reservation}
           scheduleInfo={scheduleInfo}
+          courseInfo={courseInfo}
           formData={formData}
           onUpdateReservation={onUpdateReservation}
           onChangeFormData={onFormDataChange}
+          onChangeTypeOfCourse={onChangeTypeOfCourse}
           onReserve={handleOpenModal}
           disabled={isSending}
           schoolId={schoolId}
@@ -144,6 +149,10 @@ const BookingPannel = ({
         formData={formData}
         onSubmitContact={handleSubmitContact}
         disabled={isSending}
+        initialStep="contact"
+        weeks={weeks}
+        courseType={courseType}
+        schedule={schedule}
       />
     </>
   );
