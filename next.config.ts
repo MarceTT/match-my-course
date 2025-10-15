@@ -75,7 +75,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/form-registro-mmc',
-        destination: '/formulario-registro-mmc',
+        destination: '/formulario-registro-matchmycourse',
         permanent: true,
       },
       // English to Spanish redirects (Spanish URLs are canonical)
@@ -134,7 +134,7 @@ const nextConfig: NextConfig = {
         destination: '/ebook-page',
       },
       {
-        source: '/formulario-registro-mmc',
+        source: '/formulario-registro-matchmycourse',
         destination: '/form-registro-mmc',
       },
       // Rewrite Spanish canonical URLs to their English page implementations
