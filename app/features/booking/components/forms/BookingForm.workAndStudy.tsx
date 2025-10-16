@@ -171,7 +171,15 @@ export default function WorkAndStudyBooking({
               value={
                 formData.schedule ?? reservation?.specificSchedule ?? undefined
               }
-              scheduleInfo={scheduleInfo}
+              scheduleInfo={{
+                ...scheduleInfo,
+                // Si no hay horarios disponibles pero hay specificSchedule, usarlo como opción
+                list: scheduleInfo.list && scheduleInfo.list.length > 0
+                  ? scheduleInfo.list
+                  : reservation?.specificSchedule
+                  ? [{ horario: reservation.specificSchedule, precioMinimo: 0 }]
+                  : []
+              }}
               onChange={(schedule) => {
                 onChangeFormData({ schedule });
                 onUpdateReservation({ schedule });

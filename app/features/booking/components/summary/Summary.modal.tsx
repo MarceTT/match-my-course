@@ -136,50 +136,98 @@ export default function SummaryModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-full">
-        <DialogHeader>
+    <>
+      <style jsx>{`
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: transparent transparent;
+          transition: scrollbar-color 0.3s ease;
+        }
+        .custom-scrollbar:hover {
+          scrollbar-color: rgb(209, 213, 219) transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: transparent;
+          border-radius: 20px;
+          transition: background-color 0.3s ease;
+        }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+          background-color: rgb(209, 213, 219);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background-color: rgb(156, 163, 175);
+        }
+        .modal-sending :global(button[aria-label="Close"]) {
+          opacity: 0.3;
+          pointer-events: none;
+          cursor: not-allowed;
+        }
+      `}</style>
+      <Dialog open={open} onOpenChange={disabled ? undefined : onClose}>
+        <DialogContent
+          className={`max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden ${disabled ? 'modal-sending' : ''}`}
+          onInteractOutside={(e) => {
+            if (disabled) {
+              e.preventDefault();
+            }
+          }}
+          onEscapeKeyDown={(e) => {
+            if (disabled) {
+              e.preventDefault();
+            }
+          }}
+        >
+        <DialogHeader className="flex-shrink-0">
         <DialogTitle className="text-xl font-bold text-center">
             {step === "summary"
               ? "Detalle de tu reserva"
               : "Tus datos de contacto"}
           </DialogTitle>
         </DialogHeader>
-        <AnimatePresence mode="wait">
-          {step === "summary" ? (
-            <motion.div
-              key="summary"
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 40 }}
-              transition={{ duration: 0.25 }}
-            >
-              <BookingSummaryStepOne
-                reservation={reservation}
-                formData={{ ...formData, finalPrice: computedFinalPrice }}
-                onNext={handleNext}
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="contact"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.25 }}
-            >
-              <BookingSummaryStepTwo
-                form={form}
-                onSubmit={onSubmit}
-                onBack={() => setStep("summary")}
-                disabled={disabled}
-                reservation={reservation}
-                formData={formData}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-1 custom-scrollbar">
+          <AnimatePresence mode="wait">
+            {step === "summary" ? (
+              <motion.div
+                key="summary"
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 40 }}
+                transition={{ duration: 0.25 }}
+              >
+                <BookingSummaryStepOne
+                  reservation={reservation}
+                  formData={{ ...formData, finalPrice: computedFinalPrice }}
+                  onNext={handleNext}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="contact"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.25 }}
+              >
+                <BookingSummaryStepTwo
+                  form={form}
+                  onSubmit={onSubmit}
+                  onBack={() => setStep("summary")}
+                  disabled={disabled}
+                  reservation={reservation}
+                  formData={formData}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   );
 }

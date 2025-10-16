@@ -207,7 +207,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
 
     const course = newFormData.courseType ?? reservation?.courseKey;
     const weeks = newFormData.studyDuration ?? reservation?.weeks;
-    const schedule = newFormData.schedule ?? reservation?.schedule;
+    const schedule = newFormData.schedule ?? reservation?.specificSchedule;
     const schoolId = reservation?.schoolId;
 
     // Cargar horarios y semanas si cambia el tipo de curso
@@ -360,7 +360,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       city: reservation.city,
       course: reservation.course,
       weeks: reservation.weeks,
-      schedule: reservation.schedule,
+      schedule: reservation.specificSchedule || reservation.schedule,
       schoolName: reservation.schoolName,
       offer: reservation.offer,
     };
