@@ -19,13 +19,14 @@ const CountryFlagsSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Irlanda */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full overflow-hidden">
+            <div className="w-16 h-16 rounded-full overflow-hidden" style={{ width: '64px', height: '64px' }}>
               <Image
                 src="/flags/irlanda.png"
-                alt="Irlanda"
-                width={300}
-                height={300}
+                alt="Bandera de Irlanda"
+                width={64}
+                height={64}
                 className="object-cover"
+                sizes="64px"
               />
             </div>
             <span className="text-sm mt-2">Irlanda</span>
@@ -33,13 +34,14 @@ const CountryFlagsSection = () => {
 
           {/* Nueva Zelanda */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full overflow-hidden">
+            <div className="w-16 h-16 rounded-full overflow-hidden" style={{ width: '64px', height: '64px' }}>
               <Image
                 src="/flags/nueva-zelanda.png"
-                alt="Nueva Zelanda"
-                width={300}
-                height={300}
+                alt="Bandera de Nueva Zelanda"
+                width={64}
+                height={64}
                 className="object-cover"
+                sizes="64px"
               />
             </div>
             <span className="text-sm mt-2">Nueva Zelanda</span>
@@ -47,13 +49,14 @@ const CountryFlagsSection = () => {
 
           {/* Dubai */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full overflow-hidden">
+            <div className="w-16 h-16 rounded-full overflow-hidden" style={{ width: '64px', height: '64px' }}>
               <Image
                 src="/flags/dubai.png"
-                alt="dubai"
-                width={300}
-                height={300}
+                alt="Bandera de Dubai"
+                width={64}
+                height={64}
                 className="object-cover"
+                sizes="64px"
               />
             </div>
             <span className="text-sm mt-2">Dubai</span>
@@ -61,13 +64,14 @@ const CountryFlagsSection = () => {
 
           {/* Canadá */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full overflow-hidden">
+            <div className="w-16 h-16 rounded-full overflow-hidden" style={{ width: '64px', height: '64px' }}>
               <Image
                 src="/flags/canada.png"
-                alt="dubai"
-                width={300}
-                height={300}
+                alt="Bandera de Canadá"
+                width={64}
+                height={64}
                 className="object-cover"
+                sizes="64px"
               />
             </div>
             <span className="text-sm mt-2">Canadá</span>
@@ -75,15 +79,14 @@ const CountryFlagsSection = () => {
 
           {/* Reino Unido */}
           <div className="flex flex-col items-center">
-            <div className="w-16 h-16 rounded-full overflow-hidden">
+            <div className="w-16 h-16 rounded-full overflow-hidden" style={{ width: '64px', height: '64px' }}>
               <Image
                 src="/flags/reino-unido.png"
-                alt="Cork English Academy"
-                width={400}
-                height={400}
-                priority
-                sizes="(max-width: 768px) 100vw, 400px"
-                className="rounded-sm"
+                alt="Bandera del Reino Unido"
+                width={64}
+                height={64}
+                className="object-cover"
+                sizes="64px"
               />
             </div>
             <span className="text-sm mt-2">Reino Unido</span>

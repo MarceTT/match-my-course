@@ -102,8 +102,8 @@ const Testimonials = () => {
       </div>
 
       {/* Testimonials Carousel */}
-      <div className="relative bg-gray-100 rounded-xl p-6 overflow-hidden min-h-[150px] border border-gray-500">
-        <AnimatePresence initial={false}>
+      <div className="relative bg-gray-100 rounded-xl p-6 overflow-hidden min-h-[180px] border border-gray-500">
+        <AnimatePresence initial={false} mode="wait">
           <motion.div
             key={currentTestimonial}
             variants={variants}
@@ -112,9 +112,9 @@ const Testimonials = () => {
             exit="exit"
             transition={{
               y: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.5 },
+              opacity: { duration: 0.3 },
             }}
-            className="w-full absolute left-0 right-0 px-8"
+            className="w-full absolute left-0 right-0 px-8 top-6"
           >
             <div className="flex items-center gap-2 mb-4">
               <span className="font-medium">{testimonials[currentTestimonial].name}</span>
@@ -123,6 +123,7 @@ const Testimonials = () => {
                 alt={`${testimonials[currentTestimonial].country} flag`}
                 width={20}
                 height={15}
+                style={{ width: '20px', height: '15px' }}
               />
               <div className="flex mb-4 mt-2 ml-3">
               {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (

@@ -66,13 +66,15 @@ const Footer = ({ avoidOverlap = false, showWhatsApp = true }: FooterProps) => {
           {/* Logo y descripción - Columna izquierda */}
           <div className="flex flex-col items-center lg:items-start">
             <Link href="/" className="inline-block mb-6">
-              <div className="relative w-[300px] h-[40px] mx-auto lg:mx-0">
+              <div className="w-[300px] h-[40px] mx-auto lg:mx-0">
                 <Image
                   src={Logo}
                   alt="Logo de MatchMyCourse"
-                  fill
-                  sizes="(max-width: 768px) 200px, 400px"
-                  className="object-contain"
+                  width={300}
+                  height={40}
+                  sizes="(max-width: 768px) 200px, 300px"
+                  className="object-contain w-full h-full"
+                  priority={false}
                 />
               </div>
             </Link>

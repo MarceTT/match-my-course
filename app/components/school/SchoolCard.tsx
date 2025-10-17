@@ -26,9 +26,9 @@ import { sendGTMEvent } from "@/app/lib/gtm";
 // Lazy load Framer Motion solo cuando sea necesario
 const MotionDiv = dynamic(
   () => import("framer-motion").then(mod => ({ default: mod.motion.div })),
-  { 
-    ssr: false,
-    loading: () => <div /> // Fallback estático mientras carga
+  {
+    ssr: true, // Enable SSR to prevent layout shift
+    loading: () => <div className="min-h-[300px]" /> // Reserve space to prevent CLS
   }
 );
 
@@ -157,8 +157,9 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
       >
         <div
           className={`${
-            isGrid ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"
+            isGrid ? "h-48 w-full aspect-[16/9]" : "lg:h-72 lg:w-72 sm:w-56 h-40 aspect-[4/3]"
           } overflow-hidden rounded-lg relative flex items-stretch`}
+          style={{ minHeight: isGrid ? '192px' : '160px' }}
         >
           {hasDiscount && (
             <div className="absolute top-2 right-2 z-10 bg-yellow-400 text-yellow-900 text-xs sm:text-sm font-extrabold px-2 py-1 rounded-md shadow-lg flex items-center gap-1 animate-pulse">
@@ -171,7 +172,7 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
               school.mainImage || '',
               `${school.name} - Escuela de inglés en ${school.city}`,
               {
-                sizes: isGrid 
+                sizes: isGrid
                   ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   : "(max-width: 640px) 100vw, (max-width: 768px) 40vw, 25vw",
                 priority: false,
@@ -179,15 +180,8 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
                 fallbackSrc: "/placeholder.svg"
               }
             )}
-            className="object-cover select-none pointer-events-none transition-opacity duration-300"
+            className="object-cover select-none pointer-events-none"
             onContextMenu={(e) => e.preventDefault()}
-            onLoad={(e) => {
-              // Mejorar UX con fade-in suave
-              e.currentTarget.style.opacity = '1';
-            }}
-            onLoadStart={(e) => {
-              e.currentTarget.style.opacity = '0.7';
-            }}
           />
         </div>
 
@@ -253,7 +247,7 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
                       fallbackSrc: "/placeholder.svg"
                     }
                   )}
-                  className="object-contain select-none pointer-events-none transition-opacity duration-200 h-12 w-auto"
+                  className="object-contain select-none pointer-events-none h-12 w-auto"
                   onContextMenu={(e) => e.preventDefault()}
                 />
               ) : (

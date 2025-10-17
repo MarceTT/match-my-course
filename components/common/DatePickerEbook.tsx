@@ -42,55 +42,59 @@ export function DatePickerEbook({ value, onChange, disabled, fromDate, defaultMo
 
   return (
     <div className="relative">
-      <div className="relative">
-        <Input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onBlur={() => {
-            const s = inputValue.trim();
-            const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-            if (m) {
-              const dd = Number(m[1]);
-              const mm = Number(m[2]);
-              const yyyy = Number(m[3]);
-              const d = new Date(yyyy, mm - 1, dd);
-              if (!isNaN(d.getTime())) {
-                setDate(d);
-                onChange?.(d);
-                setInputValue(format(d, "dd/MM/yyyy", { locale: es }));
+      <Popover open={open} onOpenChange={setOpen}>
+        <div className="relative">
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onClick={() => setOpen(true)}
+            onBlur={() => {
+              const s = inputValue.trim();
+              const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+              if (m) {
+                const dd = Number(m[1]);
+                const mm = Number(m[2]);
+                const yyyy = Number(m[3]);
+                const d = new Date(yyyy, mm - 1, dd);
+                if (!isNaN(d.getTime())) {
+                  setDate(d);
+                  onChange?.(d);
+                  setInputValue(format(d, "dd/MM/yyyy", { locale: es }));
+                }
               }
-            }
-          }}
-          placeholder="dd/mm/yyyy"
-          className="pr-10"
-        />
-        <Popover open={open} onOpenChange={setOpen}>
+            }}
+            placeholder="dd/mm/yyyy"
+            className="pr-10 cursor-pointer"
+          />
           <PopoverTrigger asChild>
             <button
               type="button"
               aria-label="Abrir calendario"
               className="absolute inset-y-0 right-0 px-2 flex items-center text-muted-foreground hover:text-foreground"
-              onClick={() => setOpen(!open)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpen(!open);
+              }}
             >
               <CalendarIcon className="h-4 w-4" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              locale={es}
-              mode="single"
-              selected={date}
-              onSelect={handleSelect}
-              disabled={disabled}
-              fromDate={fromDate}
-              defaultMonth={defaultMonth || date}
-              captionLayout="dropdown"
-              fromYear={1900}
-              toYear={new Date().getFullYear()}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
+        </div>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            locale={es}
+            mode="single"
+            selected={date}
+            onSelect={handleSelect}
+            disabled={disabled}
+            fromDate={fromDate}
+            defaultMonth={defaultMonth || date}
+            captionLayout="dropdown"
+            fromYear={1900}
+            toYear={new Date().getFullYear()}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

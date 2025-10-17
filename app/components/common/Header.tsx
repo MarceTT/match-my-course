@@ -175,7 +175,7 @@ const Header = () => {
         </div>
       )}
 
-      <header className="w-full py-6 md:py-8 px-4 md:px-6 bg-white transition-all duration-300 ease-in-out shadow-sm">
+      <header className="w-full py-6 md:py-8 px-4 md:px-6 bg-white shadow-sm" style={{ minHeight: '88px' }}>
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4 md:space-x-6">
           <Link
@@ -308,9 +308,12 @@ const Header = () => {
       <div
         className={`xl:hidden fixed inset-0 z-50 bg-white transform transition-all duration-300 ease-in-out ${
           isMenuOpen
-            ? "translate-x-0 opacity-100"
-            : "translate-x-full opacity-0"
+            ? "translate-x-0 opacity-100 pointer-events-auto"
+            : "translate-x-full opacity-0 pointer-events-none"
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menú de navegación"
       >
         <div className="flex justify-end p-4">
           <button
@@ -326,7 +329,10 @@ const Header = () => {
           <SchoolSearch />
         </div>
 
-        <nav className="flex flex-col items-center space-y-2 px-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <nav
+          className="flex flex-col items-center space-y-2 px-6 max-h-[calc(100vh-200px)] overflow-y-auto overscroll-contain"
+          aria-label="Navegación principal"
+        >
           {navItems.map((item, index) => (
             <div key={item.name} className="w-full">
               {item.dropdown ? (
