@@ -230,6 +230,8 @@ const nextConfig: NextConfig = {
       { source: '/unauthorized', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       { source: '/api/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       { source: '/thankyou-page', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/thankyou-booking', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/formulario-registro-matchmycourse', headers: [{ key: 'X-Robots-Tag', value: 'noindex, follow' }] },
     ];
   },
 };

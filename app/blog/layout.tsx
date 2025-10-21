@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import ReactQueryProvider from "./providers";
-import Header from "../components/common/Header";
-import Footer from "../components/common/Footer";
+import Header from "../components/common/HeaderServer";
+import Footer from "../components/common/FooterServer";
 
 export default function BlogLayout({ children }: { children: ReactNode }) {
   return (

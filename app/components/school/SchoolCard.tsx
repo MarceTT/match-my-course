@@ -142,6 +142,7 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
       href={fullUrl}
       target="_blank"
       rel="noopener noreferrer"
+      prefetch={true}
       onMouseEnter={handleHover}
       onMouseLeave={handlePrefetch}
       onClick={handleClick}

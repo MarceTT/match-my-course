@@ -59,7 +59,7 @@ const Hero = () => {
           {
             sizes: "(max-width: 768px) 100vw, 0px",
             priority: true,
-            quality: 90,
+            quality: 80,
             fill: true
           }
         )}
@@ -74,7 +74,7 @@ const Hero = () => {
           {
             sizes: "(min-width: 768px) 100vw, 0px",
             priority: true,
-            quality: 90,
+            quality: 80,
             fill: true
           }
         )}

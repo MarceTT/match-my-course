@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Footer from "../components/common/Footer";
+import Footer from "../components/common/FooterServer";
 import Filter from "../components/features/Filter/Filter";
-import Header from "../components/common/Header";
+import Header from "../components/common/HeaderServer";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
 import filtersConfig from "@/app/utils/filterConfig";

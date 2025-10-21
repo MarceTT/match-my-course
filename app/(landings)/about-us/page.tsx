@@ -6,7 +6,7 @@ import AcercaNosotros from "./AboutUs";
 import QueOfrecemos from "./QueOfrecemos";
 import Experiencia from "./Experiencia";
 import Unicos from "./Unicos";
-import Carousel from "@/app/components/features/Carousel/Carousel";
+import CarouselLazy from "@/app/components/features/Carousel/CarouselLazy";
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Quie%CC%81nes+somos+Matchmycourse.png"
@@ -102,7 +102,7 @@ const AboutUs = () => {
       <div className="min-h-screen bg-white">
         <main className="max-w-7xl mx-auto px-6 py-12">
           <HeroSection />
-          <Carousel />
+          <CarouselLazy />
           <AcercaNosotros />
           <QueOfrecemos />
           <Experiencia />

@@ -48,18 +48,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Rutas estáticas principales
   const staticUrls: MetadataRoute.Sitemap = [
-    { url: `${base}/`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    // TIER 1: Máxima prioridad
+    { url: `${base}/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
+
+    // TIER 2: Landing pages de conversión (0.7-0.9)
+    { url: `${base}/school`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/school-search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${base}/como-funciona-matchmycourse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/estudiar-ingles-nueva-zelanda`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/escuelas-socias`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${base}/servicios-matchmycourse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/servicios-matchmycourse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+
+    // TIER 3: Contenido informativo importante (0.5-0.7)
+    { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
     { url: `${base}/contacto`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
+
+    // TIER 4: Contenido secundario (0.4-0.5)
     { url: `${base}/ebook-estudiar-y-trabajar-extranjero`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
     { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
     { url: `${base}/quienes-somos`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
+
+    // TIER 5: Páginas legales (0.2-0.3)
+    { url: `${base}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${base}/politica-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
   ]
 
   // Escuelas desde backend SEO
@@ -91,7 +104,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         return []
       }
     })
-  } catch {
+  } catch (error) {
+    console.error('[Sitemap] Error fetching school entries:', error)
     // fallback a solo estáticos si falla el backend
     schoolEntries = []
   }
@@ -107,8 +121,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const seen = new Set<string>()
 
     while (page <= pages) {
-      // Limitar a un máximo de 3 páginas en build para evitar bloqueos
-      if (loops >= 3) break
+      // Limitar a un máximo de 10 páginas en build (1000 posts)
+      if (loops >= 10) break
       const res = await fetchWithTimeout(`${API_BASE}/blog/post?page=${page}&limit=${PAGE_SIZE}`, { timeoutMs: 3000 })
       const json = (await res.json()) as BlogListResp
       const list = json?.data?.posts || []
@@ -131,7 +145,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       loops += 1
       if (list.length < PAGE_SIZE) break
     }
-  } catch {
+  } catch (error) {
+    console.error('[Sitemap] Error fetching blog entries:', error)
     blogEntries = []
   }
 

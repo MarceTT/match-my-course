@@ -1,31 +1,18 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { raleway, nunito } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
 import { Suspense } from "react";
-// import Script from "next/script"; // Commented out since SW is disabled
+import Script from "next/script";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
-import { GoogleTagManager } from "@next/third-parties/google";
 import GTMClient from "./ui/GTMClient";
-import PromotionalPopup from "./ui/promotional-popup";
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  fallback: ["ui-monospace", "SFMono-Regular", "Consolas", "monospace"]
-});
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
 );
 
-const heroImage = rewriteToCDN(
-  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Pagina inicial.webp"
-);
+// Hero image preload removed - Next.js Image component with priority handles this better
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com'),
@@ -62,7 +49,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const GTM_ID = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER!;
-  const LAZY_GTM = process.env.NEXT_PUBLIC_GTM_LAZY === 'true';
   const SITE_URL = (
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_BASE_URL ||
@@ -71,18 +57,21 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        {/* Resource hints for performance */}
-        {/* Preconnects condicionados: evita 'Unused preconnect' en rutas que no los usan */}
-        {/* Fonts preconnect: Next/font suele gestionar, evitar duplicados si no es necesario */}
-        {/* CloudFront (imágenes CDN): útil en páginas con imágenes above-the-fold; dejar solo DNS-prefetch por defecto */}
+        {/* Resource hints for performance - CloudFront CDN and S3 for images */}
+        <link rel="preconnect" href="https://d2wv8pxed72bi5.cloudfront.net" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//d2wv8pxed72bi5.cloudfront.net" />
-        {/* GTM/GA preconnect solo cuando no es lazy */}
-        {!LAZY_GTM && (
-          <>
-            <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-            <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
-          </>
-        )}
+        <link rel="preconnect" href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com" />
+
+        {/* Preload critical LCP image for Hero */}
+        <link
+          rel="preload"
+          as="image"
+          href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Matchmycourse-Cursos-de-ingles-en-el-extranjero-matchmycourse.webp"
+          imageSrcSet="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Matchmycourse-Cursos-de-ingles-en-el-extranjero-matchmycourse.webp 1920w"
+          imageSizes="100vw"
+          fetchPriority="high"
+        />
         
         {/* Critical CSS for above-the-fold content */}
         <style dangerouslySetInnerHTML={{
@@ -125,11 +114,6 @@ export default function RootLayout({
         />
         <link rel="apple-touch-icon" href="/FlaviconMatchmycourse.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <link
-          rel="preload"
-          as="image"
-          href={heroImage}
-        />
         <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="Match My Course" />
         <meta name="application-name" content="Match My Course" />
@@ -187,53 +171,82 @@ export default function RootLayout({
         })()}
       </head>
       <body
-        className={`${raleway.variable} ${nunito.variable} ${geistMono.variable} antialiased`}
+        className={`${raleway.variable} ${nunito.variable} antialiased`}
         style={{ fontFamily: 'var(--font-raleway)' }}
       >
-       {GTM_ID && (
-         LAZY_GTM
-           ? <GTMClient gtmId={GTM_ID} lazyOn="both" />
-           : <GoogleTagManager gtmId={GTM_ID} />
-       )}
+       {/* Always use lazy GTM loading for better performance */}
+       {GTM_ID && <GTMClient gtmId={GTM_ID} lazyOn="idle" />}
         <ReactQueryProvider>
           <Suspense fallback={null}>
             {children}
           </Suspense>
           <Toaster position="top-center" richColors closeButton />
         </ReactQueryProvider>
-        
-        {/* Service Worker Registration - DISABLED FOR DEPLOYMENT */}
-        {/* 
+
+        {/* Service Worker Registration with Navigation Preloading */}
         <Script id="sw-registration" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', async () => {
                 try {
+                  // Enable navigation preloading if supported
+                  if ('navigationPreload' in ServiceWorkerRegistration.prototype) {
+                    console.log('[App] Navigation preload supported');
+                  }
+
                   const registration = await navigator.serviceWorker.register('/sw.js', {
-                    scope: '/'
+                    scope: '/',
+                    updateViaCache: 'none' // Always fetch fresh SW
                   });
-                  
+
                   console.log('[App] SW registered:', registration.scope);
-                  
+
+                  // Enable navigation preload
+                  if (registration.navigationPreload) {
+                    await registration.navigationPreload.enable();
+                    console.log('[App] Navigation preload enabled');
+                  }
+
                   // Actualizar cuando hay una nueva versión
                   registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
                     newWorker?.addEventListener('statechange', () => {
                       if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostrar notificación de actualización disponible
-                        if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
-                          newWorker.postMessage({ type: 'SKIP_WAITING' });
-                          window.location.reload();
-                        }
+                        console.log('[App] Nueva versión del SW disponible');
+                        // Auto-update sin confirmación para mejor UX
+                        newWorker.postMessage({ type: 'SKIP_WAITING' });
                       }
                     });
                   });
-                  
+
                   // Recargar cuando el SW toma control
+                  let refreshing = false;
                   navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    window.location.reload();
+                    if (!refreshing) {
+                      refreshing = true;
+                      window.location.reload();
+                    }
                   });
-                  
+
+                  // Prefetch critical routes after idle
+                  if ('requestIdleCallback' in window) {
+                    requestIdleCallback(() => {
+                      const criticalRoutes = [
+                        '/cursos-ingles-extranjero',
+                        '/school-search',
+                        '/servicios-matchmycourse',
+                        '/quienes-somos'
+                      ];
+
+                      criticalRoutes.forEach(route => {
+                        fetch(route, {
+                          method: 'GET',
+                          priority: 'low'
+                        }).catch(() => {});
+                      });
+                    });
+                  }
+
                 } catch (error) {
                   console.error('[App] SW registration failed:', error);
                 }
@@ -241,7 +254,6 @@ export default function RootLayout({
             }
           `}
         </Script>
-        */}
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import { notFound } from "next/navigation"
-import Carousel from "@/app/components/features/Carousel/Carousel"
+import CarouselLazy from "@/app/components/features/Carousel/CarouselLazy"
 import { getAllServices } from "@/app/lib/api/services"
 import PersonalizedAdviceSection from "@/app/(landings)/testimonials/PersonalizedAdviceSection"
 import TestimonialHighlightSection from "@/app/(landings)/testimonials/TestimonialHighlightSection"
@@ -38,7 +38,7 @@ export default async function ServiceDetail({ params }: {
         </div>
       </div>
       <Suspense fallback={null}>
-        <Carousel />
+        <CarouselLazy />
       </Suspense>
       <PersonalizedAdviceSection />
       <TestimonialHighlightSection />

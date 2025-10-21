@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Megaphone, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
 import { sendGTMEvent } from "../lib/gtm";
 
 const POPUP_KEY = "popupOfertaDismissed";
@@ -64,9 +64,10 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
   }, [scrollTrigger]);
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
+    <LazyMotion features={domAnimation} strict>
+      <AnimatePresence>
+        {isOpen && (
+          <m.div
           initial={{ opacity: 0, scale: 0.8, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 40 }}
@@ -113,8 +114,9 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
               ⏰ Oferta válida para reservas hasta el 30 de noviembre
             </p>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
+    </LazyMotion>
   );
 }

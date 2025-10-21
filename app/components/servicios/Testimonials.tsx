@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence, LazyMotion, domAnimation } from 'framer-motion'
 import Image from 'next/image'
 import { IoStarSharp } from "react-icons/io5";
 import Picture from "../../../public/images/placeholder_img.svg";
@@ -79,14 +79,15 @@ const Testimonials = ({ text }: { text: string }) => {
     ))
   }
   return (
-    <div className="bg-gray-50 py-16">
-      <div className="container mx-auto px-4">
-        <h2 className={`${raleway.className} text-3xl md:text-4xl lg:text-5xl font-black text-center mb-12`}>
-          {text}
-        </h2>
-        <div className="max-w-7xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
+    <LazyMotion features={domAnimation} strict>
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <h2 className={`${raleway.className} text-3xl md:text-4xl lg:text-5xl font-black text-center mb-12`}>
+            {text}
+          </h2>
+          <div className="max-w-7xl mx-auto">
+            <AnimatePresence mode="wait">
+              <m.div
               key={currentIndex}
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
@@ -116,11 +117,12 @@ const Testimonials = ({ text }: { text: string }) => {
                   <p className="font-semibold">{testimonial.name}</p>
                 </div>
               ))}
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
       </div>
     </div>
+    </LazyMotion>
   )
 }
 

@@ -1,10 +1,14 @@
 // Service Worker para Match My Course
 // Optimización de cache para assets críticos y performance
 
-const CACHE_NAME = 'match-my-course-v5'; // Fix external API blocking with origin check
-const SW_VERSION = 'v2.3.0'; // Version tracking
-const CDN_CACHE = 'mmc-cdn-v1';
-const API_CACHE = 'mmc-api-v1';
+const CACHE_NAME = 'match-my-course-v6'; // Improved external API caching
+const SW_VERSION = 'v2.4.0'; // Version tracking
+const CDN_CACHE = 'mmc-cdn-v2';
+const API_CACHE = 'mmc-api-v2';
+
+// Métricas de performance
+let cacheHits = 0;
+let cacheMisses = 0;
 
 // Assets críticos para caché inmediato
 const CRITICAL_ASSETS = [
@@ -58,26 +62,31 @@ self.addEventListener('install', (event) => {
 // Activar Service Worker
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activating...');
-  
+
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        // Limpiar caches obsoletos
+    Promise.all([
+      // Limpiar caches obsoletos
+      caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME && 
-                cacheName !== CDN_CACHE && 
+            if (cacheName !== CACHE_NAME &&
+                cacheName !== CDN_CACHE &&
                 cacheName !== API_CACHE) {
               console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
         );
-      })
-      .then(() => {
-        // Tomar control de todas las páginas inmediatamente
-        return self.clients.claim();
-      })
+      }),
+      // Habilitar navigation preload
+      self.registration.navigationPreload ?
+        self.registration.navigationPreload.enable().then(() => {
+          console.log('[SW] Navigation preload enabled');
+        }) : Promise.resolve()
+    ]).then(() => {
+      // Tomar control de todas las páginas inmediatamente
+      return self.clients.claim();
+    })
   );
 });
 
@@ -97,17 +106,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip para APIs externas (diferente dominio/puerto)
-  if (url.origin !== self.location.origin) {
-    console.log('[SW] Skipping external API:', url.href);
+  // Permitir cache de API externa del backend
+  const isExternalBackend = url.origin !== self.location.origin &&
+                           url.hostname.includes('backend') ||
+                           url.hostname.includes('api');
+
+  // Skip solo para recursos que no sean del backend
+  if (url.origin !== self.location.origin && !isExternalBackend) {
     return;
   }
 
   // Determinar estrategia basada en la URL
   let strategy = determineStrategy(url);
-  
+
   event.respondWith(
-    handleRequest(request, strategy)
+    handleRequest(request, strategy, event)
   );
 });
 
@@ -123,16 +136,24 @@ function determineStrategy(url) {
     return CACHE_STRATEGIES.STALE_WHILE_REVALIDATE;
   }
 
-  // APIs
+  // APIs externas del backend (cachear con network-first)
+  if (url.hostname.includes('backend') ||
+      url.hostname.includes('localhost:8500') ||
+      url.pathname.includes('/schools') ||
+      url.pathname.includes('/courses')) {
+    return CACHE_STRATEGIES.NETWORK_FIRST;
+  }
+
+  // APIs internas
   if (API_URLS.some(apiPath => url.pathname.startsWith(apiPath))) {
     return CACHE_STRATEGIES.NETWORK_FIRST;
   }
 
-  // Páginas HTML
-  if (url.pathname === '/' || 
+  // Páginas HTML - usar stale-while-revalidate para mejor UX
+  if (url.pathname === '/' ||
       url.pathname.startsWith('/cursos/') ||
       url.pathname.startsWith('/blog/')) {
-    return CACHE_STRATEGIES.NETWORK_FIRST;
+    return CACHE_STRATEGIES.STALE_WHILE_REVALIDATE;
   }
 
   // Default: network first
@@ -140,19 +161,19 @@ function determineStrategy(url) {
 }
 
 // Manejar request según estrategia
-async function handleRequest(request, strategy) {
+async function handleRequest(request, strategy, event) {
   const url = new URL(request.url);
-  
+
   switch (strategy) {
     case CACHE_STRATEGIES.CACHE_FIRST:
       return handleCacheFirst(request);
-    
+
     case CACHE_STRATEGIES.NETWORK_FIRST:
-      return handleNetworkFirst(request);
-    
+      return handleNetworkFirst(request, event);
+
     case CACHE_STRATEGIES.STALE_WHILE_REVALIDATE:
       return handleStaleWhileRevalidate(request);
-    
+
     default:
       return fetch(request);
   }
@@ -163,10 +184,13 @@ async function handleCacheFirst(request) {
   const cacheName = getCacheName(request.url);
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
-  
+
   if (cachedResponse) {
+    cacheHits++;
     return cachedResponse;
   }
+
+  cacheMisses++;
   
   try {
     const networkResponse = await fetch(request);
@@ -223,11 +247,20 @@ async function handleCacheFirst(request) {
 }
 
 // Network First: Para HTML y APIs
-async function handleNetworkFirst(request) {
+async function handleNetworkFirst(request, event) {
   const cacheName = getCacheName(request.url);
-  
+
   try {
+    // Intentar usar preloadResponse para navegación
+    const preloadResponse = event && event.preloadResponse ? await event.preloadResponse : null;
+    if (preloadResponse) {
+      console.log('[SW] Using preloaded response');
+      cacheHits++; // Preload = optimization hit
+      return preloadResponse;
+    }
+
     const networkResponse = await fetch(request);
+    cacheMisses++; // Network request = cache miss
     
     // Cachear respuestas exitosas
     if (networkResponse.status === 200) {
@@ -258,8 +291,9 @@ async function handleNetworkFirst(request) {
     
     const cache = await caches.open(cacheName);
     const cachedResponse = await cache.match(request);
-    
+
     if (cachedResponse) {
+      cacheHits++; // Fallback a cache = hit
       // Verificar TTL para APIs
       if (request.url.includes('/api/')) {
         const cachedAt = cachedResponse.headers.get('sw-cached-at');
@@ -285,7 +319,7 @@ async function handleStaleWhileRevalidate(request) {
   const cacheName = getCacheName(request.url);
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
-  
+
   // Revalidar en background
   const fetchPromise = fetch(request).then(response => {
     if (response.status === 200) {
@@ -293,9 +327,15 @@ async function handleStaleWhileRevalidate(request) {
     }
     return response;
   }).catch(() => cachedResponse);
-  
+
   // Devolver cache inmediatamente si existe
-  return cachedResponse || fetchPromise;
+  if (cachedResponse) {
+    cacheHits++;
+    return cachedResponse;
+  }
+
+  cacheMisses++;
+  return fetchPromise;
 }
 
 // Obtener nombre de cache apropiado
@@ -328,23 +368,17 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Performance monitoring
-self.addEventListener('fetch', (event) => {
-  if (event.request.url.includes('/api/performance')) {
-    // Enviar métricas de cache hit/miss
-    const cacheHits = self.cacheHits || 0;
-    const cacheMisses = self.cacheMisses || 0;
-    
-    event.respondWith(
-      new Response(JSON.stringify({
-        cacheHits,
-        cacheMisses,
-        hitRate: cacheHits / (cacheHits + cacheMisses) || 0,
-        timestamp: Date.now()
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      })
-    );
+// Exponer métricas a través de mensaje
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'GET_CACHE_STATS') {
+    const hitRate = cacheHits / (cacheHits + cacheMisses) || 0;
+    event.ports[0].postMessage({
+      cacheHits,
+      cacheMisses,
+      hitRate: Math.round(hitRate * 100),
+      timestamp: Date.now(),
+      version: SW_VERSION
+    });
   }
 });
 

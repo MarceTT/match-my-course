@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { m, LazyMotion, domAnimation, useAnimation, useInView } from 'framer-motion';
 
 const images = Array.from({ length: 26 }, (_, i) => `/schools/${i + 1}.png`);
 
@@ -30,22 +30,23 @@ const Carousel = () => {
     }, [controls, isInView]);
 
   return (
-    <div className="hidden md:block bg-white py-4 overflow-hidden relative" ref={containerRef}>
-        {/* <h1 className="text-xl md:text-xl text-center mb-12 text-gray-900 font-bold">
-          Trabajamos con más de 30 escuelas de inglés a nivel mundial y seguimos creciendo
-        </h1> */}
-      <div className="container mx-auto px-4">
-        <div className="relative">
-          <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
-          <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
-          <div className="overflow-hidden">
-            <motion.div 
-              className="flex min-h-[120px]"
-              animate={controls}
-              style={{ width: `${images.length * 200 * 2}px` }}
-            >
-              {[...images, ...images].map((src, index) => (
-                <motion.div 
+    <LazyMotion features={domAnimation} strict>
+      <div className="hidden md:block bg-white py-4 overflow-hidden relative" ref={containerRef}>
+          {/* <h1 className="text-xl md:text-xl text-center mb-12 text-gray-900 font-bold">
+            Trabajamos con más de 30 escuelas de inglés a nivel mundial y seguimos creciendo
+          </h1> */}
+        <div className="container mx-auto px-4">
+          <div className="relative">
+            <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div className="overflow-hidden">
+              <m.div
+                className="flex min-h-[120px]"
+                animate={controls}
+                style={{ width: `${images.length * 200 * 2}px` }}
+              >
+                {[...images, ...images].map((src, index) => (
+                  <m.div 
                   key={index} 
                   className="flex-shrink-0 w-[200px] px-2 min-h-[120px]"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -61,11 +62,12 @@ const Carousel = () => {
                     className="rounded-lg shadow-md object-cover"
                     loading="lazy"
                   />
-                </motion.div>
+                </m.div>
               ))}
-            </motion.div>
+            </m.div>
           </div>
         </div>
+      </div>
       </div>
       <style jsx global>{`
         .slick-track {
@@ -81,7 +83,7 @@ const Carousel = () => {
           overflow: hidden;
         }
       `}</style>
-    </div>
+    </LazyMotion>
   );
 };
 

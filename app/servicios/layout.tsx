@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { raleway } from "../ui/fonts";
-import Header from "../components/common/Header";
-import Footer from "../components/common/Footer";
+import Header from "../components/common/HeaderServer";
+import Footer from "../components/common/FooterServer";
 import { GTMPageViewTracker } from "../ui/GTMPageViewTracker";
 import { Suspense } from "react";
 

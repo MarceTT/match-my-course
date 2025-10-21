@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ThankYouPage from "@/app/features/booking/components/BookingPannel.thankYou";
-import Header from "@/app/components/common/Header";
-import Footer from "@/app/components/common/Footer";
+import Header from "@/app/components/common/HeaderServer";
+import Footer from "@/app/components/common/FooterServer";
 
 export default function ThankYouBookingPage() {
   const router = useRouter();

@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "./components/common/Header";
-import Footer from "./components/common/Footer";
+import Header from "./components/common/HeaderServer";
+import Footer from "./components/common/FooterServer";
 import Hero from "./components/features/Hero/Hero";
 import dynamic from "next/dynamic";
 import SuspenseLoader from "./admin/components/SuspenseLoader";

@@ -1,7 +1,7 @@
 import { Geist_Mono } from 'next/font/google'
 import { raleway } from '../ui/fonts'
-import Footer from '../components/common/Footer'
-import Header from '../components/common/Header'
+import Footer from '../components/common/FooterServer'
+import Header from '../components/common/HeaderServer'
 import { Suspense } from 'react'
 
 const geistMono = Geist_Mono({
