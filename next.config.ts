@@ -64,6 +64,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/irlanda',
+        destination: '/estudiar-ingles-irlanda',
+        permanent: true,
+      },
+      {
         source: '/mision-y-vision',
         destination: '/mision-vision-matchmycourse',
         permanent: true,
@@ -183,7 +188,12 @@ const nextConfig: NextConfig = {
         // Canonical Spanish URL for New Zealand page -> serves the existing route
         source: '/estudiar-ingles-nueva-zelanda',
         destination: '/nueva-zelanda',
-      }
+      },
+      {
+        // Canonical Spanish URL for New Zealand page -> serves the existing route
+        source: '/estudiar-ingles-irlanda',
+        destination: '/irlanda',
+      },
     ];
   },
   async headers() {

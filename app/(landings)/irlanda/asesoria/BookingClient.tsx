@@ -36,7 +36,7 @@ const HOLIDAYS = (process.env.NEXT_PUBLIC_BOOKING_HOLIDAYS || "")
 const SAT_DAY_START = process.env.NEXT_PUBLIC_BOOKING_SATURDAY_DAY_START || "09:00";
 const SAT_DAY_END = process.env.NEXT_PUBLIC_BOOKING_SATURDAY_DAY_END || "13:00";
 
-const COUNTRY_BOOKING = "Nueva Zelanda";
+const COUNTRY_BOOKING = "Irlanda";
 
 function fmt2(n: number) { return n.toString().padStart(2, "0"); }
 
