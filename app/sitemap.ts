@@ -48,31 +48,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Rutas estáticas principales
   const staticUrls: MetadataRoute.Sitemap = [
-    // TIER 1: Máxima prioridad
-    { url: `${base}/`, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
+    // Homepage
+    { url: `${base}/`, lastModified: new Date() },
 
-    // TIER 2: Landing pages de conversión (0.7-0.9)
-    { url: `${base}/school`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/school-search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${base}/como-funciona-matchmycourse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${base}/estudiar-ingles-nueva-zelanda`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/escuelas-socias`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${base}/servicios-matchmycourse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-
-    // TIER 3: Contenido informativo importante (0.5-0.7)
-    { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${base}/contacto`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/testimonios`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-
-    // TIER 4: Contenido secundario (0.4-0.5)
-    { url: `${base}/ebook-estudiar-y-trabajar-extranjero`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${base}/quienes-somos`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
-
-    // TIER 5: Páginas legales (0.2-0.3)
-    { url: `${base}/terminos-y-condiciones`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${base}/politica-de-privacidad`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
+    // Main navigation pages
+    { url: `${base}/como-funciona-matchmycourse`, lastModified: new Date() },
+    { url: `${base}/estudiar-ingles-nueva-zelanda`, lastModified: new Date() },
+    { url: `${base}/escuelas-socias`, lastModified: new Date() },
+    { url: `${base}/servicios-matchmycourse`, lastModified: new Date() },
+    { url: `${base}/contacto`, lastModified: new Date() },
+    { url: `${base}/testimonios`, lastModified: new Date() },
+    { url: `${base}/ebook-estudiar-y-trabajar-extranjero`, lastModified: new Date() },
+    { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date() },
+    { url: `${base}/quienes-somos`, lastModified: new Date() },
+    { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date() },
+    { url: `${base}/blog`, lastModified: new Date() },
   ]
 
   // Escuelas desde backend SEO
@@ -97,8 +87,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         return [{
           url: loc,
           lastModified: e.updatedAt ? new Date(e.updatedAt) : new Date(),
-          changeFrequency: 'weekly' as const,
-          priority: 0.8,
         }]
       } catch {
         return []
@@ -137,8 +125,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         blogEntries.push({
           url: loc,
           lastModified: last ? new Date(last) : new Date(),
-          changeFrequency: 'weekly',
-          priority: 0.5,
         })
       }
       page += 1
