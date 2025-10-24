@@ -10,6 +10,7 @@ const BodySchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   time: z.string().regex(/^\d{2}:\d{2}$/),
   duration: z.number().int().min(15).max(240).optional(),
+  country: z.string().optional(),
 });
 
 function fmt2(n: number) { return n.toString().padStart(2, "0"); }
@@ -30,7 +31,7 @@ function parseHM(hm: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, date, time, duration } = BodySchema.parse(body);
+    const { name, email, date, time, duration, country } = BodySchema.parse(body);
 
     const [y, mo, da] = date.split("-").map(Number);
     const [hh, mm] = time.split(":").map(Number);
@@ -162,6 +163,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             type: "zoom_booking_confirmation",
             user: { name, email },
+            country,
             meeting: {
               id: meeting.id,
               join_url: meeting.join_url,
