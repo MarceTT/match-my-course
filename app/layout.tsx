@@ -72,6 +72,10 @@ export default function RootLayout({
           imageSizes="100vw"
           fetchPriority="high"
         />
+
+        {/* Preconnect to Google Fonts for faster font loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Critical CSS for above-the-fold content */}
         <style dangerouslySetInnerHTML={{
@@ -228,22 +232,25 @@ export default function RootLayout({
                     }
                   });
 
-                  // Prefetch critical routes after idle
+                  // Prefetch critical routes after idle using PrefetchManager
                   if ('requestIdleCallback' in window) {
-                    requestIdleCallback(() => {
-                      const criticalRoutes = [
-                        '/cursos-ingles-extranjero',
-                        '/school-search',
-                        '/servicios-matchmycourse',
-                        '/quienes-somos'
-                      ];
+                    requestIdleCallback(async () => {
+                      try {
+                        const { default: prefetchManager } = await import('./utils/prefetchManager');
 
-                      criticalRoutes.forEach(route => {
-                        fetch(route, {
-                          method: 'GET',
-                          priority: 'low'
-                        }).catch(() => {});
-                      });
+                        // Configure prefetch manager
+                        prefetchManager.configure({
+                          enabled: true,
+                          maxPrefetchPerSession: 30,
+                          prefetchOnHover: true,
+                          prefetchOnIdle: true,
+                        });
+
+                        // Prefetch priority routes
+                        await prefetchManager.prefetchPriorityRoutes();
+                      } catch (error) {
+                        console.error('[App] Failed to initialize prefetch manager:', error);
+                      }
                     });
                   }
 

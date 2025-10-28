@@ -99,6 +99,7 @@ const DesktopNav = ({ navItems }: DesktopNavProps) => {
                     <Link
                       key={dropdownItem.name}
                       href={dropdownItem.href}
+                      prefetch={true}
                       className="block px-4 py-3 text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 transition-all duration-200 group"
                       onClick={() =>
                         handleLinkClick(
@@ -123,6 +124,7 @@ const DesktopNav = ({ navItems }: DesktopNavProps) => {
           ) : (
             <Link
               href={item.href!}
+              prefetch={true}
               className="relative px-2 lg:px-3 py-2 text-gray-600 hover:text-blue-600 transition-colors duration-200 group text-base lg:text-lg"
               onClick={() => handleLinkClick(item.name, item.href!)}
             >

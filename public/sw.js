@@ -15,7 +15,15 @@ const CRITICAL_ASSETS = [
   '/',
   '/favicon.ico',
   '/placeholder.svg',
-  '/offline.html', // Crear página offline
+  '/offline.html',
+  '/irlanda',
+  '/nueva-zelanda',
+  '/estudiar-ingles-irlanda',
+  '/estudiar-ingles-nueva-zelanda',
+  '/blog',
+  '/cursos-ingles-extranjero',
+  '/servicios-matchmycourse',
+  '/como-funciona-matchmycourse'
 ];
 
 // Patrones de URLs para diferentes estrategias de cache
@@ -152,7 +160,16 @@ function determineStrategy(url) {
   // Páginas HTML - usar stale-while-revalidate para mejor UX
   if (url.pathname === '/' ||
       url.pathname.startsWith('/cursos/') ||
-      url.pathname.startsWith('/blog/')) {
+      url.pathname.startsWith('/blog/') ||
+      url.pathname.startsWith('/irlanda') ||
+      url.pathname.startsWith('/nueva-zelanda') ||
+      url.pathname.startsWith('/estudiar-ingles-') ||
+      url.pathname.includes('/school-search') ||
+      url.pathname.includes('/servicios') ||
+      url.pathname.includes('/como-funciona') ||
+      url.pathname.includes('/quienes-somos') ||
+      url.pathname.includes('/escuelas-socias') ||
+      url.pathname.includes('/contacto')) {
     return CACHE_STRATEGIES.STALE_WHILE_REVALIDATE;
   }
 

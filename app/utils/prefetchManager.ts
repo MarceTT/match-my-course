@@ -32,12 +32,29 @@ class PrefetchManager {
     this.config = {
       enabled: true,
       priorityRoutes: [
-        '/cursos',
-        '/blog',
+        // Landing pages (highest priority)
+        '/estudiar-ingles-irlanda',
+        '/estudiar-ingles-nueva-zelanda',
+        '/irlanda',
+        '/nueva-zelanda',
+
+        // Core pages
+        '/cursos-ingles-extranjero',
         '/servicios-matchmycourse',
-        '/como-funciona-matchmycourse'
+        '/como-funciona-matchmycourse',
+        '/quienes-somos',
+        '/escuelas-socias',
+        '/contacto',
+
+        // Blog and search
+        '/blog',
+        '/school-search',
+
+        // Secondary pages
+        '/testimonios',
+        '/mision-vision-matchmycourse'
       ],
-      maxPrefetchPerSession: 10,
+      maxPrefetchPerSession: 30,
       prefetchOnHover: true,
       prefetchOnIdle: true,
       networkThreshold: 'auto'

@@ -123,6 +123,7 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
                         <Link
                           key={dropdownItem.name}
                           href={dropdownItem.href}
+                          prefetch={true}
                           className="block px-4 py-3 text-gray-600 hover:text-blue-600 transition-all duration-200 text-center"
                           onClick={() =>
                             handleLinkClick(
@@ -150,6 +151,7 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
               ) : (
                 <Link
                   href={item.href!}
+                  prefetch={true}
                   className="text-2xl text-gray-600 hover:text-blue-600 transition-all duration-200 transform hover:translate-x-2 font-semibold block text-center py-2"
                   onClick={() => handleLinkClick(item.name, item.href!)}
                   style={{ animationDelay: `${index * 50}ms` }}
