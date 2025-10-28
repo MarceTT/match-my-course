@@ -27,6 +27,10 @@ export const navItems: NavItem[] = [
     name: "Paises",
     dropdown: [
       {
+        name: "Irlanda",
+        href: "/estudiar-ingles-irlanda",
+      },
+      {
         name: "Nueva Zelanda",
         href: "/estudiar-ingles-nueva-zelanda",
       },
