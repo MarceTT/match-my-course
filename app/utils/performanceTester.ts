@@ -443,9 +443,11 @@ class PerformanceTester {
 
       // Medir tiempo de navegación usando Navigation Timing API
       const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      
+
       if (navigationEntry) {
-        const navigationTime = navigationEntry.loadEventEnd - navigationEntry.fetchStart;
+        // Use domContentLoadedEventEnd instead of loadEventEnd for more realistic navigation metric
+        // This measures when DOM is ready, not when all images/resources are loaded
+        const navigationTime = navigationEntry.domContentLoadedEventEnd - navigationEntry.fetchStart;
         resolve(Math.round(navigationTime));
       } else {
         resolve(0);

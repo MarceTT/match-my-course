@@ -63,6 +63,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com" />
 
+        {/* Preconnect to GTM and Analytics for faster third-party loading */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
+
         {/* Preload critical LCP image for Hero */}
         <link
           rel="preload"
@@ -77,29 +81,29 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Critical CSS for above-the-fold content */}
+        {/* Critical CSS for above-the-fold content - Enhanced for faster FCP */}
         <style dangerouslySetInnerHTML={{
           __html: `
-            /* Critical CSS for initial render */
+            /* Critical CSS for initial render - optimized for FCP */
             *,::before,::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
-            html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:var(--font-raleway),system-ui,-apple-system,sans-serif}
-            body{margin:0;line-height:inherit;font-family:inherit}
+            html{line-height:1.5;-webkit-text-size-adjust:100%;font-family:var(--font-raleway),system-ui,-apple-system,sans-serif;font-display:swap}
+            body{margin:0;line-height:inherit;font-family:inherit;background-color:#fff}
             /* Layout classes */
-            .container{width:100%}
-            @media (min-width: 640px){.container{max-width:640px}}
-            @media (min-width: 768px){.container{max-width:768px}}
-            @media (min-width: 1024px){.container{max-width:1024px}}
-            @media (min-width: 1280px){.container{max-width:1280px}}
-            @media (min-width: 1536px){.container{max-width:1536px}}
-            .mx-auto{margin-left:auto;margin-right:auto}
-            .px-6{padding-left:1.5rem;padding-right:1.5rem}
-            /* Hero section critical styles */
-            .hero-section{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
-            /* School card critical styles */
-            .school-card{display:flex;border-radius:0.5rem;box-shadow:0 1px 3px rgba(0,0,0,0.1);background-color:white}
+            .container{width:100%;max-width:1536px;margin-left:auto;margin-right:auto;padding-left:1.5rem;padding-right:1.5rem}
+            /* Hero section critical styles - optimized */
+            .hero-section{position:relative;display:flex;align-items:center;justify-content:center;min-height:500px;background-color:#f9fafb}
+            .hero-title{font-size:2.5rem;line-height:1.2;font-weight:700;color:#111827;margin-bottom:1rem}
+            .hero-subtitle{font-size:1.125rem;color:#6b7280;margin-bottom:2rem}
+            /* Header critical styles */
+            header{background-color:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1);position:sticky;top:0;z-index:50}
             /* Button critical styles */
-            .btn-primary{background-color:#3b82f6;color:white;padding:0.5rem 1rem;border-radius:0.375rem;font-weight:600}
+            .btn-primary{background-color:#3b82f6;color:#fff;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:600;border:none;cursor:pointer;display:inline-block;text-decoration:none}
             .btn-primary:hover{background-color:#2563eb}
+            /* Prevent layout shift */
+            img{display:block;max-width:100%;height:auto}
+            /* Loading state */
+            .loading{opacity:0;animation:fadeIn 0.3s ease-in forwards}
+            @keyframes fadeIn{to{opacity:1}}
           `
         }} />
         
