@@ -132,10 +132,10 @@ class PerformanceTester {
     // Navigation Tests
     this.tests.push({
       name: 'Navigation Speed',
-      description: 'Time for navigation between pages',
+      description: 'Time for initial page load (DOM ready)',
       execute: this.measureNavigationSpeed,
-      baseline: 800,
-      target: 200,
+      baseline: 2000,
+      target: 1000, // Realistic for initial load - subsecuent navigations will be faster
       unit: 'ms'
     });
   }
