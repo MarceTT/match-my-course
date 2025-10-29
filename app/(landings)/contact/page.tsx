@@ -65,7 +65,7 @@ export default function ContactPage() {
       }
     } catch (error) {
       alert("Error al enviar el formulario");
-      console.error(error);
+      // console.error(error);
     } finally {
       setIsSubmitting(false);
     }

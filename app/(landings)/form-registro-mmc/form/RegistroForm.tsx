@@ -239,10 +239,10 @@ export default function RegisterForm() {
       const formattedData = convertFormDataDatesToString(formData);
 
       // Debug: Log the data being sent to backend
-      console.log("=== FORM DATA BEING SENT ===");
-      console.log("needsAccommodation:", formData.needsAccommodation);
-      console.log("Formatted data:", JSON.stringify(formattedData, null, 2));
-      console.log("============================");
+      // console.log("=== FORM DATA BEING SENT ===");
+      // console.log("needsAccommodation:", formData.needsAccommodation);
+      // console.log("Formatted data:", JSON.stringify(formattedData, null, 2));
+      // console.log("============================");
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/enrollment/send-enrollment`, {
         method: 'POST',
@@ -257,7 +257,7 @@ export default function RegisterForm() {
       }
 
       const result = await response.json();
-      console.log("Enrollment submitted successfully:", result);
+      // console.log("Enrollment submitted successfully:", result);
 
       setSubmitted(true);
       toast({
@@ -265,7 +265,7 @@ export default function RegisterForm() {
         description: "Su solicitud ha sido enviada exitosamente.",
       });
     } catch (error) {
-      console.error("Error submitting enrollment:", error);
+      // console.error("Error submitting enrollment:", error);
       toast({
         title: "Error al enviar formulario",
         description: "Hubo un problema al enviar su solicitud. Por favor, inténtelo de nuevo.",

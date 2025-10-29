@@ -34,9 +34,9 @@ clientAxios.interceptors.request.use(async (config) => {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
   } catch (error) {
-    console.error('Error getting session for request:', error);
+    // console.error('Error getting session for request:', error);
   }
-  
+
   return config;
 });
 
@@ -70,7 +70,7 @@ clientAxios.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         return clientAxios(originalRequest);
       } catch (refreshError) {
-        console.error('Error refreshing via NextAuth session:', refreshError);
+        // console.error('Error refreshing via NextAuth session:', refreshError);
         processQueue(refreshError, null);
         if (typeof window !== 'undefined') {
           window.location.href = '/api/auth/signout?callbackUrl=/login';

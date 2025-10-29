@@ -78,7 +78,7 @@ export default function GeneralBooking({
           text={priceText}
           type={typeCourse}
         />
-        {/* <InfoButton onClick={() => console.log("Mostrar info")} /> */}
+        {/* <InfoButton onClick={() => // console.log("Mostrar info")} /> */}
       </div>
 
       <div>

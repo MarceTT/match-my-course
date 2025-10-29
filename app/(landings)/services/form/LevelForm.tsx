@@ -112,7 +112,7 @@ const LevelEnglishForm = () => {
         toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
       }
     } catch (error) {
-      console.error("Error al enviar el formulario:", error);
+      // console.error("Error al enviar el formulario:", error);
       toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
     }
   }
@@ -125,7 +125,7 @@ const LevelEnglishForm = () => {
         <form
           onSubmit={form.handleSubmit(onSubmit, (errors) => {
             // Log validation errors for debugging when submit doesn't fire
-            console.log("LevelForm validation errors:", errors);
+            // console.log("LevelForm validation errors:", errors);
           })}
           className="space-y-6"
         >

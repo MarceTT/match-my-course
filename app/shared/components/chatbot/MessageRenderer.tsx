@@ -230,7 +230,7 @@ const SchoolCard: React.FC<{ school: School; index: number }> = ({ school, index
           fill
           className="object-cover"
           onError={(e) => {
-//             console.log('❌ Image failed to load:', school.mainImage)
+            // // console.log('❌ Image failed to load:', school.mainImage)
             e.currentTarget.style.display = 'none'
           }}
         />
@@ -246,7 +246,7 @@ const SchoolCard: React.FC<{ school: School; index: number }> = ({ school, index
               height={24}
               className="w-full h-full object-contain"
               onError={(e) => {
-//                 console.log('❌ Logo failed to load:', school.logo)
+                // // console.log('❌ Logo failed to load:', school.logo)
               }}
             />
           </div>

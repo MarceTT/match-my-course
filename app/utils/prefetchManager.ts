@@ -245,10 +245,10 @@ class PrefetchManager {
         });
       }
 
-      console.log(`[PrefetchManager] Prefetched ${url} (trigger: ${trigger})`);
+      // console.log(`[PrefetchManager] Prefetched ${url} (trigger: ${trigger})`);
 
     } catch (error) {
-      console.error(`[PrefetchManager] Failed to prefetch ${url}:`, error);
+      // console.error(`[PrefetchManager] Failed to prefetch ${url}:`, error);
       this.prefetchedRoutes.delete(url);
       this.metrics.prefetchCount--;
     }
@@ -276,9 +276,9 @@ class PrefetchManager {
         staleTime: 1000 * 60 * 30, // 30 minutos
       });
 
-      console.log(`[PrefetchManager] Prefetched school data for ${schoolId}`);
+      // console.log(`[PrefetchManager] Prefetched school data for ${schoolId}`);
     } catch (error) {
-      console.error(`[PrefetchManager] Failed to prefetch school data:`, error);
+      // console.error(`[PrefetchManager] Failed to prefetch school data:`, error);
     }
   }
 

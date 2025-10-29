@@ -20,7 +20,7 @@ export default function PartnersPage() {
         setPartners(data)
       } catch (err) {
         setError("No se pudieron cargar las escuelas...")
-        console.error(err)
+        // console.error(err)
       } finally {
         setLoading(false)
       }

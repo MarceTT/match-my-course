@@ -67,7 +67,7 @@ export function useSubmitPost() {
     onError: (error: any) => {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(`❌ Error al guardar post: ${errorMessage}`);
-      console.error("Error detalles:", error);
+      // console.error("Error detalles:", error);
     },
   });
 }

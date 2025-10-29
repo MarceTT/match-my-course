@@ -222,7 +222,7 @@ export default function BookingClient() {
       if (!data.success) throw new Error(data.error || "Error");
       setBusy(data.busy || []);
     } catch (e: any) {
-      console.error(e);
+      // console.error(e);
       toast.error("No se pudo cargar disponibilidad.");
     } finally {
       setLoadingBusy(false);

@@ -26,7 +26,7 @@ export async function fetchSchoolsWithDetails() {
     const res = await fetch(url, { cache: "no-store" });
   
     if (!res.ok) {
-      console.error("Error en la respuesta:", res.status);
+      // console.error("Error en la respuesta:", res.status);
       throw new Error("Error al obtener escuelas");
     }
 

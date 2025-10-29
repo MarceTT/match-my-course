@@ -109,10 +109,9 @@ export default function ChatBot({
           }))
         }
       } catch (e) {
-        console.warn('Error loading saved messages:', e)
+        // console.warn('Error loading saved messages:', e)
       }
     }
-    
     return [{
       id: typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : Date.now().toString(),
       content: welcomeMessage,
@@ -214,7 +213,7 @@ export default function ChatBot({
       try {
         window.localStorage?.setItem(`chatbot-messages-${companyName}`, JSON.stringify(messages))
       } catch (e) {
-        console.warn('Error saving messages:', e)
+        // console.warn('Error saving messages:', e)
       }
     }
   }, [messages, persistMessages, companyName])
@@ -365,7 +364,7 @@ export default function ChatBot({
       try {
         window.localStorage?.removeItem(`chatbot-messages-${companyName}`)
       } catch (e) {
-        console.warn('Error removing saved messages:', e)
+        // console.warn('Error removing saved messages:', e)
       }
     }
   }

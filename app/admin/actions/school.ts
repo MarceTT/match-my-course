@@ -20,20 +20,20 @@ export async function getSchools(): Promise<School[] | { error: string }> {
     });
 
     if (!res.ok) {
-        console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
+        // console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
         return [];
       }
 
     const data: SchoolResponse = await res.json();
 
     if (!data.data || !Array.isArray(data.data.schools)) {
-        console.error("❌ Formato de respuesta inválido:", data);
+        // console.error("❌ Formato de respuesta inválido:", data);
         return [];
       }
 
     return data.data.schools;
   } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
+    // console.error("❌ Error en la solicitud:", error);
     return [];
   }
 }
@@ -54,12 +54,12 @@ export async function createSchool(formData: FormData) {
     });
 
     if (!res.ok) {
-      console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
+      // console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
       return { error: "Error en la solicitud" };
     }
 
     const responseData = await res.json();
-//     console.log("🚀 Response:", responseData);
+//     // console.log("🚀 Response:", responseData);
     if (!res.ok) {
         return { error: responseData.message || "Error al crear la escuela" };
       }
@@ -86,7 +86,7 @@ export async function updateSchool(id: string, formData: FormData) {
     });
 
     if (!res.ok) {
-      console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
+      // console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
       return { error: "Error en la solicitud" };
     }
 
@@ -96,7 +96,7 @@ export async function updateSchool(id: string, formData: FormData) {
       }
       return { success: true, data: responseData.school };
   } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
+    // console.error("❌ Error en la solicitud:", error);
     return { error: "Error en la solicitud" };
   }
 }
@@ -120,13 +120,13 @@ export async function toggleSchoolStatus(id: string, status: boolean) {
     const responseData = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Error en la respuesta del backend:", res.status, responseData.message);
+      // console.error("❌ Error en la respuesta del backend:", res.status, responseData.message);
       return { error: responseData.message || "Error al cambiar el estado de la escuela" };
     }
 
     return { success: true };
   } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
+    // console.error("❌ Error en la solicitud:", error);
     return { error: "Error en la solicitud" };
   }
 }
@@ -150,13 +150,13 @@ export async function getSchoolById(id: string): Promise<{ data?: School; error?
     const responseData = await res.json();
 
     if (!res.ok || !responseData?.data?.school) {
-      console.error("❌ Error en getSchoolById", responseData);
+      // console.error("❌ Error en getSchoolById", responseData);
       return { error: "Error al obtener escuela" };
     }
 
     return { data: responseData.data.school };
   } catch (err) {
-    console.error("❌ Error general en getSchoolById:", err);
+    // console.error("❌ Error general en getSchoolById:", err);
     return { error: "Error inesperado" };
   }
 }
@@ -183,14 +183,14 @@ export async function deleteImageSchool(
     );
 
     if (!res.ok) {
-      console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
+      // console.error("❌ Error en la respuesta del backend:", res.status, res.statusText);
       return { error: "Error en la solicitud" };
     }
 
     const responseData = await res.json();
     return { success: true, data: responseData };
   } catch (error) {
-    console.error("❌ Error en la solicitud:", error);
+    // console.error("❌ Error en la solicitud:", error);
     return { error: "Error en la solicitud" };
   }
 }

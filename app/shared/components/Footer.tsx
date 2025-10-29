@@ -44,8 +44,8 @@ const Footer = ({ avoidOverlap = false, showWhatsApp = true }: FooterProps) => {
   };
 
   const handleChatError = (error: Error) => {
-    console.error('ChatBot Error:', error);
-    
+    // console.error('ChatBot Error:', error);
+
     toast.error("Error en el chat", {
       description: "No pudimos conectar con el asistente. Por favor, intenta de nuevo.",
       action: {

@@ -21,8 +21,8 @@ const CoursePrice = ({
   type,
 }: CoursePriceProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-//   console.log("CoursePrice -> amount:", amount);
-//   console.log("CoursePrice -> offer:", offer);
+  // // console.log("CoursePrice -> amount:", amount);
+  // // console.log("CoursePrice -> offer:", offer);
 
   return (
     <div

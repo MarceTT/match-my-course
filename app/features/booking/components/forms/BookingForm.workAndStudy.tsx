@@ -110,8 +110,8 @@ export default function WorkAndStudyBooking({
     }
   }, [reservation?.specificSchedule, formData.schedule, onChangeFormData]);
 
-  console.log("formData", formData);
-  console.log("reservation", reservation);
+  // console.log("formData", formData);
+  // console.log("reservation", reservation);
 
   const handleContinueClick = () => {
     if (reservation?.schoolName === "University of Limerick Language Centre") {

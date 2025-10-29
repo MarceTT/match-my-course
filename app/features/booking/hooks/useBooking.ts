@@ -99,7 +99,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         setError(false);
         setErrorMessage("");
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         setReservation(null);
         setError(true);
    
@@ -267,7 +267,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       setError(false);
       setErrorMessage("");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       setReservation(null);
       setError(true);
       setErrorMessage('Error al conectar con el servidor');
@@ -339,7 +339,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       setError(false);
       setErrorMessage("");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       setReservation(null);
       setError(true);
       setErrorMessage('Error al conectar con el servidor');
@@ -384,7 +384,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         return { success: false, message: result.message || "Error al enviar" };
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return { success: false, message: "Error al conectar con el servidor" };
     }
   };

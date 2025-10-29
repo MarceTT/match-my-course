@@ -97,12 +97,12 @@ export default function SummaryStepTwo({
               offerPrice: Number(offerPrice),
               city: city,
             };
-            
-            console.log("📤 Datos finales a enviar:", finalData);
+
+            // console.log("📤 Datos finales a enviar:", finalData);
             onSubmit(finalData);
           },
           (errors) => {
-            console.error("❌ VALIDATION ERRORS", errors);
+            // console.error("❌ VALIDATION ERRORS", errors);
           }
         )}
         className="space-y-6"

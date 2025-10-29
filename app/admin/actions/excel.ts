@@ -172,7 +172,7 @@ export async function uploadExcelDetalleEscuela(formData: FormData, selectedColu
     try {
       result = JSON.parse(text);
     } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
+      // console.error("❌ Error: El servidor no devolvió JSON válido", text);
       throw new Error("El servidor respondió con un formato inesperado.");
     }
 
@@ -217,7 +217,7 @@ export async function uploadExcelInstallation(formData: FormData, selectedColumn
     try {
       result = JSON.parse(text);
     } catch (e) {
-      console.error("❌ Error: El servidor no devolvió JSON válido", text);
+      // console.error("❌ Error: El servidor no devolvió JSON válido", text);
       throw new Error("El servidor respondió con un formato inesperado.");
     }
 
@@ -430,7 +430,7 @@ export async function fetchUploadedFiles(tipo: string) {
       return { success: false, error: "No se pudo cargar el historial de archivos" };
     }
   } catch (error) {
-    console.error("Error fetching files:", error);
+    // console.error("Error fetching files:", error);
     return { success: false, error: "Error al conectar con el servidor" };
   }
 }
@@ -457,7 +457,7 @@ export async function fetchFileDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -484,7 +484,7 @@ export async function fetchCalidadDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -513,7 +513,7 @@ export async function fetchFileAccommodationDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -540,7 +540,7 @@ export async function fetchDescriptionDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -567,7 +567,7 @@ export async function fetchInstallation () {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -596,7 +596,7 @@ export async function fetchNationality () {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -625,7 +625,7 @@ export async function fetchPriceDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -654,7 +654,7 @@ export async function fetchWeekRangeDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }
@@ -683,7 +683,7 @@ export async function fetchWeekPriceDetails() {
       return []; // Devolvemos un array vacío en lugar de lanzar un error
     }
   } catch (error) {
-    console.error("Error fetching file details:", error);
+    // console.error("Error fetching file details:", error);
     return [];
   }
 }

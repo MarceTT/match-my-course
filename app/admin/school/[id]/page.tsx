@@ -229,7 +229,7 @@ const EditSchoolPage = () => {
 
       field.onChange(processedFile);
     } catch (error) {
-      console.error("Error comprimiendo imagen:", error);
+      // console.error("Error comprimiendo imagen:", error);
       toast.error(
         error instanceof Error ? error.message : "Error al procesar la imagen"
       );
@@ -278,7 +278,7 @@ const EditSchoolPage = () => {
             isNew: true,
           });
         } catch (error) {
-          console.error(`Error procesando imagen:`, error);
+          // console.error(`Error procesando imagen:`, error);
           toast.error(
             error instanceof Error ? error.message : `Error al procesar imagen`
           );
@@ -289,7 +289,7 @@ const EditSchoolPage = () => {
       form.setValue("galleryImages", updatedGallery);
       await form.trigger("galleryImages");
     } catch (error) {
-      console.error("Error general:", error);
+      // console.error("Error general:", error);
       toast.error("Error al procesar las imágenes");
     } finally {
       setLoadingGallery(false);
@@ -343,7 +343,7 @@ const EditSchoolPage = () => {
 
       toast.success("Imagen eliminada correctamente ✅");
     } catch (error: any) {
-      console.error("❌ Error al eliminar imagen:", error);
+      // console.error("❌ Error al eliminar imagen:", error);
       toast.error(error.message || "No se pudo eliminar la imagen");
     } finally {
       setRemovingImages((prev) => ({
@@ -371,7 +371,7 @@ const EditSchoolPage = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
-            console.log("📦 Datos a enviar:", data);
+            // console.log("📦 Datos a enviar:", data);
             mutation.mutate(data);
           })}
           className="space-y-6"

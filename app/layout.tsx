@@ -199,7 +199,7 @@ export default function RootLayout({
                 try {
                   // Enable navigation preloading if supported
                   if ('navigationPreload' in ServiceWorkerRegistration.prototype) {
-                    console.log('[App] Navigation preload supported');
+                    // console.log('[App] Navigation preload supported');
                   }
 
                   const registration = await navigator.serviceWorker.register('/sw.js', {
@@ -207,12 +207,12 @@ export default function RootLayout({
                     updateViaCache: 'none' // Always fetch fresh SW
                   });
 
-                  console.log('[App] SW registered:', registration.scope);
+                  // console.log('[App] SW registered:', registration.scope);
 
                   // Enable navigation preload
                   if (registration.navigationPreload) {
                     await registration.navigationPreload.enable();
-                    console.log('[App] Navigation preload enabled');
+                    // console.log('[App] Navigation preload enabled');
                   }
 
                   // Actualizar cuando hay una nueva versión
@@ -220,7 +220,7 @@ export default function RootLayout({
                     const newWorker = registration.installing;
                     newWorker?.addEventListener('statechange', () => {
                       if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        console.log('[App] Nueva versión del SW disponible');
+                        // console.log('[App] Nueva versión del SW disponible');
                         // Auto-update sin confirmación para mejor UX
                         newWorker.postMessage({ type: 'SKIP_WAITING' });
                       }
@@ -265,9 +265,11 @@ export default function RootLayout({
                             prefetchOnHover: true,
                             prefetchOnIdle: true,
                           });
-                          console.log('[App] PrefetchManager initialized');
+                          // console.log('[App] PrefetchManager initialized');
                         })
-                        .catch(err => console.error('[App] PrefetchManager init failed:', err));
+                        .catch(err => {
+                          // console.error('[App] PrefetchManager init failed:', err)
+                        });
                     }, { timeout: 3000 });
                   }
 

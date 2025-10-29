@@ -93,7 +93,7 @@ const resetForm = form.reset;
 
   // 3. Define la función de envío
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("GuideForm payload:", values);
+    // console.log("GuideForm payload:", values);
     try {
       const response = await axiosInstance.post("/ebook/download-ebook", values);
       if (response.data.success) {
@@ -108,14 +108,14 @@ const resetForm = form.reset;
         resetForm();
         toast.success("Formulario enviado correctamente");
       } else {
-        console.warn("Respuesta 200 sin success=true:", response.data);
+        // console.warn("Respuesta 200 sin success=true:", response.data);
         const msg = response.data?.message || "Error al enviar el formulario. Por favor, intenta de nuevo.";
         toast.error(msg);
       }
     } catch (error: any) {
       const status = error?.response?.status;
       const data = error?.response?.data;
-      console.error("[GuideForm] Error al enviar:", { status, data, error });
+      // console.error("[GuideForm] Error al enviar:", { status, data, error });
       const msg = data?.message || data?.error || `Error ${status || ""}. Por favor, revisa los datos e intenta nuevamente.`;
       toast.error(msg);
     }

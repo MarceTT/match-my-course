@@ -17,7 +17,7 @@ export function useUploadCalidad() {
       return response.data;
     },
     onError: (error: any) => {
-      console.error("❌ Error al subir archivo de calidad:", error);
+      // console.error("❌ Error al subir archivo de calidad:", error);
     },
     onSuccess: (data) => {
 //       console.log("✅ Archivo de calidad subido correctamente:", data);

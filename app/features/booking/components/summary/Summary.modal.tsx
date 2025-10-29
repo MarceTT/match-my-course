@@ -131,7 +131,7 @@ export default function SummaryModal({
       onSubmitContact(finalData);
       // NO cerramos el modal aquí - la navegación se manejará desde el container
     } catch (err) {
-      console.error("Error en envío de contacto", err);
+      // console.error("Error en envío de contacto", err);
     }
   }
 
