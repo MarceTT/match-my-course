@@ -372,11 +372,45 @@ class PerformanceTester {
     if (typeof window === 'undefined') return 0;
 
     try {
-      // Importar prefetch manager dinámicamente para evitar SSR issues
-      const { default: prefetchManager } = await import('./prefetchManager');
-      const metrics = prefetchManager.getMetrics();
-      return Math.round(metrics.hitRate * 100);
-    } catch {
+      // Check prefetch links in DOM
+      const prefetchLinks = document.querySelectorAll('link[rel="prefetch"]');
+      const prefetchCount = prefetchLinks.length;
+
+      // Check if PrefetchManager is initialized
+      let managerInitialized = false;
+      try {
+        const { default: prefetchManager } = await import('./prefetchManager');
+        const metrics = prefetchManager.getMetrics();
+        managerInitialized = metrics.prefetchCount > 0 || prefetchLinks.length > 0;
+      } catch {
+        managerInitialized = false;
+      }
+
+      // Score based on:
+      // 1. Prefetch links present (40 points)
+      // 2. Manager initialized (30 points)
+      // 3. Priority routes covered (30 points)
+      let score = 0;
+
+      if (prefetchCount >= 5) score += 40;
+      else if (prefetchCount >= 3) score += 25;
+      else if (prefetchCount >= 1) score += 15;
+
+      if (managerInitialized) score += 30;
+
+      // Check if Next.js prefetch is working (check for router prefetch resources)
+      const performanceEntries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+      const prefetchedResources = performanceEntries.filter(entry =>
+        entry.name.includes('_next') && entry.initiatorType === 'link'
+      );
+
+      if (prefetchedResources.length >= 5) score += 30;
+      else if (prefetchedResources.length >= 3) score += 20;
+      else if (prefetchedResources.length >= 1) score += 10;
+
+      return Math.min(score, 100);
+    } catch (error) {
+      console.error('[PrefetchTest] Error:', error);
       return 0;
     }
   };

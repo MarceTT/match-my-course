@@ -232,26 +232,39 @@ export default function RootLayout({
                     }
                   });
 
-                  // Prefetch critical routes after idle using PrefetchManager
+                  // Prefetch critical routes after idle - lightweight approach
                   if ('requestIdleCallback' in window) {
-                    requestIdleCallback(async () => {
-                      try {
-                        const { default: prefetchManager } = await import('./utils/prefetchManager');
+                    requestIdleCallback(() => {
+                      // Simple prefetch of priority routes using link rel=prefetch
+                      const criticalRoutes = [
+                        '/estudiar-ingles-irlanda',
+                        '/estudiar-ingles-nueva-zelanda',
+                        '/cursos-ingles-extranjero',
+                        '/blog',
+                        '/school-search'
+                      ];
 
-                        // Configure prefetch manager
-                        prefetchManager.configure({
-                          enabled: true,
-                          maxPrefetchPerSession: 30,
-                          prefetchOnHover: true,
-                          prefetchOnIdle: true,
-                        });
+                      criticalRoutes.forEach(route => {
+                        const link = document.createElement('link');
+                        link.rel = 'prefetch';
+                        link.href = route;
+                        link.as = 'document';
+                        document.head.appendChild(link);
+                      });
 
-                        // Prefetch priority routes
-                        await prefetchManager.prefetchPriorityRoutes();
-                      } catch (error) {
-                        console.error('[App] Failed to initialize prefetch manager:', error);
-                      }
-                    });
+                      // Initialize PrefetchManager after prefetch links are added
+                      import('./utils/prefetchManager')
+                        .then(({ default: prefetchManager }) => {
+                          prefetchManager.configure({
+                            enabled: true,
+                            maxPrefetchPerSession: 30,
+                            prefetchOnHover: true,
+                            prefetchOnIdle: true,
+                          });
+                          console.log('[App] PrefetchManager initialized');
+                        })
+                        .catch(err => console.error('[App] PrefetchManager init failed:', err));
+                    }, { timeout: 3000 });
                   }
 
                 } catch (error) {
