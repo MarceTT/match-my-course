@@ -448,12 +448,12 @@ export default function RegisterForm() {
                     value={formData.gender}
                     onValueChange={(value) => updateFormData("gender", value)}
                   >
-                    <div className="flex gap-6">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="femenino" id="femenino" />
                         <Label
                           htmlFor="femenino"
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer text-sm break-words"
                         >
                           Femenino
                         </Label>
@@ -462,7 +462,7 @@ export default function RegisterForm() {
                         <RadioGroupItem value="masculino" id="masculino" />
                         <Label
                           htmlFor="masculino"
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer text-sm break-words"
                         >
                           Masculino
                         </Label>
@@ -471,7 +471,7 @@ export default function RegisterForm() {
                         <RadioGroupItem value="otro" id="otro" />
                         <Label
                           htmlFor="otro"
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer text-sm break-words"
                         >
                           Otro
                         </Label>
@@ -825,23 +825,25 @@ export default function RegisterForm() {
                       }));
                     }}
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="morning" id="morning" />
-                      <Label
-                        htmlFor="morning"
-                        className="font-normal cursor-pointer"
-                      >
-                        Curso por la mañana
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="afternoon" id="afternoon" />
-                      <Label
-                        htmlFor="afternoon"
-                        className="font-normal cursor-pointer"
-                      >
-                        Curso por la tarde
-                      </Label>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="morning" id="morning" />
+                        <Label
+                          htmlFor="morning"
+                          className="font-normal cursor-pointer text-sm break-words"
+                        >
+                          Curso por la mañana
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="afternoon" id="afternoon" />
+                        <Label
+                          htmlFor="afternoon"
+                          className="font-normal cursor-pointer text-sm break-words"
+                        >
+                          Curso por la tarde
+                        </Label>
+                      </div>
                     </div>
                   </RadioGroup>
                   {errors.courseModality && (
@@ -879,12 +881,12 @@ export default function RegisterForm() {
                       updateFormData("needsAccommodation", value)
                     }
                   >
-                    <div className="flex gap-6">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="si" id="accommodation-yes" />
                         <Label
                           htmlFor="accommodation-yes"
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer text-sm break-words"
                         >
                           Sí
                         </Label>
@@ -893,7 +895,7 @@ export default function RegisterForm() {
                         <RadioGroupItem value="no" id="accommodation-no" />
                         <Label
                           htmlFor="accommodation-no"
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer text-sm break-words"
                         >
                           No
                         </Label>
@@ -917,12 +919,12 @@ export default function RegisterForm() {
                           updateFormData("accommodationType", value ? [value] : [""]);
                         }}
                       >
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4">
                           <div className="flex items-center space-x-2">
                             <RadioGroupItem value="accommodation" id="accommodation" />
                             <Label
                               htmlFor="accommodation"
-                              className="font-normal cursor-pointer"
+                              className="font-normal cursor-pointer text-sm break-words"
                             >
                               Accommodation
                             </Label>
@@ -931,7 +933,7 @@ export default function RegisterForm() {
                             <RadioGroupItem value="residencia" id="residencia" />
                             <Label
                               htmlFor="residencia"
-                              className="font-normal cursor-pointer"
+                              className="font-normal cursor-pointer text-sm break-words"
                             >
                               Residencia
                             </Label>
@@ -940,7 +942,7 @@ export default function RegisterForm() {
                             <RadioGroupItem value="host-family" id="host-family" />
                             <Label
                               htmlFor="host-family"
-                              className="font-normal cursor-pointer"
+                              className="font-normal cursor-pointer text-sm break-words"
                             >
                               Host Family
                             </Label>
