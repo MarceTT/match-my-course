@@ -1023,24 +1023,24 @@ export default function RegisterForm() {
                 </div>
               </div>
 
-              <div className="flex justify-between gap-4">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4">
                 <Button
                   type="button"
                   onClick={prevStep}
                   variant="outline"
                   size="lg"
-                  className="gap-2 bg-transparent"
+                  className="gap-2 bg-transparent w-full sm:w-auto"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Anterior
+                  <span className="truncate">Anterior</span>
                 </Button>
-                <Button type="submit" size="lg" className="gap-2" disabled={isSubmitting}>
+                <Button type="submit" size="lg" className="gap-2 w-full sm:w-auto" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Check className="h-4 w-4" />
                   )}
-                  {isSubmitting ? "Enviando..." : "Enviar Formulario"}
+                  <span className="truncate">{isSubmitting ? "Enviando..." : "Enviar Formulario"}</span>
                 </Button>
               </div>
             </CardContent>
