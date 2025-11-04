@@ -8,7 +8,7 @@ import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMa
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
 
 // Lazy load SchoolSeoHome
-const SchoolSeoHome = dynamic(() => import('../[slugEscuela]/[schoolId]/SchoolSeoHome'), {
+const SchoolSeoHome = dynamic(() => import('./SchoolSeoHome'), {
   loading: () => (
     <div className="min-h-screen flex items-center justify-center">
       <div className="animate-pulse text-gray-400">Cargando...</div>

@@ -57,11 +57,9 @@ SchoolCardProps) => {
   const seoEntry = seoCourses.find(
     (c: any) => c.subcategoria === "Inglés General"
   );
-  const schoolId = _id.toString();
-  const course = "ingles-general";
   // Enlaza directamente a la URL canónica (sin query params) para SEO interno
   const canonicalPath = seoEntry
-    ? buildCanonicalSeoSchoolPathFromSeoEntry(seoEntry, schoolId)
+    ? buildCanonicalSeoSchoolPathFromSeoEntry(seoEntry)
     : "#";
 
   return (

@@ -94,7 +94,6 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
 
   const fullUrl = seoEntry
     ? buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId, {
-        schoolId,
         curso: course,
         semanas: weeks,
         ciudad: city,

@@ -136,8 +136,8 @@ export default function SchoolSearch() {
         const course = courses[highlightIndex];
         if (course?.courseseo) {
           const href = buildSeoSchoolUrlFromSeoEntry(
-            course.id,
             course.courseseo,
+            course.id,
             {
               semanas: 1,
               ciudad: course.ciudad,
@@ -180,7 +180,6 @@ export default function SchoolSearch() {
     }));
 
     const fullUrl = buildSeoSchoolUrlFromSeoEntry(seoEntry, schoolId.toString(), {
-      schoolId: schoolId.toString(),
       curso: courseSlug,
       semanas: weeks,
       ciudad: city,
