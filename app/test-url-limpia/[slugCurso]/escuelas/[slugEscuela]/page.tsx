@@ -32,21 +32,50 @@ export default async function TestURLLimpiaPage({ params }: Props) {
   // Paso 2: Buscar la entrada SEO que coincida
   const fetchStart = Date.now();
   let entries: Array<any> = [];
+  let fetchError = null;
+
   try {
-    entries = await fetchAllSeoEntries();
+    const result: any = await fetchAllSeoEntries();
+
+    // Verificar si el resultado es un error del backend
+    if (result && typeof result === 'object' && 'code' in result) {
+      fetchError = `Backend error: ${JSON.stringify(result)}`;
+      entries = [];
+    } else if (Array.isArray(result)) {
+      entries = result;
+    } else if (result && typeof result === 'object' && 'data' in result) {
+      entries = Array.isArray(result.data) ? result.data : [];
+    } else {
+      entries = [];
+    }
   } catch (e) {
+    fetchError = String(e);
+  }
+
+  const fetchTime = Date.now() - fetchStart;
+
+  if (fetchError) {
     return (
       <div className="min-h-screen p-8 bg-red-50">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold text-red-600 mb-4">
             ❌ Error al obtener datos del backend
           </h1>
-          <p>Error: {String(e)}</p>
+          <p className="mb-2"><strong>Error:</strong></p>
+          <pre className="bg-white p-4 rounded text-xs overflow-auto">{fetchError}</pre>
+          <p className="mt-4 text-sm text-gray-600">
+            <strong>Posibles causas:</strong>
+          </p>
+          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+            <li>El backend no está accesible desde localhost</li>
+            <li>Variable de entorno NEXT_PUBLIC_BACKEND_URL no configurada</li>
+            <li>El backend requiere autenticación</li>
+            <li>CORS bloqueando la petición</li>
+          </ul>
         </div>
       </div>
     );
   }
-  const fetchTime = Date.now() - fetchStart;
 
   // Paso 3: Filtrar para encontrar la escuela correcta
   const filterStart = Date.now();
@@ -129,6 +158,26 @@ export default async function TestURLLimpiaPage({ params }: Props) {
   const totalTime = Date.now() - startTime;
 
   const school = schoolData?.school || schoolData?.data?.school || schoolData;
+
+  // Función helper para extraer valores de objetos anidados
+  const safeString = (value: any): string => {
+    if (value === null || value === undefined) return 'N/A';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number') return String(value);
+    if (typeof value === 'object') {
+      // Si es un objeto con propiedad 'name' o 'value'
+      if (value.name) return String(value.name);
+      if (value.value) return String(value.value);
+      if (value.text) return String(value.text);
+      // Si es array, tomar el primer elemento
+      if (Array.isArray(value) && value.length > 0) {
+        return safeString(value[0]);
+      }
+      // Fallback: convertir a JSON
+      return JSON.stringify(value);
+    }
+    return String(value);
+  };
 
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-green-50 to-blue-50">
@@ -219,29 +268,29 @@ export default async function TestURLLimpiaPage({ params }: Props) {
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">Nombre</p>
-              <p className="font-semibold text-lg">{school?.name || 'N/A'}</p>
+              <p className="font-semibold text-lg">{safeString(school?.name)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Ciudad</p>
-              <p className="font-semibold text-lg">{school?.city || 'N/A'}</p>
+              <p className="font-semibold text-lg">{safeString(school?.city)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">País</p>
-              <p className="font-semibold text-lg">{school?.country || 'N/A'}</p>
+              <p className="font-semibold text-lg">{safeString(school?.country)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Rating</p>
-              <p className="font-semibold text-lg">{school?.rating || 'N/A'}</p>
+              <p className="font-semibold text-lg">{safeString(school?.rating)}</p>
             </div>
             <div className="md:col-span-2">
               <p className="text-sm text-gray-500">Descripción</p>
               <p className="text-sm text-gray-700 line-clamp-3">
-                {school?.description || 'N/A'}
+                {safeString(school?.description)}
               </p>
             </div>
             <div className="md:col-span-2">
               <p className="text-sm text-gray-500">Dirección</p>
-              <p className="text-sm">{school?.address || 'N/A'}</p>
+              <p className="text-sm">{safeString(school?.address)}</p>
             </div>
           </div>
         </div>
@@ -286,19 +335,19 @@ export default async function TestURLLimpiaPage({ params }: Props) {
             <div className="grid md:grid-cols-2 gap-2">
               <div>
                 <span className="text-gray-500">H1:</span>
-                <span className="ml-2 font-semibold">{match.h1 || 'N/A'}</span>
+                <span className="ml-2 font-semibold">{safeString(match.h1)}</span>
               </div>
               <div>
                 <span className="text-gray-500">Meta Title:</span>
-                <span className="ml-2 font-semibold">{match.metaTitle || 'N/A'}</span>
+                <span className="ml-2 font-semibold">{safeString(match.metaTitle)}</span>
               </div>
               <div className="md:col-span-2">
                 <span className="text-gray-500">Meta Description:</span>
-                <p className="text-gray-700 mt-1">{match.metaDescription || 'N/A'}</p>
+                <p className="text-gray-700 mt-1">{safeString(match.metaDescription)}</p>
               </div>
               <div>
                 <span className="text-gray-500">Keyword Principal:</span>
-                <span className="ml-2">{match.keywordPrincipal || 'N/A'}</span>
+                <span className="ml-2">{safeString(match.keywordPrincipal)}</span>
               </div>
             </div>
           </div>
