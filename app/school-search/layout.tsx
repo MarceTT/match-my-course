@@ -10,8 +10,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Match My Course",
-  description: "Match My Course - Servicios",
+  title: "Buscardor de cursos de Inglés | MatchMyCourse",
+  description: "Compara y elige las mejores escuelas para estudiar inglés general. Encuentra cursos, precios y asesores que te guían paso a paso ¡Realiza tu busqueda hoy!",
   robots: { index: false, follow: false },
 };
 

@@ -10,6 +10,8 @@ export default function HeaderSection() {
       <div
         className="absolute inset-0 bg-cover bg-center filter scale-105"
         style={{ backgroundImage: `url(${bgUrl})` }}
+        role="img"
+        aria-label="Estudiar inglés en Irlanda"
       ></div>
       <div className="absolute inset-0 bg-black bg-opacity-10"></div>
       <div className="relative z-10 flex items-center justify-center h-full">

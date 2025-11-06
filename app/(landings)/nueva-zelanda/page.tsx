@@ -13,15 +13,15 @@ const ogImage = rewriteToCDN(
   
   // Configuración de metadatos para Open Graph
   export const metadata: Metadata = {
-    title: "estudiar inglés en Nueva Zelanda",
+    title: "Estudiar Inglés en Nueva Zelanda | MatchMyCourse",
     description:
-      "Descubre cómo estudiar inglés en Nueva Zelanda. Guía completa con requisitos, visas, pasos para aplicar y opciones de trabajo. Solicita tu asesoría gratuita y mejora tu inglés en el extranjero.",
+      "Estudia inglés en Nueva Zelanda con nuestra guía completa: visas, alojamiento y consejos prácticos para que tu viaje sea seguro y libre de estrés.",
   
     // Open Graph para redes sociales
     openGraph: {
-      title: "estudiar inglés en Nueva Zelanda",
+      title: "Estudiar Inglés en Nueva Zelanda | MatchMyCourse",
       description:
-        "Descubre cómo estudiar inglés en Nueva Zelanda. Guía completa con requisitos, visas, pasos para aplicar y opciones de trabajo. Solicita tu asesoría gratuita y mejora tu inglés en el extranjero.",
+        "Estudia inglés en Nueva Zelanda con nuestra guía completa: visas, alojamiento y consejos prácticos para que tu viaje sea seguro y libre de estrés.",
       url: "https://matchmycourse.com/estudiar-ingles-nueva-zelanda", // Cambia por tu URL real
       siteName: "MatchMyCourse",
       images: [
@@ -29,7 +29,7 @@ const ogImage = rewriteToCDN(
           url: ogImage, // Ruta a tu imagen Open Graph
           width: 1200,
           height: 630,
-          alt: "estudiar inglés en Nueva Zelanda",
+          alt: "Estudiar inglés en Nueva Zelanda",
         },
       ],
       locale: "es_ES",
@@ -53,9 +53,9 @@ const ogImage = rewriteToCDN(
     // Twitter Card
     twitter: {
       card: "summary_large_image",
-      title: "estudiar inglés en Nueva Zelanda",
+      title: "Estudiar Inglés en Nueva Zelanda | MatchMyCourse",
       description:
-        "Descubre cómo estudiar inglés en Nueva Zelanda. Guía completa con requisitos, visas, pasos para aplicar y opciones de trabajo. Solicita tu asesoría gratuita y mejora tu inglés en el extranjero.",
+        "Estudia inglés en Nueva Zelanda con nuestra guía completa: visas, alojamiento y consejos prácticos para que tu viaje sea seguro y libre de estrés.",
       images: [ogImage],
     },
     keywords: ["cursos de inglés en Nueva Zelanda", "requisitos para estudiar inglés en Nueva Zelanda", "trabajar y estudiar en Nueva Zelanda", "visa para estudiar inglés en Nueva Zelanda"],

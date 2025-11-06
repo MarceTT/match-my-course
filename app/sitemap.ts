@@ -78,10 +78,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       try {
         const slugCurso = subcategoriaToCursoSlug[e.subcategoria]
         const slugEscuela = extractSlugEscuelaFromSeoUrl(e.url)
-        const schoolId = e.schoolId
-        if (!slugCurso || !slugEscuela || !schoolId) return []
+        if (!slugCurso || !slugEscuela) return []
 
-        const loc = `${base}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}/${encodeURIComponent(schoolId)}`
+        // URL sin schoolId para SEO-friendly URLs
+        const loc = `${base}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`
         if (seen.has(loc)) return []
         seen.add(loc)
         return [{

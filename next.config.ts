@@ -83,6 +83,38 @@ const nextConfig: NextConfig = {
         destination: '/formulario-registro-matchmycourse',
         permanent: true,
       },
+      // Course slug redirects (old/incorrect slugs to correct ones)
+      {
+        source: '/cursos/ingles-general-sesiones/escuelas/:school*',
+        destination: '/cursos/ingles-general-mas-sesiones-individuales/escuelas/:school*',
+        permanent: true,
+      },
+      {
+        source: '/cursos/ingles-estudio-trabajo/escuelas/:school*',
+        destination: '/cursos/ingles-visa-de-trabajo/escuelas/:school*',
+        permanent: true,
+      },
+      {
+        source: '/cursos/ingles-negocios/escuelas/:school*',
+        destination: '/cursos/ingles-general-orientado-a-negocios/escuelas/:school*',
+        permanent: true,
+      },
+      // Course category pages redirects
+      {
+        source: '/cursos/ingles-general-sesiones',
+        destination: '/cursos/ingles-general-mas-sesiones-individuales',
+        permanent: true,
+      },
+      {
+        source: '/cursos/ingles-estudio-trabajo',
+        destination: '/cursos/ingles-visa-de-trabajo',
+        permanent: true,
+      },
+      {
+        source: '/cursos/ingles-negocios',
+        destination: '/cursos/ingles-general-orientado-a-negocios',
+        permanent: true,
+      },
       // English to Spanish redirects (Spanish URLs are canonical)
       {
         source: '/services',

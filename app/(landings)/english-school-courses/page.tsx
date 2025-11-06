@@ -9,8 +9,8 @@ const ogImage = rewriteToCDN(
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://matchmycourse.com'),
-  title: 'Cursos de Inglés en el Extranjero | Escuelas y Programas | MatchMyCourse',
-  description: 'Descubre los mejores cursos de inglés en el extranjero. Compara escuelas, programas, precios y horarios. Reserva online fácilmente con MatchMyCourse.',
+  title: 'Estudiar Inglés en el extranjero | MatchMyCourse',
+  description: 'Descubre cursos de inglés en el extranjero: desde inglés general hasta preparación de exámenes, con escuelas confiables y asesoría completa para tu viaje',
   keywords: ['Cursos de Inglés en el Extranjero', 'escuelas de inglés', 'programas de inglés', 'estudiar inglés extranjero', 'cursos de inglés internacional'],
   authors: [{ name: 'MatchMyCourse', url: 'https://matchmycourse.com' }],
   robots: {
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     canonical: 'https://matchmycourse.com/cursos-ingles-extranjero'
   },
   openGraph: {
-    title: 'Cursos de Inglés en el Extranjero | Escuelas y Programas | MatchMyCourse',
-    description: 'Descubre los mejores cursos de inglés en el extranjero. Compara escuelas, programas, precios y horarios. Reserva online fácilmente con MatchMyCourse.',
+    title: 'Estudiar Inglés en el extranjero | MatchMyCourse',
+    description: 'Descubre cursos de inglés en el extranjero: desde inglés general hasta preparación de exámenes, con escuelas confiables y asesoría completa para tu viaje',
     type: 'website',
     locale: 'es_ES',
     siteName: 'MatchMyCourse',
@@ -39,14 +39,14 @@ export const metadata: Metadata = {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: 'Cursos de Inglés en el Extranjero - MatchMyCourse'
+        alt: 'Estudiar inglés en el extranjero - MatchMyCourse'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cursos de Inglés en el Extranjero | Escuelas y Programas | MatchMyCourse',
-    description: 'Descubre los mejores cursos de inglés en el extranjero. Compara escuelas, programas, precios y horarios. Reserva online fácilmente con MatchMyCourse.',
+    title: 'Estudiar Inglés en el extranjero | MatchMyCourse',
+    description: 'Descubre cursos de inglés en el extranjero: desde inglés general hasta preparación de exámenes, con escuelas confiables y asesoría completa para tu viaje',
     images: [ogImage]
   }
 }

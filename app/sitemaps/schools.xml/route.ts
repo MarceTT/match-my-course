@@ -25,9 +25,9 @@ export async function GET() {
     try {
       const slugCurso = (subcategoriaToCursoSlug as Record<string, string | undefined>)[String(e.subcategoria)];
       const escuelaSlug = extractSlugEscuelaFromSeoUrl(String(e.url ?? ""));
-      const schoolId = e.schoolId ? String(e.schoolId) : null;
-      if (!slugCurso || !escuelaSlug || !schoolId) continue;
-      const absolute = `${base}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(escuelaSlug)}/${encodeURIComponent(schoolId)}`;
+      if (!slugCurso || !escuelaSlug) continue;
+      // URL sin schoolId para SEO-friendly URLs
+      const absolute = `${base}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(escuelaSlug)}`;
       if (seen.has(absolute)) continue;
       seen.add(absolute);
       const lmRaw = (e as any).updatedAt || (e as any).updated_at || (e as any).lastModified || null;
