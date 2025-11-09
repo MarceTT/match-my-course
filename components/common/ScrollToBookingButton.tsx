@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const MIN_SCROLL_UP_THRESHOLD = 0.3; // 30% of viewport height
 const MIN_SCROLL_DOWN_THRESHOLD = 100; // Show button if scrolled at least 100px down
 
 const ScrollToBookingButton = () => {
@@ -45,28 +44,35 @@ const ScrollToBookingButton = () => {
     const handleScroll = () => {
       const bookingVisible = checkBookingVisibility();
       const currentY = window.scrollY;
+      const scrollingDown = currentY > lastScrollY.current;
 
+      // Si el formulario es visible, NUNCA mostrar el botón
       if (bookingVisible) {
         setIsVisible(false);
+        lastScrollY.current = currentY;
         return;
       }
 
-      const scrollingUp = currentY < lastScrollY.current;
-      const scrolledUpEnough = lastScrollY.current - currentY > window.innerHeight * MIN_SCROLL_UP_THRESHOLD;
-      const scrolledDownEnough = currentY > MIN_SCROLL_DOWN_THRESHOLD;
+      // Solo mostrar el botón cuando:
+      // 1. El formulario NO es visible (está arriba, fuera de vista)
+      // 2. El usuario ha hecho scroll suficiente hacia abajo
+      // 3. El usuario está haciendo scroll hacia abajo
+      const scrolledEnough = currentY > MIN_SCROLL_DOWN_THRESHOLD;
 
-      if (scrollingUp && scrolledUpEnough) {
+      if (scrollingDown && scrolledEnough && !bookingVisible) {
         setIsVisible(true);
-      } else if (!scrollingUp && !bookingVisible && scrolledDownEnough) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
       }
+      // El botón permanece visible cuando se hace scroll hacia arriba
+      // Solo desaparece cuando el formulario se vuelve visible
 
       lastScrollY.current = currentY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Check inicial al montar
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

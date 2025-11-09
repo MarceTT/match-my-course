@@ -292,7 +292,7 @@ const SchoolSeoHome = ({
                 </div>
 
                 {/* Mobile booking panel - appears after school info on mobile */}
-                <div className="lg:hidden mt-6 mb-8">
+                <div className="lg:hidden mt-6 mb-8" id="booking-pannel">
                   <Suspense fallback={
                     <div className="bg-white rounded-lg border p-6">
                       <div className="animate-pulse space-y-4">
@@ -451,7 +451,7 @@ const SchoolSeoHome = ({
           </div>
 
           {/* Panel de booking con Suspense - solo desktop */}
-          <div className="hidden lg:block lg:col-span-1 order-1 lg:order-2" id="booking-pannel">
+          <div className="hidden lg:block lg:col-span-1 order-1 lg:order-2">
             <Suspense fallback={
               <div className="bg-white rounded-lg border p-6 sticky top-4">
                 <div className="animate-pulse space-y-4">
