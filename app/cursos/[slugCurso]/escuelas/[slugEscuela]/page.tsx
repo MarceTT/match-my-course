@@ -229,17 +229,16 @@ export default async function Page({ params, searchParams }: Props) {
     description:
       (seoEntry as any)?.metaDescription ||
       (seoEntry as any)?.h1 ||
-      `Información del curso ${cursoSlugToSubcategoria[slugCurso] || ''}${
-        city ? ` en ${city}` : ''
-      }.`,
+      `Mejora tu inglés con clases dinámicas, profesores nativos y opciones de visa estudio + trabajo en Irlanda.`,
     provider: {
       '@type': 'EducationalOrganization',
-      name: schoolName || undefined,
-      url: canonicalUrl,
+      name: 'Match My Course',
+      url: `${origin}/`,
     },
     courseMode: 'OnSite',
-    inLanguage: ['en'],
-    areaServed: city || undefined,
+    inLanguage: 'en',
+    areaServed: city || 'Irlanda',
+    url: canonicalUrl,
   } as const;
 
   // Texto breve para integrar visualmente debajo del H1 del hero

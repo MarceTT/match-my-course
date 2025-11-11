@@ -130,21 +130,35 @@ export default function RootLayout({
           content="r10bqkdz2nziy7vzg7h0cv7qb2upbm"
         />
 
-        {/* Organization JSON-LD */}
+        {/* EducationalOrganization JSON-LD - Main Schema */}
         {(() => {
           const origin = SITE_URL;
           const orgLd = {
             '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'MatchMyCourse',
-            url: origin,
-            logo: `${origin}/FlaviconMatchmycourse.png`,
+            '@type': 'EducationalOrganization',
+            name: 'Match My Course',
+            url: `${origin}/`,
+            logo: `${origin}/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffinal-logo.c32fac39.png&w=512&q=75`,
+            description: 'Te orientamos para estudiar inglés en el extranjero, ayudándote con visas, alojamiento y asesoría personalizada para que viajes sin estrés.',
+            telephone: ['+393925210018', '+56931714541'],
             sameAs: [
               'https://www.facebook.com/matchmycourse',
               'https://www.instagram.com/match.my.course/',
-              'https://www.linkedin.com/company/matchmycourse',
+              'https://www.linkedin.com/company/matchmycourse/',
               'https://www.youtube.com/@matchmycourse',
             ],
+            foundingDate: '2021',
+            founder: {
+              '@type': 'Person',
+              name: 'Match My Course Team',
+            },
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: '77 Camden Street Lower',
+              addressLocality: 'Dublin',
+              addressRegion: 'Leinster',
+              addressCountry: 'Ireland',
+            },
           };
           return (
             <script
@@ -161,8 +175,8 @@ export default function RootLayout({
           const siteLd = {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'MatchMyCourse',
-            url: origin,
+            name: 'Match My Course',
+            url: `${origin}/`,
             potentialAction: {
               '@type': 'SearchAction',
               target: `${origin}/school-search?course={search_term_string}`,

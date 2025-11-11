@@ -115,6 +115,9 @@ export default function robots(): MetadataRoute.Robots {
         disallow: disallowedPaths,
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: [
+      `${base}/sitemap.xml`,
+      `${base}/sitemap-video.xml`,
+    ],
   };
 }

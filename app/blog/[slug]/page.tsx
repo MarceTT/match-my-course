@@ -146,20 +146,26 @@ export default async function Page(
   const jsonLd = post
     ? {
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "BlogPosting",
         headline: post?.title || "Post",
         description: ldDescription,
         keywords,
         articleSection: categoryName,
-        author: [{ "@type": "Person", name: post?.author || "MatchMyCourse" }],
+        author: {
+          "@type": "Organization",
+          name: "Match My Course"
+        },
         datePublished: post?.publishedAt || post?.createdAt,
         dateModified: post?.updatedAt || post?.createdAt,
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
-        image: coverAbs ? [coverAbs] : undefined,
+        image: coverAbs ? coverAbs : undefined,
         publisher: {
           "@type": "Organization",
-          name: "MatchMyCourse",
-          logo: { "@type": "ImageObject", url: absUrl("/FlaviconMatchmycourse.png") },
+          name: "Match My Course",
+          logo: {
+            "@type": "ImageObject",
+            url: absUrl("/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffinal-logo.c32fac39.png&w=512&q=75")
+          },
         },
       }
     : null;
