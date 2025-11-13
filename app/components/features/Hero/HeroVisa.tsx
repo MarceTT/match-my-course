@@ -12,7 +12,7 @@ const HeroVisa = () => {
     <div className="relative overflow-hidden h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] flex items-center justify-center">
       <Image
         src={bgImage}
-        alt="Visa Hero Background"
+        alt="Asesoría gratuita para visa de estudio y trabajo en el extranjero - MatchMyCourse"
         fill
         priority
         className="object-cover object-center"

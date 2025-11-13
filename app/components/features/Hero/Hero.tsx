@@ -60,7 +60,8 @@ const Hero = () => {
             sizes: "(max-width: 768px) 100vw, 0px",
             priority: true,
             quality: 80,
-            fill: true
+            fill: true,
+            fetchPriority: 'high'
           }
         )}
         fill
@@ -75,7 +76,8 @@ const Hero = () => {
             sizes: "(min-width: 768px) 100vw, 0px",
             priority: true,
             quality: 80,
-            fill: true
+            fill: true,
+            fetchPriority: 'high'
           }
         )}
         fill

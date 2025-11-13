@@ -51,6 +51,7 @@ export function getResponsiveImageProps(
     height?: number;
     fill?: boolean;
     fallbackSrc?: string;
+    fetchPriority?: 'high' | 'low' | 'auto';
   } = {}
 ) {
   const {
@@ -59,7 +60,8 @@ export function getResponsiveImageProps(
     width,
     height,
     fill = false,
-    fallbackSrc = "/placeholder.svg"
+    fallbackSrc = "/placeholder.svg",
+    fetchPriority = priority ? 'high' : 'auto'
   } = options;
 
   // Usar CDN optimizado pero sin parámetros problemáticos
@@ -71,6 +73,7 @@ export function getResponsiveImageProps(
     placeholder: "blur" as const,
     blurDataURL: generateBlurPlaceholder(url),
     loading: priority ? "eager" as const : "lazy" as const,
+    fetchPriority: fetchPriority as 'high' | 'low' | 'auto',
     onError: (e: any) => {
       // Fallback a imagen placeholder si falla la carga
       if (e.target.src !== fallbackSrc) {

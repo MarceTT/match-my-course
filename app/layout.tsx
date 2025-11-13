@@ -67,6 +67,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
 
+        {/* Preconnect to backend API for faster data fetching */}
+        <link rel="preconnect" href="https://api.matchmycourse.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//api.matchmycourse.com" />
+
         {/* Preload critical LCP image for Hero */}
         <link
           rel="preload"

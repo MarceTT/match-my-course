@@ -117,7 +117,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       `${base}/sitemap.xml`,
-      `${base}/sitemap-video.xml`,
+      `${base}/api/sitemap-video`,
     ],
   };
 }

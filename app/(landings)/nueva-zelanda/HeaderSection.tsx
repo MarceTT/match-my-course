@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 
 export default function HeaderSection() {
@@ -7,10 +8,14 @@ export default function HeaderSection() {
 
   return (
     <section className="relative h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center filter scale-105"
-        style={{ backgroundImage: `url(${bgUrl})` }}
-      ></div>
+      <Image
+        src={bgUrl}
+        alt="Estudiar Inglés en Nueva Zelanda | MatchMyCourse"
+        fill
+        className="absolute inset-0 object-cover scale-105"
+        priority
+        quality={85}
+      />
       <div className="absolute inset-0 bg-black bg-opacity-10"></div>
       <div className="relative z-10 flex items-center justify-center h-full">
         <div className="container mx-auto px-4">
