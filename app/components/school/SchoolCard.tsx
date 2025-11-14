@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { BadgePercent } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 // Inline Star icon to avoid pulling entire react-icons packs
 const Star = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
@@ -67,7 +68,9 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
   );
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
-  
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
   // Memoizar filtrado de precios
   const priceOptions = useMemo(
     () => filtrarPrecioMasBarato(school.prices),
@@ -103,6 +106,8 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
 
   useEffect(() => {
     setSelectedOptionIndex(0);
+    setImageLoaded(false);
+    setLogoLoaded(false);
   }, [school._id]);
 
   // Memoizar event handlers
@@ -167,6 +172,9 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
               Oferta activa
             </div>
           )}
+          {!imageLoaded && (
+            <Skeleton className="absolute inset-0 rounded-lg" />
+          )}
           <Image
             {...getResponsiveImageProps(
               school.mainImage || '',
@@ -180,7 +188,11 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
                 fallbackSrc: "/placeholder.svg"
               }
             )}
-            className="object-cover select-none pointer-events-none"
+            className={`object-cover select-none pointer-events-none transition-opacity duration-300 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(true)}
             onContextMenu={(e) => e.preventDefault()}
           />
         </div>
@@ -235,30 +247,46 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
           <div className="mt-4 flex items-center justify-between lg:mt-0 xl:mt-0">
             {!isMobile && (
               isGrid ? (
-                <Image
-                  {...getResponsiveImageProps(
-                    school.logo || '',
-                    `Logo de ${school.name}`,
-                    {
-                      sizes: "120px",
-                      priority: false,
-                      width: 120,
-                      height: 60,
-                      fallbackSrc: "/placeholder.svg"
-                    }
+                <div className="relative h-12 w-auto">
+                  {!logoLoaded && (
+                    <Skeleton className="h-12 w-24 rounded" />
                   )}
-                  className="object-contain select-none pointer-events-none h-12 w-auto"
-                  onContextMenu={(e) => e.preventDefault()}
-                />
+                  <Image
+                    {...getResponsiveImageProps(
+                      school.logo || '',
+                      `Logo de ${school.name}`,
+                      {
+                        sizes: "120px",
+                        priority: false,
+                        width: 120,
+                        height: 60,
+                        fallbackSrc: "/placeholder.svg"
+                      }
+                    )}
+                    className={`object-contain select-none pointer-events-none h-12 w-auto transition-opacity duration-300 ${
+                      logoLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoLoaded(true)}
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                </div>
               ) : (
-                <div className="h-32 flex items-center justify-start shrink-0">
+                <div className="h-32 flex items-center justify-start shrink-0 relative">
+                  {!logoLoaded && (
+                    <Skeleton className="h-32 w-32 rounded" />
+                  )}
                   <Image
                     src={rewriteToCDN(school.logo || '/placeholder.svg')}
                     alt={`Logo de ${school.name}`}
                     width={320}
                     height={128}
                     sizes="320px"
-                    className="h-full w-auto object-contain select-none pointer-events-none"
+                    className={`h-full w-auto object-contain select-none pointer-events-none transition-opacity duration-300 ${
+                      logoLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoLoaded(true)}
                     onContextMenu={(e) => e.preventDefault()}
                   />
                 </div>
