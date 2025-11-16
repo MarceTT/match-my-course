@@ -97,14 +97,6 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                       href="/servicios"
                       className="hover:text-[#333] transition-colors"
                     >
-                      Material de apoyo al estudiante
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/servicios"
-                      className="hover:text-[#333] transition-colors"
-                    >
                       Asesorías personalizadas
                     </Link>
                   </li>
@@ -127,10 +119,18 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                 <ul className="space-y-3 text-sm">
                   <li>
                     <Link
-                      href="/servicios"
+                      href="/asesorias/irlanda"
                       className="hover:text-[#333] transition-colors"
                     >
-                      Asesorías gratis
+                      Asesoría Irlanda
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/asesorias/nueva-zelanda"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Asesoría Nueva Zelanda
                     </Link>
                   </li>
                   <li>

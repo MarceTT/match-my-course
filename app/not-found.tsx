@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import HeaderServer from '@/app/components/common/HeaderServer'
-import Footer from '@/app/components/common/Footer'
+import Footer from '@/app/components/common/FooterServer'
 
 export default function NotFound() {
   const router = useRouter()

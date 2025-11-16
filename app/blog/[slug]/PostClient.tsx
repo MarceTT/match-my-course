@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, User } from "lucide-react";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { rewriteToCDN, getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
 import { useMemo } from "react";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
@@ -13,6 +14,25 @@ import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import { ShareButtons } from "@/app/components/common/social";
 
 type Tag = { _id: string; name: string; slug: string };
+
+// Componente para optimizar imágenes del rich text
+function OptimizedImage(props: any) {
+  return (
+    <img
+      {...props}
+      loading="lazy"
+      decoding="async"
+      style={{
+        ...props.style,
+        maxWidth: '100%',
+        height: 'auto',
+        borderRadius: '0.5rem',
+        margin: '1.5rem 0',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+      }}
+    />
+  );
+}
 
 export default function PostClient({ slug }: { slug: string }) {
   const { data: post, isLoading, isError } = usePostBySlug(slug);
@@ -27,6 +47,15 @@ export default function PostClient({ slug }: { slug: string }) {
 
   const author = (post as any)?.author?.name || post?.author || "MatchMyCourse";
   const cleanHtml = post?.content ? DOMPurify.sanitize(post.content) : "";
+
+  // Configurar html-react-parser para usar componente optimizado para imágenes
+  const parseOptions = {
+    replace: (domNode: any) => {
+      if (domNode.type === 'tag' && domNode.name === 'img') {
+        return <OptimizedImage {...domNode.attribs} />;
+      }
+    },
+  };
 
   if (isLoading) return <FullScreenLoader isLoading />;
   if (isError || !post)
@@ -74,7 +103,7 @@ export default function PostClient({ slug }: { slug: string }) {
           </div>
 
           {/* Header */}
-          <header className="mb-12">
+          <div className="mb-12">
             {/* Título */}
             <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center md:text-left">
               {post.title}
@@ -110,14 +139,23 @@ export default function PostClient({ slug }: { slug: string }) {
 
             {/* Imagen de portada */}
             {post.coverImage && (
-              <img
-                src={rewriteToCDN(post.coverImage)}
-                alt={post.title}
-                className="w-full h-52 sm:h-64 object-cover rounded-lg"
-                loading="eager"
-              />
+              <div className="relative w-full h-52 sm:h-64 overflow-hidden rounded-lg mb-8">
+                <Image
+                  {...getResponsiveImageProps(
+                    rewriteToCDN(post.coverImage),
+                    post.title,
+                    {
+                      fill: true,
+                      quality: 85,
+                      priority: true,
+                      sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100%",
+                    }
+                  )}
+                  className="object-cover"
+                />
+              </div>
             )}
-          </header>
+          </div>
 
           {/* Contenido */}
           <div className="prose prose-lg max-w-none [&_p]:text-justify sm:[&_p]:text-left">
@@ -126,7 +164,7 @@ export default function PostClient({ slug }: { slug: string }) {
                 {post.excerpt}
               </p>
             )}
-            <div>{parse(cleanHtml)}</div>
+            <div>{parse(cleanHtml, parseOptions)}</div>
           </div>
 
           {/* Footer */}

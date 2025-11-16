@@ -1,4 +1,5 @@
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import Image from "next/image";
+import { rewriteToCDN, getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
@@ -23,11 +24,20 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
           <h1 className="text-2xl font-bold mb-8 text-center md:text-4xl lg:text-5xl">Blog MatchMyCourse</h1>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <img
-                src={rewriteToCDN(post.coverImage)}
-                alt={post.title}
-                className="w-full h-64 object-cover"
-              />
+              <div className="relative w-full h-64 overflow-hidden">
+                <Image
+                  {...getResponsiveImageProps(
+                    rewriteToCDN(post.coverImage),
+                    post.title,
+                    {
+                      fill: true,
+                      quality: 85,
+                      sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 100%",
+                    }
+                  )}
+                  className="object-cover"
+                />
+              </div>
               <div className="p-8">
                 <div className="flex items-center gap-2 mb-4">
                   <Badge variant="default">{post.category?.name}</Badge>

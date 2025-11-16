@@ -52,6 +52,11 @@ export function DatePicker({ value, onChange, disabled, fromDate, defaultMonth }
   const [date, setDate] = React.useState<Date | undefined>(value);
   const [open, setOpen] = React.useState(false);
 
+  // Sincronizar el estado interno cuando cambia el prop value
+  React.useEffect(() => {
+    setDate(value);
+  }, [value]);
+
   const handleSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     onChange?.(selectedDate);
@@ -72,7 +77,7 @@ export function DatePicker({ value, onChange, disabled, fromDate, defaultMonth }
             : <span>Selecciona una fecha</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0 z-[9999]">
         <Calendar
           locale={es}
           mode="single"
