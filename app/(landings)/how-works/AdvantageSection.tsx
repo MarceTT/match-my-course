@@ -28,6 +28,7 @@ const AdvantageSection = () => {
                     width={24}
                     height={24}
                     className="mt-1 w-8 h-8 object-contain"
+                    loading="lazy"
                   />
                 </div>
                 <h3 className="text-lg font-bold text-[#2F343D]">CONOCE LAS ESCUELAS EN DETALLE</h3>
@@ -41,13 +42,14 @@ const AdvantageSection = () => {
             {/* Card 2 - Porcentaje de nacionalidades */}
             <div className="bg-white rounded-xl p-6 shadow-lg transition hover:shadow-xl">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center">
                   <Image
                     src="/about-us/en-todo-el-mundo.png"
                     alt="Porcentaje de nacionalidades"
                     width={24}
                     height={24}
                     className="mt-1 w-8 h-8 object-contain"
+                    loading="lazy"
                   />
                 </div>
                 <h3 className="text-lg font-bold text-[#2F343D]">PORCENTAJE DE NACIONALIDADES</h3>
@@ -88,6 +90,7 @@ const AdvantageSection = () => {
                   width={24}
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
+                  loading="lazy"
                 />
                 <h3 className="text-lg font-bold text-[#2F343D]">FECHAS Y HORARIOS</h3>
               </div>
@@ -106,6 +109,7 @@ const AdvantageSection = () => {
                   width={24}
                   height={24}
                   className="mt-1 w-8 h-8 object-contain"
+                  loading="lazy"
                 />
                 <h3 className="text-lg font-bold text-[#2F343D]">ALOJAMIENTO</h3>
               </div>

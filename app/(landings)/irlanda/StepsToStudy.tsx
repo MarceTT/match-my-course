@@ -79,6 +79,8 @@ const StetpsToStudy = () => {
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-contain rounded-lg"
               priority
+              quality={80}
+              fetchPriority="high"
             />
           </div>
         </div>

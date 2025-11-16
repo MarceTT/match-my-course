@@ -14,7 +14,9 @@ export default function HeaderSection() {
         fill
         className="absolute inset-0 object-cover scale-105"
         priority
-        quality={85}
+        quality={80}
+        sizes="100vw"
+        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-black bg-opacity-10"></div>
       <div className="relative z-10 flex items-center justify-center h-full">
