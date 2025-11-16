@@ -9,7 +9,7 @@ import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Download, Globe, Users, BookUser } from "lucide-react";
-import { Footer } from "@/app/shared";
+import FooterServer from "@/app/components/common/FooterServer";
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
 import ResourcesSection from "./components/ResourcesSection";
@@ -176,7 +176,7 @@ export default function Page() {
         {/* Additional resources section */}
        <ResourcesSection />
       </main>
-      <Footer />
+      <FooterServer />
     </div>
   );
 }

@@ -1,10 +1,10 @@
-import React from 'react'   
+import React from 'react'
 import { GuideForm } from './GuideForm'
 import HeaderSection from './HeaderSection'
 import EbookHeader from './EbookHeader'
 import NewExperience from './NewExperience'
 import Testimonial from './Testimonial'
-import { Footer } from '@/app/shared'
+import FooterServer from '@/app/components/common/FooterServer'
 
 const Ebook = () => {
   return (
@@ -17,7 +17,7 @@ const Ebook = () => {
       <GuideForm />
       <NewExperience />
       <Testimonial />
-      <Footer />
+      <FooterServer />
     </div>
   )
 }
