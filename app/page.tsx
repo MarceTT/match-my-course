@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import Header from "./components/common/HeaderServer";
-import Footer from "./components/common/FooterServer";
 import Hero from "./components/features/Hero/Hero";
 import SchoolListServer from "./school/SchoolListServer";
 import { Suspense } from "react";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import PopupOfertaClient from "./ui/PopupOfertaClient";
 import { buildCanonicalUrl } from "@/lib/helpers/canonicalUrl";
+import dynamic from "next/dynamic";
+
+// Lazy load Header and Footer to improve LCP and TBT
+const Header = dynamic(() => import("./components/common/HeaderServer"), {
+  loading: () => <div className="h-20 bg-white border-b" />,
+});
+
+const Footer = dynamic(() => import("./components/common/FooterServer"), {
+  loading: () => <div className="h-32 bg-gray-900" />,
+});
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
