@@ -93,8 +93,8 @@ export default async function SchoolListServer() {
               seoCourses={school.cursosEos}
               generalEnglishPrice={school.generalEnglishPrice}
               specificSchedule={school.specificSchedule}
-              // First 4 schools get priority loading for LCP optimization
-              priority={idx < 4}
+              // First 6 schools get priority loading for LCP optimization
+              priority={idx < 6}
             />
           );
         })}
