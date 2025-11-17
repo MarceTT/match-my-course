@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { useRouter } from "next/navigation";
@@ -36,7 +35,6 @@ export default function SchoolSearch() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const prefetchSchool = usePrefetchSchoolDetails();
@@ -254,65 +252,41 @@ export default function SchoolSearch() {
           </DialogHeader>
 
           <div ref={scrollRef} className="p-4 max-h-[60vh] overflow-y-auto" id="search-results">
-            <AnimatePresence mode="wait">
-              {isLoading ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex justify-center items-center py-8"
-                >
-                  <Loader2 className="animate-spin text-gray-400" size={24} />
-                </motion.div>
-              ) : query && courses.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center py-8 text-gray-500"
-                >
-                  No encontramos resultados para "{query}"
-                  <p className="text-sm mt-2">Prueba con otros términos de búsqueda</p>
-                </motion.div>
-              ) : !query ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="py-8"
-                >
-                  <div className="text-center text-gray-500 mb-4">
-                    Escribe para buscar escuelas y cursos
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
-                  className="space-y-4"
-                >
-                  {courses.map((c: any, i: number) => {
-                    const isSelected = selectedCourse?.id === c.id && selectedCourse?.slug === c.slug;
-                    return (
-                      <motion.div
-                        key={`${c.nombre}-${i}`}
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.1, delay: i * 0.03 }}
-                        onClick={() => handleShowSchool(c)}
-                        onMouseEnter={() => setHighlightIndex(i)}
-                        className={`cursor-pointer border rounded-md p-6 transition-all flex items-center gap-4 hover:bg-gray-50 ${
-                          isSelected
-                            ? "bg-blue-100 border-blue-400"
-                            : i === highlightIndex
-                            ? "bg-blue-50 border-blue-500"
-                            : "border-gray-200"
-                        }`}
-                        role="option"
-                        aria-selected={i === highlightIndex}
-                      >
+            {isLoading ? (
+              <div className="flex justify-center items-center py-8 animate-fade-in">
+                <Loader2 className="animate-spin text-gray-400" size={24} />
+              </div>
+            ) : query && courses.length === 0 ? (
+              <div className="text-center py-8 text-gray-500 animate-fade-in">
+                No encontramos resultados para "{query}"
+                <p className="text-sm mt-2">Prueba con otros términos de búsqueda</p>
+              </div>
+            ) : !query ? (
+              <div className="py-8 animate-fade-in">
+                <div className="text-center text-gray-500 mb-4">
+                  Escribe para buscar escuelas y cursos
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4 animate-slide-up">
+                {courses.map((c: any, i: number) => {
+                  const isSelected = selectedCourse?.id === c.id && selectedCourse?.slug === c.slug;
+                  return (
+                    <div
+                      key={`${c.nombre}-${i}`}
+                      onClick={() => handleShowSchool(c)}
+                      onMouseEnter={() => setHighlightIndex(i)}
+                      className={`cursor-pointer border rounded-md p-6 transition-all flex items-center gap-4 hover:bg-gray-50 animate-fade-in ${
+                        isSelected
+                          ? "bg-blue-100 border-blue-400"
+                          : i === highlightIndex
+                          ? "bg-blue-50 border-blue-500"
+                          : "border-gray-200"
+                      }`}
+                      role="option"
+                      aria-selected={i === highlightIndex}
+                      style={{ animationDelay: `${i * 30}ms` }}
+                    >
                         {c.logo && (
                           <Image
                             src={rewriteToCDN(c.logo)}
@@ -359,13 +333,12 @@ export default function SchoolSearch() {
                             </p>
                           )}
                         </div>
-                        {i === highlightIndex && <Check className="text-blue-600" size={18} />}
-                      </motion.div>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                      {i === highlightIndex && <Check className="text-blue-600" size={18} />}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

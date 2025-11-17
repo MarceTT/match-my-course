@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
-import { motion } from "framer-motion";
 import { sendGTMEvent } from "@/app/lib/gtm";
 
 const courseLabelToIdMap: Record<string, string> = {
@@ -88,23 +87,17 @@ const Hero = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-[20vh] lg:pt-[18vh] xl:pt-[22vh]">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className={`${raleway.className} text-4xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}
+          <h1
+            className={`${raleway.className} animate-fade-in text-4xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}
           >
             Encuentra tu <br />curso de inglés
-          </motion.h1>
+          </h1>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className={`${raleway.className} text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] hidden md:block`}
+          <h1
+            className={`${raleway.className} animate-fade-in text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] hidden md:block`}
           >
             Encuentra tu curso de inglés
-          </motion.h1>
+          </h1>
 
           <div className="flex flex-col sm:flex-row bg-white rounded-2xl sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl">
             <div className="relative flex-1 sm:border-r border-gray-200">

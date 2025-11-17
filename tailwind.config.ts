@@ -94,7 +94,6 @@ const config: Config = {
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],
-        nunito: ["Nunito", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

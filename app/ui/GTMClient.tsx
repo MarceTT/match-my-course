@@ -45,11 +45,11 @@ export default function GTMClient({ gtmId, dataLayerName = "dataLayer", lazyOn =
 
     const onIdle = () => {
       if ("requestIdleCallback" in window) {
-        // Increased timeout from 3000ms to 5000ms for better initial page performance
-        (window as any).requestIdleCallback(() => loadGTM(), { timeout: 5000 });
+        // Increased timeout from 5000ms to 8000ms for better initial page performance
+        (window as any).requestIdleCallback(() => loadGTM(), { timeout: 8000 });
       } else {
-        // Increased fallback timeout from 1500ms to 3000ms
-        setTimeout(loadGTM, 3000);
+        // Increased fallback timeout from 3000ms to 6000ms
+        setTimeout(loadGTM, 6000);
       }
     };
 

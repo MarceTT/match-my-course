@@ -133,7 +133,7 @@ SchoolCardProps) => {
               <div className="flex flex-wrap items-center gap-1 text-left">
                 <span className="text-sm text-gray-500 font-medium">Desde</span>
                 <span
-                  className={`${nunito.className} text-xl sm:text-2xl font-extrabold text-blue-600`}
+                  className="text-xl sm:text-2xl font-extrabold text-blue-600"
                 >
                   €{lowestPrice.toLocaleString()}
                 </span>

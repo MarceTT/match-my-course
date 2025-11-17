@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { raleway, nunito } from "./ui/fonts";
+import { raleway } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
 import { Suspense } from "react";
@@ -197,7 +197,7 @@ export default function RootLayout({
         })()}
       </head>
       <body
-        className={`${raleway.variable} ${nunito.variable} antialiased`}
+        className={`${raleway.variable} antialiased`}
         style={{ fontFamily: 'var(--font-raleway)' }}
       >
        {/* Always use lazy GTM loading for better performance */}

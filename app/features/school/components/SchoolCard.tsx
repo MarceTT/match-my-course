@@ -9,7 +9,6 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
 import { SchoolDetails } from "@/app/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
@@ -113,9 +112,8 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       onClick={handleClick}
       className="block" // Hace que todo el card sea clickeable como un bloque
     >
-      <motion.div
-        whileHover={{ scale: 1.02, y: -4 }}
-        className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 group cursor-pointer ${
+      <div
+        className={`relative border bg-white hover:bg-white hover:shadow-md transition-all duration-200 hover-scale rounded-lg p-4 group cursor-pointer ${
           isGrid
             ? "flex flex-col h-full justify-between"
             : "flex flex-col sm:flex-row"
@@ -231,7 +229,7 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

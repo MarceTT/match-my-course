@@ -1,12 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { raleway, nunito } from "../../ui/fonts"
+import { raleway } from "../../ui/fonts"
 import { Toaster } from "@/components/ui/toaster"
 import { Suspense } from "react"
 import "../../globals.css"
 
 const geistSans = raleway.variable
-const geistMono = nunito.variable
 
 export const metadata: Metadata = {
   title: "Match My Course",
@@ -21,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${geistSans} ${geistMono} antialiased`}>
+      <body className={`${geistSans} antialiased`}>
         <Suspense fallback={null}>
           {children}
           <Toaster />

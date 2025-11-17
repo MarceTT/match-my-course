@@ -150,3 +150,57 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Performance-optimized animations to replace Framer Motion */
+@layer utilities {
+  /* Fade In */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Slide Up */
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Scale In */
+  .animate-scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Hover Scale (para cards) */
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+}
