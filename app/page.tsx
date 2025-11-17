@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <PopupOfertaClient scrollTrigger={200} />
+      <PopupOfertaClient scrollTrigger={1500} />
       <Hero />
       <div className="container mx-auto px-6 py-16">
         <Suspense fallback={<SchoolListSkeleton />}>

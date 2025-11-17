@@ -210,7 +210,7 @@ export default function RootLayout({
         </ReactQueryProvider>
 
         {/* Service Worker Registration with Navigation Preloading */}
-        <Script id="sw-registration" strategy="afterInteractive">
+        <Script id="sw-registration" strategy="lazyOnload">
           {`
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', async () => {
