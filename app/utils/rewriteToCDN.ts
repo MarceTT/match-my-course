@@ -74,12 +74,6 @@ export function getResponsiveImageProps(
     blurDataURL: generateBlurPlaceholder(url),
     loading: priority ? "eager" as const : "lazy" as const,
     fetchPriority: fetchPriority as 'high' | 'low' | 'auto',
-    onError: (e: any) => {
-      // Fallback a imagen placeholder si falla la carga
-      if (e.target.src !== fallbackSrc) {
-        e.target.src = fallbackSrc;
-      }
-    },
   };
 
   // If using fill, include fill and sizes but exclude dimensions
