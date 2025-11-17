@@ -45,20 +45,25 @@ export const useInfiniteSchools = (initialSchools: SchoolData[] = []) => {
   // Initialize React Query with server-side data to prevent double fetch
   useEffect(() => {
     if (initialSchools.length > 0) {
-      queryClient.setQueryData(
-        ["infiniteSchools"],
-        {
-          pages: [
-            {
-              schools: initialSchools,
-              currentPage: 1,
-              totalPages: Math.ceil(100 / 12), // Assuming ~100 schools total
-              hasMore: true,
-            },
-          ],
-          pageParams: [1],
-        }
-      );
+      const existingData = queryClient.getQueryData(["infiniteSchools"]);
+
+      // Only set data if not already set
+      if (!existingData) {
+        queryClient.setQueryData(
+          ["infiniteSchools"],
+          {
+            pages: [
+              {
+                schools: initialSchools,
+                currentPage: 1,
+                totalPages: Math.ceil(100 / 12), // Assuming ~100 schools total
+                hasMore: true,
+              },
+            ],
+            pageParams: [1],
+          }
+        );
+      }
     }
   }, [initialSchools, queryClient]);
 
@@ -66,6 +71,17 @@ export const useInfiniteSchools = (initialSchools: SchoolData[] = []) => {
     queryKey: ["infiniteSchools"],
     queryFn: fetchPaginatedSchools,
     initialPageParam: 2, // Start from page 2 since page 1 is from server
+    initialData: initialSchools.length > 0 ? {
+      pages: [
+        {
+          schools: initialSchools,
+          currentPage: 1,
+          totalPages: Math.ceil(100 / 12),
+          hasMore: true,
+        },
+      ],
+      pageParams: [1],
+    } : undefined,
     getNextPageParam: (lastPage) => {
       return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
     },
