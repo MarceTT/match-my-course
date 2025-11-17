@@ -3,17 +3,20 @@ import Hero from "./components/features/Hero/Hero";
 import SchoolListServer from "./school/SchoolListServer";
 import { Suspense } from "react";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
-import PopupOfertaClient from "./ui/PopupOfertaClient";
 import { buildCanonicalUrl } from "@/lib/helpers/canonicalUrl";
 import dynamic from "next/dynamic";
 
-// Lazy load Header and Footer to improve LCP and TBT
+// Lazy load Header, Footer, and PopupOferta to improve LCP and TBT
 const Header = dynamic(() => import("./components/common/HeaderServer"), {
   loading: () => <div className="h-20 bg-white border-b" />,
 });
 
 const Footer = dynamic(() => import("./components/common/FooterServer"), {
   loading: () => <div className="h-32 bg-gray-900" />,
+});
+
+const PopupOfertaClient = dynamic(() => import("./ui/PopupOfertaClient"), {
+  loading: () => null,
 });
 
 const ogImage = rewriteToCDN(
