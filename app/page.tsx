@@ -6,19 +6,25 @@ import SchoolListServer from "./school/SchoolListServer";
 import { Suspense } from "react";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import PopupOfertaClient from "./ui/PopupOfertaClient";
+import { buildCanonicalUrl } from "@/lib/helpers/canonicalUrl";
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
 );
 
+const canonicalUrl = buildCanonicalUrl('/');
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com'),
   title: "MatchMyCourse | Encuentra tu curso de inglés",
   description: "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
+  alternates: {
+    canonical: canonicalUrl,
+  },
   openGraph: {
     title: "MatchMyCourse | Encuentra tu curso de inglés",
     description: "Compara escuelas, cursos y reserva fácil y segura.",
-    url: "https://matchmycourse.com",
+    url: canonicalUrl,
     siteName: "MatchMyCourse",
     images: [{ url: ogImage, width: 1200, height: 630, alt: "MatchMyCourse OG Image" }],
     type: "website",

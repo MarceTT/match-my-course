@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,14 @@ import { sendGTMEvent } from "@/app/lib/gtm";
 import confetti from "canvas-confetti";
 import { Loader2 } from "lucide-react";
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: "Contacto | MatchMyCourse",
+  description: "Contáctanos para más información sobre nuestros servicios de consultoría para estudiar inglés en el extranjero.",
+  alternates: {
+    canonical: "https://matchmycourse.com/contacto",
+  },
+};
 
 export default function ContactPage() {
   const methods = useForm<ContactFormData>();

@@ -1,6 +1,16 @@
 // app/privacy-policy/page.tsx
 "use client"
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Política de Privacidad | MatchMyCourse",
+  description: "Política de privacidad de MatchMyCourse. Conoce cómo protegemos tus datos personales.",
+  alternates: {
+    canonical: "https://matchmycourse.com/politica-privacidad",
+  },
+};
+
 export default function PrivacyPolicyPage() {
   return (
     <section className="px-4 py-10">

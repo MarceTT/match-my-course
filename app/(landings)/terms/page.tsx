@@ -1,7 +1,16 @@
 // app/terms/page.tsx
 "use client"
 
+import type { Metadata } from "next";
 import React from "react"
+
+export const metadata: Metadata = {
+  title: "Términos y Condiciones | MatchMyCourse",
+  description: "Términos y condiciones de uso de MatchMyCourse. Lee nuestros términos antes de usar nuestros servicios.",
+  alternates: {
+    canonical: "https://matchmycourse.com/terminos-condiciones",
+  },
+};
 
 export default function TermsPage() {
   return (

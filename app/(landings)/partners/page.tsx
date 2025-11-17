@@ -1,5 +1,6 @@
 "use client"
 
+import type { Metadata } from "next";
 import React, { useEffect, useState } from 'react'
 import { Partner } from '@/types'
 import { getAllPartners } from '@/app/lib/api/partners'
@@ -7,6 +8,13 @@ import HeaderSection from './HeaderSection'
 import PartnerSection from './PartnerSection'
 import SchoolOptionsSection from './SchoolOptions'
 
+export const metadata: Metadata = {
+  title: "Nuestras Escuelas Aliadas | MatchMyCourse",
+  description: "Descubre nuestras escuelas aliadas de inglés certificadas y acreditadas en Irlanda y Nueva Zelanda.",
+  alternates: {
+    canonical: "https://matchmycourse.com/escuelas-aliadas",
+  },
+};
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([])

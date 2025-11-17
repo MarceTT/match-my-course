@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import EnrollmentForm from "./form/RegistroForm"
+
+export const metadata: Metadata = {
+  title: "Formulario de Inscripción | MatchMyCourse",
+  description: "Complete el formulario de inscripción para registrarse en nuestros programas de estudios de inglés en el extranjero.",
+  alternates: {
+    canonical: "https://matchmycourse.com/registro",
+  },
+};
 
 export default function Home() {
   return (

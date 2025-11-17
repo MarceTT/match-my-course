@@ -3,8 +3,11 @@ import BookingClient from "./BookingClient";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Agendar Asesoría | MatchMyCourse",
-  description: "Agenda tu asesoría por Zoom con nuestro equipo.",
+  title: "Asesoría Irlanda | MatchMyCourse",
+  description: "Agenda tu asesoría por Zoom con nuestro equipo para estudiar inglés en Irlanda.",
+  alternates: {
+    canonical: "https://matchmycourse.com/asesorias/irlanda",
+  },
 };
 
 export default function AsesoriaIrlandaPage() {

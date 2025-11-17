@@ -22,3 +22,5 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
     </>
   );
 }
+
+// Note: Individual pages handle their own metadata including canonical URLs
