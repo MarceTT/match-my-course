@@ -64,7 +64,7 @@ export default function ClientSchoolPagination({ initialSchools }: ClientSchoolP
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-  } = useInfiniteSchools();
+  } = useInfiniteSchools(initialSchools);
 
   // Get all schools from paginated data, excluding the initial ones
   const paginatedSchools = Array.from(

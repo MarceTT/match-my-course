@@ -1,10 +1,35 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/app/utils/apiClient";
+import { useEffect } from "react";
 
 const LIMIT = 8;
 
+interface SchoolData {
+  _id: string;
+  name: string;
+  city: string;
+  mainImage: string;
+  ponderado?: number;
+  prices?: Array<{
+    horarios?: {
+      precio?: string | number;
+    };
+  }>;
+  lowestPrice?: number;
+  courseTypes?: string[];
+  cursosEos?: any[];
+  generalEnglishPrice?: number;
+  specificSchedule?: any;
+}
 
-const fetchPaginatedSchools = async ({ pageParam = 1 }) => {
+interface PaginatedPage {
+  schools: SchoolData[];
+  currentPage: number;
+  totalPages: number;
+  hasMore: boolean;
+}
+
+const fetchPaginatedSchools = async ({ pageParam = 2 }) => {
   const res = await axios.get(`/front/schools?page=${pageParam}&limit=${LIMIT}`);
   return {
     schools: res.data.data.schools,
@@ -14,11 +39,33 @@ const fetchPaginatedSchools = async ({ pageParam = 1 }) => {
   };
 };
 
-export const useInfiniteSchools = () => {
+export const useInfiniteSchools = (initialSchools: SchoolData[] = []) => {
+  const queryClient = useQueryClient();
+
+  // Initialize React Query with server-side data to prevent double fetch
+  useEffect(() => {
+    if (initialSchools.length > 0) {
+      queryClient.setQueryData(
+        ["infiniteSchools"],
+        {
+          pages: [
+            {
+              schools: initialSchools,
+              currentPage: 1,
+              totalPages: Math.ceil(100 / 12), // Assuming ~100 schools total
+              hasMore: true,
+            },
+          ],
+          pageParams: [1],
+        }
+      );
+    }
+  }, [initialSchools, queryClient]);
+
   return useInfiniteQuery({
     queryKey: ["infiniteSchools"],
     queryFn: fetchPaginatedSchools,
-    initialPageParam: 1,
+    initialPageParam: 2, // Start from page 2 since page 1 is from server
     getNextPageParam: (lastPage) => {
       return lastPage.hasMore ? lastPage.currentPage + 1 : undefined;
     },
