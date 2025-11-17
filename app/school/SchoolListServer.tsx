@@ -1,6 +1,11 @@
 import School from "../components/School";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
-import ClientSchoolPagination from "./ClientSchoolPagination";
+import dynamic from "next/dynamic";
+
+// Lazy load pagination component which loads after schools are visible
+const ClientSchoolPagination = dynamic(() => import("./ClientSchoolPagination"), {
+  loading: () => <div className="mt-8 h-20 bg-gray-100 rounded-lg" />,
+});
 
 interface SchoolData {
   _id: string;
