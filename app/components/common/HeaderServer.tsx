@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/logos/final-logo.png";
-import SchoolSearch from "./SchoolSearch";
+import dynamic from "next/dynamic";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import AnnouncementBanner from "./AnnouncementBanner";
+
+// Lazy load SchoolSearch to reduce Header JavaScript bundle
+const SchoolSearch = dynamic(() => import("./SchoolSearch"), {
+  loading: () => <div className="h-10 bg-gray-200 rounded-lg w-64" />,
+});
 
 export interface DropdownItem {
   name: string;
