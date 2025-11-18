@@ -80,7 +80,7 @@ export function DatePickerEbook({ value, onChange, disabled, fromDate, defaultMo
             </button>
           </PopoverTrigger>
         </div>
-        <PopoverContent className="w-auto p-0 z-[9999]">
+        <PopoverContent side="bottom" align="start" className="w-auto p-0 z-[9999]">
           <Calendar
             locale={es}
             mode="single"
