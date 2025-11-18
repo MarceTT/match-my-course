@@ -86,11 +86,12 @@ self.addEventListener('activate', (event) => {
           })
         );
       }),
-      // Habilitar navigation preload
-      self.registration.navigationPreload ?
-        self.registration.navigationPreload.enable().then(() => {
-          console.log('[SW] Navigation preload enabled');
-        }) : Promise.resolve()
+      // Desabilitar navigation preload - causa problemas en producción
+      Promise.resolve()
+      // self.registration.navigationPreload ?
+      //   self.registration.navigationPreload.enable().then(() => {
+      //     console.log('[SW] Navigation preload enabled');
+      //   }) : Promise.resolve()
     ]).then(() => {
       // Tomar control de todas las páginas inmediatamente
       return self.clients.claim();
@@ -268,13 +269,13 @@ async function handleNetworkFirst(request, event) {
   const cacheName = getCacheName(request.url);
 
   try {
-    // Intentar usar preloadResponse para navegación
-    const preloadResponse = event && event.preloadResponse ? await event.preloadResponse : null;
-    if (preloadResponse) {
-      console.log('[SW] Using preloaded response');
-      cacheHits++; // Preload = optimization hit
-      return preloadResponse;
-    }
+    // Desabilitar preloadResponse - causa problemas en producción
+    // const preloadResponse = event && event.preloadResponse ? await event.preloadResponse : null;
+    // if (preloadResponse) {
+    //   console.log('[SW] Using preloaded response');
+    //   cacheHits++; // Preload = optimization hit
+    //   return preloadResponse;
+    // }
 
     const networkResponse = await fetch(request);
     cacheMisses++; // Network request = cache miss
