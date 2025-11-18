@@ -77,7 +77,7 @@ export function DatePicker({ value, onChange, disabled, fromDate, defaultMonth }
             : <span>Selecciona una fecha</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 z-[9999]">
+      <PopoverContent side="bottom" align="start" className="w-auto p-0 z-[9999]">
         <Calendar
           locale={es}
           mode="single"
