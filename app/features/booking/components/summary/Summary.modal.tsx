@@ -172,7 +172,7 @@ export default function SummaryModal({
       <Dialog open={open} onOpenChange={disabled ? undefined : onClose}>
         <DialogContent
           className={`max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden ${disabled ? 'modal-sending' : ''}`}
-          style={{ zIndex: 50 }}
+          style={{ zIndex: 9999 }}
           onInteractOutside={(e) => {
             if (disabled) {
               e.preventDefault();
