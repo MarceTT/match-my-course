@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -190,6 +191,11 @@ export default function SummaryModal({
               ? "Detalle de tu reserva"
               : "Tus datos de contacto"}
           </DialogTitle>
+          <DialogDescription className="text-center text-sm mt-1">
+            {step === "summary"
+              ? "Revisa los detalles de tu reserva antes de continuar"
+              : "Completa tu información de contacto para finalizar la reserva"}
+          </DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-1 custom-scrollbar">
           <AnimatePresence mode="wait">
