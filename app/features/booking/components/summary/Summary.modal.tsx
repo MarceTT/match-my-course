@@ -197,7 +197,7 @@ export default function SummaryModal({
               : "Completa tu información de contacto para finalizar la reserva"}
           </DialogDescription>
         </DialogHeader>
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-1 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-1 custom-scrollbar isolate">
           <AnimatePresence mode="wait">
             {step === "summary" ? (
               <motion.div
