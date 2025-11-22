@@ -58,10 +58,10 @@ export default function HeroClient() {
             Encuentra tu curso de inglés
           </h1>
 
-          <div className="flex flex-col sm:flex-row bg-white rounded-2xl sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl pointer-events-auto">
-            <div className="relative flex-1 sm:border-r border-gray-200">
+          <div className="flex flex-col sm:flex-row bg-white rounded-lg sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl pointer-events-auto">
+            <div className="relative flex-1 sm:border-r border-gray-200 rounded-l-lg sm:rounded-l-full overflow-hidden">
               <select
-                className="w-full px-6 py-3 rounded-l-full bg-transparent text-gray-700 appearance-none focus:outline-none"
+                className="w-full px-6 py-3 bg-transparent text-gray-700 appearance-none focus:outline-none"
                 aria-label="Selecciona un destino"
                 disabled
               >
@@ -104,7 +104,7 @@ export default function HeroClient() {
 
             <button
               onClick={handleSearch}
-              className="px-6 py-3 rounded-r-full bg-[#FF385C] hover:bg-[#FF385C]/80 text-white font-semibold flex items-center justify-center whitespace-nowrap transition-colors"
+              className="px-4 py-3 rounded-lg sm:rounded-full bg-[#FF385C] hover:bg-[#FF385C]/80 text-white font-semibold flex items-center justify-center whitespace-nowrap transition-colors sm:h-14 sm:w-14"
             >
               <FiSearch className="w-5 h-5 text-white" />
               <span className="ml-2 lg:ml-0 lg:hidden md:hidden">Buscar</span>

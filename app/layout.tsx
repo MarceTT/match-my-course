@@ -16,23 +16,25 @@ const ogImage = rewriteToCDN(
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com'),
-  title: "Escuelas de Inglés | Irlanda y Nueva Zelanda | MatchMyCourse",
+  title: "MatchMyCourse — Encuentra y compara cursos en el extranjero",
   description:
-    "Encuentra y reserva tu curso de inglés ideal con asesoría personal, comparativa de escuelas y total transparencia en una sola plataforma ¡Reserva ahora!",
+    "Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más.",
   openGraph: {
-    title: "Escuelas de Inglés | Irlanda y Nueva Zelanda | MatchMyCourse",
-    description: "Encuentra y reserva tu curso de inglés ideal con asesoría personal, comparativa de escuelas y total transparencia en una sola plataforma ¡Reserva ahora!",
+    locale: "es_ES",
+    type: "website",
     url: "https://matchmycourse.com",
     siteName: "MatchMyCourse",
+    title: "MatchMyCourse — Encuentra y compara cursos en el extranjero",
+    description: "Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más.",
     images: [
       {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: "MatchMyCourse OG Image",
+        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        type: "image/png",
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
