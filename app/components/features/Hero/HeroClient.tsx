@@ -104,7 +104,7 @@ export default function HeroClient() {
 
             <button
               onClick={handleSearch}
-              className="px-6 py-3 rounded-r-full bg-blue-500 hover:bg-blue-600 text-white font-semibold flex items-center justify-center whitespace-nowrap transition-colors"
+              className="px-6 py-3 rounded-r-full bg-[#FF385C] hover:bg-[#FF385C]/80 text-white font-semibold flex items-center justify-center whitespace-nowrap transition-colors"
             >
               <FiSearch className="w-5 h-5 text-white" />
               <span className="ml-2 lg:ml-0 lg:hidden md:hidden">Buscar</span>

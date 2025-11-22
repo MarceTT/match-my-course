@@ -106,6 +106,10 @@ export default function SchoolSearchList({
         isFilterOpen ? "mt-0 lg:mt-64" : "mt-0"
       }`}
     >
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+        Buscador de cursos de Inglés | MatchMyCourse
+      </h1>
+
       <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
         <span className="text-sm text-gray-600 hidden md:inline">Vista</span>
         <div className="hidden md:flex items-center space-x-2">
