@@ -7,6 +7,21 @@ interface ImageOptimizationOptions {
   fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
 }
 
+// Tipos para srcset generado automáticamente
+export interface ResponsiveImageConfig {
+  url: string;
+  alt: string;
+  sizes?: string;
+  priority?: boolean;
+  fetchPriority?: 'high' | 'low' | 'auto';
+}
+
+export interface GeneratedSrcset {
+  src: string;
+  srcSet: string;
+  sizes: string;
+}
+
 // Lista de formatos válidos para CloudFront
 const VALID_FORMATS = ['webp', 'avif', 'jpg', 'jpeg', 'png'] as const;
 
@@ -30,6 +45,35 @@ export function rewriteToCDN(url?: string | null, options?: ImageOptimizationOpt
   // Simplemente retornar la URL del CDN sin parámetros adicionales
   // Esto asegura que las imágenes se carguen correctamente
   return optimizedUrl;
+}
+
+/**
+ * Genera automáticamente srcset con densidades de píxeles (1x, 2x)
+ * Compatible con CloudFront CDN que no soporta parámetros de transformación
+ * Next.js Image component maneja automáticamente el redimensionamiento
+ * @param url - URL de la imagen original
+ * @param sizes - Media queries para responsive design
+ * @returns Objeto con src, srcSet y sizes para usar en <img> tag
+ */
+export function generateAutoSrcset(
+  url: string,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+): GeneratedSrcset {
+  const cdnUrl = rewriteToCDN(url);
+
+  // Generar srcset con múltiples densidades de píxeles
+  // El navegador selecciona la mejor versión según el dispositivo y su densidad de píxeles
+  // Next.js Image component genera automáticamente las versiones optimizadas
+  const srcSet = [
+    `${cdnUrl} 1x`,   // Densidad estándar (1 píxel de dispositivo = 1 píxel CSS)
+    `${cdnUrl} 2x`,   // Retina/dispositivos de alta densidad
+  ].join(', ');
+
+  return {
+    src: cdnUrl,
+    srcSet,
+    sizes,
+  };
 }
 
 // Helper para generar placeholder simple

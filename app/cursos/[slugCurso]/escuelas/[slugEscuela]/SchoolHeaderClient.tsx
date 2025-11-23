@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Star } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Star, Volume2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { PlayCircle } from "lucide-react";
 
@@ -128,9 +128,7 @@ const SchoolHeaderClient = ({
                   <DialogHeader>
                     <DialogTitle>Presentación de {schoolName}</DialogTitle>
                   </DialogHeader>
-                  <div className="relative aspect-video w-full bg-gray-900 rounded">
-                    <p className="text-white text-center py-20">Video player would go here</p>
-                  </div>
+                  <VideoEmbedPlayer url={schoolUrlVideo} />
                 </DialogContent>
               </Dialog>
             </div>
@@ -145,6 +143,85 @@ const SchoolHeaderClient = ({
         )}
       </div>
     </>
+  );
+};
+
+// Video embed component for school presentation
+const VideoEmbedPlayer: React.FC<{ url?: string }> = ({ url }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const storageKey = useMemo(() => `VIDEO_SOUND_PREF::${url ?? ""}`, [url]);
+
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const pref = localStorage.getItem(storageKey);
+      if (pref === "1") setMuted(false);
+    } catch {}
+  }, [storageKey]);
+
+  const getEmbedUrl = (raw?: string | null, muted: boolean = true) => {
+    if (!raw) return null;
+    try {
+      const urlObj = new URL(raw);
+      const host = urlObj.hostname.toLowerCase();
+      if (host.includes("youtube.com") || host.includes("youtu.be")) {
+        let id = urlObj.searchParams.get("v");
+        if (!id && host.includes("youtu.be")) id = urlObj.pathname.slice(1);
+        if (!id && urlObj.pathname.startsWith("/shorts/")) id = urlObj.pathname.split("/")[2];
+        if (!id) return raw;
+        const embed = new URL(`https://www.youtube-nocookie.com/embed/${id}`);
+        embed.searchParams.set("autoplay", "1");
+        embed.searchParams.set("mute", muted ? "1" : "0");
+        embed.searchParams.set("rel", "0");
+        embed.searchParams.set("playsinline", "1");
+        embed.searchParams.set("modestbranding", "1");
+        return embed.toString();
+      }
+      if (host.includes("vimeo.com")) {
+        const id = urlObj.pathname.split("/").filter(Boolean).pop();
+        if (!id) return raw;
+        const embed = new URL(`https://player.vimeo.com/video/${id}`);
+        embed.searchParams.set("autoplay", "1");
+        embed.searchParams.set("muted", muted ? "1" : "0");
+        embed.searchParams.set("title", "0");
+        embed.searchParams.set("byline", "0");
+        embed.searchParams.set("portrait", "0");
+        return embed.toString();
+      }
+      return raw;
+    } catch {
+      return raw;
+    }
+  };
+
+  const src = useMemo(() => getEmbedUrl(url, muted) || undefined, [url, muted]);
+
+  return (
+    <div className="relative aspect-video w-full">
+      {!loaded && (
+        <div className="absolute inset-0 animate-pulse bg-gray-200 rounded" />
+      )}
+      <iframe
+        src={src}
+        className="w-full h-full rounded"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        onLoad={() => setLoaded(true)}
+      />
+      {muted && (
+        <button
+          onClick={() => {
+            setLoaded(false);
+            setMuted(false);
+            try { localStorage.setItem(storageKey, "1"); } catch {}
+          }}
+          className="absolute bottom-3 right-3 px-3 py-1.5 rounded-md bg-black/60 hover:bg-black/70 text-white text-xs font-medium inline-flex items-center gap-1"
+        >
+          <Volume2 className="h-3.5 w-3.5" /> Activar sonido
+        </button>
+      )}
+    </div>
   );
 };
 
