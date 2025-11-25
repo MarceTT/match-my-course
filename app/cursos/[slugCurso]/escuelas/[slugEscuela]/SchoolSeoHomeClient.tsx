@@ -87,33 +87,9 @@ export const SchoolSeoHomeClient = ({
 
   if (mobileOnly) {
     // Mobile only - show booking panel for mobile screens
+    // Note: Video button is handled by SchoolHeaderClient to avoid duplication
     return (
       <>
-        {/* Video button only */}
-        {schoolUrlVideo && (
-          <div className="mt-6 mb-4 flex justify-center lg:justify-start">
-            <Dialog>
-              <DialogTrigger asChild>
-                <button
-                  className="px-4 py-2 rounded-md bg-[#FF385C] hover:bg-[#e63152] text-white text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FF385C]"
-                  aria-label="Ver video de la escuela"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    <PlayCircle className="h-4 w-4" />
-                    Video de la escuela
-                  </span>
-                </button>
-              </DialogTrigger>
-              <DialogContent className="max-w-5xl">
-                <DialogHeader>
-                  <DialogTitle>Presentación de {schoolName}</DialogTitle>
-                </DialogHeader>
-                <VideoEmbed url={schoolUrlVideo} getEmbedUrl={getEmbedUrl} />
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
-
         {/* Booking panel mobile */}
         <div className="lg:hidden mt-6 mb-8" id="booking-pannel">
           <Suspense fallback={
