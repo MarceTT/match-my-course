@@ -161,6 +161,14 @@ const nextConfig: NextConfig = {
         destination: '/contacto',
         permanent: true,
       },
+      // Redirect malformed school URLs with extra characters at the end
+      // Pattern: /cursos/[slug]/escuelas/[slug]/[extra-characters]
+      // Redirect to clean URL: /cursos/[slug]/escuelas/[slug]
+      {
+        source: '/cursos/:cursoSlug/escuelas/:schoolSlug/:schoolId',
+        destination: '/cursos/:cursoSlug/escuelas/:schoolSlug',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

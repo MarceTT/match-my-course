@@ -7,6 +7,20 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
+      // === REGLA 0: Bloquear parámetros de búsqueda (evitar duplicados) ===
+      // Prevenir indexación de URLs con parámetros de búsqueda que generan duplicados
+      {
+        userAgent: "*",
+        disallow: [
+          "*?curso=",
+          "*?semanas=",
+          "*?ciudad=",
+          "*?horario=",
+          "*?weeksMin=",
+          "*?schedule=",
+        ],
+      },
+
       // === REGLA 1: Googlebot y variantes (máxima prioridad) ===
       {
         userAgent: "Googlebot",
@@ -117,7 +131,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       `${base}/sitemap.xml`,
-      `${base}/api/sitemap-video`,
+      `${base}/sitemap-video`,
     ],
   };
 }
