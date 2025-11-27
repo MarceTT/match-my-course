@@ -107,7 +107,7 @@ export default function SchoolSearchList({
       }`}
     >
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-        Buscador de cursos de Inglés | MatchMyCourse
+        Buscador de cursos de Inglés
       </h1>
 
       <div className="flex items-center space-x-4 md:flex-row md:space-x-4">
