@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { ShareButtons } from "@/app/components/common/social";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { StaticImageData } from "next/image";
 import { ZoomIn } from "lucide-react";
 
@@ -63,26 +62,29 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
               <div
                 key={i}
                 onClick={() => openSlider(i)}
-                className={`relative aspect-[3/2] w-full cursor-zoom-in group ${
+                className={`relative aspect-[3/2] w-full cursor-zoom-in group bg-gray-100 rounded-lg ${
                   i < 2 ? "col-span-3" : "col-span-2"
-                } row-span-1 transition hover:brightness-90`}
+                } row-span-1 transition hover:brightness-90 overflow-hidden`}
               >
                 {!loaded && (
-                  <Skeleton className="absolute inset-0 h-full w-full rounded-lg z-0" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-50 to-gray-100 animate-pulse" />
                 )}
                 <Image
                   src={url}
-                  alt={`Image ${i + 1}`}
+                  alt={`Imagen ${i + 1} de la escuela`}
                   fill
-                  className={`object-cover rounded-lg transition-opacity duration-500 ${
+                  className={`object-cover rounded-lg transition-opacity duration-300 ${
                     loaded ? "opacity-100" : "opacity-0"
                   }`}
                   onLoad={() => setLoaded(true)}
                   onError={() => setLoaded(true)}
                   loading={isLcp ? "eager" : "lazy"}
                   priority={isLcp}
-                  fetchPriority={isLcp ? "high" : undefined}
-                  sizes="100vw"
+                  fetchPriority={isLcp ? "high" : "low"}
+                  sizes={i < 2 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+                  quality={isLcp ? 85 : 75}
+                  placeholder="blur"
+                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEwIDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMCIgaGVpZ2h0PSI3IiBmaWxsPSIjRTVFN0VCIi8+Cjwvc3ZnPgo="
                   onContextMenu={(e) => e.preventDefault()}
                 />
 

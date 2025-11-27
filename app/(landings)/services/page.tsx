@@ -16,7 +16,7 @@ const ogImage = rewriteToCDN(
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://matchmycourse.com'),
-  title: 'Nuestros Servicios | MatchMyCourse – Reserva, Matrícula y Preparación',
+  title: 'Nuestros Servicios | MatchMyCourse',
   description: 'Descubre los servicios de MatchMyCourse: reserva tu curso de inglés, completa la matrícula fácilmente y recibe preparación para estudiar en el extranjero.',
   keywords: ['servicios MatchMyCourse', 'reserva curso inglés', 'matrícula extranjero', 'preparación estudiar extranjero', 'servicios educativos'],
   authors: [{ name: 'MatchMyCourse', url: 'https://matchmycourse.com' }],

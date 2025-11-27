@@ -10,7 +10,7 @@ const ogImage = rewriteToCDN(
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://matchmycourse.com'),
-  title: 'Misión y Visión | MatchMyCourse – Cursos de Inglés en el Extranjero',
+  title: 'Misión y Visión | MatchMyCourse',
   description: 'Descubre la misión y visión de MatchMyCourse, el marketplace líder para comparar y reservar cursos de inglés en el extranjero. Transparencia y confianza.',
   keywords: ['misión y visión de MatchMyCourse', 'marketplace cursos inglés', 'empresa educativa', 'valores MatchMyCourse', 'transparencia educación'],
   authors: [{ name: 'MatchMyCourse', url: 'https://matchmycourse.com' }],
