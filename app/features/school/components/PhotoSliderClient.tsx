@@ -17,6 +17,18 @@ type Props = {
 export default function PhotoSlider(props: Props) {
   const { images, visible, index } = props;
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set([index]));
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar viewport en cliente
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Precargar imagen actual y siguientes para mejor UX
   useEffect(() => {
@@ -65,6 +77,19 @@ export default function PhotoSlider(props: Props) {
     }
   }, [visible, handleKeyDown]);
 
+  // Aplicar estilos fullscreen en mobile
+  const sliderStyles = isMobile && visible
+    ? {
+        position: "fixed" as const,
+        inset: 0,
+        zIndex: 9999,
+      }
+    : undefined;
+
   // Tipado laxo para compatibilidad con la lib instalada
-  return <RPPhotoSlider {...(props as any)} />;
+  return (
+    <div style={sliderStyles}>
+      <RPPhotoSlider {...(props as any)} />
+    </div>
+  );
 }

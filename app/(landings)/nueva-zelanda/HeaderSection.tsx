@@ -10,7 +10,7 @@ export default function HeaderSection() {
     <section className="relative h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] overflow-hidden">
       <Image
         src={bgUrl}
-        alt="Estudiar Inglés en Nueva Zelanda | MatchMyCourse"
+        alt="Estudiar Inglés en Nueva Zelanda"
         fill
         className="absolute inset-0 object-cover scale-105"
         priority
