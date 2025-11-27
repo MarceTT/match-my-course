@@ -73,20 +73,10 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
 
   const ogImage = seoEntry.imageOpenGraph ? rewriteToCDN(seoEntry.imageOpenGraph) : undefined;
 
-  // Construir título dinámico
+  // Construir título simple: Nombre de escuela | MatchMyCourse
   const brand = 'MatchMyCourse';
-  const schoolName = seoEntry?.escuela || seoEntry?.h1 || '';
-  const subcatName = cursoSlugToSubcategoria[slugCurso] || '';
-  const city = seoEntry?.ciudad || '';
-  const baseCandidate = seoEntry?.metaTitle || '';
-  const lower = (s: string) => s.toLowerCase();
-  let dynamicTitle = baseCandidate || `${schoolName || 'Escuela de inglés'}${city ? ` en ${city}` : ''}${subcatName ? ` | ${subcatName}` : ''}`;
-  if (schoolName && !lower(dynamicTitle).includes(lower(schoolName))) {
-    dynamicTitle = `${schoolName} | ${dynamicTitle}`;
-  }
-  if (!lower(dynamicTitle).includes('matchmycourse')) {
-    dynamicTitle = `${dynamicTitle} | ${brand}`;
-  }
+  const schoolName = seoEntry?.escuela || seoEntry?.h1 || 'Escuela de inglés';
+  const dynamicTitle = `${schoolName} | ${brand}`;
 
   return {
     title: dynamicTitle,
