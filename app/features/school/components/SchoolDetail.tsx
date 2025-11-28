@@ -10,11 +10,12 @@ import { ZoomIn } from "lucide-react";
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
   city: string;
+  schoolName?: string;
 }
 
 const PhotoSlider = dynamic(() => import("./PhotoSliderClient"), { ssr: false, loading: () => null });
 
-const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
+const SchoolDetail = ({ images, city, schoolName }: SchoolDetailProps) => {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -65,7 +66,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                     )}
                     <Image
                       src={imageUrls[0]}
-                      alt={`Imagen principal de la escuela`}
+                      alt={`${schoolName || 'Escuela'} - Imagen principal`}
                       fill
                       className={`object-cover rounded-lg transition-opacity duration-300 ${
                         loaded ? "opacity-100" : "opacity-0"
@@ -117,7 +118,7 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
                 )}
                 <Image
                   src={url}
-                  alt={`Imagen ${i + 1} de la escuela`}
+                  alt={`${schoolName || 'Escuela'} - Imagen ${i + 1}`}
                   fill
                   className={`object-cover rounded-lg transition-opacity duration-300 ${
                     loaded ? "opacity-100" : "opacity-0"
@@ -152,11 +153,16 @@ const SchoolDetail = ({ images, city }: SchoolDetailProps) => {
 
         {visible && (
           <PhotoSlider
-            images={imageUrls.map((src, index) => ({ key: `img-${index}`, src }))}
+            images={imageUrls.map((src, index) => ({
+              key: `img-${index}`,
+              src,
+              alt: `${schoolName || 'Escuela'} - Imagen ${index + 1}`
+            }))}
             visible={visible}
             index={index}
             onClose={() => setVisible(false)}
             onIndexChange={setIndex}
+            schoolName={schoolName}
           />
         )}
       </div>

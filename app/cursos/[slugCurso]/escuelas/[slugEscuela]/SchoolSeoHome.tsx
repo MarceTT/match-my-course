@@ -89,6 +89,7 @@ async function SchoolSeoHome({
         <SchoolDetailDynamic
           images={(school.galleryImages || []).map((url: any) => rewriteToCDN(url))}
           city={school.city!}
+          schoolName={school.name}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">

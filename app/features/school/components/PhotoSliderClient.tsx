@@ -11,31 +11,12 @@ type Props = {
   index: number;
   onClose: () => void;
   onIndexChange: (index: number) => void;
+  schoolName?: string;
   [key: string]: any;
 };
 
-// Debounce utility para resize
-function useDebounce<T>(value: T, delay: number = 300): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
 export default function PhotoSlider(props: Props) {
-  const { images, visible, index } = props;
+  const { images, visible, index, schoolName } = props;
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set([index]));
   const abortControllerRef = useRef<AbortController>(new AbortController());
 
@@ -122,7 +103,13 @@ export default function PhotoSlider(props: Props) {
     };
   }, []);
 
+  // Pasar images con alt texts descriptivos
+  const imagesWithAlt = images.map((img, idx) => ({
+    ...img,
+    alt: img.alt || `${schoolName || 'Escuela'} - Imagen ${idx + 1}`
+  }));
+
   // NO usar wrapper fixed - dejar que react-photo-view maneje su propio overlay
   // El wrapper fixed estaba interfiriendo con el cierre del modal en mobile
-  return <RPPhotoSlider {...(props as any)} />;
+  return <RPPhotoSlider {...(props as any)} images={imagesWithAlt} />;
 }
