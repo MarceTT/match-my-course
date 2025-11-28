@@ -210,19 +210,6 @@ async function SchoolSeoHome({
         </div>
       </div>
 
-      {/* Mobile booking panel - outside grid */}
-      <div className="max-w-7xl mx-auto px-4">
-        <SchoolSeoHomeClient
-          schoolId={schoolId}
-          schoolName={school.name}
-          schoolUrlVideo={school.urlVideo}
-          slugCurso={slugCurso}
-          weeks={weeks}
-          schedule={schedule}
-          mobileOnly={true}
-        />
-      </div>
-
       <ScrollToBookingButton />
 
       <Footer showWhatsApp={false} />
