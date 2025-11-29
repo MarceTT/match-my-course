@@ -8,9 +8,9 @@ import Script from "next/script";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import GTMClient from "./ui/GTMClient";
 
-const ogImage = rewriteToCDN(
-  "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
-);
+// Open Graph image - use absolute URL without URL encoding for social media compatibility
+// Social networks require fully qualified URLs and may have caching issues with special characters
+const ogImage = "https://d2wv8pxed72bi5.cloudfront.net/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png";
 
 // Hero image preload removed - Next.js Image component with priority handles this better
 
@@ -31,22 +31,25 @@ export const metadata: Metadata = {
         url: ogImage,
         width: 1200,
         height: 630,
-        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        alt: "MatchMyCourse - Encuentra y compara cursos de inglés en el extranjero",
         type: "image/png",
+        secureUrl: ogImage,
       },
       {
         url: ogImage,
         width: 1080,
         height: 1080,
-        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        alt: "MatchMyCourse - Encuentra y compara cursos de inglés en el extranjero",
         type: "image/png",
+        secureUrl: ogImage,
       },
       {
         url: ogImage,
         width: 1200,
         height: 675,
-        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        alt: "MatchMyCourse - Encuentra y compara cursos de inglés en el extranjero",
         type: "image/png",
+        secureUrl: ogImage,
       },
     ],
   },
