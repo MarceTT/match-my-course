@@ -1,14 +1,18 @@
 import { Headphones } from "lucide-react";
 import React from "react";
+import Image from "next/image";
 
 function Preparation() {
   return (
     <div className="grid lg:grid-cols-2 gap-12 mb-16 items-center">
-      <div>
-        <img
+      <div className="relative w-full h-80 lg:h-96">
+        <Image
           src="/images/Servicios-gratuitos-Matchmycourse-1.png"
-          alt="Servicios gratuitos Matchmycourse"
-          className="rounded-lg w-full h-auto"
+          alt="Asesorías de preparación personalizadas para estudiar en el extranjero"
+          fill
+          className="rounded-lg object-cover"
+          loading="lazy"
+          quality={80}
         />
       </div>
       <div>

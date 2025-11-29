@@ -34,6 +34,20 @@ export const metadata: Metadata = {
         alt: "MatchMyCourse - Estudia inglés en el extranjero",
         type: "image/png",
       },
+      {
+        url: ogImage,
+        width: 1080,
+        height: 1080,
+        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        type: "image/png",
+      },
+      {
+        url: ogImage,
+        width: 1200,
+        height: 675,
+        alt: "MatchMyCourse - Estudia inglés en el extranjero",
+        type: "image/png",
+      },
     ],
   },
   twitter: {

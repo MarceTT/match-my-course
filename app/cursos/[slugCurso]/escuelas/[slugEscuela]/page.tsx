@@ -77,27 +77,40 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
   const brand = 'MatchMyCourse';
   const schoolName = seoEntry?.escuela || seoEntry?.h1 || 'Escuela de inglés';
   const dynamicTitle = `${schoolName} | ${brand}`;
+  const description = seoEntry.metaDescription || `Descubre ${schoolName}, la mejor opción para aprender inglés en Irlanda con cursos de calidad, profesores nativos y experiencia inmersiva.`;
+
+  // Open Graph images con múltiples dimensiones para diferentes plataformas
+  const ogImages = ogImage ? [
+    // Facebook (1200x630)
+    { url: ogImage, width: 1200, height: 630, alt: dynamicTitle, type: 'image/jpeg' },
+    // Instagram (1080x1080 - square, optimal for feed)
+    { url: ogImage, width: 1080, height: 1080, alt: dynamicTitle, type: 'image/jpeg' },
+    // X/Twitter (1200x675)
+    { url: ogImage, width: 1200, height: 675, alt: dynamicTitle, type: 'image/jpeg' },
+  ] : [];
 
   return {
     title: dynamicTitle,
-    description: seoEntry.metaDescription,
+    description: description,
     keywords: seoEntry.keywordPrincipal,
     alternates: { canonical: canonicalUrl },
     robots: { index: true, follow: true },
     openGraph: {
       title: dynamicTitle,
-      description: seoEntry.metaDescription,
+      description: description,
       url: canonicalUrl,
       type: 'website',
-      images: ogImage ? [
-        { url: ogImage, width: 1200, height: 630, alt: dynamicTitle },
-      ] : [],
+      siteName: brand,
+      locale: 'es_ES',
+      images: ogImages,
     },
     twitter: {
       card: 'summary_large_image',
       title: dynamicTitle,
-      description: seoEntry.metaDescription,
+      description: description,
       images: ogImage ? [ogImage] : [],
+      creator: '@matchmycourse',
+      site: '@matchmycourse',
     },
   };
 }

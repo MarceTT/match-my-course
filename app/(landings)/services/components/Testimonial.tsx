@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +25,7 @@ const Testimonial = () => {
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
               ></iframe>
             </div>
           </div>

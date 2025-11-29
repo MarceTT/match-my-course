@@ -1,6 +1,6 @@
 import React from "react";
 import { BookUser } from "lucide-react";
-import { extractSlugEscuelaFromSeoUrl } from "../../../../lib/helpers/buildSeoSchoolUrl";
+import Image from "next/image";
 
 const Inscription = () => {
   return (
@@ -41,11 +41,14 @@ const Inscription = () => {
       </div>
 
       {/* Image Section - Order 1 on mobile, Order 2 on desktop */}
-      <div className="order-1 lg:order-2">
-        <img
+      <div className="order-1 lg:order-2 relative w-full h-80 lg:h-96">
+        <Image
           src="/images/Servicios-gratuitos-Matchmycourse.png"
-          alt="Servicios gratuitos Matchmycourse"
-          className="rounded-lg w-full h-auto"
+          alt="Asistencia completa en matrícula y documentación para estudios en el extranjero"
+          fill
+          className="rounded-lg object-cover"
+          loading="lazy"
+          quality={80}
         />
       </div>
     </div>

@@ -1,7 +1,6 @@
-"use client";
-
 import { Headphones } from "lucide-react";
 import React from "react";
+import Image from "next/image";
 
 const Service = () => {
   return (
@@ -9,11 +8,14 @@ const Service = () => {
       {/* Left Side - School Cards */}
       <div className="hidden lg:block space-y-4">
         {/* School Card 1 */}
-        <div className="rounded-lg p-4 flex items-center gap-4">
-          <img
+        <div className="rounded-lg p-4 flex items-center gap-4 relative w-full h-64">
+          <Image
             src="/about-us/Utiliza-nuestro-filtro-para-buscar-tu-escuela-de-ingles-ideal.png"
-            alt="Escuela de inglés ideal"
-            className="w-full h-auto object-cover"
+            alt="Utiliza nuestro filtro para buscar tu escuela de inglés ideal"
+            fill
+            className="object-cover rounded-lg"
+            loading="lazy"
+            quality={80}
           />
         </div>
       </div>
