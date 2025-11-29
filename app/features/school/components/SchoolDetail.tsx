@@ -1,11 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ZoomIn } from "lucide-react";
 import { ShareButtons } from "@/app/components/common/social";
 import type { StaticImageData } from "next/image";
-import { SchoolDetailClient } from "./SchoolDetailClient";
+import dynamic from "next/dynamic";
+
+const PhotoSlider = dynamic(() => import("./PhotoSliderClient"), {
+  ssr: false,
+  loading: () => null
+});
 
 interface SchoolDetailProps {
   images: string[] | StaticImageData[];
@@ -14,14 +19,21 @@ interface SchoolDetailProps {
 }
 
 /**
- * Server-rendered component for school gallery
- * - Renders all images server-side for better SEO and performance
- * - Mobile: Shows single image + button
- * - Desktop: Shows 5-image grid
- * - Client-side interactivity handled by SchoolDetailClient wrapper
+ * School gallery component with image grid and PhotoSlider modal
+ * - Desktop: 5-image grid with hover zoom effects
+ * - Mobile: Single image with "Ver más imágenes" button
+ * - Click on any image opens PhotoSlider modal
  */
 export default function SchoolDetail({ images, city, schoolName }: SchoolDetailProps) {
+  const [visible, setVisible] = useState(false);
+  const [index, setIndex] = useState(0);
+
   const imageUrls = images.map((img) => (typeof img === "string" ? img : img.src));
+
+  const openSlider = (i: number) => {
+    setIndex(i);
+    setVisible(true);
+  };
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -70,16 +82,18 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
             </div>
 
             {imageUrls.length > 1 && (
-              <SchoolDetailClient
-                imageUrls={imageUrls}
-                schoolName={schoolName}
-              />
+              <button
+                onClick={() => openSlider(0)}
+                className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+              >
+                Ver más imágenes ({imageUrls.length})
+              </button>
             )}
           </div>
         </div>
 
-        {/* DESKTOP VIEW: Grid layout - Server rendered for SEO */}
-        <div className="hidden lg:grid grid-cols-6 grid-rows-1 gap-2 desktop-gallery-interactive">
+        {/* DESKTOP VIEW: Grid layout with clickable images */}
+        <div className="hidden lg:grid grid-cols-6 grid-rows-1 gap-2">
           {imageUrls.slice(0, 5).map((url, i) => {
             const remaining = imageUrls.length - 5;
             const isLcp = i === 0; // First large box: LCP candidate
@@ -88,6 +102,7 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
               <div
                 key={i}
                 data-image-index={i}
+                onClick={() => openSlider(i)}
                 className={`relative aspect-[3/2] w-full bg-gray-100 rounded-lg cursor-zoom-in group ${
                   i < 2 ? "col-span-3" : "col-span-2"
                 } row-span-1 overflow-hidden hover:brightness-90 transition`}
@@ -124,11 +139,21 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
           })}
         </div>
 
-        {/* Client-side interactive overlay and gallery - only loaded on demand */}
-        <SchoolDetailClient
-          imageUrls={imageUrls}
-          schoolName={schoolName}
-        />
+        {/* PhotoSlider modal - only rendered when visible */}
+        {visible && (
+          <PhotoSlider
+            images={imageUrls.map((src, idx) => ({
+              key: `img-${idx}`,
+              src,
+              alt: `${schoolName || 'Escuela'} - Imagen ${idx + 1}`
+            }))}
+            visible={visible}
+            index={index}
+            onClose={() => setVisible(false)}
+            onIndexChange={setIndex}
+            schoolName={schoolName}
+          />
+        )}
       </div>
     </div>
   );
