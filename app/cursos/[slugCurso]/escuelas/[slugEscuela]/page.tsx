@@ -244,7 +244,6 @@ export default async function Page({ params, searchParams }: Props) {
       url: `${origin}/`,
     },
     inLanguage: 'en',
-    areaServed: city || 'Irlanda',
     url: canonicalUrl,
     hasCourseInstance: {
       '@type': 'CourseInstance',
