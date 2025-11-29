@@ -169,13 +169,6 @@ const nextConfig: NextConfig = {
         destination: '/cursos/:cursoSlug/escuelas/:schoolSlug',
         permanent: true,
       },
-      // Redirect invalid course pages (e.g., misspelled course slugs) to main courses page
-      // This catches any /cursos/* path that doesn't exist and redirects to the main courses directory
-      {
-        source: '/cursos/:path*',
-        destination: '/cursos-ingles-extranjero',
-        permanent: true,
-      },
     ];
   },
   async rewrites() {
