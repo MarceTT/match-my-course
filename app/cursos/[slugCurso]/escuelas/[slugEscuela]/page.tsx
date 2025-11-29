@@ -212,6 +212,11 @@ export default async function Page({ params, searchParams }: Props) {
     schoolName ? ` en ${schoolName}` : ''
   }`;
 
+  // Calculate course instance dates (starting today, duration based on weeks)
+  const today = new Date();
+  const startDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+  const endDate = new Date(today.getTime() + weeks * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
   const courseSchema = {
     '@context': 'https://schema.org',
     '@type': 'Course',
@@ -221,14 +226,23 @@ export default async function Page({ params, searchParams }: Props) {
       (seoEntry as any)?.h1 ||
       `Mejora tu inglés con clases dinámicas, profesores nativos y opciones de visa estudio + trabajo en Irlanda.`,
     provider: {
-      '@type': 'EducationalOrganization',
+      '@type': 'Organization',
       name: 'Match My Course',
       url: `${origin}/`,
     },
-    courseMode: 'OnSite',
     inLanguage: 'en',
     areaServed: city || 'Irlanda',
     url: canonicalUrl,
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'OnSite',
+      location: {
+        '@type': 'Place',
+        name: `${city || 'Irlanda'}, Irlanda`,
+      },
+      startDate: startDate,
+      endDate: endDate,
+    },
   } as const;
 
   // Texto breve para integrar visualmente debajo del H1 del hero
