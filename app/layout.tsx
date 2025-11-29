@@ -10,7 +10,7 @@ import GTMClient from "./ui/GTMClient";
 
 // Open Graph image - use absolute URL without URL encoding for social media compatibility
 // Social networks require fully qualified URLs and may have caching issues with special characters
-const ogImage = "https://d2wv8pxed72bi5.cloudfront.net/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png";
+const ogImage = "https://d2wv8pxed72bi5.cloudfront.net/matchmycourse-og-image.png.png";
 
 // Hero image preload removed - Next.js Image component with priority handles this better
 
