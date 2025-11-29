@@ -39,7 +39,6 @@ const SchoolStatDynamic = dynamic(
 type Props = {
   schoolId: string;
   slugCurso: string;
-  slugEscuela: string;
   weeks: number;
   schedule: string;
   summaryText?: string;
@@ -48,7 +47,6 @@ type Props = {
 async function SchoolSeoHome({
   schoolId,
   slugCurso,
-  slugEscuela,
   weeks,
   schedule,
   summaryText,
@@ -90,7 +88,6 @@ async function SchoolSeoHome({
 
       <SchoolBreadcrumb
         slugCurso={slugCurso}
-        slugEscuela={slugEscuela}
         schoolName={school.name}
       />
 

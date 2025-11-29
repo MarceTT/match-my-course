@@ -302,7 +302,6 @@ export default async function Page({ params, searchParams }: Props) {
       <SchoolSeoHome
         schoolId={schoolId}
         slugCurso={slugCurso}
-        slugEscuela={slugEscuela}
         weeks={weeks}
         schedule={schedule}
         summaryText={summaryText}

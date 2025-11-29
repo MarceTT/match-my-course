@@ -7,13 +7,11 @@ import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 interface SchoolBreadcrumbProps {
   slugCurso: string;
   schoolName: string;
-  slugEscuela: string;
 }
 
 export default function SchoolBreadcrumb({
   slugCurso,
   schoolName,
-  slugEscuela,
 }: SchoolBreadcrumbProps) {
   const courseCategory = cursoSlugToSubcategoria[slugCurso] || "Cursos";
 
@@ -44,7 +42,7 @@ export default function SchoolBreadcrumb({
           {/* Course Category */}
           <li>
             <Link
-              href={`/cursos/${slugCurso}`}
+              href={`/school-search?course=${slugCurso}`}
               className="text-blue-600 hover:text-blue-800 hover:underline transition-colors font-medium"
               title={`Ver todos los ${courseCategory.toLowerCase()}`}
             >
