@@ -21,6 +21,7 @@ import { fetchSchoolById } from "@/app/actions/school";
 import { SchoolSeoHomeClient } from "./SchoolSeoHomeClient";
 import SchoolHeaderClient from "./SchoolHeaderClient";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
+import SchoolBreadcrumb from "@/app/features/school/components/SchoolBreadcrumb";
 
 const SchoolDetailDynamic = dynamic(
   () =>
@@ -38,6 +39,7 @@ const SchoolStatDynamic = dynamic(
 type Props = {
   schoolId: string;
   slugCurso: string;
+  slugEscuela: string;
   weeks: number;
   schedule: string;
   summaryText?: string;
@@ -46,6 +48,7 @@ type Props = {
 async function SchoolSeoHome({
   schoolId,
   slugCurso,
+  slugEscuela,
   weeks,
   schedule,
   summaryText,
@@ -84,6 +87,12 @@ async function SchoolSeoHome({
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+
+      <SchoolBreadcrumb
+        slugCurso={slugCurso}
+        slugEscuela={slugEscuela}
+        schoolName={school.name}
+      />
 
       <div className="max-w-7xl mx-auto px-4 mt-8">
         <SchoolDetailDynamic
