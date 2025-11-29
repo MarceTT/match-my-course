@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { ZoomIn } from "lucide-react";
 import { ShareButtons } from "@/app/components/common/social";
 import type { StaticImageData } from "next/image";
 import { SchoolDetailClient } from "./SchoolDetailClient";
@@ -78,7 +79,7 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
         </div>
 
         {/* DESKTOP VIEW: Grid layout - Server rendered for SEO */}
-        <div className="hidden lg:grid grid-cols-6 grid-rows-1 gap-2">
+        <div className="hidden lg:grid grid-cols-6 grid-rows-1 gap-2 desktop-gallery-interactive">
           {imageUrls.slice(0, 5).map((url, i) => {
             const remaining = imageUrls.length - 5;
             const isLcp = i === 0; // First large box: LCP candidate
@@ -86,9 +87,10 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
             return (
               <div
                 key={i}
-                className={`relative aspect-[3/2] w-full bg-gray-100 rounded-lg ${
+                data-image-index={i}
+                className={`relative aspect-[3/2] w-full bg-gray-100 rounded-lg cursor-zoom-in group ${
                   i < 2 ? "col-span-3" : "col-span-2"
-                } row-span-1 overflow-hidden`}
+                } row-span-1 overflow-hidden hover:brightness-90 transition`}
               >
                 <Image
                   src={url}
@@ -104,6 +106,11 @@ export default function SchoolDetail({ images, city, schoolName }: SchoolDetailP
                   blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEwIDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMCIgaGVpZ2h0PSI3IiBmaWxsPSIjRTVFN0VCIi8+Cjwvc3ZnPgo="
                   onContextMenu={(e) => e.preventDefault()}
                 />
+
+                {/* Hover overlay with zoom icon */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition pointer-events-none">
+                  <ZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
 
                 {i === 4 && remaining > 0 && (
                   <div className="absolute inset-0 bg-black/60 rounded-lg flex items-center justify-center pointer-events-none">

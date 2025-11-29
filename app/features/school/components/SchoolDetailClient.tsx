@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { ZoomIn } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const PhotoSlider = dynamic(() => import("./PhotoSliderClient"), {
@@ -12,11 +11,13 @@ const PhotoSlider = dynamic(() => import("./PhotoSliderClient"), {
 interface SchoolDetailClientProps {
   imageUrls: string[];
   schoolName?: string;
+  onImageClick?: (index: number) => void;
 }
 
 export function SchoolDetailClient({
   imageUrls,
-  schoolName
+  schoolName,
+  onImageClick
 }: SchoolDetailClientProps) {
   const [visible, setVisible] = useState(false);
   const [index, setIndex] = useState(0);
@@ -24,17 +25,17 @@ export function SchoolDetailClient({
   const openSlider = (i: number) => {
     setIndex(i);
     setVisible(true);
+    onImageClick?.(i);
   };
 
   // For mobile: Just the "Ver más imágenes" button
   if (imageUrls.length <= 1) {
-    return null; // No interactivity needed for single image
+    return null;
   }
 
-  // Return mobile button + desktop interactive overlay
   return (
     <>
-      {/* Mobile "Ver más imágenes" button - rendered in mobile view section */}
+      {/* Mobile "Ver más imágenes" button */}
       <div className="lg:hidden">
         <button
           onClick={() => openSlider(0)}
@@ -44,27 +45,8 @@ export function SchoolDetailClient({
         </button>
       </div>
 
-      {/* Desktop interactive overlay */}
-      <div className="hidden lg:block">
-        <div className="grid grid-cols-6 grid-rows-1 gap-2 absolute inset-0 pointer-events-none">
-          {imageUrls.slice(0, 5).map((_, i) => (
-            <div
-              key={i}
-              onClick={() => openSlider(i)}
-              className={`relative aspect-[3/2] cursor-zoom-in group bg-gray-100 rounded-lg ${
-                i < 2 ? "col-span-3" : "col-span-2"
-              } row-span-1 pointer-events-auto transition hover:brightness-90 overflow-hidden`}
-            >
-              <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 rounded-lg transition">
-                <ZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* PhotoSlider modal - only rendered when visible */}
-      {visible && PhotoSlider && (
+      {visible && (
         <PhotoSlider
           images={imageUrls.map((src, idx) => ({
             key: `img-${idx}`,
@@ -80,4 +62,20 @@ export function SchoolDetailClient({
       )}
     </>
   );
+}
+
+// Export a helper function to attach click handlers to desktop images
+export function attachImageClickHandlers(openSlider: (index: number) => void) {
+  if (typeof window === "undefined") return;
+
+  const desktopGallery = document.querySelector(".desktop-gallery-interactive");
+  if (!desktopGallery) return;
+
+  desktopGallery.querySelectorAll("[data-image-index]").forEach((element) => {
+    element.addEventListener("click", (e) => {
+      const index = parseInt((element as HTMLElement).dataset.imageIndex || "0");
+      openSlider(index);
+      e.stopPropagation();
+    });
+  });
 }
