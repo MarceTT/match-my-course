@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl'
+import { subcategoriaToCursoSlug } from '@/lib/courseMap'
 
 /**
  * Extracts YouTube video ID from various URL formats
@@ -35,25 +37,6 @@ function extractYouTubeId(url: string): string | null {
 }
 
 /**
- * Extracts Vimeo video ID from URL
- */
-function extractVimeoId(url: string): string | null {
-  if (!url) return null
-
-  try {
-    const urlObj = new URL(url)
-    if (urlObj.hostname.includes('vimeo.com')) {
-      return urlObj.pathname.split('/').filter(Boolean).pop() || null
-    }
-  } catch {
-    const match = url.match(/vimeo\.com\/(\d+)/)
-    return match?.[1] || null
-  }
-
-  return null
-}
-
-/**
  * Type definitions
  */
 type SchoolWithVideo = {
@@ -62,57 +45,68 @@ type SchoolWithVideo = {
   city: string
   urlVideo: string
   updatedAt?: string
+  subcategoria?: string
+  url?: string
 }
 
 type EducationalVideo = {
-  url: string
+  youtubeUrl: string
   title: string
   description: string
   publicationDate: string
+  slug: string
 }
 
 type VideoEntry = {
-  url: string
+  pageUrl: string // URL de la página en tu sitio
   title: string
   description: string
   thumbnailUrl: string
-  contentUrl: string
+  playerUrl: string // URL del player embebido
   publicationDate: string
+  uploadDate?: string
+  duration?: string
 }
 
 /**
- * Hardcoded educational videos about studying in Ireland
+ * Educational videos about studying in Ireland
+ * These will be accessible at /videos/[slug]
  */
 const EDUCATIONAL_VIDEOS: EducationalVideo[] = [
   {
-    url: 'https://www.youtube.com/watch?v=M5aakNAUotw',
-    title: '¿Cuándo puedo trabajar en Irlanda? 🇮🇪 Guía 2025 para estudiantes',
+    youtubeUrl: 'https://www.youtube.com/watch?v=M5aakNAUotw',
+    title: '¿Cuándo puedo trabajar en Irlanda? Guía 2025 para estudiantes',
     description: '¿Vas a estudiar inglés en Irlanda en 2025 y vienes de Chile, México, Argentina, Uruguay, Costa Rica o Panamá? En este video te explicamos paso a paso cuándo puedes empezar a trabajar legalmente con el permiso de estudio y trabajo, conocido oficialmente como Stamp 2.',
-    publicationDate: '2025-05-17T12:00:00+00:00',
+    publicationDate: '2024-11-17T12:00:00+00:00',
+    slug: 'cuando-puedo-trabajar-irlanda-2025',
   },
   {
-    url: 'https://www.youtube.com/watch?v=lOa8lh2RKMw',
-    title: 'Requisitos para el Permiso de Estudio y Trabajo de Irlanda 🇮🇪',
+    youtubeUrl: 'https://www.youtube.com/watch?v=lOa8lh2RKMw',
+    title: 'Requisitos para el Permiso de Estudio y Trabajo de Irlanda',
     description: '¿Quieres estudiar inglés y trabajar legalmente en Irlanda en 2025? En este vídeo explicamos de forma clara y directa cuáles son los requisitos oficiales para estudiar inglés y trabajar legalmente en Irlanda en 2025.',
-    publicationDate: '2025-05-17T12:00:00+00:00',
+    publicationDate: '2024-11-17T12:00:00+00:00',
+    slug: 'requisitos-permiso-estudio-trabajo-irlanda-2025',
   },
   {
-    url: 'https://www.youtube.com/watch?v=c0pqehnu4Ds',
-    title: '¿Qué es el permiso de estudio y trabajo en Irlanda? 2025 🇮🇪',
+    youtubeUrl: 'https://www.youtube.com/watch?v=c0pqehnu4Ds',
+    title: '¿Qué es el permiso de estudio y trabajo en Irlanda? 2025',
     description: 'En este video te explico todo sobre el permiso de estudio y trabajo en Irlanda 2025, también conocido (aunque erróneamente) como "visa de estudiante".',
-    publicationDate: '2025-05-17T12:00:00+00:00',
+    publicationDate: '2024-11-17T12:00:00+00:00',
+    slug: 'que-es-permiso-estudio-trabajo-irlanda-2025',
   },
   {
-    url: 'https://www.youtube.com/watch?v=z9VVnkAW7CM',
-    title: 'Alojamiento en Irlanda para estudiantes 2025 🇮🇪',
+    youtubeUrl: 'https://www.youtube.com/watch?v=z9VVnkAW7CM',
+    title: 'Alojamiento en Irlanda para estudiantes 2025',
     description: 'En este video te explicamos las tres opciones principales de alojamiento ofrecidas por las escuelas de inglés en Irlanda: Host Family, Residencia de estudiantes ó Accommodation compartido',
-    publicationDate: '2025-05-17T12:00:00+00:00',
+    publicationDate: '2024-11-17T12:00:00+00:00',
+    slug: 'alojamiento-irlanda-estudiantes-2025',
   },
   {
-    url: 'https://www.youtube.com/watch?v=a2EI6gP6qBE',
-    title: 'Cómo reservar tu cita en Migración Irlanda ✈️ (IRP Visa)',
+    youtubeUrl: 'https://www.youtube.com/watch?v=a2EI6gP6qBE',
+    title: 'Cómo reservar tu cita en Migración Irlanda (IRP Visa)',
     description: '¿Estás estudiando en Irlanda y necesitas sacar tu IRP (Irish Residence Permit)? En este video te muestro paso a paso cómo solicitar, reagendar o cancelar tu cita en el portal de inmigración ISD. Ideal para estudiantes internacionales con visa Stamp 2.',
-    publicationDate: '2025-05-17T12:00:00+00:00',
+    publicationDate: '2024-11-17T12:00:00+00:00',
+    slug: 'reservar-cita-migracion-irlanda-irp',
   },
 ]
 
@@ -139,11 +133,11 @@ async function fetchWithTimeout(
 }
 
 /**
- * Fetch schools with videos from backend
+ * Fetch schools with videos from backend SEO endpoint
  */
 async function fetchSchoolsWithVideos(): Promise<SchoolWithVideo[]> {
   try {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/videos/list`
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/seo/course/schools`
     const res = await fetchWithTimeout(url, { timeoutMs: 5000 })
 
     if (!res.ok) {
@@ -152,21 +146,21 @@ async function fetchSchoolsWithVideos(): Promise<SchoolWithVideo[]> {
     }
 
     const json = await res.json()
+    const entries = Array.isArray(json?.data) ? json.data : []
 
-    // Handle the response format from /api/schools/videos/list endpoint
-    const schools = json?.data?.schools || []
+    console.log(`[Sitemap-Video] Received ${entries.length} schools from backend`)
 
-    console.log(`[Sitemap-Video] Received ${schools.length} schools from backend`)
-
-    // Filter schools that have videos (should all have them from this endpoint)
-    const filtered = schools
-      .filter((school: any) => school?.urlVideo && typeof school.urlVideo === 'string')
-      .map((school: any) => ({
-        schoolId: school._id || school.id,
-        name: school.name,
-        city: school.city,
-        urlVideo: school.urlVideo,
-        updatedAt: school.updatedAt || school.updated_at,
+    // Filter schools that have videos
+    const filtered = entries
+      .filter((entry: any) => entry?.urlVideo && typeof entry.urlVideo === 'string')
+      .map((entry: any) => ({
+        schoolId: entry.schoolId || entry._id || entry.id,
+        name: entry.escuela || entry.name,
+        city: entry.ciudad || entry.city,
+        urlVideo: entry.urlVideo,
+        updatedAt: entry.updatedAt || entry.updated_at,
+        subcategoria: entry.subcategoria,
+        url: entry.url,
       }))
 
     console.log(`[Sitemap-Video] Filtered to ${filtered.length} schools with valid video URLs`)
@@ -184,13 +178,17 @@ function generateSitemapXML(videos: VideoEntry[]): string {
   const videoEntries = videos
     .map(
       (video) => `  <url>
-    <loc>${escapeXml(video.url)}</loc>
+    <loc>${escapeXml(video.pageUrl)}</loc>
     <video:video>
       <video:thumbnail_loc>${escapeXml(video.thumbnailUrl)}</video:thumbnail_loc>
       <video:title>${escapeXml(video.title)}</video:title>
       <video:description>${escapeXml(video.description)}</video:description>
-      <video:content_loc>${escapeXml(video.contentUrl)}</video:content_loc>
+      <video:player_loc allow_embed="yes">${escapeXml(video.playerUrl)}</video:player_loc>
+      ${video.uploadDate ? `<video:upload_date>${video.uploadDate}</video:upload_date>` : ''}
       <video:publication_date>${video.publicationDate}</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:live>no</video:live>
     </video:video>
   </url>`
     )
@@ -216,51 +214,67 @@ function escapeXml(unsafe: string): string {
 }
 
 /**
- * Format date to ISO 8601
- */
-function formatDate(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date
-  return d.toISOString().split('T')[0]
-}
-
-/**
  * Convert educational video to VideoEntry format
  */
-function convertEducationalVideoToEntry(video: EducationalVideo): VideoEntry | null {
-  const youtubeId = extractYouTubeId(video.url)
+function convertEducationalVideoToEntry(
+  video: EducationalVideo,
+  baseUrl: string
+): VideoEntry | null {
+  const youtubeId = extractYouTubeId(video.youtubeUrl)
   if (!youtubeId) return null
 
-  const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/0.jpg`
-  const contentUrl = `https://www.youtube.com/embed/${youtubeId}`
+  const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+  const playerUrl = `https://www.youtube.com/embed/${youtubeId}`
+
+  // IMPORTANTE: La URL debe ser de TU sitio, no de YouTube
+  const pageUrl = `${baseUrl}/videos/${video.slug}`
 
   return {
-    url: video.url,
+    pageUrl,
     title: video.title,
     description: video.description,
     thumbnailUrl,
-    contentUrl,
+    playerUrl,
     publicationDate: video.publicationDate,
+    uploadDate: video.publicationDate,
   }
 }
 
 /**
  * Convert school video to VideoEntry format
  */
-function convertSchoolVideoToEntry(school: SchoolWithVideo): VideoEntry | null {
+function convertSchoolVideoToEntry(
+  school: SchoolWithVideo,
+  baseUrl: string
+): VideoEntry | null {
   const youtubeId = extractYouTubeId(school.urlVideo)
   if (!youtubeId) return null
 
-  const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/0.jpg`
-  const contentUrl = `https://www.youtube.com/embed/${youtubeId}`
+  const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
+  const playerUrl = `https://www.youtube.com/embed/${youtubeId}`
   const publicationDate = school.updatedAt || new Date().toISOString()
 
+  // Build school page URL
+  let pageUrl = `${baseUrl}/school/${school.schoolId}`
+
+  // Try to build SEO-friendly URL if we have the data
+  if (school.subcategoria && school.url) {
+    const slugCurso = subcategoriaToCursoSlug[school.subcategoria]
+    const slugEscuela = extractSlugEscuelaFromSeoUrl(school.url)
+
+    if (slugCurso && slugEscuela) {
+      pageUrl = `${baseUrl}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`
+    }
+  }
+
   return {
-    url: school.urlVideo,
-    title: school.name,
-    description: `Video de ${school.name} - ${school.city}`,
+    pageUrl,
+    title: `Video de ${school.name} - Escuela de inglés en ${school.city}`,
+    description: `Conoce ${school.name}, una escuela de inglés en ${school.city}, Irlanda. Descubre sus instalaciones, profesores y ambiente de estudio en este video.`,
     thumbnailUrl,
-    contentUrl,
+    playerUrl,
     publicationDate,
+    uploadDate: publicationDate,
   }
 }
 
@@ -269,17 +283,23 @@ function convertSchoolVideoToEntry(school: SchoolWithVideo): VideoEntry | null {
  */
 export async function GET() {
   try {
-    const videos: VideoEntry[] = []
-    const seenUrls = new Set<string>()
+    const baseUrl = (
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      'https://matchmycourse.com'
+    ).replace(/\/$/, '')
 
-    // Add educational videos
+    const videos: VideoEntry[] = []
+    const seenPageUrls = new Set<string>()
+
+    // Add educational videos (accessible at /videos/[slug])
     try {
       let educationalCount = 0
       EDUCATIONAL_VIDEOS.forEach((video) => {
-        const entry = convertEducationalVideoToEntry(video)
-        if (entry && !seenUrls.has(video.url)) {
+        const entry = convertEducationalVideoToEntry(video, baseUrl)
+        if (entry && !seenPageUrls.has(entry.pageUrl)) {
           videos.push(entry)
-          seenUrls.add(video.url)
+          seenPageUrls.add(entry.pageUrl)
           educationalCount++
         }
       })
@@ -288,19 +308,17 @@ export async function GET() {
       console.error('[Sitemap-Video] Error processing educational videos:', error)
     }
 
-    // Add school videos
+    // Add school videos (accessible at school detail pages)
     try {
       const schoolsWithVideos = await fetchSchoolsWithVideos()
 
       let schoolCount = 0
       schoolsWithVideos.forEach((school) => {
-        if (!seenUrls.has(school.urlVideo)) {
-          const entry = convertSchoolVideoToEntry(school)
-          if (entry) {
-            videos.push(entry)
-            seenUrls.add(school.urlVideo)
-            schoolCount++
-          }
+        const entry = convertSchoolVideoToEntry(school, baseUrl)
+        if (entry && !seenPageUrls.has(entry.pageUrl)) {
+          videos.push(entry)
+          seenPageUrls.add(entry.pageUrl)
+          schoolCount++
         }
       })
 
@@ -316,7 +334,8 @@ export async function GET() {
     return new NextResponse(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=172800',
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200',
+        'X-Robots-Tag': 'all',
       },
     })
   } catch (error) {
