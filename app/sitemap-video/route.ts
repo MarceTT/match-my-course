@@ -248,7 +248,10 @@ function convertSchoolVideoToEntry(
   baseUrl: string
 ): VideoEntry | null {
   const youtubeId = extractYouTubeId(school.urlVideo)
-  if (!youtubeId) return null
+  if (!youtubeId) {
+    console.log(`[Sitemap-Video] No YouTube ID extracted for school: ${school.name}, urlVideo: ${school.urlVideo}`)
+    return null
+  }
 
   const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`
   const playerUrl = `https://www.youtube.com/embed/${youtubeId}`
@@ -264,7 +267,11 @@ function convertSchoolVideoToEntry(
 
     if (slugCurso && slugEscuela) {
       pageUrl = `${baseUrl}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`
+    } else {
+      console.log(`[Sitemap-Video] Failed to build SEO URL for ${school.name}: slugCurso=${slugCurso}, slugEscuela=${slugEscuela}`)
     }
+  } else {
+    console.log(`[Sitemap-Video] Missing subcategoria or url for ${school.name}, using fallback URL: ${pageUrl}`)
   }
 
   return {
@@ -311,18 +318,34 @@ export async function GET() {
     // Add school videos (accessible at school detail pages)
     try {
       const schoolsWithVideos = await fetchSchoolsWithVideos()
+      console.log(`[Sitemap-Video] Fetched ${schoolsWithVideos.length} schools with videos`)
 
       let schoolCount = 0
+      let skippedNoEntry = 0
+      let skippedDuplicate = 0
+
       schoolsWithVideos.forEach((school) => {
         const entry = convertSchoolVideoToEntry(school, baseUrl)
-        if (entry && !seenPageUrls.has(entry.pageUrl)) {
-          videos.push(entry)
-          seenPageUrls.add(entry.pageUrl)
-          schoolCount++
+
+        if (!entry) {
+          skippedNoEntry++
+          console.log(`[Sitemap-Video] Skipped school (no entry generated): ${school.name}`)
+          return
         }
+
+        if (seenPageUrls.has(entry.pageUrl)) {
+          skippedDuplicate++
+          console.log(`[Sitemap-Video] Skipped school (duplicate URL): ${school.name} - ${entry.pageUrl}`)
+          return
+        }
+
+        videos.push(entry)
+        seenPageUrls.add(entry.pageUrl)
+        schoolCount++
       })
 
       console.log(`[Sitemap-Video] Added ${schoolCount} school video entries`)
+      console.log(`[Sitemap-Video] Skipped ${skippedNoEntry} (no entry), ${skippedDuplicate} (duplicate)`)
     } catch (error) {
       console.error('[Sitemap-Video] Error adding school videos:', error)
     }
