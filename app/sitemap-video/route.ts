@@ -133,12 +133,13 @@ async function fetchWithTimeout(
 }
 
 /**
- * Fetch schools with videos from backend SEO endpoint
+ * Fetch schools with videos from backend
+ * Using /schools/videos/list endpoint which returns only schools that have urlVideo populated
  */
 async function fetchSchoolsWithVideos(): Promise<SchoolWithVideo[]> {
   try {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/seo/course/schools`
-    const res = await fetchWithTimeout(url, { timeoutMs: 5000 })
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/videos/list`
+    const res = await fetchWithTimeout(url, { timeoutMs: 8000 })
 
     if (!res.ok) {
       console.error(`[Sitemap-Video] Backend responded with ${res.status}`)
@@ -146,21 +147,27 @@ async function fetchSchoolsWithVideos(): Promise<SchoolWithVideo[]> {
     }
 
     const json = await res.json()
-    const entries = Array.isArray(json?.data) ? json.data : []
+    const schools = Array.isArray(json?.data?.schools) ? json.data.schools : []
 
-    console.log(`[Sitemap-Video] Received ${entries.length} schools from backend`)
+    console.log(`[Sitemap-Video] Received ${schools.length} schools with videos from backend`)
 
-    // Filter schools that have videos
-    const filtered = entries
-      .filter((entry: any) => entry?.urlVideo && typeof entry.urlVideo === 'string')
-      .map((entry: any) => ({
-        schoolId: entry.schoolId || entry._id || entry.id,
-        name: entry.escuela || entry.name,
-        city: entry.ciudad || entry.city,
-        urlVideo: entry.urlVideo,
-        updatedAt: entry.updatedAt || entry.updated_at,
-        subcategoria: entry.subcategoria,
-        url: entry.url,
+    // All schools from this endpoint already have videos, but we still validate
+    const filtered = schools
+      .filter((school: any) => {
+        const hasVideo = school?.urlVideo && typeof school.urlVideo === 'string' && school.urlVideo.trim() !== ''
+        if (!hasVideo) {
+          console.log(`[Sitemap-Video] School "${school.name}" has invalid urlVideo:`, school.urlVideo)
+        }
+        return hasVideo
+      })
+      .map((school: any) => ({
+        schoolId: school._id,
+        name: school.name,
+        city: school.city,
+        urlVideo: school.urlVideo,
+        updatedAt: school.updatedAt || school.updated_at || new Date().toISOString(),
+        subcategoria: school.subcategoria,
+        url: school.url,
       }))
 
     console.log(`[Sitemap-Video] Filtered to ${filtered.length} schools with valid video URLs`)
