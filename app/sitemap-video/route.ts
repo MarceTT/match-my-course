@@ -139,17 +139,31 @@ async function fetchWithTimeout(
 async function fetchSchoolsWithVideos(): Promise<SchoolWithVideo[]> {
   try {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/schools/videos/list`
+    console.log(`[Sitemap-Video] Fetching schools from: ${url}`)
+
     const res = await fetchWithTimeout(url, { timeoutMs: 8000 })
 
     if (!res.ok) {
-      console.error(`[Sitemap-Video] Backend responded with ${res.status}`)
+      console.error(`[Sitemap-Video] Backend responded with ${res.status} ${res.statusText}`)
+      const errorText = await res.text().catch(() => 'Unable to read error')
+      console.error(`[Sitemap-Video] Error response:`, errorText)
       return []
     }
 
     const json = await res.json()
+    console.log(`[Sitemap-Video] Raw response structure:`, {
+      hasData: !!json?.data,
+      hasSchools: !!json?.data?.schools,
+      isArray: Array.isArray(json?.data?.schools),
+      keys: Object.keys(json || {})
+    })
+
     const schools = Array.isArray(json?.data?.schools) ? json.data.schools : []
 
     console.log(`[Sitemap-Video] Received ${schools.length} schools with videos from backend`)
+    if (schools.length > 0) {
+      console.log(`[Sitemap-Video] First school sample:`, schools[0])
+    }
 
     // All schools from this endpoint already have videos, but we still validate
     const filtered = schools
