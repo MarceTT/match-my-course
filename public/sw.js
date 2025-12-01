@@ -50,14 +50,24 @@ const CACHE_STRATEGIES = {
 // Instalar Service Worker
 self.addEventListener('install', (event) => {
   console.log('[SW] Installing...');
-  
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[SW] Caching critical assets');
-        return cache.addAll(CRITICAL_ASSETS);
+        // Cache each asset individually to avoid failing if one asset fails
+        return Promise.all(
+          CRITICAL_ASSETS.map((url) => {
+            return cache.add(url).catch((error) => {
+              console.warn(`[SW] Failed to cache ${url}:`, error.message);
+              // Continue even if this asset fails
+              return null;
+            });
+          })
+        );
       })
       .then(() => {
+        console.log('[SW] Critical assets cached successfully');
         // Force activate para actualizar inmediatamente
         return self.skipWaiting();
       })
