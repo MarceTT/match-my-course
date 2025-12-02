@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   openGraph: {
     locale: "es_ES",
     type: "website",
-    url: "https://matchmycourse.com",
     siteName: "MatchMyCourse",
     title: "MatchMyCourse — Encuentra y compara cursos en el extranjero",
     description: "Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más.",
