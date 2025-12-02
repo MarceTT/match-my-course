@@ -6,7 +6,7 @@ import React from 'react'
     const router = useRouter()
     
     const goSearchSchool = () => {
-      router.push('/school-search?course=ingles-general')
+      router.push('/buscador-cursos-de-ingles?course=ingles-general')
     }
 
     return (

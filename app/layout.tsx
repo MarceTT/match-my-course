@@ -219,7 +219,7 @@ export default function RootLayout({
             url: `${origin}/`,
             potentialAction: {
               '@type': 'SearchAction',
-              target: `${origin}/school-search?course={search_term_string}`,
+              target: `${origin}/buscador-cursos-de-ingles?course={search_term_string}`,
               'query-input': 'required name=search_term_string',
             },
           };
@@ -299,7 +299,7 @@ export default function RootLayout({
                         '/estudiar-ingles-nueva-zelanda',
                         '/cursos-ingles-extranjero',
                         '/blog',
-                        '/school-search'
+                        '/buscador-cursos-de-ingles'
                       ];
 
                       criticalRoutes.forEach(route => {

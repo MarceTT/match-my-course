@@ -175,7 +175,7 @@ function determineStrategy(url) {
       url.pathname.startsWith('/irlanda') ||
       url.pathname.startsWith('/nueva-zelanda') ||
       url.pathname.startsWith('/estudiar-ingles-') ||
-      url.pathname.includes('/school-search') ||
+      url.pathname.includes('/buscador-cursos-de-ingles') ||
       url.pathname.includes('/servicios') ||
       url.pathname.includes('/como-funciona') ||
       url.pathname.includes('/quienes-somos') ||

@@ -86,7 +86,7 @@ const CallToAction = () => {
       </div>
 
       <Button className="bg-[#FF385C] hover:bg-[#E51D58] text-white px-8 py-6 rounded-lg text-lg md:text-xl lg:text-2xl">
-        <Link href="/school-search?course=ingles-general" target="_blank">
+        <Link href="/buscador-cursos-de-ingles?course=ingles-general" target="_blank">
           Buscar mi escuela
         </Link>
       </Button>

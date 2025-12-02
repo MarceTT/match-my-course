@@ -151,7 +151,7 @@ const IndividualLessons = () => {
                     </div>
                     <div>
                       <Button className="bg-[#F1B607] w-full md:w-auto hover:bg-[#e6c35a] text-white">
-                        <Link href="/school-search?course=ingles-general-mas-sesiones-individuales" className="flex items-center justify-center">
+                        <Link href="/buscador-cursos-de-ingles?course=ingles-general-mas-sesiones-individuales" className="flex items-center justify-center">
                           <Search className="h-5 w-5 mr-2" />
                           Buscar cursos
                         </Link>

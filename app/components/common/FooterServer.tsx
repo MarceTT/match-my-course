@@ -102,7 +102,7 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                   </li>
                   <li>
                     <Link
-                      href="/school-search?course=ingles-general"
+                      href="/buscador-cursos-de-ingles?course=ingles-general"
                       className="hover:text-[#333] transition-colors"
                     >
                       Buscador de escuelas

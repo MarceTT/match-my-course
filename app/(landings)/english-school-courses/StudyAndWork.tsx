@@ -164,7 +164,7 @@ const StudyAndWork = () => {
 
                   <div>
                     <Button className="bg-[#233A81] w-full md:w-auto text-white">
-                      <Link href="/school-search?course=ingles-visa-de-trabajo" className="flex items-center justify-center">
+                      <Link href="/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo" className="flex items-center justify-center">
                         <Search className="h-5 w-5 mr-2" />
                         Buscar cursos
                       </Link>

@@ -67,7 +67,7 @@ const FilterWorksSection = () => {
               asChild
               className="block mx-auto w-fit items-center justify-center px-6 py-2 bg-[#5174fc] hover:bg-[#4257FF] text-white text-sm font-semibold rounded-md shadow transition"
             >
-              <Link href="/school-search?course=ingles-general" target="_blank">
+              <Link href="/buscador-cursos-de-ingles?course=ingles-general" target="_blank">
                 Quiero buscar mi escuela
               </Link>
             </Button>

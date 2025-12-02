@@ -38,10 +38,10 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
     sendGTMEvent("popup_cta_clicked", {
         popup_name: "special_offer",
         page_path: window.location.pathname,
-        target_url: "/school-search?course=ingles-visa-de-trabajo",
+        target_url: "/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo",
       });
     markAsDismissed();
-    router.push("/school-search?course=ingles-visa-de-trabajo");
+    router.push("/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo");
   };
 
   // Mostrar solo cuando el usuario scrollea lo suficiente

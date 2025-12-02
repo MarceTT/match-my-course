@@ -12,7 +12,7 @@ const Features = () => {
         {
           image: '/features-images/COMO_FUNCIONA_PRINCIPAL.svg',
           text: 'Requisitos visas de estudio',
-          url: '/school-search?course=todos'
+          url: '/buscador-cursos-de-ingles?course=todos'
         },
         {
           image: '/features-images/MATCH_PRINCIPAL.svg',

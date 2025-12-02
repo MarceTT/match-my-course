@@ -150,7 +150,7 @@ const GeneralEnglish = () => {
                     </div>
                     <div>
                       <Button className="bg-[#41B93B] w-full md:w-auto hover:bg-[#289822] text-white">
-                        <Link href="/school-search?course=ingles-general" className="flex items-center justify-center">
+                        <Link href="/buscador-cursos-de-ingles?course=ingles-general" className="flex items-center justify-center">
                           <Search className="h-5 w-5 mr-2" />
                           Buscar cursos
                         </Link>

@@ -117,6 +117,11 @@ const nextConfig: NextConfig = {
       },
       // English to Spanish redirects (Spanish URLs are canonical)
       {
+        source: '/school-search',
+        destination: '/buscador-cursos-de-ingles',
+        permanent: true,
+      },
+      {
         source: '/services',
         destination: '/servicios-matchmycourse',
         permanent: true,
@@ -181,6 +186,11 @@ const nextConfig: NextConfig = {
       {
         source: '/formulario-registro-matchmycourse',
         destination: '/form-registro-mmc',
+      },
+      // SEO-friendly Spanish URL for school search
+      {
+        source: '/buscador-cursos-de-ingles',
+        destination: '/school-search',
       },
       // Rewrite Spanish canonical URLs to their English page implementations
       // This allows Spanish URLs to be canonical while using English page files

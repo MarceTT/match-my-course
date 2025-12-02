@@ -71,7 +71,7 @@ const SchoolSearch = () => {
       }
     });
 
-    router.replace(`/school-search?${params.toString()}`);
+    router.replace(`/buscador-cursos-de-ingles?${params.toString()}`);
   }, [debouncedFilters, router]);
 
   const { data: schoolsData, isLoading, isError } = useFilteredSchools(filters);

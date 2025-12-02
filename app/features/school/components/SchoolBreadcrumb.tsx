@@ -42,7 +42,7 @@ export default function SchoolBreadcrumb({
           {/* Course Category */}
           <li>
             <Link
-              href={`/school-search?course=${slugCurso}`}
+              href={`/buscador-cursos-de-ingles?course=${slugCurso}`}
               className="text-blue-600 hover:text-blue-800 hover:underline transition-colors font-medium"
               title={`Ver todos los ${courseCategory.toLowerCase()}`}
             >

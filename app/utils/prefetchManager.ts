@@ -48,7 +48,7 @@ class PrefetchManager {
 
         // Blog and search
         '/blog',
-        '/school-search',
+        '/buscador-cursos-de-ingles',
 
         // Secondary pages
         '/testimonios',

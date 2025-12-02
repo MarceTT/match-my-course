@@ -329,7 +329,7 @@ export default function ContactForm() {
               y necesidades a través de nuestro filtro inteligente.
             </p>
             <a
-              href="/school-search?course=ingles-general"
+              href="/buscador-cursos-de-ingles?course=ingles-general"
               className="inline-block px-6 py-3 bg-black text-white text-lg rounded-full"
             >
               Buscar escuela

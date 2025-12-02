@@ -57,7 +57,7 @@ export default function NotFound() {
             Ir al inicio ahora
           </Link>
           <Link
-            href="/school-search"
+            href="/buscador-cursos-de-ingles"
             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             Buscar escuelas

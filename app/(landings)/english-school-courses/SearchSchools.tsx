@@ -48,7 +48,7 @@ const SearchSchools = () => {
                   size="lg"
                   className="bg-[#5271FF] hover:bg-[#5271FF] text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  <Link href="/school-search?course=ingles-general" target="_blank">
+                  <Link href="/buscador-cursos-de-ingles?course=ingles-general" target="_blank">
                     Buscar curso
                   </Link>
                 </Button>

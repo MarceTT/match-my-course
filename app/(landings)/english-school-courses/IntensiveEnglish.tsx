@@ -148,7 +148,7 @@ const IntensiveEnglish = () => {
                     </div>
                     <div>
                     <Button className="bg-[#5271FF] w-full md:w-auto hover:bg-[#5271FF] text-white">
-                      <Link href="/school-search?course=ingles-general-intensivo" target="_blank" className="flex items-center justify-center">
+                      <Link href="/buscador-cursos-de-ingles?course=ingles-general-intensivo" target="_blank" className="flex items-center justify-center">
                           <Search className="mr-2 h-4 w-4" />
                         Buscar curso
                       </Link>

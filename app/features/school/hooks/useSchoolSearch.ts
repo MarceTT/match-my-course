@@ -15,7 +15,7 @@ export const useSchoolSearch = (params: Params) => {
   return useQuery({
     queryKey: ['schools', params],
     queryFn: async () => {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/school-search`, { params });
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/buscador-cursos-de-ingles`, { params });
       return data.data;
     },
     enabled: !!params.q || !!params.city // evita fetch vacío si no hay filtros

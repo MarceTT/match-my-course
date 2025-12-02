@@ -42,7 +42,7 @@ export default function HeroClient() {
       course_id: normalizedId ?? null,
     });
     if (normalizedId) {
-      router.push(`/school-search?course=${encodeURIComponent(normalizedId)}`);
+      router.push(`/buscador-cursos-de-ingles?course=${encodeURIComponent(normalizedId)}`);
     }
   };
 

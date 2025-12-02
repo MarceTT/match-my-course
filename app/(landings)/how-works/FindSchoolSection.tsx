@@ -59,7 +59,7 @@ const FindSchoolSection = () => {
               className="w-fit px-6 py-2 bg-[#5174fc] hover:bg-[#4257FF] text-white text-sm font-semibold rounded-md shadow transition"
             >
               <Link
-                href="/school-search?course=ingles-visa-de-trabajo"
+                href="/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo"
                 target="_blank"
               >
                 Encuentra tu escuela

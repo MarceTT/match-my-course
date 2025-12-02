@@ -17,6 +17,14 @@ const ORIGIN = (
   'https://matchmycourse.com'
 ).replace(/\/$/, '');
 export const metadata: Metadata = {
-  alternates: { canonical: `${ORIGIN}/school-search` },
-  robots: { index: false, follow: true },
+  title: 'Buscador de Cursos de Inglés en el Extranjero | MatchMyCourse',
+  description: 'Encuentra y compara cursos de inglés en Irlanda, Nueva Zelanda y más destinos. Filtra por ciudad, horario, duración y precio. Reserva gratis con MatchMyCourse.',
+  alternates: { canonical: `${ORIGIN}/buscador-cursos-de-ingles` },
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: 'Buscador de Cursos de Inglés | MatchMyCourse',
+    description: 'Encuentra y compara cursos de inglés en el extranjero. Filtra por ciudad, horario, duración y precio.',
+    url: `${ORIGIN}/buscador-cursos-de-ingles`,
+    type: 'website',
+  },
 };

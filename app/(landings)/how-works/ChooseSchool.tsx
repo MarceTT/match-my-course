@@ -39,7 +39,7 @@ const ChooseSchool = () => {
             asChild
             className="bg-[#5174fc] hover:bg-[#4257FF] text-white px-6 py-2 text-lg font-semibold rounded-md transition-colors"
           >
-            <Link href="/school-search?course=ingles-general" target="_blank">
+            <Link href="/buscador-cursos-de-ingles?course=ingles-general" target="_blank">
               Quiero buscar mi escuela
             </Link>
           </Button>
