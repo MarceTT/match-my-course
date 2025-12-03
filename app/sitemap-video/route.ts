@@ -262,6 +262,30 @@ function convertEducationalVideoToEntry(
 }
 
 /**
+ * Manual mapping of school names to SEO URLs
+ * TODO: Backend should return subcategoria and url fields in /schools/videos/list endpoint
+ */
+const schoolNameToSeoUrl: Record<string, string> = {
+  'Castleforbes College': '/cursos/ingles-general-intensivo/escuelas/castleforbes-college',
+  'Celtic School of English': '/cursos/ingles-general-intensivo/escuelas/celtic-school-of-english',
+  'EC Dublin': '/cursos/ingles-general-intensivo/escuelas/ec-dublin',
+  'Future Learning Language School': '/cursos/ingles-general-intensivo/escuelas/future-learning-language-school-athlone',
+  'IBAT College': '/cursos/ingles-general-intensivo/escuelas/ibat-college',
+  'Irish College of English': '/cursos/ingles-general-intensivo/escuelas/irish-college-of-english',
+  'Killarney School of English': '/cursos/ingles-general-intensivo/escuelas/killarney-school-of-english',
+  'Swan Training Institute': '/cursos/ingles-general-intensivo/escuelas/swan-training-institute',
+  'University of Limerick Language Centre': '/cursos/ingles-general-intensivo/escuelas/university-of-limerick-language-centre',
+  'Apollo Language Centre': '/cursos/ingles-general-intensivo/escuelas/apollo-language-centre',
+  'ATC Language Schools': '/cursos/ingles-general-intensivo/escuelas/atc-language-schools-dublin',
+  'Centre of English Studies (CES)': '/cursos/ingles-general-intensivo/escuelas/centre-of-english-studies-dublin',
+  'Cork English College (CEC)': '/cursos/ingles-general-intensivo/escuelas/cork-english-college',
+  'Emerald Cultural Institute': '/cursos/ingles-general-intensivo/escuelas/emerald-cultural-institute',
+  'Galway Cultural Institute': '/cursos/ingles-general-intensivo/escuelas/galway-cultural-institute',
+  'The Linguaviva Centre': '/cursos/ingles-general-intensivo/escuelas/the-linguaviva-centre',
+  'University College Cork (UCC)': '/cursos/ingles-general-intensivo/escuelas/university-college-cork',
+};
+
+/**
  * Convert school video to VideoEntry format
  */
 function convertSchoolVideoToEntry(
@@ -278,21 +302,27 @@ function convertSchoolVideoToEntry(
   const playerUrl = `https://www.youtube.com/embed/${youtubeId}`
   const publicationDate = school.updatedAt || new Date().toISOString()
 
-  // Build school page URL
-  let pageUrl = `${baseUrl}/school/${school.schoolId}`
+  // Try to use manual SEO URL mapping first
+  const seoPath = schoolNameToSeoUrl[school.name]
+  let pageUrl: string
 
-  // Try to build SEO-friendly URL if we have the data
-  if (school.subcategoria && school.url) {
+  if (seoPath) {
+    pageUrl = `${baseUrl}${seoPath}`
+    console.log(`[Sitemap-Video] Using SEO URL for ${school.name}: ${pageUrl}`)
+  } else if (school.subcategoria && school.url) {
+    // Fallback to building from subcategoria/url if available
     const slugCurso = subcategoriaToCursoSlug[school.subcategoria]
     const slugEscuela = extractSlugEscuelaFromSeoUrl(school.url)
 
     if (slugCurso && slugEscuela) {
       pageUrl = `${baseUrl}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`
     } else {
-      console.log(`[Sitemap-Video] Failed to build SEO URL for ${school.name}: slugCurso=${slugCurso}, slugEscuela=${slugEscuela}`)
+      console.warn(`[Sitemap-Video] No SEO URL mapping found for "${school.name}" and failed to build from data`)
+      pageUrl = `${baseUrl}/school/${school.schoolId}`
     }
   } else {
-    console.log(`[Sitemap-Video] Missing subcategoria or url for ${school.name}, using fallback URL: ${pageUrl}`)
+    console.warn(`[Sitemap-Video] No SEO URL mapping found for "${school.name}", using fallback`)
+    pageUrl = `${baseUrl}/school/${school.schoolId}`
   }
 
   return {
