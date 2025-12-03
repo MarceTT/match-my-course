@@ -263,26 +263,27 @@ function convertEducationalVideoToEntry(
 
 /**
  * Manual mapping of school names to SEO URLs
+ * Using 'ingles-general' as it's the most common course offered by all schools
  * TODO: Backend should return subcategoria and url fields in /schools/videos/list endpoint
  */
 const schoolNameToSeoUrl: Record<string, string> = {
-  'Castleforbes College': '/cursos/ingles-general-intensivo/escuelas/castleforbes-college',
-  'Celtic School of English': '/cursos/ingles-general-intensivo/escuelas/celtic-school-of-english',
-  'EC Dublin': '/cursos/ingles-general-intensivo/escuelas/ec-dublin',
-  'Future Learning Language School': '/cursos/ingles-general-intensivo/escuelas/future-learning-language-school-athlone',
-  'IBAT College': '/cursos/ingles-general-intensivo/escuelas/ibat-college',
-  'Irish College of English': '/cursos/ingles-general-intensivo/escuelas/irish-college-of-english',
-  'Killarney School of English': '/cursos/ingles-general-intensivo/escuelas/killarney-school-of-english',
-  'Swan Training Institute': '/cursos/ingles-general-intensivo/escuelas/swan-training-institute',
-  'University of Limerick Language Centre': '/cursos/ingles-general-intensivo/escuelas/university-of-limerick-language-centre',
-  'Apollo Language Centre': '/cursos/ingles-general-intensivo/escuelas/apollo-language-centre',
-  'ATC Language Schools': '/cursos/ingles-general-intensivo/escuelas/atc-language-schools-dublin',
-  'Centre of English Studies (CES)': '/cursos/ingles-general-intensivo/escuelas/centre-of-english-studies-dublin',
-  'Cork English College (CEC)': '/cursos/ingles-general-intensivo/escuelas/cork-english-college',
-  'Emerald Cultural Institute': '/cursos/ingles-general-intensivo/escuelas/emerald-cultural-institute',
-  'Galway Cultural Institute': '/cursos/ingles-general-intensivo/escuelas/galway-cultural-institute',
-  'The Linguaviva Centre': '/cursos/ingles-general-intensivo/escuelas/the-linguaviva-centre',
-  'University College Cork (UCC)': '/cursos/ingles-general-intensivo/escuelas/university-college-cork',
+  'Castleforbes College': '/cursos/ingles-general/escuelas/castleforbes-college',
+  'Celtic School of English': '/cursos/ingles-general/escuelas/celtic-school-of-english',
+  'EC Dublin': '/cursos/ingles-general/escuelas/ec-dublin',
+  'Future Learning Language School': '/cursos/ingles-general/escuelas/future-learning-language-school-athlone',
+  'IBAT College': '/cursos/ingles-general/escuelas/ibat-college',
+  'Irish College of English': '/cursos/ingles-general/escuelas/irish-college-of-english',
+  'Killarney School of English': '/cursos/ingles-general/escuelas/killarney-school-of-english',
+  'Swan Training Institute': '/cursos/ingles-general/escuelas/swan-training-institute',
+  'University of Limerick Language Centre': '/cursos/ingles-general/escuelas/university-of-limerick-language-centre',
+  'Apollo Language Centre': '/cursos/ingles-general/escuelas/apollo-language-centre',
+  'ATC Language Schools': '/cursos/ingles-general/escuelas/atc-language-schools-dublin',
+  'Centre of English Studies (CES)': '/cursos/ingles-general/escuelas/centre-of-english-studies-dublin',
+  'Cork English College (CEC)': '/cursos/ingles-general/escuelas/cork-english-college',
+  'Emerald Cultural Institute': '/cursos/ingles-general/escuelas/emerald-cultural-institute',
+  'Galway Cultural Institute': '/cursos/ingles-general/escuelas/galway-cultural-institute',
+  'The Linguaviva Centre': '/cursos/ingles-general/escuelas/the-linguaviva-centre',
+  'University College Cork (UCC)': '/cursos/ingles-general/escuelas/university-college-cork',
 };
 
 /**
