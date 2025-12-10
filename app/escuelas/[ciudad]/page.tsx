@@ -14,6 +14,7 @@ const ORIGIN = (
 ).replace(/\/$/, '');
 
 export const revalidate = 3600; // Revalidar cada hora
+export const dynamicParams = true; // Allow dynamic city pages beyond generateStaticParams
 
 type Props = {
   params: Promise<{ ciudad: string }>;
@@ -30,7 +31,7 @@ interface School {
   image?: string;
 }
 
-// Mapeo de slugs de ciudades a nombres reales
+// Mapeo de slugs de ciudades a nombres reales (fallback para ciudades conocidas)
 const citySlugMap: Record<string, string> = {
   'dublin': 'Dublin',
   'cork': 'Cork',
@@ -43,13 +44,28 @@ const citySlugMap: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  // Pre-generate pages for main cities
+  // Pre-generate only main cities at build time
+  // Other cities will be generated on-demand with dynamicParams = true
   return Object.keys(citySlugMap).map((ciudad) => ({ ciudad }));
+}
+
+// Helper function to normalize city name from slug
+function normalizeCityName(slug: string): string {
+  // Try known mapping first
+  if (citySlugMap[slug.toLowerCase()]) {
+    return citySlugMap[slug.toLowerCase()];
+  }
+
+  // Capitalize each word for unknown cities
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ciudad: ciudadSlug } = await params;
-  const cityName = citySlugMap[ciudadSlug.toLowerCase()] || ciudadSlug;
+  const cityName = normalizeCityName(ciudadSlug);
 
   return {
     title: `Escuelas de Inglés en ${cityName} | MatchMyCourse`,
@@ -67,11 +83,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CitySchoolsPage({ params }: Props) {
   const { ciudad: ciudadSlug } = await params;
-  const cityName = citySlugMap[ciudadSlug.toLowerCase()];
-
-  if (!cityName) {
-    notFound();
-  }
+  const cityName = normalizeCityName(ciudadSlug);
 
   let schools: School[] = [];
 
@@ -91,8 +103,15 @@ export default async function CitySchoolsPage({ params }: Props) {
     entries.forEach((entry) => {
       if (!entry || !entry.escuela || !entry.ciudad || !entry.url) return;
 
-      // Match city case-insensitively
-      if (entry.ciudad.toLowerCase() !== cityName.toLowerCase()) return;
+      // Normalize the entry city to slug for comparison
+      const entryCitySlug = entry.ciudad.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with dash
+        .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
+
+      // Match city by slug
+      if (entryCitySlug !== ciudadSlug.toLowerCase()) return;
 
       const slugCurso = subcategoriaToCursoSlug[entry.subcategoria] || 'ingles-general';
       const slugEscuela = extractSlugEscuelaFromSeoUrl(String(entry.url));
