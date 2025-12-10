@@ -108,6 +108,14 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                       Buscador de escuelas
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/escuelas"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Todas las escuelas
+                    </Link>
+                  </li>
                 </ul>
               </div>
 

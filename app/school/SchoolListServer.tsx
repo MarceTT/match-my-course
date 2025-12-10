@@ -1,6 +1,7 @@
 import School from "../components/School";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 // Lazy load pagination component which loads after schools are visible
 const ClientSchoolPagination = dynamic(() => import("./ClientSchoolPagination"), {
@@ -102,6 +103,47 @@ export default async function SchoolListServer() {
 
       {/* Client component handles infinite scroll and pagination */}
       <ClientSchoolPagination initialSchools={schools} />
+
+      {/* SEO Internal Links Section */}
+      <div className="mt-16 bg-white rounded-lg shadow-sm p-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          Explora Escuelas por Ciudad
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <Link
+            href="/escuelas/dublin"
+            className="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+          >
+            <span className="font-semibold text-gray-900">Dublin</span>
+          </Link>
+          <Link
+            href="/escuelas/cork"
+            className="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+          >
+            <span className="font-semibold text-gray-900">Cork</span>
+          </Link>
+          <Link
+            href="/escuelas/galway"
+            className="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+          >
+            <span className="font-semibold text-gray-900">Galway</span>
+          </Link>
+          <Link
+            href="/escuelas/limerick"
+            className="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+          >
+            <span className="font-semibold text-gray-900">Limerick</span>
+          </Link>
+        </div>
+        <div className="text-center">
+          <Link
+            href="/escuelas"
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Ver Todas las Escuelas
+          </Link>
+        </div>
+      </div>
     </>
   );
 }

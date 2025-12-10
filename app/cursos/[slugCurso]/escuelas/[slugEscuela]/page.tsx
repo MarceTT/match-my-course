@@ -29,6 +29,42 @@ const ORIGIN = (
 // ISR para performance
 export const revalidate = 900; // 15 minutos
 
+// Pre-generate static pages for top schools at build time
+export async function generateStaticParams() {
+  try {
+    const result: any = await fetchAllSeoEntries();
+    let entries: Array<any> = [];
+
+    if (Array.isArray(result)) {
+      entries = result;
+    } else if (result && typeof result === 'object' && 'data' in result) {
+      entries = Array.isArray(result.data) ? result.data : [];
+    }
+
+    // Generate params for all schools with all course types
+    const params: Array<{ slugCurso: string; slugEscuela: string }> = [];
+
+    entries.forEach((entry) => {
+      if (!entry || !entry.subcategoria || !entry.url) return;
+
+      const slugCurso = subcategoriaToCursoSlug[entry.subcategoria];
+      const slugEscuela = extractSlugEscuelaFromSeoUrl(String(entry.url));
+
+      if (slugCurso && slugEscuela) {
+        params.push({ slugCurso, slugEscuela });
+      }
+    });
+
+    console.log(`[generateStaticParams] Generated ${params.length} school pages for pre-rendering`);
+
+    // Return top 100 to avoid build time issues
+    return params.slice(0, 100);
+  } catch (error) {
+    console.error('[generateStaticParams] Error:', error);
+    return [];
+  }
+}
+
 export async function generateMetadata(ctx: Props): Promise<Metadata> {
   const { slugCurso, slugEscuela } = await ctx.params;
 
@@ -89,12 +125,21 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
     { url: ogImage, width: 1200, height: 675, alt: dynamicTitle, type: 'image/jpeg' },
   ] : [];
 
+  // Check if this specific URL combination should have noindex
+  // Note: Using the canonical slugs (after redirects from next.config.ts)
+  const shouldNoIndex = (
+    (slugCurso === 'ingles-general-orientado-a-negocios' && slugEscuela === 'cork-english-academy') ||
+    (slugCurso === 'ingles-visa-de-trabajo' && slugEscuela === 'cork-english-academy') ||
+    (slugCurso === 'ingles-visa-de-trabajo' && slugEscuela === 'future-learning-language-school-dublin') ||
+    (slugCurso === 'ingles-general-mas-sesiones-individuales' && slugEscuela === 'cork-english-academy')
+  );
+
   return {
     title: dynamicTitle,
     description: description,
     keywords: seoEntry.keywordPrincipal,
     alternates: { canonical: canonicalUrl },
-    robots: { index: true, follow: true },
+    robots: { index: !shouldNoIndex, follow: true },
     openGraph: {
       title: dynamicTitle,
       description: description,
