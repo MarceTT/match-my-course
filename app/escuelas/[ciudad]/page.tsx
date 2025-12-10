@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { fetchAllSeoEntries } from '@/app/actions/seo';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
 import { subcategoriaToCursoSlug } from '@/lib/courseMap';
+import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
 
 const ORIGIN = (
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -25,6 +27,7 @@ interface School {
   slugEscuela: string;
   url: string;
   description?: string;
+  image?: string;
 }
 
 // Mapeo de slugs de ciudades a nombres reales
@@ -103,6 +106,7 @@ export default async function CitySchoolsPage({ params }: Props) {
           slugEscuela,
           url: `/cursos/${slugCurso}/escuelas/${slugEscuela}`,
           description: entry.metaDescription,
+          image: entry.imageOpenGraph,
         });
       }
     });
@@ -175,109 +179,185 @@ export default async function CitySchoolsPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
-        {/* Breadcrumbs */}
-        <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-blue-600">
-                Inicio
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/escuelas" className="hover:text-blue-600">
-                Escuelas
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium">{cityName}</li>
-          </ol>
-        </nav>
+      {/* Hero Section */}
+      <div className="relative w-full h-[40vh] bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-black bg-opacity-20" />
+        <div className="relative z-10 container mx-auto px-4">
+          {/* Breadcrumbs */}
+          <nav className="mb-6">
+            <ol className="flex items-center space-x-2 text-sm text-white/80">
+              <li>
+                <Link href="/" className="hover:text-white transition-colors">
+                  Inicio
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link href="/escuelas" className="hover:text-white transition-colors">
+                  Escuelas
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-white font-semibold">{cityName}</li>
+            </ol>
+          </nav>
 
-        {/* Header */}
-        <header className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
             Escuelas de Inglés en {cityName}
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Descubre {schools.length} escuela{schools.length !== 1 ? 's' : ''} de inglés certificada{schools.length !== 1 ? 's' : ''} en {cityName}.
-            Compara precios, horarios y encuentra el curso perfecto para ti.
+          <p className="text-xl md:text-2xl text-white/90 max-w-3xl">
+            {schools.length} escuela{schools.length !== 1 ? 's' : ''} certificada{schools.length !== 1 ? 's' : ''}
           </p>
-        </header>
+        </div>
+      </div>
 
-        {/* Schools List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {schools.map((school) => (
-            <Link
-              key={school.slugEscuela}
-              href={school.url}
-              className="block bg-white border border-gray-200 rounded-lg p-6 hover:border-blue-500 hover:shadow-lg transition-all duration-200"
-            >
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
-                {school.name}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {school.city}, {school.country}
-              </p>
-              {school.description && (
-                <p className="text-sm text-gray-500 mb-4 line-clamp-2">
-                  {school.description}
-                </p>
-              )}
-              <span className="text-blue-600 hover:text-blue-700 font-semibold">
-                Ver cursos y precios →
-              </span>
-            </Link>
-          ))}
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white rounded-lg shadow-md p-6 text-center">
+            <div className="text-4xl font-bold text-blue-600 mb-2">{schools.length}</div>
+            <div className="text-gray-600">Escuelas en {cityName}</div>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6 text-center">
+            <div className="text-4xl font-bold text-blue-600 mb-2">✓</div>
+            <div className="text-gray-600">Todas Certificadas</div>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6 text-center">
+            <div className="text-4xl font-bold text-blue-600 mb-2">100%</div>
+            <div className="text-gray-600">Reserva Gratuita</div>
+          </div>
         </div>
 
-        {/* CTA */}
-        <div className="bg-blue-50 rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        {/* Schools Grid */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            Todas las Escuelas en {cityName}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {schools.map((school) => (
+              <Link
+                key={school.slugEscuela}
+                href={school.url}
+                className="group bg-white rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-blue-500"
+              >
+                {/* School Image */}
+                {school.image ? (
+                  <div className="relative w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200">
+                    <Image
+                      src={rewriteToCDN(school.image)}
+                      alt={school.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                    <div className="text-6xl">🏫</div>
+                  </div>
+                )}
+
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {school.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4 flex items-center gap-1">
+                    <span>📍</span>
+                    {school.city}, {school.country}
+                  </p>
+                  {school.description && (
+                    <p className="text-sm text-gray-500 mb-4 line-clamp-2">
+                      {school.description}
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between pt-4 border-t">
+                    <span className="text-sm text-blue-600 font-bold group-hover:underline">
+                      Ver cursos y precios
+                    </span>
+                    <span className="text-blue-600 text-xl group-hover:translate-x-2 transition-transform">
+                      →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl shadow-xl p-12 text-center text-white mb-12">
+          <h2 className="text-3xl font-bold mb-4">
             ¿Quieres comparar más opciones?
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
             Usa nuestro buscador para filtrar por horario, duración, precio y tipo de curso.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/buscador-cursos-de-ingles"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-white text-blue-600 px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl"
             >
-              Buscar Cursos
+              🔍 Buscar Cursos Ahora
             </Link>
             <Link
               href="/escuelas"
-              className="bg-white border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              className="inline-block bg-blue-700 text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition-colors shadow-lg border-2 border-white/20"
             >
-              Ver Todas las Escuelas
+              🌍 Ver Todas las Ciudades
             </Link>
           </div>
         </div>
 
         {/* SEO Content */}
-        <div className="mt-12 prose prose-lg max-w-none">
-          <h2>¿Por qué estudiar inglés en {cityName}?</h2>
-          <p>
+        <div className="bg-white rounded-xl shadow-sm p-8 prose prose-lg max-w-none">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            ¿Por qué estudiar inglés en {cityName}?
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-6">
             {cityName} es un destino popular para estudiantes internacionales que buscan mejorar
-            su inglés en un ambiente multicultural. La ciudad cuenta con escuelas certificadas
-            que ofrecen cursos de alta calidad, profesores nativos experimentados y una amplia
+            su inglés en un ambiente multicultural. La ciudad cuenta con {schools.length} escuela{schools.length !== 1 ? 's' : ''} certificada{schools.length !== 1 ? 's' : ''} que {schools.length !== 1 ? 'ofrecen' : 'ofrece'} cursos de alta calidad, profesores nativos experimentados y una amplia
             variedad de actividades extracurriculares.
           </p>
-          <h3>Tipos de cursos disponibles</h3>
-          <ul>
-            <li><strong>Inglés General:</strong> Ideal para mejorar tu comunicación diaria</li>
-            <li><strong>Inglés Intensivo:</strong> Progreso acelerado con más horas de clase</li>
-            <li><strong>Inglés de Negocios:</strong> Enfoque profesional y corporativo</li>
-            <li><strong>Programas Estudio y Trabajo:</strong> Combina estudio con permiso de trabajo</li>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3">
+            Tipos de cursos disponibles en {cityName}
+          </h3>
+          <ul className="space-y-2 mb-6">
+            <li className="flex items-start gap-2">
+              <span className="text-blue-600 mt-1">✓</span>
+              <div>
+                <strong>Inglés General:</strong> Ideal para mejorar tu comunicación diaria y fluidez
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-blue-600 mt-1">✓</span>
+              <div>
+                <strong>Inglés Intensivo:</strong> Progreso acelerado con más horas de clase semanales
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-blue-600 mt-1">✓</span>
+              <div>
+                <strong>Inglés de Negocios:</strong> Enfoque profesional y corporativo para tu carrera
+              </div>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-blue-600 mt-1">✓</span>
+              <div>
+                <strong>Programas Estudio y Trabajo:</strong> Combina estudio con permiso de trabajo
+              </div>
+            </li>
           </ul>
-          <h3>¿Cómo elegir la escuela correcta?</h3>
-          <p>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3">
+            ¿Cómo elegir la escuela correcta en {cityName}?
+          </h3>
+          <p className="text-gray-700 leading-relaxed">
             Al comparar escuelas en {cityName}, considera factores como ubicación, tamaño de
             grupos, horarios disponibles, instalaciones, certificaciones y opiniones de otros
             estudiantes. MatchMyCourse te ayuda a comparar todas estas variables para que tomes
-            la mejor decisión.
+            la mejor decisión. Todas nuestras escuelas en {cityName} están certificadas y
+            ofrecen programas de calidad para estudiantes internacionales.
           </p>
         </div>
       </div>
