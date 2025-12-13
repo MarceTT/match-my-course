@@ -137,9 +137,8 @@ export default async function CitySchoolsPage({ params }: Props) {
     console.error('[CitySchoolsPage] Error fetching schools:', error);
   }
 
-  if (schools.length === 0) {
-    notFound();
-  }
+  // Don't show 404, instead show a friendly message if no schools found
+  const hasSchools = schools.length > 0;
 
   // ItemList Schema for better SEO
   const itemListSchema = {
@@ -250,10 +249,38 @@ export default async function CitySchoolsPage({ params }: Props) {
         {/* Schools Grid */}
         <div className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">
-            Todas las Escuelas en {cityName}
+            {hasSchools ? `Todas las Escuelas en ${cityName}` : `Próximamente en ${cityName}`}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {schools.map((school) => (
+
+          {!hasSchools ? (
+            <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+              <div className="text-6xl mb-6">🏗️</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Estamos trabajando en traer escuelas a {cityName}
+              </h3>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Actualmente no tenemos escuelas disponibles en {cityName}, pero estamos
+                expandiendo nuestra red constantemente. Mientras tanto, puedes explorar
+                escuelas en otras ciudades de Irlanda.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/escuelas/dublin"
+                  className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Ver Escuelas en Dublin
+                </Link>
+                <Link
+                  href="/escuelas"
+                  className="inline-block bg-gray-200 text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                >
+                  Ver Todas las Ciudades
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {schools.map((school) => (
               <Link
                 key={school.slugEscuela}
                 href={school.url}
@@ -300,7 +327,8 @@ export default async function CitySchoolsPage({ params }: Props) {
                 </div>
               </Link>
             ))}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* CTA Section */}
@@ -327,16 +355,17 @@ export default async function CitySchoolsPage({ params }: Props) {
           </div>
         </div>
 
-        {/* SEO Content */}
-        <div className="bg-white rounded-xl shadow-sm p-8 prose prose-lg max-w-none">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            ¿Por qué estudiar inglés en {cityName}?
-          </h2>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            {cityName} es un destino popular para estudiantes internacionales que buscan mejorar
-            su inglés en un ambiente multicultural. La ciudad cuenta con {schools.length} escuela{schools.length !== 1 ? 's' : ''} certificada{schools.length !== 1 ? 's' : ''} que {schools.length !== 1 ? 'ofrecen' : 'ofrece'} cursos de alta calidad, profesores nativos experimentados y una amplia
-            variedad de actividades extracurriculares.
-          </p>
+        {/* SEO Content - Only show if there are schools */}
+        {hasSchools && (
+          <div className="bg-white rounded-xl shadow-sm p-8 prose prose-lg max-w-none">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              ¿Por qué estudiar inglés en {cityName}?
+            </h2>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              {cityName} es un destino popular para estudiantes internacionales que buscan mejorar
+              su inglés en un ambiente multicultural. La ciudad cuenta con {schools.length} escuela{schools.length !== 1 ? 's' : ''} certificada{schools.length !== 1 ? 's' : ''} que {schools.length !== 1 ? 'ofrecen' : 'ofrece'} cursos de alta calidad, profesores nativos experimentados y una amplia
+              variedad de actividades extracurriculares.
+            </p>
 
           <h3 className="text-xl font-bold text-gray-900 mb-3">
             Tipos de cursos disponibles en {cityName}
@@ -378,7 +407,8 @@ export default async function CitySchoolsPage({ params }: Props) {
             la mejor decisión. Todas nuestras escuelas en {cityName} están certificadas y
             ofrecen programas de calidad para estudiantes internacionales.
           </p>
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
