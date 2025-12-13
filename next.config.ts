@@ -255,16 +255,16 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Permitir scripts de Google Analytics, GTM y YouTube
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.youtube.com https://www.youtube-nocookie.com https://tagmanager.google.com https://assets.calendly.com",
+              // Permitir scripts de Google Analytics, GTM, YouTube y Cloudflare
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.youtube.com https://www.youtube-nocookie.com https://tagmanager.google.com https://assets.calendly.com https://static.cloudflareinsights.com",
               // Permitir frames/iframes de YouTube, Google y Vimeo
               "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://player.vimeo.com https://calendly.com https://assets.calendly.com",
               // Permitir imágenes de cualquier fuente
               "img-src 'self' data: https: http: blob:",
               // Permitir media de fuentes seguras
               "media-src 'self' https:",
-              // Permitir conexiones según el entorno (incluyendo Service Workers)
-              `connect-src 'self' http://localhost:8500 ${isDev ? 'http://localhost:* ' : ''}https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://tagmanager.google.com https:`,
+              // Permitir conexiones según el entorno (incluyendo Service Workers y Cloudflare)
+              `connect-src 'self' http://localhost:8500 ${isDev ? 'http://localhost:* ' : ''}https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://tagmanager.google.com https://cloudflareinsights.com https:`,
               // Permitir Service Workers hacer requests
               `worker-src 'self' blob:`,
               // CSP específico para Service Workers
