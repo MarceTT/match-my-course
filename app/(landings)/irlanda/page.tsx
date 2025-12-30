@@ -1,10 +1,9 @@
 import React from 'react'
 import HeaderSection from './HeaderSection'
-import StetpsToStudy from './StepsToStudy'
-import { Suspense } from 'react'
-import Calendar from './Calendar'
+import StepsToStudy from './StepsToStudy'
 import Requisitos from './Requisitos'
 import WhyIRL from './WhyIRL'
+import TestimonialsSection from '@/app/components/home/TestimonialsSection'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -18,13 +17,20 @@ export const metadata: Metadata = {
 const IrlandaPage = () => {
   return (
     <>
-    <HeaderSection />
-    <WhyIRL />
-    <StetpsToStudy />
-    <Suspense fallback={null}>
-      <Calendar />
-    </Suspense>
-    <Requisitos />
+      {/* Hero con gradiente y calendario de reserva */}
+      <HeaderSection />
+
+      {/* Requisitos para estudiar (fondo blanco, 4 cards) */}
+      <Requisitos />
+
+      {/* Invierte en tu futuro (imagen + beneficios) */}
+      <WhyIRL />
+
+      {/* 3 pasos para estudiar (círculos azules, línea punteada) */}
+      <StepsToStudy />
+
+      {/* Testimonios de estudiantes */}
+      <TestimonialsSection />
     </>
   )
 }

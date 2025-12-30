@@ -3,26 +3,56 @@
 import Header from "./components/common/HeaderServer";
 import Footer from "./components/common/FooterServer";
 import Hero from "./components/features/Hero/Hero";
-import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import SuspenseLoader from "./admin/components/SuspenseLoader";
-import { Suspense, useState } from "react";
 import PopupOferta from "./ui/promotional-popup";
-
-const SchoolPage = dynamic(() => import("./school/SchoolPage"), { ssr: false });
+import {
+  PartnersSection,
+  VideoHeroSection,
+  StatsSection,
+  WhyMatchMyCourse,
+  TravelSupportSection,
+  TestimonialsSection,
+  ProcessStepsSection,
+  FinalCTASection,
+} from "./components/home";
 
 export default function HomeClient() {
-  const [isScrollTopVisible, setScrollTopVisible] = useState(false);
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <PopupOferta scrollTrigger={200} />
+
+      {/* Hero con buscador */}
       <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
         <Hero />
       </Suspense>
-      <div className="container mx-auto px-6 py-16">
-        <SchoolPage onScrollTopVisibilityChange={setScrollTopVisible} />
-      </div>
-      <Footer avoidOverlap={isScrollTopVisible} />
+
+      {/* Partners - Escuelas asociadas */}
+      <PartnersSection />
+
+      {/* Video + Beneficios */}
+      <VideoHeroSection youtubeVideoId={undefined} />
+
+      {/* Stats - Métricas */}
+      <StatsSection />
+
+      {/* Por qué MatchMyCourse - Grid 2x3 */}
+      <WhyMatchMyCourse />
+
+      {/* Apoyo durante el viaje */}
+      <TravelSupportSection />
+
+      {/* Testimonios */}
+      <TestimonialsSection />
+
+      {/* Proceso de 3 pasos */}
+      <ProcessStepsSection />
+
+      {/* CTA Final */}
+      <FinalCTASection />
+
+      <Footer />
     </div>
   );
 }

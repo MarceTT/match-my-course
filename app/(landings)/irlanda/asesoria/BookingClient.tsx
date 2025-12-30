@@ -402,18 +402,23 @@ export default function BookingClient() {
       </div>
 
       {/* Pasos */}
-      <div className="flex items-center gap-2 text-sm mb-4 flex-wrap">
-        <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border ${step === 1 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>1</span>
-        <span className={step === 1 ? 'font-medium' : 'text-muted-foreground'}>Selecciona fecha</span>
-        <span className="mx-1 text-muted-foreground">/</span>
-        <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border ${step === 2 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>2</span>
-        <span className={step === 2 ? 'font-medium' : 'text-muted-foreground'}>Elige hora</span>
-        <span className="mx-1 text-muted-foreground">/</span>
-        <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border ${step === 3 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>3</span>
-        <span className={step === 3 ? 'font-medium' : 'text-muted-foreground'}>Datos y confirmación</span>
-        <span className="mx-1 text-muted-foreground">/</span>
-        <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border ${step === 4 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>4</span>
-        <span className={step === 4 ? 'font-medium' : 'text-muted-foreground'}>Completado</span>
+      <div className="grid grid-cols-4 gap-2 text-xs mb-4">
+        <div className="flex flex-col items-center gap-1">
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border text-sm ${step === 1 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>1</span>
+          <span className={`text-center leading-tight ${step === 1 ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>Fecha</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border text-sm ${step === 2 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>2</span>
+          <span className={`text-center leading-tight ${step === 2 ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>Hora</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border text-sm ${step === 3 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>3</span>
+          <span className={`text-center leading-tight ${step === 3 ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>Datos</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full border text-sm ${step === 4 ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary'}`}>4</span>
+          <span className={`text-center leading-tight ${step === 4 ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>Listo</span>
+        </div>
       </div>
 
       <AnimatePresence mode="wait">

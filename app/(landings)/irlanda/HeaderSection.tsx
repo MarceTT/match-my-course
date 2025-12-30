@@ -1,36 +1,38 @@
-import Image from "next/image";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+"use client";
+
+import React from "react";
+import BookingClient from "./asesoria/BookingClient";
 
 export default function HeaderSection() {
-  const bgUrl = rewriteToCDN(
-    "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/landing-irlanda/Estudiar+y+trabajar+en+Irlanda%2C+estudiar+ingle%CC%81s+en+Irlanda%2C+cursos+de+ingle%CC%81s+en+Irlanda.jpg"
-  );
-
   return (
-    <section className="relative h-[70vh] md:h-[50vh] lg:h-[65vh] xl:h-[70vh] overflow-hidden">
-      <Image
-        src={bgUrl}
-        alt="Estudiar Inglés en Irlanda"
-        fill
-        className="absolute inset-0 object-cover scale-105"
-        priority
-        quality={80}
-        sizes="100vw"
-        fetchPriority="high"
-      />
-      <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-white text-3xl md:text-6xl font-extrabold px-4 text-shadow">
-              Estudiar inglés en Irlanda
-            </h1>
-            <p className="text-white text-lg md:text-2xl font-semibold px-4">
-              Comienza tu aventura con un curso de inglés que te permitirá estudiar y trabajar.
-            </p>
+    <div id="calendario" className="relative scroll-mt-0">
+      {/* Background gradient - extends to half of calendar */}
+      <div className="absolute inset-x-0 top-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-[70%] lg:h-[75%]" />
+
+      <section className="relative px-6 py-8 lg:py-10">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-4 lg:gap-6 items-start">
+            {/* Left Content */}
+            <div className="text-white flex flex-col justify-center">
+              <h1 className="text-3xl text-center [text-shadow:0_8px_24px_rgba(88,28,135,0.45)] lg:text-start lg:text-4xl xl:text-5xl font-black leading-tight mb-4">
+                Asesoría estudiar inglés y trabajar en Irlanda
+              </h1>
+              <p className="text-base text-center lg:text-start lg:text-lg xl:text-xl text-white font-semibold leading-relaxed">
+                ¿Estás buscando una experiencia única para estudiar y trabajar en el extranjero? Pide tu asesoría gratuita y descubre cuál es la mejor escuela, ciudad y curso para ti
+              </p>
+            </div>
+
+            {/* Right Content - Booking Calendar */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-md lg:max-w-[500px]">
+                <div className="bg-white p-4 lg:p-5 rounded-2xl shadow-2xl ring-1 ring-black/5">
+                  <BookingClient />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
