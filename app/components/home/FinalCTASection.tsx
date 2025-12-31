@@ -11,7 +11,7 @@ export default function FinalCTASection() {
           encuentra tu escuela ideal ;)
         </h2>
 
-        <Link href="/buscador-cursos-de-ingles?course=ingles-general">
+        <Link href="/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo">
           <Button
             size="lg"
             className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold px-8 py-6 text-lg rounded-lg shadow-md hover:shadow-lg transition-all"

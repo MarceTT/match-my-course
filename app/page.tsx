@@ -5,7 +5,6 @@ import { rewriteToCDN } from "./utils/rewriteToCDN";
 import { buildCanonicalUrl } from "@/lib/helpers/canonicalUrl";
 import dynamic from "next/dynamic";
 import {
-  PartnersSection,
   VideoHeroSection,
   StatsSection,
   WhyMatchMyCourse,
@@ -14,6 +13,7 @@ import {
   ProcessStepsSection,
   FinalCTASection,
 } from "./components/home";
+import Carousel from "./components/features/Carousel/Carousel";
 
 // Lazy load Header, Footer, and PopupOferta to improve LCP and TBT
 const Header = dynamic(() => import("./components/common/HeaderServer"), {
@@ -81,8 +81,13 @@ export default function Home() {
         <Hero />
       </Suspense>
 
-      {/* Partners - Escuelas asociadas */}
-      <PartnersSection />
+      {/* Partners - Escuelas asociadas con carousel animado */}
+      <section className="bg-white pt-4 pb-2">
+        <p className="text-center text-base md:text-lg font-semibold text-gray-700 mb-4">
+          Escuelas que han confiado en nuestro servicio
+        </p>
+        <Carousel />
+      </section>
 
       {/* Video + Beneficios */}
       <VideoHeroSection youtubeVideoId="TavnREMEzQs" />

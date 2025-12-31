@@ -93,7 +93,7 @@ export default function VideoHeroSection({
               ))}
             </ul>
 
-            <Link href="/buscador-cursos-de-ingles?course=ingles-general" className="mt-4 inline-block">
+            <Link href="/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo" className="mt-4 inline-block">
               <Button
                 size="lg"
                 className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold px-8 py-6 text-lg rounded-lg shadow-md hover:shadow-lg transition-all"

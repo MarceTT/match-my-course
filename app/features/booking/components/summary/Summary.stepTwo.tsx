@@ -194,7 +194,7 @@ export default function SummaryStepTwo({
                       <SelectValue placeholder="Selecciona" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="z-[10000]">
                     {professionalLevel.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -225,7 +225,7 @@ export default function SummaryStepTwo({
                       <SelectValue placeholder="Selecciona" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="z-[10000]">
                     {levelEnglish.map((level) => (
                       <SelectItem key={level.value} value={level.value}>
                         {level.label}
