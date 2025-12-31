@@ -67,7 +67,7 @@ export function Select<T extends string, Extra = unknown>({
             : optionsArray.find((opt) => opt.value === selected)?.label}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="z-[10000]">
         {optionsArray.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {renderOption ? renderOption(option) : option.label}
