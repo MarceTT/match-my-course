@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const benefits = [
   "Compara cursos en más de 35 escuelas de inglés de Irlanda",
@@ -24,21 +24,53 @@ export default function VideoHeroSection({
   youtubeVideoId,
 }: VideoHeroSectionProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // YouTube thumbnail URL - maxresdefault for best quality
   const thumbnailUrl = youtubeVideoId
     ? `https://img.youtube.com/vi/${youtubeVideoId}/maxresdefault.jpg`
     : null;
 
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Autoplay on mobile when component mounts
+  useEffect(() => {
+    if (isMobile && youtubeVideoId) {
+      // Small delay to let the page load first
+      const timer = setTimeout(() => {
+        setIsVideoPlaying(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile, youtubeVideoId]);
+
+  // Handle hover for desktop
+  const handleMouseEnter = () => {
+    if (!isMobile && youtubeVideoId) {
+      setIsVideoPlaying(true);
+    }
+  };
+
   return (
     <section className="bg-white py-12 md:py-16">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Video Section */}
-          <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl bg-gray-900">
+          <div 
+            className="relative aspect-video rounded-2xl overflow-hidden shadow-xl bg-gray-900"
+            onMouseEnter={handleMouseEnter}
+          >
             {youtubeVideoId && isVideoPlaying ? (
               <iframe
-                src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}?autoplay=1`}
+                src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}?autoplay=1&mute=1`}
                 title="Video de presentación"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -71,6 +103,9 @@ export default function VideoHeroSection({
                   <div className="w-16 h-16 md:w-20 md:h-20 bg-white/90 rounded-full flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-2xl">
                     <Play className="w-8 h-8 md:w-10 md:h-10 text-[#283593] ml-1" fill="#283593" />
                   </div>
+                  <span className="text-white text-sm font-medium hidden lg:block">
+                    Pasa el cursor para reproducir
+                  </span>
                 </div>
               </div>
             )}

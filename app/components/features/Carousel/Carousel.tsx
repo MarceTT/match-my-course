@@ -6,6 +6,8 @@ import { m, LazyMotion, domAnimation, useAnimation, useInView } from 'framer-mot
 
 const images = Array.from({ length: 26 }, (_, i) => `/schools/${i + 1}.png`);
 
+const LOGO_WIDTH = 100; // Mitad del tamaño original
+
 const Carousel = () => {
     const controls = useAnimation();
     const containerRef = useRef(null);
@@ -14,12 +16,12 @@ const Carousel = () => {
     useEffect(() => {
       if (isInView) {
         controls.start({
-          x: [0, -200 * images.length],
+          x: [0, -LOGO_WIDTH * images.length],
           transition: {
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 40,
+              duration: 30,
               ease: "linear",
             },
           },
@@ -31,58 +33,42 @@ const Carousel = () => {
 
   return (
     <LazyMotion features={domAnimation} strict>
-      <div className="hidden md:block bg-white py-4 overflow-hidden relative" ref={containerRef}>
-          {/* <h1 className="text-xl md:text-xl text-center mb-12 text-gray-900 font-bold">
-            Trabajamos con más de 30 escuelas de inglés a nivel mundial y seguimos creciendo
-          </h1> */}
+      <div className="bg-white py-2 overflow-hidden relative" ref={containerRef}>
         <div className="container mx-auto px-4">
           <div className="relative">
-            <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div className="absolute top-0 left-0 w-8 md:w-16 h-full bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div className="absolute top-0 right-0 w-8 md:w-16 h-full bg-gradient-to-l from-white to-transparent z-10"></div>
             <div className="overflow-hidden">
               <m.div
-                className="flex min-h-[120px]"
+                className="flex items-center min-h-[60px] md:min-h-[80px]"
                 animate={controls}
-                style={{ width: `${images.length * 200 * 2}px` }}
+                style={{ width: `${images.length * LOGO_WIDTH * 2}px` }}
               >
                 {[...images, ...images].map((src, index) => (
                   <m.div 
-                  key={index} 
-                  className="flex-shrink-0 w-[200px] px-2 min-h-[120px]"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Image
-                    src={src || "/placeholder.svg"}
-                    alt={`Escuela asociada ${index + 1}`}
-                    width={200}
-                    height={120}
-                    className="rounded-lg shadow-md object-cover"
-                    loading="lazy"
-                  />
-                </m.div>
-              ))}
-            </m.div>
+                    key={index} 
+                    className="flex-shrink-0 px-2 md:px-3"
+                    style={{ width: `${LOGO_WIDTH}px` }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Image
+                      src={src || "/placeholder.svg"}
+                      alt={`Escuela asociada ${(index % images.length) + 1}`}
+                      width={LOGO_WIDTH}
+                      height={60}
+                      className="rounded-md object-contain h-[50px] md:h-[60px] w-auto mx-auto"
+                      loading="lazy"
+                    />
+                  </m.div>
+                ))}
+              </m.div>
+            </div>
           </div>
         </div>
       </div>
-      </div>
-      <style jsx global>{`
-        .slick-track {
-          display: flex !important;
-        }
-        .slick-slide {
-          height: inherit !important;
-          display: flex !important;
-          justify-content: center;
-          align-items: center;
-        }
-        .slick-list {
-          overflow: hidden;
-        }
-      `}</style>
     </LazyMotion>
   );
 };
