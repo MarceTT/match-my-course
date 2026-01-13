@@ -244,6 +244,16 @@ const nextConfig: NextConfig = {
         source: '/estudiar-ingles-irlanda',
         destination: '/irlanda',
       },
+      {
+        // Canonical Spanish URL for New Zealand advisory page
+        source: '/asesorias/nueva-zelanda',
+        destination: '/nueva-zelanda/asesoria',
+      },
+      {
+        // Canonical Spanish URL for Ireland advisory page
+        source: '/asesorias/irlanda',
+        destination: '/irlanda/asesoria',
+      },
     ];
   },
   async headers() {

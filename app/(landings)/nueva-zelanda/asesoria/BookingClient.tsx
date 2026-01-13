@@ -120,7 +120,7 @@ export default function BookingClient() {
   useEffect(() => {
     const p = searchParams?.get("manage_p");
     const t = searchParams?.get("manage_t");
-    const base = typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_BASE_URL || "");
+    const base = window.location.origin;
     if (p && t) {
       const resBase = `${base}/api/zoom/reschedule?p=${encodeURIComponent(p)}&t=${encodeURIComponent(t)}`;
       const canUrl = `${base}/api/zoom/cancel?p=${encodeURIComponent(p)}&t=${encodeURIComponent(t)}`;
