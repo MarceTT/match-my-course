@@ -14,17 +14,6 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  const shouldShowPopup = () => {
-    const lastDismissed = localStorage.getItem(POPUP_KEY);
-    if (!lastDismissed) return true;
-
-    const lastDate = new Date(lastDismissed);
-    const now = new Date();
-
-    const diffDays = (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24);
-    return diffDays >= POPUP_INTERVAL_DAYS;
-  };
-
   const markAsDismissed = () => {
     sendGTMEvent("popup_dismissed", {
         popup_name: "special_offer",
@@ -46,6 +35,18 @@ export default function PopupOferta({ scrollTrigger = 200 }: { scrollTrigger?: n
 
   // Mostrar solo cuando el usuario scrollea lo suficiente
   useEffect(() => {
+    // Verificar si debe mostrarse el popup (SOLO en el cliente)
+    const shouldShowPopup = () => {
+      const lastDismissed = localStorage.getItem(POPUP_KEY);
+      if (!lastDismissed) return true;
+
+      const lastDate = new Date(lastDismissed);
+      const now = new Date();
+
+      const diffDays = (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24);
+      return diffDays >= POPUP_INTERVAL_DAYS;
+    };
+
     if (!shouldShowPopup()) return;
 
     const handleScroll = () => {
