@@ -21,11 +21,24 @@ const normalizeCourse = (course: string) => {
 
 const SchoolSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const courseType = searchParams.get("course") || "ingles-general";
   const normalizedCourse = normalizeCourse(courseType);
   const listRef = useRef<HTMLDivElement | null>(null);
+
+  // Detectar mobile en el cliente para evitar mismatch de hidratación
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 1024);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const generateInitialFilters = (course: string): Record<string, any> => {
     const initial: Record<string, any> = {};
@@ -119,7 +132,8 @@ const SchoolSearch = () => {
   );
 
   // Mostrar TourProvider SOLO si es escritorio (>=1024px)
-  if (typeof window !== "undefined" && window.innerWidth < 1024) {
+  // Evita mismatch de hidratación renderizando siempre TourProvider en el servidor
+  if (isMobile) {
     return pageContent;
   }
 
