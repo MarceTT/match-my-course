@@ -127,7 +127,7 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                 <ul className="space-y-3 text-sm">
                   <li>
                     <Link
-                      href="/asesorias/irlanda"
+                      href="/estudiar-ingles-irlanda"
                       className="hover:text-[#333] transition-colors"
                     >
                       Asesoría Irlanda
@@ -135,7 +135,7 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                   </li>
                   <li>
                     <Link
-                      href="/asesorias/nueva-zelanda"
+                      href="/estudiar-ingles-nueva-zelanda"
                       className="hover:text-[#333] transition-colors"
                     >
                       Asesoría Nueva Zelanda
@@ -230,24 +230,12 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                 </h3>
                 <ul className="space-y-2 text-sm">
                   <li>
-                    <a
-                      href="https://abroad.cl/programas/estudiar-trabajar-nueva-zelanda"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href="/estudiar-ingles-nueva-zelanda"
                       className="hover:text-[#333] transition-colors"
                     >
                       Nueva Zelanda
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://abroad.cl/programas/estudiar-italiano-italia"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-[#333] transition-colors"
-                    >
-                      Italia
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
