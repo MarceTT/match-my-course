@@ -24,9 +24,10 @@ const Footer = dynamic(() => import("./components/common/FooterServer"), {
   loading: () => <div className="h-32 bg-gray-900" />,
 });
 
-const PopupOfertaClient = dynamic(() => import("./ui/PopupOfertaClient"), {
-  loading: () => null,
-});
+// Popup desactivado temporalmente
+// const PopupOfertaClient = dynamic(() => import("./ui/PopupOfertaClient"), {
+//   loading: () => null,
+// });
 
 const ogImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Image+Open+Graph+Front/Matchmycourse+Cursos+de+ingles+en+el+extranjero%2C+estudiar+ingles+en+Irlanda.png"
@@ -70,7 +71,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <PopupOfertaClient scrollTrigger={1500} />
+      {/* <PopupOfertaClient scrollTrigger={1500} /> */}
 
       {/* Hero con buscador */}
       <Suspense

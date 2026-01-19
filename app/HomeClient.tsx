@@ -5,7 +5,7 @@ import Footer from "./components/common/FooterServer";
 import Hero from "./components/features/Hero/Hero";
 import { Suspense } from "react";
 import SuspenseLoader from "./admin/components/SuspenseLoader";
-import PopupOferta from "./ui/promotional-popup";
+// import PopupOferta from "./ui/promotional-popup";
 import {
   PartnersSection,
   VideoHeroSection,
@@ -21,7 +21,7 @@ export default function HomeClient() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      <PopupOferta scrollTrigger={200} />
+      {/* <PopupOferta scrollTrigger={200} /> */}
 
       {/* Hero con buscador */}
       <Suspense fallback={<SuspenseLoader fullscreen={false} />}>
