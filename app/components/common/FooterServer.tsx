@@ -94,14 +94,6 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                 <ul className="space-y-3 text-sm">
                   <li>
                     <Link
-                      href="/servicios"
-                      className="hover:text-[#333] transition-colors"
-                    >
-                      Asesorías personalizadas
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/buscador-cursos-de-ingles?course=ingles-general"
                       className="hover:text-[#333] transition-colors"
                     >
