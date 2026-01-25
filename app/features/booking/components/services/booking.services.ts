@@ -82,11 +82,19 @@ export const fetchReservationCalculation = async (
     curso: course,
     semanas: weeks.toString(),
     horario: schedule,
+    _t: Date.now().toString(), // Cache buster
   });
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`,
-    { signal, cache: 'no-store' }
+    {
+      signal,
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      }
+    }
   );
 
   if (!res.ok) {
@@ -115,9 +123,19 @@ export const fetchCheapestCourseBySchool = async (
   course: string,
   signal?: AbortSignal
 ) => {
+  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/curso-mas-economico/${schoolId}/${course}`);
+  url.searchParams.set('_t', Date.now().toString()); // Cache buster
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/curso-mas-economico/${schoolId}/${course}`,
-    { signal, cache: 'no-store' }
+    url.toString(),
+    {
+      signal,
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      }
+    }
   );
 
   if (!res.ok) {

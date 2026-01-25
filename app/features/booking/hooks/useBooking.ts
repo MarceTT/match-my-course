@@ -265,11 +265,6 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
       return;
     }
 
-    // console.log('Recalculando reserva con course:', course);
-    // console.log('Recalculando reserva con weeks:', weeks);
-    // console.log('Recalculando reserva con schedule:', schedule);
-    // console.log('Recalculando reserva con schoolId:', schoolId);
-
     try {
       setLoading(true);
 
