@@ -1,7 +1,7 @@
 export const fetchCourses = async (schoolId: string) => {
   if (!schoolId) throw new Error("School ID is required");
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/tipo-cursos/${schoolId}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/tipo-cursos/${schoolId}`, { cache: 'no-store' });
 
   if (!res.ok) {
     throw new Error('Error fetching courses');
@@ -49,7 +49,7 @@ export const fetchCourses = async (schoolId: string) => {
 export const fetchSchedulesByCourse = async (schoolId: string, course: string) => {
   if (!schoolId || !course) throw new Error('School ID and course are required');
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/horarios/${schoolId}/${course}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/horarios/${schoolId}/${course}`, { cache: 'no-store' });
 
   if (!res.ok) {
     throw new Error('Error fetching schedules');
@@ -60,7 +60,7 @@ export const fetchSchedulesByCourse = async (schoolId: string, course: string) =
 };
 
 export async function fetchWeeksBySchool(schoolId: string, course: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/semanas/${schoolId}/${course}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/semanas/${schoolId}/${course}`, { cache: 'no-store' });
 
   if (!res.ok) {
     throw new Error("Error fetching weeks");
@@ -86,7 +86,7 @@ export const fetchReservationCalculation = async (
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/calculo-reserva/${schoolId}?${query}`,
-    { signal }
+    { signal, cache: 'no-store' }
   );
 
   if (!res.ok) {
@@ -117,7 +117,7 @@ export const fetchCheapestCourseBySchool = async (
 ) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/booking/curso-mas-economico/${schoolId}/${course}`,
-    { signal }
+    { signal, cache: 'no-store' }
   );
 
   if (!res.ok) {
