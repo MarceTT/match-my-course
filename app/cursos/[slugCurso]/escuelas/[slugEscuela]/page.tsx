@@ -2,19 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchAllSeoEntries, fetchSeoSchoolById } from '@/app/actions/seo';
 import { fetchSchoolById } from '@/app/actions/school';
-import dynamic from 'next/dynamic';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
 import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMap';
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
-
-// Lazy load SchoolSeoHome
-const SchoolSeoHome = dynamic(() => import('./SchoolSeoHome'), {
-  loading: () => (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-gray-400">Cargando...</div>
-    </div>
-  ),
-});
+import SchoolSeoHome from './SchoolSeoHome';
 
 type Params = { slugCurso: string; slugEscuela: string };
 type PageSearch = Record<string, string | string[] | undefined>;
@@ -57,8 +48,8 @@ export async function generateStaticParams() {
 
     console.log(`[generateStaticParams] Generated ${params.length} school pages for pre-rendering`);
 
-    // Return top 100 to avoid build time issues
-    return params.slice(0, 100);
+    // Generate ALL pages for better SEO and indexation
+    return params;
   } catch (error) {
     console.error('[generateStaticParams] Error:', error);
     return [];
@@ -127,6 +118,8 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
 
   // Check if this specific URL combination should have noindex
   // Note: Using the canonical slugs (after redirects from next.config.ts)
+  // These combinations are noindexed to prevent duplicate content issues
+  // TODO: Consider using canonical URLs instead of noindex if these pages have value
   const shouldNoIndex = (
     (slugCurso === 'ingles-general-orientado-a-negocios' && slugEscuela === 'cork-english-academy') ||
     (slugCurso === 'ingles-visa-de-trabajo' && slugEscuela === 'cork-english-academy') ||
