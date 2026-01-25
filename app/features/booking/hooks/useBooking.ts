@@ -94,7 +94,32 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         }
 
         const reservation = createReservationFromApiResponse(data);
-        setReservation(reservation);
+
+        // Si el specificSchedule del backend es diferente al schedule usado en el fetch,
+        // recalcular automáticamente con el schedule correcto del backend
+        const backendSchedule = reservation.specificSchedule;
+        const usedSchedule = schedule || 'PM';
+
+        if (backendSchedule && backendSchedule !== usedSchedule && weeks > 1) {
+          // Recalcular con el schedule correcto del backend
+          const recalcData = await fetchReservationCalculation(schoolId, course, weeks, backendSchedule, signal);
+
+          if (recalcData && typeof recalcData === 'object' && 'requiresAdvisor' in recalcData) {
+            setAdvisorInfo(recalcData as BookingResponse);
+            setReservation(null);
+            setError(false);
+            setErrorMessage("");
+            return;
+          }
+
+          const recalcReservation = createReservationFromApiResponse(recalcData);
+          setReservation(recalcReservation);
+          setFormData(prev => ({ ...prev, schedule: backendSchedule }));
+        } else {
+          setReservation(reservation);
+          setFormData(prev => ({ ...prev, schedule: backendSchedule || usedSchedule }));
+        }
+
         setAdvisorInfo(null);
         setError(false);
         setErrorMessage("");
@@ -102,7 +127,7 @@ export function useBooking({ schoolId, course, weeks, schedule }: UseReservation
         // console.error(error);
         setReservation(null);
         setError(true);
-   
+
         if (error instanceof Error) {
           setErrorMessage(error.message);
         } else {
