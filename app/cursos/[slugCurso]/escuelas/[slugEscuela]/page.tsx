@@ -192,7 +192,10 @@ export default async function Page({ params, searchParams }: Props) {
 
   // Obtener datos completos
   const sp = await searchParams;
-  const weeks = Number.parseInt((sp.semanas as string) ?? '1', 10) || 1;
+
+  // Determinar semanas por defecto según el tipo de curso
+  const defaultWeeks = subcategoria === 'Programa Estudio y Trabajo (25 semanas)' ? 25 : 1;
+  const weeks = Number.parseInt((sp.semanas as string) ?? String(defaultWeeks), 10) || defaultWeeks;
   const schedule = (sp.horario as string) ?? 'PM';
 
   const seoCourses = await fetchSeoSchoolById(schoolId);
