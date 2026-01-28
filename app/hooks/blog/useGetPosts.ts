@@ -24,7 +24,13 @@ interface PostsResponse {
   pages: number;
 }
 
-export function usePosts(page = 1, limit = 10, category?: string, tag?: string) {
+export function usePosts(
+  page = 1,
+  limit = 10,
+  category?: string,
+  tag?: string,
+  initialData?: PostsResponse
+) {
   return useQuery<PostsResponse>({
     queryKey: ["posts", page, limit, category, tag],
     queryFn: async () => {
@@ -33,6 +39,8 @@ export function usePosts(page = 1, limit = 10, category?: string, tag?: string) 
       });
       return data.data;
     },
+    // Si tenemos initialData del SSR, usarlo
+    initialData: initialData,
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
