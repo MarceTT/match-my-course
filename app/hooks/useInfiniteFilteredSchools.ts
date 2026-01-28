@@ -60,7 +60,10 @@ const fetchPaginatedSchools = async ({ pageParam = 1, filters }: { pageParam?: n
   };
 };
 
-export const useInfiniteFilteredSchools = (filters: Record<string, any> | undefined) => {
+export const useInfiniteFilteredSchools = (
+  filters: Record<string, any> | undefined,
+  initialData?: { schools: any[]; currentPage: number; totalPages: number }
+) => {
   return useInfiniteQuery({
     queryKey: ["infinite-schools", filters],
     queryFn: ({ pageParam = 1 }) => fetchPaginatedSchools({ pageParam, filters: filters || {} }),
@@ -71,6 +74,11 @@ export const useInfiniteFilteredSchools = (filters: Record<string, any> | undefi
       }
       return undefined;
     },
+    // Si tenemos initialData del SSR, usarlo como primera página
+    initialData: initialData ? {
+      pages: [initialData],
+      pageParams: [1],
+    } : undefined,
     placeholderData: (previousData) => previousData,
     retry: 1,
     staleTime: 1000 * 60 * 5,

@@ -19,7 +19,21 @@ const normalizeCourse = (course: string) => {
     .replace(/\s+/g, "-");
 };
 
-const SchoolSearch = () => {
+type SchoolSearchProps = {
+  initialData?: {
+    schools: any[];
+    currentPage: number;
+    totalPages: number;
+  };
+  initialParams?: {
+    course?: string;
+    cities?: string;
+    weeksMin?: string;
+    [key: string]: string | undefined;
+  };
+};
+
+const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const searchParams = useSearchParams();
@@ -114,7 +128,11 @@ const SchoolSearch = () => {
             />
           )}
           <div ref={listRef} className="flex-1 pr-1">
-            <InfiniteSchoolFiltered filters={filters} isFilterOpen={isOpen} />
+            <InfiniteSchoolFiltered
+              filters={filters}
+              isFilterOpen={isOpen}
+              initialData={initialData}
+            />
           </div>
         </div>
       </div>

@@ -7,9 +7,10 @@ import { Loader2 } from "lucide-react";
 interface InfiniteSchoolFilteredProps {
   filters: Record<string, any>;
   isFilterOpen: boolean;
+  initialData?: { schools: any[]; currentPage: number; totalPages: number };
 }
 
-const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFilteredProps) => {
+const InfiniteSchoolFiltered = ({ filters, isFilterOpen, initialData }: InfiniteSchoolFilteredProps) => {
   const {
     data,
     fetchNextPage,
@@ -18,7 +19,7 @@ const InfiniteSchoolFiltered = ({ filters, isFilterOpen }: InfiniteSchoolFiltere
     isLoading,
     isError,
     isFetching,
-  } = useInfiniteFilteredSchools(filters);
+  } = useInfiniteFilteredSchools(filters, initialData);
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
