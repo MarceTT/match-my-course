@@ -282,6 +282,7 @@ export interface SchoolPriceOption {
   horasSemana: number;
   horasDeClase: number;
   oferta?: number;
+  semanas?: number;
 }
 
 export type GalleryImage = {
