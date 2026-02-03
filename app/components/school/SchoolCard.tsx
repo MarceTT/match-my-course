@@ -38,7 +38,19 @@ interface SchoolCardProps {
   viewType: "grid" | "list";
 }
 
-function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
+function filtrarPrecioMasBarato(
+  precios: SchoolDetails["prices"] = [],
+  targetWeeks?: number
+) {
+  // Si tenemos semanas específicas, buscar exactamente ese precio
+  if (targetWeeks) {
+    const exactMatch = precios.find((p) => p.semanas === targetWeeks);
+    if (exactMatch) {
+      return [exactMatch];
+    }
+  }
+
+  // Si no hay match exacto o no hay semanas, buscar el más barato
   const pm = precios.filter((p) => p.horario === "PM");
   const am = precios.filter((p) => p.horario === "AM");
 
@@ -56,14 +68,20 @@ function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
 const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCardProps) {
   const searchParams = useSearchParams();
   const prefetchSchool = usePrefetchSchoolDetails();
-  
+
+  // Extraer parámetros primero (necesarios para otros cálculos)
+  const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
+  const subcategoria = cursoSlugToSubcategoria[course];
+  const defaultWeeks = subcategoria === 'Programa Estudio y Trabajo (25 semanas)' ? 25 : 1;
+  const weeks = Number(searchParams.get("weeksMin") ?? defaultWeeks);
+
   // Memoizar cálculos costosos
   const rating = useMemo(() => Number(school.qualities?.ponderado ?? 0), [school.qualities?.ponderado]);
-  
-  const antiguedad = useMemo(() => 
+
+  const antiguedad = useMemo(() =>
     school.description?.añoFundacion
       ? new Date().getFullYear() - school.description.añoFundacion
-      : null, 
+      : null,
     [school.description?.añoFundacion]
   );
 
@@ -73,8 +91,8 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
 
   // Memoizar filtrado de precios
   const priceOptions = useMemo(
-    () => filtrarPrecioMasBarato(school.prices),
-    [school.prices]
+    () => filtrarPrecioMasBarato(school.prices, weeks),
+    [school.prices, weeks]
   );
 
   const selected = priceOptions[selectedOptionIndex] ?? null;
@@ -85,12 +103,10 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
 
   // Generar URL para la tarjeta
   const schoolId = school._id.toString();
-  const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
-  const weeks = Number(searchParams.get("weeksMin") ?? 1);
+
   const city = searchParams.get("city") ?? "Dublin";
   const schedule = searchParams.get("horario") ?? "PM";
 
-  const subcategoria = cursoSlugToSubcategoria[course];
   const seoEntry = school.cursosEos?.find(
     (c: any) => c.subcategoria === subcategoria
   );
