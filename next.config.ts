@@ -4,6 +4,9 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
+  // Trailing slash behavior: false = URLs sin barra final (consistente con canonicals)
+  trailingSlash: false,
+
   images: {
     // Formatos modernos para mejor compresión
     formats: ['image/avif', 'image/webp'],

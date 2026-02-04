@@ -7,21 +7,30 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
-      // === REGLA 0: Bloquear parámetros de búsqueda (evitar duplicados) ===
-      // Prevenir indexación de URLs con parámetros de búsqueda que generan duplicados
+      // === REGLA 0: Permitir explícitamente el buscador con filtros ===
+      // El buscador NECESITA query params para funcionar y debe ser indexado
       {
         userAgent: "*",
-        disallow: [
-          "*?curso=",
-          "*?semanas=",
-          "*?ciudad=",
-          "*?horario=",
-          "*?weeksMin=",
-          "*?schedule=",
+        allow: [
+          "/buscador-cursos-de-ingles*",
+          "/school-search*",
         ],
       },
 
-      // === REGLA 1: Googlebot y variantes (máxima prioridad) ===
+      // === REGLA 1: Bloquear query params SOLO en páginas de detalle de escuelas ===
+      // Estas páginas ya tienen middleware que hace 301 redirect a canonical sin query params
+      {
+        userAgent: "*",
+        disallow: [
+          "/cursos/*/escuelas/*?curso=*",
+          "/cursos/*/escuelas/*?semanas=*",
+          "/cursos/*/escuelas/*?ciudad=*",
+          "/cursos/*/escuelas/*?horario=*",
+          "/cursos/*/escuelas/*?schoolId=*",
+        ],
+      },
+
+      // === REGLA 2: Googlebot y variantes (máxima prioridad) ===
       {
         userAgent: "Googlebot",
         allow: "/",
