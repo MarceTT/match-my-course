@@ -3,10 +3,28 @@ import { getToken } from 'next-auth/jwt';
 
 const ADMIN_PREFIX = '/admin';
 const KNOWN_QUERY_PARAMS = new Set(['curso', 'schoolId', 'semanas', 'ciudad', 'horario']);
+const CANONICAL_DOMAIN = 'matchmycourse.com';
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const { pathname } = url;
+  const hostname = req.headers.get('host') || '';
+
+  // === REDIRECT RAILWAY/VERCEL DOMAINS TO CANONICAL DOMAIN ===
+  // Previene contenido duplicado en Google indexando dominios de staging/preview
+  if (
+    hostname &&
+    !hostname.includes(CANONICAL_DOMAIN) &&
+    !hostname.includes('localhost') &&
+    !hostname.includes('127.0.0.1')
+  ) {
+    const redirectUrl = new URL(req.url);
+    redirectUrl.host = CANONICAL_DOMAIN;
+    redirectUrl.protocol = 'https:';
+
+    // 301 Permanent Redirect para transferir SEO juice
+    return NextResponse.redirect(redirectUrl, 301);
+  }
 
   // /admin – auth con NextAuth
   if (pathname.startsWith(ADMIN_PREFIX)) {
@@ -44,5 +62,9 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/cursos/:path*'],
+  // Matcher debe incluir TODAS las rutas para el redirect de dominio
+  // Excluimos _next/static, _next/image, favicon.ico, y otros assets
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+  ],
 };
