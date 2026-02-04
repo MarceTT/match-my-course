@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
     const redirectUrl = new URL(req.url);
     redirectUrl.host = CANONICAL_DOMAIN;
     redirectUrl.protocol = 'https:';
+    redirectUrl.port = ''; // Remover puerto explícitamente (Railway usa 8080 internamente)
 
     // 301 Permanent Redirect para transferir SEO juice
     return NextResponse.redirect(redirectUrl, 301);
