@@ -49,8 +49,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // /cursos/.../:id – quitar query conocidas → 301 a canónica sin query
-  const isCourseDetail = /^\/cursos\/[^/]+\/escuelas\/[^/]+\/[A-Za-z0-9]+$/.test(pathname);
+  // /cursos/.../escuelas/... – quitar query conocidas → 301 a canónica sin query
+  // Matches both: /cursos/X/escuelas/Y and /cursos/X/escuelas/Y/schoolId
+  const isCourseDetail = /^\/cursos\/[^/]+\/escuelas\/[^/]+/.test(pathname);
   if (isCourseDetail) {
     const hasKnown = Array.from(url.searchParams.keys()).some((k) => KNOWN_QUERY_PARAMS.has(k));
     if (hasKnown) {

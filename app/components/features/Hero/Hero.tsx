@@ -13,10 +13,9 @@ export default function Hero() {
           "MatchMyCourse - Cursos de inglés en el extranjero - Hero móvil",
           {
             sizes: "(max-width: 768px) 100vw, 0px",
-            priority: true,
+            priority: false, // Only desktop gets priority to avoid dual preload
             quality: 80,
-            fill: true,
-            fetchPriority: 'high'
+            fill: true
           }
         )}
         fill

@@ -53,41 +53,10 @@ export const metadata: Metadata = {
 };
 
 const MisionAnVisionPage = () => {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "MatchMyCourse",
-    "url": "https://matchmycourse.com",
-    "logo": "https://matchmycourse.com/logo.png",
-    "description": "Marketplace líder para comparar y reservar cursos de inglés en el extranjero",
-    "foundingDate": "2020",
-    "sameAs": [
-      "https://www.facebook.com/matchmycourse",
-      "https://www.instagram.com/matchmycourse",
-      "https://www.linkedin.com/company/matchmycourse"
-    ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "Customer Service",
-      "availableLanguage": ["Spanish", "English"]
-    },
-    "areaServed": "Worldwide",
-    "serviceType": "Educational Services",
-    "knowsAbout": [
-      "English Language Courses",
-      "International Education",
-      "Study Abroad Programs"
-    ]
-  };
+  // Organization schema removed to avoid duplication (handled in layout.tsx)
 
   return (
     <div className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData)
-        }}
-      />
       <main className="max-w-4xl mx-auto px-6 py-12">
         <Detail />
         <CallToAction />

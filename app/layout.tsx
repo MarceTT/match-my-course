@@ -89,15 +89,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.matchmycourse.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//api.matchmycourse.com" />
 
-        {/* Preload critical LCP image for Hero */}
-        <link
-          rel="preload"
-          as="image"
-          href="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Matchmycourse-Cursos-de-ingles-en-el-extranjero-matchmycourse.webp"
-          imageSrcSet="https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Matchmycourse-Cursos-de-ingles-en-el-extranjero-matchmycourse.webp 1920w"
-          imageSizes="100vw"
-          fetchPriority="high"
-        />
+        {/* Hero image preload handled by next/image with priority prop */}
 
         {/* Preconnect to Google Fonts for faster font loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -187,7 +179,7 @@ export default function RootLayout({
               'https://www.linkedin.com/company/matchmycourse/',
               'https://www.youtube.com/@matchmycourse',
             ],
-            foundingDate: '2021',
+            foundingDate: '2020',
             founder: {
               '@type': 'Person',
               name: 'Match My Course Team',

@@ -53,7 +53,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Main navigation pages
     { url: `${base}/como-funciona-matchmycourse`, lastModified: new Date() },
+    { url: `${base}/estudiar-ingles-irlanda`, lastModified: new Date('2025-01-15') },
     { url: `${base}/estudiar-ingles-nueva-zelanda`, lastModified: new Date() },
+    { url: `${base}/buscador-cursos-de-ingles`, lastModified: new Date() },
     { url: `${base}/escuelas-socias`, lastModified: new Date() },
     { url: `${base}/servicios-matchmycourse`, lastModified: new Date() },
     { url: `${base}/contacto`, lastModified: new Date() },
@@ -62,6 +64,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date() },
     { url: `${base}/quienes-somos`, lastModified: new Date() },
     { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date() },
+    { url: `${base}/politica-de-privacidad`, lastModified: new Date('2025-01-01') },
+    { url: `${base}/terminos-y-condiciones`, lastModified: new Date('2025-01-01') },
     { url: `${base}/blog`, lastModified: new Date() },
   ]
 

@@ -59,10 +59,10 @@ export const metadata: Metadata = {
 const AboutUs = () => {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "AboutPage",
     "name": "MatchMyCourse",
     "url": "https://matchmycourse.com",
-    "logo": "https://matchmycourse.com/logo.png",
+    "logo": "https://d2wv8pxed72bi5.cloudfront.net/logos/final-logo.png",
     "description": "Marketplace para comparar y reservar cursos de inglés en el extranjero con escuelas certificadas",
     "foundingDate": "2020",
     "sameAs": [

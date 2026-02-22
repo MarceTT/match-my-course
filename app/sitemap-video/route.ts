@@ -305,7 +305,7 @@ function convertSchoolVideoToEntry(
 
   // Try to use manual SEO URL mapping first
   const seoPath = schoolNameToSeoUrl[school.name]
-  let pageUrl: string
+  let pageUrl: string | null = null
 
   if (seoPath) {
     pageUrl = `${baseUrl}${seoPath}`
@@ -318,12 +318,12 @@ function convertSchoolVideoToEntry(
     if (slugCurso && slugEscuela) {
       pageUrl = `${baseUrl}/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`
     } else {
-      console.warn(`[Sitemap-Video] No SEO URL mapping found for "${school.name}" and failed to build from data`)
-      pageUrl = `${baseUrl}/school/${school.schoolId}`
+      console.warn(`[Sitemap-Video] No SEO URL for "${school.name}", failed to build from data - SKIPPING`)
+      return null
     }
   } else {
-    console.warn(`[Sitemap-Video] No SEO URL mapping found for "${school.name}", using fallback`)
-    pageUrl = `${baseUrl}/school/${school.schoolId}`
+    console.warn(`[Sitemap-Video] No SEO URL for "${school.name}", no fallback available - SKIPPING`)
+    return null
   }
 
   return {
@@ -352,20 +352,22 @@ export async function GET() {
     const seenPageUrls = new Set<string>()
 
     // Add educational videos (accessible at /videos/[slug])
-    try {
-      let educationalCount = 0
-      EDUCATIONAL_VIDEOS.forEach((video) => {
-        const entry = convertEducationalVideoToEntry(video, baseUrl)
-        if (entry && !seenPageUrls.has(entry.pageUrl)) {
-          videos.push(entry)
-          seenPageUrls.add(entry.pageUrl)
-          educationalCount++
-        }
-      })
-      console.log(`[Sitemap-Video] Added ${educationalCount} educational video entries`)
-    } catch (error) {
-      console.error('[Sitemap-Video] Error processing educational videos:', error)
-    }
+    // DISABLED: Video pages not yet implemented (would return 404)
+    // TODO: Create /app/videos/[slug]/page.tsx before re-enabling
+    // try {
+    //   let educationalCount = 0
+    //   EDUCATIONAL_VIDEOS.forEach((video) => {
+    //     const entry = convertEducationalVideoToEntry(video, baseUrl)
+    //     if (entry && !seenPageUrls.has(entry.pageUrl)) {
+    //       videos.push(entry)
+    //       seenPageUrls.add(entry.pageUrl)
+    //       educationalCount++
+    //     }
+    //   })
+    //   console.log(`[Sitemap-Video] Added ${educationalCount} educational video entries`)
+    // } catch (error) {
+    //   console.error('[Sitemap-Video] Error processing educational videos:', error)
+    // }
 
     // Add school videos (accessible at school detail pages)
     try {

@@ -95,7 +95,8 @@ async function SchoolSeoHome({
       "@type": "AggregateRating",
       "ratingValue": rating.toFixed(1),
       "bestRating": "5",
-      "worstRating": "1"
+      "worstRating": "1",
+      "reviewCount": school.reviewCount || 1
     } : undefined,
     "foundingDate": school.description?.añoFundacion ? school.description.añoFundacion.toString() : undefined,
     "priceRange": school.minPrecio ? `€€` : undefined,

@@ -50,12 +50,9 @@ export default function HeroClient() {
     <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
-          <h1 className={`${raleway.className} animate-fade-in text-4xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] block md:hidden`}>
-            Encuentra tu <br />curso de inglés
-          </h1>
-
-          <h1 className={`${raleway.className} animate-fade-in text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)] hidden md:block`}>
-            Encuentra tu curso de inglés
+          <h1 className={`${raleway.className} animate-fade-in text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)]`}>
+            <span className="md:hidden">Encuentra tu<br />curso de inglés</span>
+            <span className="hidden md:inline">Encuentra tu curso de inglés en Irlanda y las escuelas que lo ofrecen</span>
           </h1>
 
           <div className="flex flex-col sm:flex-row bg-white rounded-lg sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl pointer-events-auto">
