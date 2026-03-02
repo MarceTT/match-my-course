@@ -605,15 +605,16 @@ export default function RegisterForm() {
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">
-                    Teléfono (agregar prefijo del país)
+                    Teléfono (incluir código de país)
                   </Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => updateFormData("phone", e.target.value)}
-                    placeholder="+56 9 1234 5678"
+                    placeholder="+52 55 1234 5678"
                   />
+                  <p className="text-xs text-muted-foreground">Ej: +56 (Chile), +52 (México), +54 (Argentina)</p>
                   {errors.phone && (
                     <p className="text-sm text-destructive">{errors.phone}</p>
                   )}
@@ -628,8 +629,9 @@ export default function RegisterForm() {
                     onChange={(e) =>
                       updateFormData("emergencyPhone", e.target.value)
                     }
-                    placeholder="+56 9 1234 5678"
+                    placeholder="+52 55 1234 5678"
                   />
+                  <p className="text-xs text-muted-foreground">Ej: +56 (Chile), +52 (México), +54 (Argentina)</p>
                   {errors.emergencyPhone && (
                     <p className="text-sm text-destructive">
                       {errors.emergencyPhone}
