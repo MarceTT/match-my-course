@@ -525,6 +525,7 @@ export default function RegisterForm() {
                    placeholder="Seleccione la fecha"
                    showYearSelector={true}
                   />
+                  <p className="text-xs text-muted-foreground">Edad mínima: 16 años</p>
                   {errors.birthDate && (
                     <p className="text-sm text-destructive">
                       {errors.birthDate}
@@ -540,7 +541,9 @@ export default function RegisterForm() {
                     value={formData.age}
                     onChange={(e) => updateFormData("age", e.target.value)}
                     placeholder="Edad"
+                    min="16"
                   />
+                  <p className="text-xs text-muted-foreground">Edad mínima: 16 años</p>
                   {errors.age && (
                     <p className="text-sm text-destructive">{errors.age}</p>
                   )}

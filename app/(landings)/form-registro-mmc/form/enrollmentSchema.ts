@@ -34,7 +34,7 @@ export const enrollmentInfoSchema = z.object({
     required_error: "La fecha de solicitud es requerida",
   }),
   fullName: z.string().min(3, "El nombre completo debe tener al menos 3 caracteres"),
-  passportNumber: z.string().min(6, "El número de pasaporte debe tener al menos 6 caracteres"),
+  passportNumber: z.string().optional(),
   gender: z.enum(["femenino", "masculino", "otro"], {
     required_error: "Debe seleccionar un género",
   }),
@@ -47,28 +47,28 @@ export const enrollmentInfoSchema = z.object({
     .refine((date) => {
       const age = calculateAge(date)
       return age >= 16
-    }, "Debe tener al menos 16 años para enviar el formulario"),
+    }, "Debes tener al menos 16 años para aplicar a un curso de inglés en el extranjero"),
     age: z
     .string()
     .min(1, "La edad es requerida")
     .refine((val) => {
       const age = Number.parseInt(val)
       return !isNaN(age) && age >= 16
-    }, "Debe tener al menos 16 años para enviar el formulario"),
+    }, "Debes tener al menos 16 años para aplicar a un curso de inglés en el extranjero"),
   email: z.string().email("Debe ingresar un correo electrónico válido"),
   address: z.string().min(5, "La dirección debe tener al menos 5 caracteres"),
   city: z.string().min(2, "La ciudad es requerida"),
   postalCode: z.string().min(3, "El código postal es requerido"),
   phone: z
     .string()
-    .min(8, "El teléfono debe tener al menos 8 caracteres")
-    .refine((val) => val.startsWith("+56"), "El teléfono debe comenzar con el prefijo +56"),
+    .min(8, "El teléfono debe tener al menos 8 dígitos")
+    .regex(/^\d+$/, "El teléfono solo puede contener números"),
   emergencyContactName: z.string().min(3, "El nombre del contacto de emergencia es requerido"),
   emergencyContactEmail: z.string().email("Debe ingresar un correo electrónico válido"),
   emergencyPhone: z
     .string()
-    .min(8, "El teléfono de emergencia debe tener al menos 8 caracteres")
-    .refine((val) => val.startsWith("+56"), "El teléfono de emergencia debe comenzar con el prefijo +56"),
+    .min(8, "El teléfono de emergencia debe tener al menos 8 dígitos")
+    .regex(/^\d+$/, "El teléfono de emergencia solo puede contener números"),
   medicalConditions: z.string().optional(),
 })
 
