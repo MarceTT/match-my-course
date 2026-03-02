@@ -605,16 +605,19 @@ export default function RegisterForm() {
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">
-                    Teléfono (incluir código de país)
+                    Teléfono (solo números)
                   </Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => updateFormData("phone", e.target.value)}
-                    placeholder="+52 55 1234 5678"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      updateFormData("phone", value);
+                    }}
+                    placeholder="5255 1234 5678"
                   />
-                  <p className="text-xs text-muted-foreground">Ej: +56 (Chile), +52 (México), +54 (Argentina)</p>
+                  <p className="text-xs text-muted-foreground">Opcional: incluir código de país (52, 56, 54, etc.)</p>
                   {errors.phone && (
                     <p className="text-sm text-destructive">{errors.phone}</p>
                   )}
@@ -626,12 +629,13 @@ export default function RegisterForm() {
                     id="emergencyPhone"
                     type="tel"
                     value={formData.emergencyPhone}
-                    onChange={(e) =>
-                      updateFormData("emergencyPhone", e.target.value)
-                    }
-                    placeholder="+52 55 1234 5678"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      updateFormData("emergencyPhone", value);
+                    }}
+                    placeholder="5255 1234 5678"
                   />
-                  <p className="text-xs text-muted-foreground">Ej: +56 (Chile), +52 (México), +54 (Argentina)</p>
+                  <p className="text-xs text-muted-foreground">Opcional: incluir código de país (52, 56, 54, etc.)</p>
                   {errors.emergencyPhone && (
                     <p className="text-sm text-destructive">
                       {errors.emergencyPhone}
