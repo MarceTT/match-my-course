@@ -22,6 +22,7 @@ import { SchoolSeoHomeClient } from "./SchoolSeoHomeClient";
 import SchoolHeaderClient from "./SchoolHeaderClient";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
 import SchoolBreadcrumb from "@/app/features/school/components/SchoolBreadcrumb";
+import SchoolDescription from "./components/SchoolDescription";
 
 const SchoolDetailDynamic = dynamic(
   () =>
@@ -178,9 +179,7 @@ async function SchoolSeoHome({
             )}
           </div>
           {school.description?.detalleEscuela && (
-            <p className="text-gray-700 leading-relaxed text-base">
-              {school.description.detalleEscuela}
-            </p>
+            <SchoolDescription description={school.description.detalleEscuela} />
           )}
         </div>
       </div>
