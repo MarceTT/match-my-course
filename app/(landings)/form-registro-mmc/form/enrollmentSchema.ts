@@ -85,22 +85,25 @@ export const enrollmentSchoolInfoSchema = z
         required_error: "La fecha de inicio de clases es requerida",
       })
       .refine((date) => {
-        // Validate that it's a Monday (getDay() returns 1 for Monday)
-        return date.getDay() === 1
-      }, "La fecha de inicio debe ser un lunes")
-      .refine((date) => {
-        const minDate = getMinimumClassStartDate()
-        return date >= minDate
-      }, "La fecha de inicio debe ser al menos 2 semanas desde hoy"),
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        return date > today
+      }, "La fecha de inicio no puede ser hoy ni en el pasado"),
     needsAccommodation: z.enum(["si", "no"], {
       required_error: "Debe indicar si necesita alojamiento",
     }),
     accommodationType: z.array(z.string()).optional(),
     accommodationArrivalDate: z.date().optional(),
     accommodationWeeks: z.string().optional(),
-    estimatedArrivalDate: z.date({
-      required_error: "La fecha de llegada es requerida",
-    }),
+    estimatedArrivalDate: z
+      .date({
+        required_error: "La fecha de llegada es requerida",
+      })
+      .refine((date) => {
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        return date > today
+      }, "La fecha de llegada no puede ser hoy ni en el pasado"),
   })
   .refine(
     (data) => {
@@ -122,15 +125,16 @@ export const enrollmentSchoolInfoSchema = z
   )
   .refine(
     (data) => {
-      // Validate accommodation arrival date is Saturday or Sunday
+      // Validate accommodation arrival date is not in the past
       if (data.needsAccommodation === "si" && data.accommodationArrivalDate) {
-        const day = data.accommodationArrivalDate.getDay()
-        return day === 0 || day === 6 // 0 = Sunday, 6 = Saturday
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        return data.accommodationArrivalDate > today
       }
       return true
     },
     {
-      message: "La fecha de llegada al alojamiento debe ser un sábado o domingo",
+      message: "La fecha de llegada al alojamiento no puede ser hoy ni en el pasado",
       path: ["accommodationArrivalDate"],
     },
   )
