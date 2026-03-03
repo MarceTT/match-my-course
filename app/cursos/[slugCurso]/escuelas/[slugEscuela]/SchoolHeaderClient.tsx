@@ -41,25 +41,35 @@ const SchoolHeaderClient = ({
 
           {/* Summary text with expand/collapse */}
           {summaryText && (
-            <>
+            <div className="mt-2">
               <p
                 id="school-summary"
-                className={`mt-2 text-gray-700 text-base leading-relaxed text-center md:text-left lg:text-left xl:text-left ${
-                  summaryExpanded ? '' : 'clamp-2-md-unset fade-bottom-mobile'
-                } md:text-base md:leading-6 md:text-slate-500 md:font-normal md:max-w-2xl md:opacity-90`}
+                className={`text-gray-700 text-base leading-relaxed text-center md:text-left lg:text-left xl:text-left md:text-base md:leading-6 md:text-slate-500 md:font-normal md:max-w-2xl md:opacity-90 transition-all duration-300 ${
+                  summaryExpanded ? '' : 'line-clamp-2'
+                }`}
               >
                 {summaryText}
               </p>
-              <button
-                type="button"
-                aria-controls="school-summary"
-                aria-expanded={summaryExpanded}
-                onClick={() => setSummaryExpanded((v) => !v)}
-                className="mt-1 text-blue-600 hover:text-blue-700 text-sm md:hidden underline"
-              >
-                {summaryExpanded ? 'Leer menos' : 'Leer más'}
-              </button>
-            </>
+              {summaryText.length > 200 && (
+                <button
+                  type="button"
+                  aria-controls="school-summary"
+                  aria-expanded={summaryExpanded}
+                  onClick={() => setSummaryExpanded((v) => !v)}
+                  className="mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium underline inline-flex items-center gap-1"
+                >
+                  {summaryExpanded ? 'Ver menos' : 'Leer más'}
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${summaryExpanded ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              )}
+            </div>
           )}
 
           {/* Rating display */}
