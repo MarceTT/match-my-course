@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import Image from "next/image";
+import { rewriteToCDN, getResponsiveImageProps } from "@/app/utils/rewriteToCDN";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
 
@@ -19,11 +20,20 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <article className="bg-white rounded-lg shadow hover:shadow-xl transition overflow-hidden flex flex-col">
       {post.coverImage && (
-        <img
-          src={rewriteToCDN(post.coverImage)}
-          alt={post.title}
-          className="w-full h-48 object-cover"
-        />
+        <div className="relative w-full h-48 overflow-hidden">
+          <Image
+            {...getResponsiveImageProps(
+              rewriteToCDN(post.coverImage),
+              post.title,
+              {
+                fill: true,
+                quality: 75,
+                sizes: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+              }
+            )}
+            className="object-cover"
+          />
+        </div>
       )}
       <div className="p-4 flex flex-col flex-grow">
         {post.category && (

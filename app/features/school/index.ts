@@ -18,9 +18,9 @@ export { default as SchoolSearchList } from './components/SchoolSearchList';
 export { default as SchoolStat } from './components/SchoolStat';
 export { default as Section } from './components/Section';
 
-// School Feature Hooks
-export { useSchoolById } from './hooks/useSchoolById';
-export { useSchools } from './hooks/useSchools';
-export { useSchoolDetails } from './hooks/useSchoolDetails';
-export { useFilteredSchools } from './hooks/useSchoolsByCourse';
-export { useSchoolSearch } from './hooks/useSchoolSearch';
+// School Feature Hooks - re-exported from app/hooks
+export { useSchoolById } from '@/app/hooks/useSchoolById';
+export { useSchools } from '@/app/hooks/useSchools';
+export { useSchoolDetails } from '@/app/hooks/useSchoolDetails';
+export { useFilteredSchools } from '@/app/hooks/useSchoolsByCourse';
+export { useSchoolSearch } from '@/app/hooks/useSchoolSearch';

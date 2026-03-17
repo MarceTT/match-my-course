@@ -8,7 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useFilteredSchools } from "../hooks/useSchoolsByCourse";
 import filtersConfig from "@/app/utils/filterConfig";
 import { useDebounce } from "@/app/hooks/useDebounce";
-import InfiniteSchoolFiltered from "../components/school/InfiniteSchoolFiltered";
+import InfiniteSchoolFiltered from "@/app/features/school/components/InfiniteSchoolFiltered";
 import { TourProvider } from "@reactour/tour";
 
 const normalizeCourse = (course: string) => {
@@ -54,11 +54,20 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const generateInitialFilters = (course: string): Record<string, any> => {
+  const generateInitialFilters = (course: string, params: URLSearchParams): Record<string, any> => {
     const initial: Record<string, any> = {};
     Object.entries(filtersConfig).forEach(([key, config]) => {
       if (key === "course") {
         initial[key] = course ? [course] : ["ingles-general"];
+      } else if (key === "weeks") {
+        // Read weeksMin from URL if present
+        const urlWeeks = params.get("weeksMin");
+        const def = config.slider?.default;
+        initial[key] = urlWeeks ? [parseInt(urlWeeks, 10)] : (Array.isArray(def) ? def : [def]);
+      } else if (key === "cities") {
+        // Read cities from URL if present
+        const urlCities = params.get("cities");
+        initial[key] = urlCities ? urlCities.split(",") : [];
       } else if (config.type === "slider") {
         const def = config.slider?.default;
         initial[key] = Array.isArray(def) ? def : [def];
@@ -70,13 +79,13 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
   };
 
   const [filters, setFilters] = useState<Record<string, any>>(
-    generateInitialFilters(normalizedCourse)
+    generateInitialFilters(normalizedCourse, searchParams)
   );
   const debouncedFilters = useDebounce(filters, 700); // Optimizado: 700ms vs 600ms original
 
   useEffect(() => {
-    setFilters(generateInitialFilters(normalizedCourse));
-  }, [courseType]);
+    setFilters(generateInitialFilters(normalizedCourse, searchParams));
+  }, [courseType, searchParams]);
 
   useEffect(() => {
     const params = new URLSearchParams();

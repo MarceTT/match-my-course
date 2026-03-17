@@ -64,6 +64,11 @@ export const useInfiniteFilteredSchools = (
   filters: Record<string, any> | undefined,
   initialData?: { schools: any[]; currentPage: number; totalPages: number }
 ) => {
+  // Solo usar initialData si no hay filtros de ciudad o semanas custom
+  // (es decir, solo para la carga inicial sin filtros)
+  const hasCustomFilters = filters?.cities?.length > 0 || 
+    (filters?.weeks?.[0] && filters.weeks[0] !== 1);
+  
   return useInfiniteQuery({
     queryKey: ["infinite-schools", filters],
     queryFn: ({ pageParam = 1 }) => fetchPaginatedSchools({ pageParam, filters: filters || {} }),
@@ -74,14 +79,16 @@ export const useInfiniteFilteredSchools = (
       }
       return undefined;
     },
-    // Si tenemos initialData del SSR, usarlo como primera página
-    initialData: initialData ? {
+    // Solo usar initialData si NO hay filtros custom (primera carga)
+    initialData: (!hasCustomFilters && initialData) ? {
       pages: [initialData],
       pageParams: [1],
     } : undefined,
-    placeholderData: (previousData) => previousData,
+    // No mantener datos viejos cuando cambian filtros
+    placeholderData: undefined,
     retry: 1,
-    staleTime: 1000 * 60 * 5,
+    // Reducir staleTime para que refetch más rápido
+    staleTime: 1000 * 30, // 30 segundos
     enabled: !!filters && Object.keys(filters).length > 0,
   });
 };

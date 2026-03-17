@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@/app/hooks/useDebounce";
 import { useSearchParams, useRouter } from "next/navigation";
-import filtersConfig from "@/app/utils/filterConfig";
+import filtersConfig, { courseCitiesMap } from "@/app/utils/filterConfig";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import {
@@ -34,44 +34,6 @@ const normalize = (str: string) =>
     .replace(/--+/g, "-")
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
-
-const courseCitiesMap: Record<string, string[]> = {
-  "ingles-visa-de-trabajo": [
-    "Dublín",
-    "Bray",
-    "Galway",
-    "Naas",
-    "Tralee",
-    "Cork",
-    "Limerick",
-    "Athlone",
-    "Waterford",
-    "Killarney",
-    "Wexford",
-  ],
-  "ingles-general": [
-    "Dublín",
-    "Cork",
-    "Galway",
-    "Athlone",
-    "Naas",
-    "Limerick",
-    "Waterford",
-    "Bray",
-    "Wexford",
-    "Tralee",
-  ],
-  "ingles-general-mas-sesiones-individuales": ["Dublín", "Galway", "Wexford"],
-  "ingles-general-intensivo": [
-    "Dublín",
-    "Galway",
-    "Cork",
-    "Bray",
-    "Limerick",
-    "Tralee",
-  ],
-  "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
-};
 
 interface FilterProps {
   isOpen: boolean;

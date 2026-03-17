@@ -1,7 +1,7 @@
 "use client";
 
 import { usePosts } from "@/app/hooks/blog/useGetPosts";
-import PostCard from "@/app/components/blog/PostCard";
+import { PostCard } from "@/app/features/blog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

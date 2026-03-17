@@ -44,6 +44,48 @@ const normalizeUrl = (str: string) =>
     .replace(/[^a-z0-9-]/g, "")
     .replace(/^-+|-+$/g, "");
 
+// Source of truth: course-to-cities mapping
+export const courseCitiesMap: Record<string, string[]> = {
+  "ingles-visa-de-trabajo": [
+    "Dublín",
+    "Bray",
+    "Galway",
+    "Naas",
+    "Tralee",
+    "Cork",
+    "Limerick",
+    "Athlone",
+    "Waterford",
+    "Killarney",
+    "Wexford",
+  ],
+  "ingles-general": [
+    "Dublín",
+    "Cork",
+    "Galway",
+    "Athlone",
+    "Naas",
+    "Limerick",
+    "Waterford",
+    "Bray",
+    "Wexford",
+    "Tralee",
+  ],
+  "ingles-general-mas-sesiones-individuales": ["Dublín", "Galway", "Wexford"],
+  "ingles-general-intensivo": [
+    "Dublín",
+    "Galway",
+    "Cork",
+    "Bray",
+    "Limerick",
+    "Tralee",
+  ],
+  "ingles-general-orientado-a-negocios": ["Dublín", "Cork"],
+};
+
+// Generate all unique cities from courseCitiesMap (single source of truth)
+const allCities = [...new Set(Object.values(courseCitiesMap).flat())];
+
 const filtersConfig: Record<string, FilterConfig> = {
   course: {
     label: "Tipo de curso",
@@ -71,7 +113,7 @@ const filtersConfig: Record<string, FilterConfig> = {
 
   cities: {
     label: "Ciudad",
-    options: ["Dublín", "Cork", "Galway", "Limerick"].map((label) => ({
+    options: allCities.map((label) => ({
       id: normalize(label),
       label,
     })),

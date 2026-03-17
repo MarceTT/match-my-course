@@ -26,7 +26,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DatePickerEbook } from "@/components/common/DatePickerEbook";
 import { format as formatDate } from "date-fns";
 import Image from "next/image";
-import { CustomCountrySelect } from "../../shared";
+import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect";
 import { countries } from "@/lib/constants/countries";
 import { toast } from "sonner";
 import axiosInstance from "@/app/utils/apiClient";

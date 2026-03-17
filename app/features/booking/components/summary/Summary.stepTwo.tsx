@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { CustomCountrySelect } from "@/app/shared";
+import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect";
 import { countries } from "@/lib/constants/countries";
 import { parseDDMMYYYY, ReservationFormData } from "@/types/reservationForm";
 import { UseFormReturn } from "react-hook-form";

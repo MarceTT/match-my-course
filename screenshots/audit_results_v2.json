@@ -1,0 +1,258 @@
+[
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/homepage_desktop.png",
+    "url": "https://matchmycourse.com",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 2,
+      "h1_texts": [
+        "Encuentra tu curso de inglés",
+        "Encuentra tu curso de inglés"
+      ],
+      "h1_visible": [
+        {
+          "text": "Encuentra tu curso de inglés",
+          "in_viewport": true,
+          "position_y": 430
+        }
+      ],
+      "cta_count": 20,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hero_present": false,
+      "image_count": 77,
+      "image_issues": [],
+      "title": "MatchMyCourse | Encuentra tu curso de inglés",
+      "meta_description": "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
+      "canonical": "https://matchmycourse.com"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/homepage_mobile.png",
+    "url": "https://matchmycourse.com",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 2,
+      "h1_texts": [
+        "Encuentra tu\ncurso de inglés",
+        "Encuentra tu curso de inglés"
+      ],
+      "h1_visible": [
+        {
+          "text": "Encuentra tu\ncurso de inglés",
+          "in_viewport": true,
+          "position_y": 164.4375
+        }
+      ],
+      "cta_count": 23,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros",
+        "Buscar"
+      ],
+      "nav_present": true,
+      "hamburger_menu": true,
+      "hero_present": false,
+      "image_count": 76,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "body_font_size": "16px",
+      "title": "MatchMyCourse | Encuentra tu curso de inglés",
+      "meta_description": "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
+      "canonical": "https://matchmycourse.com"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/curso_page_desktop.png",
+    "url": "https://matchmycourse.com/cursos-ingles-extranjero",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Estudiar Inglés en el extranjero"
+      ],
+      "h1_visible": [
+        {
+          "text": "Estudiar Inglés en el extranjero",
+          "in_viewport": true,
+          "position_y": 394
+        }
+      ],
+      "cta_count": 15,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hero_present": true,
+      "image_count": 25,
+      "image_issues": [],
+      "title": "Estudiar Inglés en el extranjero | MatchMyCourse",
+      "meta_description": "Descubre cursos de inglés en el extranjero: desde inglés general hasta preparación de exámenes, con escuelas confiables y asesoría completa para tu viaje",
+      "canonical": "https://matchmycourse.com/cursos-ingles-extranjero"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/curso_page_mobile.png",
+    "url": "https://matchmycourse.com/cursos-ingles-extranjero",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Estudiar Inglés en el extranjero"
+      ],
+      "h1_visible": [
+        {
+          "text": "Estudiar Inglés en el extranjero",
+          "in_viewport": true,
+          "position_y": 188.3125
+        }
+      ],
+      "cta_count": 15,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hamburger_menu": true,
+      "hero_present": true,
+      "image_count": 25,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "body_font_size": "16px",
+      "title": "Estudiar Inglés en el extranjero | MatchMyCourse",
+      "meta_description": "Descubre cursos de inglés en el extranjero: desde inglés general hasta preparación de exámenes, con escuelas confiables y asesoría completa para tu viaje",
+      "canonical": "https://matchmycourse.com/cursos-ingles-extranjero"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/pais_page_desktop.png",
+    "url": "https://matchmycourse.com/estudiar-ingles-irlanda",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Asesoría estudiar inglés y trabajar en Irlanda"
+      ],
+      "h1_visible": [
+        {
+          "text": "Asesoría estudiar inglés y trabajar en Irlanda",
+          "in_viewport": true,
+          "position_y": 152
+        }
+      ],
+      "cta_count": 50,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hero_present": true,
+      "image_count": 14,
+      "image_issues": [],
+      "title": "Estudiar Inglés en Irlanda | MatchMyCourse",
+      "meta_description": "Estudia inglés en Irlanda con asesoría experta, escuelas acreditadas, alojamiento seguro y programas flexibles para vivir una experiencia inolvidable.",
+      "canonical": "https://matchmycourse.com/estudiar-ingles-irlanda"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/pais_page_mobile.png",
+    "url": "https://matchmycourse.com/estudiar-ingles-irlanda",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Asesoría estudiar inglés y trabajar en Irlanda"
+      ],
+      "h1_visible": [
+        {
+          "text": "Asesoría estudiar inglés y trabajar en Irlanda",
+          "in_viewport": true,
+          "position_y": 112
+        }
+      ],
+      "cta_count": 53,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hamburger_menu": true,
+      "hero_present": true,
+      "image_count": 14,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "body_font_size": "16px",
+      "title": "Estudiar Inglés en Irlanda | MatchMyCourse",
+      "meta_description": "Estudia inglés en Irlanda con asesoría experta, escuelas acreditadas, alojamiento seguro y programas flexibles para vivir una experiencia inolvidable.",
+      "canonical": "https://matchmycourse.com/estudiar-ingles-irlanda"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/blog_page_desktop.png",
+    "url": "https://matchmycourse.com/blog",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Blog MatchMyCourse"
+      ],
+      "h1_visible": [
+        {
+          "text": "Blog MatchMyCourse",
+          "in_viewport": true,
+          "position_y": 144
+        }
+      ],
+      "cta_count": 16,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros",
+        "Leer Más"
+      ],
+      "nav_present": true,
+      "hero_present": true,
+      "image_count": 8,
+      "image_issues": [],
+      "title": "Blog | MatchMyCourse",
+      "meta_description": "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
+      "canonical": "https://matchmycourse.com/blog"
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/blog_page_mobile.png",
+    "url": "https://matchmycourse.com/blog",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Blog MatchMyCourse"
+      ],
+      "h1_visible": [
+        {
+          "text": "Blog MatchMyCourse",
+          "in_viewport": true,
+          "position_y": 112
+        }
+      ],
+      "cta_count": 16,
+      "visible_ctas": [
+        "Paises",
+        "Nosotros"
+      ],
+      "nav_present": true,
+      "hamburger_menu": true,
+      "hero_present": true,
+      "image_count": 8,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "body_font_size": "16px",
+      "title": "Blog | MatchMyCourse",
+      "meta_description": "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
+      "canonical": "https://matchmycourse.com/blog"
+    }
+  }
+]

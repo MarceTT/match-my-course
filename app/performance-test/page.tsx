@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import PerformanceTestPanel from '@/app/components/admin/PerformanceTestPanel';
+import PerformanceTestPanel from '@/app/admin/components/PerformanceTestPanel';
 
 export default function PerformanceTestPage() {
   return (

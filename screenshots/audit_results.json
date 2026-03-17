@@ -1,0 +1,108 @@
+[
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/homepage_desktop.png",
+    "url": "https://matchmycourse.com/",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 2,
+      "h1_texts": [
+        "Encuentra tu curso de inglés",
+        "Encuentra tu curso de inglés"
+      ],
+      "h1_visible": [
+        {
+          "text": "Encuentra tu curso de inglés",
+          "in_viewport": true,
+          "position_y": 430
+        }
+      ],
+      "cta_count": 20,
+      "nav_present": true,
+      "hero_present": true,
+      "image_count": 77,
+      "image_issues": [],
+      "title": "MatchMyCourse | Encuentra tu curso de inglés",
+      "meta_description": "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse."
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/homepage_mobile.png",
+    "url": "https://matchmycourse.com/",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 2,
+      "h1_texts": [
+        "Encuentra tu\ncurso de inglés",
+        "Encuentra tu curso de inglés"
+      ],
+      "h1_visible": [
+        {
+          "text": "Encuentra tu\ncurso de inglés",
+          "in_viewport": true,
+          "position_y": 164.4375
+        }
+      ],
+      "cta_count": 23,
+      "nav_present": true,
+      "hamburger_menu": false,
+      "hero_present": true,
+      "image_count": 76,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "title": "MatchMyCourse | Encuentra tu curso de inglés",
+      "meta_description": "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse."
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/cursos_desktop.png",
+    "url": "https://matchmycourse.com/cursos",
+    "viewport": "desktop",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Página no encontrada"
+      ],
+      "h1_visible": [
+        {
+          "text": "Página no encontrada",
+          "in_viewport": true,
+          "position_y": 393.5
+        }
+      ],
+      "cta_count": 9,
+      "nav_present": true,
+      "hero_present": true,
+      "image_count": 2,
+      "image_issues": [],
+      "title": "MatchMyCourse — Encuentra y compara cursos en el extranjero",
+      "meta_description": "Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más."
+    }
+  },
+  {
+    "screenshot": "/Users/marceloyvale/Desktop/Works/match-my-course/screenshots/cursos_mobile.png",
+    "url": "https://matchmycourse.com/cursos",
+    "viewport": "mobile",
+    "analysis": {
+      "h1_count": 1,
+      "h1_texts": [
+        "Página no encontrada"
+      ],
+      "h1_visible": [
+        {
+          "text": "Página no encontrada",
+          "in_viewport": true,
+          "position_y": 228
+        }
+      ],
+      "cta_count": 9,
+      "nav_present": true,
+      "hamburger_menu": false,
+      "hero_present": true,
+      "image_count": 2,
+      "image_issues": [],
+      "horizontal_overflow": false,
+      "title": "MatchMyCourse — Encuentra y compara cursos en el extranjero",
+      "meta_description": "Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más."
+    }
+  }
+]

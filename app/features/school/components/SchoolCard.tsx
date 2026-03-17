@@ -1,25 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { BadgePercent } from "lucide-react";
-import { FaStar } from "react-icons/fa6";
+import { Skeleton } from "@/components/ui/skeleton";
+// Inline Star icon to avoid pulling entire react-icons packs
+const Star = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className}>
+    <path
+      d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.787 1.401 8.168L12 18.896 4.665 23.166l1.401-8.168L.132 9.211l8.2-1.193L12 .587z"
+      fill="currentColor"
+    />
+  </svg>
+);
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
-import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import { getResponsiveImageProps, rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
 import { SchoolDetails } from "@/app/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { sendGTMEvent } from "@/app/lib/gtm";
 
+// Lazy load Framer Motion solo cuando sea necesario
+const MotionDiv = dynamic(
+  () => import("framer-motion").then(mod => ({ default: mod.motion.div })),
+  {
+    ssr: true, // Enable SSR to prevent layout shift
+    loading: () => <div className="min-h-[300px]" /> // Reserve space to prevent CLS
+  }
+);
+
 interface SchoolCardProps {
   school: SchoolDetails;
   viewType: "grid" | "list";
 }
 
-function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
+function filtrarPrecioMasBarato(
+  precios: SchoolDetails["prices"] = [],
+  targetWeeks?: number
+) {
+  // Si tenemos semanas específicas, buscar exactamente ese precio
+  if (targetWeeks) {
+    const exactMatch = precios.find((p) => p.semanas === targetWeeks);
+    if (exactMatch) {
+      return [exactMatch];
+    }
+  }
+
+  // Si no hay match exacto o no hay semanas, buscar el más barato
   const pm = precios.filter((p) => p.horario === "PM");
   const am = precios.filter((p) => p.horario === "AM");
 
@@ -34,16 +65,35 @@ function filtrarPrecioMasBarato(precios: SchoolDetails["prices"] = []) {
   return [];
 }
 
-export default function SchoolCard({ school, viewType }: SchoolCardProps) {
+const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCardProps) {
   const searchParams = useSearchParams();
   const prefetchSchool = usePrefetchSchoolDetails();
-  const rating = Number(school.qualities?.ponderado ?? 0);
-  const antiguedad = school.description?.añoFundacion
-    ? new Date().getFullYear() - school.description.añoFundacion
-    : null;
+
+  // Extraer parámetros primero (necesarios para otros cálculos)
+  const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
+  const subcategoria = cursoSlugToSubcategoria[course];
+  const defaultWeeks = subcategoria === 'Programa Estudio y Trabajo (25 semanas)' ? 25 : 1;
+  const weeks = Number(searchParams.get("weeksMin") ?? defaultWeeks);
+
+  // Memoizar cálculos costosos
+  const rating = useMemo(() => Number(school.qualities?.ponderado ?? 0), [school.qualities?.ponderado]);
+
+  const antiguedad = useMemo(() =>
+    school.description?.añoFundacion
+      ? new Date().getFullYear() - school.description.añoFundacion
+      : null,
+    [school.description?.añoFundacion]
+  );
 
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>(0);
-  const priceOptions = filtrarPrecioMasBarato(school.prices);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
+  // Memoizar filtrado de precios
+  const priceOptions = useMemo(
+    () => filtrarPrecioMasBarato(school.prices, weeks),
+    [school.prices, weeks]
+  );
 
   const selected = priceOptions[selectedOptionIndex] ?? null;
   const hasDiscount = selected?.oferta && selected.oferta < selected.precio;
@@ -53,12 +103,10 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
 
   // Generar URL para la tarjeta
   const schoolId = school._id.toString();
-  const course = searchParams.get("course")?.toString().toLowerCase() ?? "";
-  const weeks = Number(searchParams.get("weeksMin") ?? 1);
+
   const city = searchParams.get("city") ?? "Dublin";
   const schedule = searchParams.get("horario") ?? "PM";
 
-  const subcategoria = cursoSlugToSubcategoria[course];
   const seoEntry = school.cursosEos?.find(
     (c: any) => c.subcategoria === subcategoria
   );
@@ -74,9 +122,12 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
 
   useEffect(() => {
     setSelectedOptionIndex(0);
+    setImageLoaded(false);
+    setLogoLoaded(false);
   }, [school._id]);
 
-  const handleClick = () => {
+  // Memoizar event handlers
+  const handleClick = useCallback(() => {
     sendGTMEvent("school_card_clicked", {
       school_id: schoolId,
       school_name: school.name,
@@ -86,9 +137,9 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       course_slug: course,
       view_type: viewType,
     });
-  };
+  }, [schoolId, school.name, school.city, selected, hasDiscount, course, viewType]);
 
-  const handleHover = () => {
+  const handleHover = useCallback(() => {
     prefetchSchool(`${school._id}`);
     sendGTMEvent("school_card_hovered", {
       school_id: schoolId,
@@ -99,7 +150,11 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       course_slug: course,
       view_type: viewType,
     });
-  };
+  }, [prefetchSchool, school._id, school.name, school.city, selected, hasDiscount, course, viewType, schoolId]);
+
+  const handlePrefetch = useCallback(() => {
+    prefetchSchool(`${school._id}`);
+  }, [prefetchSchool, school._id]);
 
 
   return (
@@ -107,13 +162,15 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       href={fullUrl}
       target="_blank"
       rel="noopener noreferrer"
+      prefetch={true}
       onMouseEnter={handleHover}
-      onMouseLeave={() => prefetchSchool(`${school._id}`)}
+      onMouseLeave={handlePrefetch}
       onClick={handleClick}
       className="block" // Hace que todo el card sea clickeable como un bloque
     >
-      <div
-        className={`relative border bg-white hover:bg-white hover:shadow-md transition-all duration-200 hover-scale rounded-lg p-4 group cursor-pointer ${
+      <MotionDiv
+        whileHover={{ scale: 1.02, y: -4 }}
+        className={`relative border bg-white hover:bg-white hover:shadow-md transition-shadow rounded-lg p-4 group cursor-pointer ${
           isGrid
             ? "flex flex-col h-full justify-between"
             : "flex flex-col sm:flex-row"
@@ -121,8 +178,9 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
       >
         <div
           className={`${
-            isGrid ? "h-48 w-full" : "lg:h-72 lg:w-72 sm:w-56 h-40"
+            isGrid ? "h-48 w-full aspect-[16/9]" : "lg:h-72 lg:w-72 sm:w-56 h-40 aspect-[4/3]"
           } overflow-hidden rounded-lg relative flex items-stretch`}
+          style={{ minHeight: isGrid ? '192px' : '160px' }}
         >
           {hasDiscount && (
             <div className="absolute top-2 right-2 z-10 bg-yellow-400 text-yellow-900 text-xs sm:text-sm font-extrabold px-2 py-1 rounded-md shadow-lg flex items-center gap-1 animate-pulse">
@@ -130,13 +188,27 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
               Oferta activa
             </div>
           )}
+          {!imageLoaded && (
+            <Skeleton className="absolute inset-0 rounded-lg" />
+          )}
           <Image
-            src={rewriteToCDN(school.mainImage)}
-            alt={school.name}
-            fill
-            className="object-cover select-none pointer-events-none"
-            loading="lazy"
-            placeholder="empty"
+            {...getResponsiveImageProps(
+              school.mainImage || '',
+              `${school.name} - Escuela de inglés en ${school.city}`,
+              {
+                sizes: isGrid
+                  ? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  : "(max-width: 640px) 100vw, (max-width: 768px) 40vw, 25vw",
+                priority: false,
+                fill: true,
+                fallbackSrc: "/placeholder.svg"
+              }
+            )}
+            className={`object-cover select-none pointer-events-none transition-opacity duration-300 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(true)}
             onContextMenu={(e) => e.preventDefault()}
           />
         </div>
@@ -156,14 +228,14 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
                   const full = i + 1 <= Math.floor(rating);
                   const half = i + 0.5 === Math.round(rating * 2) / 2;
                   return (
-                    <FaStar
+                    <Star
                       key={i}
                       className={`h-4 w-4 ${
                         full
-                          ? "fill-yellow-400"
+                          ? "text-yellow-400"
                           : half
-                          ? "fill-yellow-200"
-                          : "fill-gray-200"
+                          ? "text-yellow-200"
+                          : "text-gray-200"
                       }`}
                     />
                   );
@@ -190,16 +262,51 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
 
           <div className="mt-4 flex items-center justify-between lg:mt-0 xl:mt-0">
             {!isMobile && (
-              <Image
-                src={rewriteToCDN(school.logo)}
-                alt="Logo"
-                width={120}
-                height={60}
-                className="object-contain select-none pointer-events-none"
-                loading="lazy"
-                placeholder="empty"
-                onContextMenu={(e) => e.preventDefault()}
-              />
+              isGrid ? (
+                <div className="relative h-12 w-auto">
+                  {!logoLoaded && (
+                    <Skeleton className="h-12 w-24 rounded" />
+                  )}
+                  <Image
+                    {...getResponsiveImageProps(
+                      school.logo || '',
+                      `Logo de ${school.name}`,
+                      {
+                        sizes: "120px",
+                        priority: false,
+                        width: 120,
+                        height: 60,
+                        fallbackSrc: "/placeholder.svg"
+                      }
+                    )}
+                    className={`object-contain select-none pointer-events-none h-12 w-auto transition-opacity duration-300 ${
+                      logoLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoLoaded(true)}
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                </div>
+              ) : (
+                <div className="h-32 flex items-center justify-start shrink-0 relative">
+                  {!logoLoaded && (
+                    <Skeleton className="h-32 w-32 rounded" />
+                  )}
+                  <Image
+                    src={rewriteToCDN(school.logo || '/placeholder.svg')}
+                    alt={`Logo de ${school.name}`}
+                    width={320}
+                    height={128}
+                    sizes="320px"
+                    className={`h-full w-auto object-contain select-none pointer-events-none transition-opacity duration-300 ${
+                      logoLoaded ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    onLoad={() => setLogoLoaded(true)}
+                    onError={() => setLogoLoaded(true)}
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                </div>
+              )
             )}
 
             <div className="mt-4 w-full flex flex-col items-center sm:items-end text-center sm:text-right space-y-2">
@@ -229,7 +336,9 @@ export default function SchoolCard({ school, viewType }: SchoolCardProps) {
             </div>
           </div>
         </div>
-      </div>
+      </MotionDiv>
     </Link>
   );
-}
+});
+
+export default SchoolCard;

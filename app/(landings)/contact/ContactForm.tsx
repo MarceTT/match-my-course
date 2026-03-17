@@ -16,7 +16,7 @@ import {
 import { countries } from "@/lib/constants/countries";
 import { transformCountryFormData } from "@/lib/helpers/countryHelper";
 import { ContactFormData } from "@/app/lib/types";
-import { CustomCountrySelect } from "@/app/shared";
+import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect";
 import { BookingPannelSubmit } from "@/app/features/booking";
 
 import { sendGTMEvent } from "@/app/lib/gtm";

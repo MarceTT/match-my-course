@@ -2,8 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { usePosts } from "@/app/hooks/blog/useGetPosts";
-import PostCard from "@/app/components/blog/PostCard";
-import Pagination from "@/app/components/blog/Pagination";
+import { PostCard, Pagination } from "@/app/features/blog";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 
 export default function CategoryClient({ slug }: { slug: string }) {
