@@ -64,10 +64,11 @@ export const useInfiniteFilteredSchools = (
   filters: Record<string, any> | undefined,
   initialData?: { schools: any[]; currentPage: number; totalPages: number }
 ) => {
-  // Solo usar initialData si no hay filtros de ciudad o semanas custom
+  // Solo usar initialData si no hay filtros custom
   // (es decir, solo para la carga inicial sin filtros)
   const hasCustomFilters = filters?.cities?.length > 0 || 
-    (filters?.weeks?.[0] && filters.weeks[0] !== 1);
+    (filters?.weeks?.[0] && filters.weeks[0] !== 1) ||
+    filters?.offers?.length > 0;
   
   return useInfiniteQuery({
     queryKey: ["infinite-schools", filters],

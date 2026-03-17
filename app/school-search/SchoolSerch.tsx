@@ -68,6 +68,10 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
         // Read cities from URL if present
         const urlCities = params.get("cities");
         initial[key] = urlCities ? urlCities.split(",") : [];
+      } else if (key === "offers") {
+        // Read offers from URL if present
+        const urlOffers = params.get("offers");
+        initial[key] = urlOffers ? urlOffers.split(",") : [];
       } else if (config.type === "slider") {
         const def = config.slider?.default;
         initial[key] = Array.isArray(def) ? def : [def];

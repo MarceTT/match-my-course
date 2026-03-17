@@ -101,7 +101,7 @@ const Filter = ({
         updatedFilters.type = [];
         updatedFilters.accreditation = [];
         updatedFilters.certification = [];
-        if (value !== "ingles-mas-visa-de-trabajo-6-meses") {
+        if (value !== "ingles-visa-de-trabajo") {
           updatedFilters.offers = [];
         }
       } else {
