@@ -82,8 +82,18 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
     generateInitialFilters(normalizedCourse, searchParams)
   );
   const debouncedFilters = useDebounce(filters, 700); // Optimizado: 700ms vs 600ms original
+  
+  // Flag to prevent URL→State sync during programmatic resets
+  // This breaks the bidirectional sync loop that causes visual flashing
+  const isResettingRef = useRef(false);
 
   useEffect(() => {
+    // Skip URL→State sync if we're in the middle of a programmatic reset
+    // The reset already set the correct state; re-reading from URL would cause flash
+    if (isResettingRef.current) {
+      isResettingRef.current = false;
+      return;
+    }
     setFilters(generateInitialFilters(normalizedCourse, searchParams));
   }, [courseType, searchParams]);
 
@@ -125,6 +135,7 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
                 setIsOpen={setIsOpen}
                 filters={filters}
                 setFilters={setFilters}
+                onResetFilters={() => { isResettingRef.current = true; }}
               />
             </div>
           )}
@@ -134,6 +145,7 @@ const SchoolSearch = ({ initialData, initialParams }: SchoolSearchProps = {}) =>
               setIsOpen={setIsOpen}
               filters={filters}
               setFilters={setFilters}
+              onResetFilters={() => { isResettingRef.current = true; }}
             />
           )}
           <div ref={listRef} className="flex-1 pr-1">

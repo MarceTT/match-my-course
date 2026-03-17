@@ -54,6 +54,9 @@ const Filter = ({
   const debouncedSearchParams = useDebounce(searchParams.toString(), 150);
   const router = useRouter();
 
+  // This effect ONLY handles course changes from URL.
+  // Other filter syncing is handled by SchoolSearch.tsx useEffect.
+  // We removed the cities sync here to avoid race conditions with handleReset.
   useEffect(() => {
     const params = new URLSearchParams(debouncedSearchParams);
     const courseFromUrl = params.get("course") || "ingles-general";
@@ -61,17 +64,19 @@ const Filter = ({
 
     setFilters((prev) => {
       const prevCourse = prev.course?.[0] || "";
+      // Only update if course actually changed
       if (prevCourse === normalizedCourse) return prev;
 
-      const citiesFromUrl = params.get("cities");
-      const normalizedCities = citiesFromUrl
-        ? citiesFromUrl.split(",").map((c) => normalize(c))
-        : [];
-
+      // When course changes, reset dependent filters
       return {
         ...prev,
         course: [normalizedCourse],
-        cities: normalizedCities,
+        cities: [],
+        hours: [],
+        type: [],
+        accreditation: [],
+        certification: [],
+        offers: [],
       };
     });
   }, [debouncedSearchParams, setFilters]);
@@ -147,10 +152,15 @@ const Filter = ({
       resetFilters.course = [...filters.course];
     }
 
+    // Signal parent to skip URL→State sync for this reset cycle.
+    // This prevents the flash caused by the bidirectional sync loop:
+    // reset → URL update → useEffect reads URL → re-sets filters with stale values
+    onResetFilters?.();
+    
+    // Only update state — URL sync is handled by SchoolSearch.tsx useEffect
+    // which watches debouncedFilters. This avoids race conditions with
+    // router.replace() and useSearchParams() not being in sync.
     setFilters(resetFilters);
-    const params = new URLSearchParams(window.location.search);
-    params.delete("weeksMin");
-    router.replace(`?${params.toString()}`);
   };
 
   const isDefaultFilters = () =>
