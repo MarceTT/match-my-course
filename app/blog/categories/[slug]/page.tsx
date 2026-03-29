@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `Categoría: ${slug} | ${site}`,
       description: featured?.metaDescription || featured?.excerpt || baseDesc,
       alternates: { canonical: `${ORIGIN}/blog/categories/${slug}` },
-      robots: { index: true, follow: true },
+      robots: { index: false, follow: true },  // noindex thin taxonomy pages
       openGraph: {
         title: `Categoría: ${slug} | ${site}`,
         description: featured?.metaDescription || featured?.excerpt || baseDesc,
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `Categoría: ${slug} | ${site}`,
       description: baseDesc,
       alternates: { canonical: `${ORIGIN}/blog/categories/${slug}` },
-      robots: { index: true, follow: true },
+      robots: { index: false, follow: true },  // noindex thin taxonomy pages
     };
   }
 }
