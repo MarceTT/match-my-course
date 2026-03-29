@@ -10,9 +10,10 @@ interface SchoolDescriptionProps {
 
 export default function SchoolDescription({
   description,
-  maxLength = 150
+  maxLength = 500  // Increased from 150 to show more content for SEO
 }: SchoolDescriptionProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Start expanded for better SEO - Google sees full content on initial render
+  const [isExpanded, setIsExpanded] = useState(true);
 
   // Si la descripción es corta, no mostrar el botón
   const needsToggle = description.length > maxLength;
