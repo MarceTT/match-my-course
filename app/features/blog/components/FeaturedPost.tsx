@@ -21,7 +21,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
   return (
     <section className="py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-2xl font-bold mb-8 text-center md:text-4xl lg:text-5xl">Blog MatchMyCourse</h1>
+          <h2 className="text-2xl font-bold mb-8 text-center md:text-4xl lg:text-5xl">Blog MatchMyCourse</h2>
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="relative w-full h-64 overflow-hidden">

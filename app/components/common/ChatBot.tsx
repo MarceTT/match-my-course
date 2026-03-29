@@ -427,7 +427,7 @@ export default function ChatBot({
                 <div className="absolute -bottom-1 -right-1 h-3 w-3 bg-green-400 rounded-full border-2 border-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="font-bold text-lg truncate">ChatBot {companyName}</h1>
+                <span className="font-bold text-lg truncate">ChatBot {companyName}</span>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
                   <p className="text-sm opacity-90">

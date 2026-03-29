@@ -34,10 +34,10 @@ const SchoolHeaderClient = ({
     <>
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 mb-4">
         <div className="flex flex-col flex-1">
-          {/* School name - rendered by server, interactive here for expand functionality */}
-          <h1 className="text-4xl font-black text-center md:text-left lg:text-left xl:text-left">
+          {/* School name - H1 is in SchoolSeoHome.tsx, this is just visual duplicate for client interactivity */}
+          <span className="text-4xl font-black text-center md:text-left lg:text-left xl:text-left block">
             {schoolName || "Nombre no disponible"}
-          </h1>
+          </span>
 
           {/* Summary text with expand/collapse */}
           {summaryText && (

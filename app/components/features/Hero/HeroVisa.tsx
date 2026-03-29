@@ -23,12 +23,12 @@ const HeroVisa = () => {
 
       <div className="container mx-auto px-4 relative z-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h2
+          <h1
             className={`${raleway.className} text-4xl lg:text-5xl font-black text-white mb-4 md:mb-6 lg:mb-8 xl:mb-10`}
           >
             Asesoría gratuita para
-            <div className="mt-1">la visa de estudio y trabajo</div>
-          </h2>
+            <span className="block mt-1">la visa de estudio y trabajo</span>
+          </h1>
           <p
             className={`${raleway.className} text-xl lg:text-xl text-white mb-8 font-light`}
           >

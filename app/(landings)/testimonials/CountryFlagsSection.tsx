@@ -5,10 +5,10 @@ const CountryFlagsSection = () => {
   return (
     <section className="py-12" style={{ backgroundColor: '#D8D8D8' }}>
       <div className="container mx-auto px-4 text-center">
-        {/* Title */}
-        <h1 className="text-4xl font-bold mb-4">
+        {/* Title - Using h2 since testimonials page H1 is in HeroSection */}
+        <h2 className="text-4xl font-bold mb-4">
           Países más elegidos <br />por los estudiantes
-        </h1>
+        </h2>
 
         {/* Description */}
         <p className="text-lg mb-8">
