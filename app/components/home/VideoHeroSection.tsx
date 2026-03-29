@@ -7,13 +7,10 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 const benefits = [
-  "Compara cursos en más de 35 escuelas de inglés de Irlanda",
-  "Elige curso con autonomía y sin intermediarios",
-  "Encuentra precios oficiales iguales o más bajos que el de las escuelas",
-  <>
-    Reserva gratis tu inicio de clases e inicia tu aventura con{" "}
-    <span className="font-bold underline">asistencia profesional</span>
-  </>,
+  "Compara cursos de inglés en más de 35 escuelas de Irlanda",
+  "Elige la escuela que mejor se adapte a tu presupuesto y objetivos",
+  "Accede a precios oficiales sin costos ocultos",
+  "Reserva tu curso gratis con asesoría personalizada",
 ];
 
 interface VideoHeroSectionProps {
@@ -61,11 +58,11 @@ export default function VideoHeroSection({
 
   return (
     <section className="bg-white py-12 md:py-16">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {/* Video Section */}
           <div 
-            className="relative aspect-video rounded-2xl overflow-hidden shadow-xl bg-gray-900"
+            className="relative aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[400px] rounded-2xl overflow-hidden shadow-xl bg-gray-900"
             onMouseEnter={handleMouseEnter}
           >
             {youtubeVideoId && isVideoPlaying ? (
@@ -114,9 +111,8 @@ export default function VideoHeroSection({
           {/* Content Section */}
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-tight">
-              <span className="font-bold">Encuentra tu curso de inglés en{" "}
-              <span className="text-[#283593]">Irlanda</span></span>{" "}
-              <span className="font-normal">y las escuelas que lo ofrecen</span>
+              <span className="font-bold">Compara cursos de inglés en más de 35 escuelas en{" "}
+              <span className="text-[#283593]">Irlanda</span></span>
             </h2>
 
             <ul className="space-y-4">

@@ -51,8 +51,8 @@ export default function HeroClient() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto">
         <div className="flex flex-col items-center justify-center text-center space-y-8">
           <h1 className={`${raleway.className} animate-fade-in text-4xl md:text-5xl lg:text-5xl font-black text-white leading-tight drop-shadow-[2px_4px_6px_rgba(0,0,0,0.6)]`}>
-            <span className="md:hidden">Encuentra tu<br />curso de inglés</span>
-            <span className="hidden md:inline">Encuentra tu curso de inglés en Irlanda y las escuelas que lo ofrecen</span>
+            <span className="md:hidden">Cursos de inglés<br />en Irlanda</span>
+            <span className="hidden md:inline">Cursos de inglés en Irlanda: compara escuelas y elige la mejor opción</span>
           </h1>
 
           <div className="flex flex-col sm:flex-row bg-white rounded-lg sm:rounded-full p-2 shadow-sm space-y-2 sm:space-y-0 w-full max-w-xl pointer-events-auto">

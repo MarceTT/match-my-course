@@ -2,28 +2,31 @@ import Image from "next/image";
 
 const stats = [
   {
-    image: "/home-icons/user.png",
-    alt: "Estudiantes",
-    value: "2.000",
-    prefix: "Más de",
-    suffix: "estudiantes",
-    description: "han confiado en nosotros",
-  },
-  {
     image: "/home-icons/universidad.png",
     alt: "Escuelas",
-    value: "35",
-    prefix: "Representamos a",
-    suffix: "escuelas",
-    description: "de inglés en Irlanda",
+    text: (
+      <>
+        Más de <span className="font-bold">35 escuelas</span> de inglés en Irlanda han confiado en nuestros servicios
+      </>
+    ),
+  },
+  {
+    image: "/home-icons/user.png",
+    alt: "Estudiantes",
+    text: (
+      <>
+        Más de <span className="font-bold">2.000 estudiantes</span> han confiado en nosotros
+      </>
+    ),
   },
   {
     image: "/home-icons/mundo.png",
     alt: "Países",
-    value: "5",
-    prefix: "Tenemos presencia en",
-    suffix: "países",
-    description: "",
+    text: (
+      <>
+        Tenemos presencia en <span className="font-bold">más de 5 países</span>
+      </>
+    ),
   },
 ];
 
@@ -50,14 +53,8 @@ export default function StatsSection() {
                   className="w-20 h-20 md:w-24 md:h-24 brightness-0 invert"
                 />
               </div>
-              <p className="text-white text-lg text-center max-w-[180px]">
-                {stat.prefix}{" "}
-                <span className="font-bold text-white">
-                  más de {stat.value} {stat.suffix}
-                </span>
-                {stat.description && (
-                  <span className="block">{stat.description}</span>
-                )}
+              <p className="text-white text-lg text-center max-w-[200px]">
+                {stat.text}
               </p>
             </div>
           ))}

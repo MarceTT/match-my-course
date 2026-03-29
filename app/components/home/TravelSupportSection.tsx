@@ -35,9 +35,9 @@ export default function TravelSupportSection() {
     <section className="bg-[#283593] py-12 md:py-16">
       <div className="container mx-auto px-6">
         <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-10">
-          Durante el viaje te entregamos
+          Te acompañamos durante todo tu
           <br />
-          atención y apoyo constante
+          proceso de estudio en Irlanda
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 mb-10">

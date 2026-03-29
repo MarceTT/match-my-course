@@ -6,6 +6,7 @@ import { buildCanonicalUrl } from "@/lib/helpers/canonicalUrl";
 import dynamic from "next/dynamic";
 import {
   VideoHeroSection,
+  FeaturedSchoolsSection,
   StatsSection,
   WhyMatchMyCourse,
   TravelSupportSection,
@@ -92,6 +93,9 @@ export default function Home() {
 
       {/* Video + Beneficios */}
       <VideoHeroSection youtubeVideoId="TavnREMEzQs" />
+
+      {/* Escuelas destacadas */}
+      <FeaturedSchoolsSection />
 
       {/* Stats - Métricas */}
       <StatsSection />

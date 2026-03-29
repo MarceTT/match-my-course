@@ -2,73 +2,40 @@ import Image from "next/image";
 
 const benefits = [
   {
-    image: "/home-icons/reserva.png",
-    alt: "Matrícula preferencial",
-    title: "Matrícula preferencial",
-    description: (
-      <>
-        <span className="font-bold">Aseguramos tu inicio de clases</span> cuando
-        quieras, gracias a nuestra representación preferencial
-      </>
-    ),
-  },
-  {
-    image: "/home-icons/visa.png",
-    alt: "Apoyo legal",
-    title: "Apoyo legal",
-    description: (
-      <>
-        Contamos con un equipo profesional que te apoyará en la gestión de tus{" "}
-        <span className="font-bold">visados</span> y{" "}
-        <span className="font-bold">trámites internacionales</span>
-      </>
-    ),
-  },
-  {
-    image: "/home-icons/casa.png",
-    alt: "Alojamiento seguro",
-    title: "Alojamiento seguro",
-    description: (
-      <>
-        <span className="font-bold">Aseguramos tu alojamiento</span> a tu
-        llegada a Irlanda para que viajes con mayor tranquilidad
-      </>
-    ),
-  },
-  {
-    image: "/home-icons/user.png",
-    alt: "Acompañamiento para tu llegada",
-    title: "Acompañamiento para tu llegada",
-    description: (
-      <>
-        <span className="font-bold">Te acompañamos durante todo el proceso</span>
-        , desde la compra de tu pasaje hasta el término de tu curso
-      </>
-    ),
+    image: "/home-icons/universidad.png",
+    alt: "Variedad de escuelas",
+    title: "Variedad de escuelas",
+    description: "Compara más de 35 escuelas de inglés en Irlanda en un solo lugar",
   },
   {
     image: "/home-icons/dolar.png",
-    alt: "Ofertas únicas",
-    title: "Ofertas únicas",
-    description: (
-      <>
-        Ofrecemos{" "}
-        <span className="font-bold">precios iguales o más económicos</span> que
-        las escuelas de inglés
-      </>
-    ),
+    alt: "Precios oficiales",
+    title: "Precios oficiales",
+    description: "Accede a precios oficiales, iguales o más bajos que los de las escuelas",
   },
   {
-    image: "/home-icons/bus.png",
-    alt: "Beneficios extras",
-    title: "Beneficios extras",
-    description: (
-      <>
-        <span className="font-bold">Te regalamos</span> internet
-        para tu llegada, tu chip telefónico, pasaje a tu ciudad destino y mucho
-        más!
-      </>
-    ),
+    image: "/home-icons/reserva.png",
+    alt: "Toda la información en un solo lugar",
+    title: "Toda la información en un solo lugar",
+    description: "Encuentra información clara y completa para tomar una decisión segura",
+  },
+  {
+    image: "/home-icons/user.png",
+    alt: "Elige sin presión",
+    title: "Elige sin presión",
+    description: "Elige tu curso con total autonomía, sin presión de vendedores",
+  },
+  {
+    image: "/home-icons/casa.png",
+    alt: "Asistencia gratuita",
+    title: "Asistencia gratuita",
+    description: "Recibe asesoría gratuita antes, durante y después de tu experiencia",
+  },
+  {
+    image: "/home-icons/visa.png",
+    alt: "Trámites legales",
+    title: "Trámites legales",
+    description: "Tramitamos a tus visas y permisos de residencia de forma gratuita",
   },
 ];
 

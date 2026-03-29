@@ -1,5 +1,6 @@
 export { default as PartnersSection } from "./PartnersSection";
 export { default as VideoHeroSection } from "./VideoHeroSection";
+export { default as FeaturedSchoolsSection } from "./FeaturedSchoolsSection";
 export { default as StatsSection } from "./StatsSection";
 export { default as WhyMatchMyCourse } from "./WhyMatchMyCourse";
 export { default as TravelSupportSection } from "./TravelSupportSection";
