@@ -144,23 +144,11 @@ export default function RootLayout({
           content="r10bqkdz2nziy7vzg7h0cv7qb2upbm"
         />
 
-        {/* Explicit Open Graph Meta Tags for Social Media - Facebook requires these */}
-        <meta property="og:url" content="https://matchmycourse.com" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="MatchMyCourse — Encuentra y compara cursos en el extranjero" />
-        <meta property="og:description" content="Descubre, compara y reserva cursos en el extranjero con MatchMyCourse. Asesoría personalizada para estudiar inglés o trabajar en Irlanda, Reino Unido, Canadá y más." />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="es_ES" />
-
-        {/* Twitter Card Meta Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MatchMyCourse | Encuentra tu curso de inglés" />
-        <meta name="twitter:description" content="Reserva tu curso ideal de inglés. Compara escuelas en Irlanda con MatchMyCourse." />
-        <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:creator" content="@matchmycourse" />
-        <meta name="twitter:site" content="@matchmycourse" />
+        {/* 
+          OG and Twitter meta tags are now handled by Next.js metadata API in each page.
+          Hardcoded tags here were overriding page-specific metadata causing SEO issues.
+          See: metadata export in layout.tsx and individual page.tsx files.
+        */}
 
         {/* EducationalOrganization JSON-LD - Main Schema */}
         {(() => {

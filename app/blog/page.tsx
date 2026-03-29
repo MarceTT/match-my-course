@@ -40,7 +40,14 @@ function extractTextSnippet(raw?: string, max = 160): string {
   return (cut > 80 ? s.slice(0, cut) : s.slice(0, max)).trim() + "…";
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+type Props = {
+  searchParams: Promise<{ category?: string; tag?: string; page?: string }>;
+};
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const hasFilters = params.category || params.tag || params.page;
+  
   try {
     const { posts } = await getPostBySlugServer("test");
     const featured = posts?.[0];
@@ -62,7 +69,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       alternates: { canonical: url },
-      robots: { index: true, follow: true },
+      robots: hasFilters 
+        ? { index: false, follow: true }  // noindex filtered/paginated pages
+        : { index: true, follow: true },
       openGraph: {
         type: "website",
         siteName: SITE_NAME,
@@ -88,7 +97,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Artículos sobre cursos de inglés, escuelas, visados, costos y consejos para estudiar en el extranjero.",
       alternates: { canonical: url },
-      robots: { index: true, follow: true },
+      robots: hasFilters 
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
       openGraph: {
         type: "website",
         siteName: SITE_NAME,

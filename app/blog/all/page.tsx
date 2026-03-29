@@ -6,9 +6,12 @@ import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 // ISR: Revalidar cada 15 minutos (900 segundos)
 export const revalidate = 900;
 
+const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
+
 export const metadata: Metadata = {
   title: "Blog - Todos los Artículos | MatchMyCourse",
   description: "Explora todos nuestros artículos sobre estudiar inglés en el extranjero, experiencias de estudiantes, guías de viaje y más.",
+  alternates: { canonical: `${ORIGIN}/blog/all` },
   robots: { index: true, follow: true },
 };
 

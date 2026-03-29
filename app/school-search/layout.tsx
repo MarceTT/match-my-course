@@ -9,11 +9,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Buscardor de cursos de Inglés | MatchMyCourse",
-  description: "Compara y elige las mejores escuelas para estudiar inglés general. Encuentra cursos, precios y asesores que te guían paso a paso ¡Realiza tu busqueda hoy!",
-  robots: { index: false, follow: false },
-};
+// Metadata is handled by page.tsx to allow dynamic noindex based on filters
+// Removing conflicting metadata from layout
 
 export default function SchoolSearchLayout({
   children,

@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Nuestros servicios | MatchMyCourse",
   description:
     "Descubre los servicios de MatchMyCourse: búsqueda y comparación de cursos de inglés, asesoría personalizada y ayuda en inscripción.",
+  alternates: { canonical: "https://matchmycourse.com/servicios" },
   openGraph: {
     title: "Nuestros servicios | MatchMyCourse",
     description:
