@@ -123,9 +123,6 @@ const LoginForm = () => {
                 <Label htmlFor="password" className="text-sm font-medium">
                   Contraseña
                 </Label>
-                <a href="#" className="text-sm text-primary hover:underline">
-                  ¿Olvidaste tu contraseña?
-                </a>
               </div>
               <div className="relative">
                 <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />

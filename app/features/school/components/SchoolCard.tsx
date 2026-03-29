@@ -118,7 +118,13 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
         ciudad: city,
         horario: schedule,
       })
-    : "#";
+    : null;
+
+  // Don't render broken links - if no SEO data, skip this card
+  if (!fullUrl) {
+    console.warn(`[SchoolCard] Missing SEO data for school: ${school._id} - ${school.name}`);
+    return null;
+  }
 
   useEffect(() => {
     setSelectedOptionIndex(0);
@@ -220,9 +226,9 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
         >
           <div className="flex justify-between items-start">
             <div className="flex flex-col">
-              <h1 className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl hover:underline">
+              <h2 className="mt-2 text-lg font-bold lg:mt-0 lg:text-lg xl:text-xl hover:underline">
                 {school.name}
-              </h1>
+              </h2>
               <div className="flex items-center mt-1">
                 {[...Array(5)].map((_, i) => {
                   const full = i + 1 <= Math.floor(rating);

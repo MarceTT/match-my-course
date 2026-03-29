@@ -60,7 +60,13 @@ SchoolCardProps) => {
   // Enlaza directamente a la URL canónica (sin query params) para SEO interno
   const canonicalPath = seoEntry
     ? buildCanonicalSeoSchoolPathFromSeoEntry(seoEntry)
-    : "#";
+    : null;
+
+  // Don't render broken links - if no SEO data, skip this card
+  if (!canonicalPath) {
+    console.warn(`[School] Missing SEO data for school: ${_id} - ${name}`);
+    return null;
+  }
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full border border-gray-100">

@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const Features = () => {
 
@@ -42,7 +43,7 @@ const Features = () => {
                 loading="lazy"
               />
             </div>
-            <p className="text-md text-gray-700 lg:mt-2"><a href={feature.url}>{feature.text}</a></p>
+            <p className="text-md text-gray-700 lg:mt-2"><Link href={feature.url}>{feature.text}</Link></p>
           </div>
         ))}
       </div>

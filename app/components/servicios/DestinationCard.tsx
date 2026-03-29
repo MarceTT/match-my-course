@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -68,7 +69,7 @@ const DestinationCard = ({
           className="w-full text-gray-700 hover:bg-gray-50 mt-4"
           asChild
         >
-          <a href={href}>Ver asesoría</a>
+          <Link href={href}>Ver asesoría</Link>
         </Button>
       </div>
     </div>
