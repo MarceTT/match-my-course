@@ -23,6 +23,9 @@ import SchoolHeaderClient from "./SchoolHeaderClient";
 import ScrollToBookingButton from "@/components/common/ScrollToBookingButton";
 import SchoolBreadcrumb from "@/app/features/school/components/SchoolBreadcrumb";
 import SchoolDescription from "./components/SchoolDescription";
+import RelatedSchools from "./components/RelatedSchools";
+import SchoolFAQ from "./components/SchoolFAQ";
+import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 
 const SchoolDetailDynamic = dynamic(
   () =>
@@ -248,6 +251,13 @@ async function SchoolSeoHome({
                 transportIcon={getTransportIcon(school.name)}
               />
             </Suspense>
+
+            {/* FAQ Section with Schema.org markup */}
+            <SchoolFAQ
+              schoolName={school.name}
+              city={school.city!}
+              courseType={cursoSlugToSubcategoria[slugCurso] || "Inglés General"}
+            />
           </div>
 
           {/* Client-side interactive components - positioned in grid on desktop, outside on mobile */}
@@ -264,6 +274,13 @@ async function SchoolSeoHome({
           </div>
         </div>
       </div>
+
+      {/* Related Schools Section */}
+      <RelatedSchools
+        currentSchoolId={schoolId}
+        city={school.city}
+        slugCurso={slugCurso}
+      />
 
       <ScrollToBookingButton />
 
