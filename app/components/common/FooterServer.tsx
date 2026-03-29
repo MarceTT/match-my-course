@@ -108,6 +108,55 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                       Todas las escuelas
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/blog"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Blog
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Tipos de Curso */}
+              <div>
+                <h3 className="font-semibold mb-4 text-[#535353] underline">
+                  Tipos de Curso
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li>
+                    <Link
+                      href="/buscador-cursos-de-ingles?course=ingles-general"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Inglés General
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/buscador-cursos-de-ingles?course=ingles-general-intensivo"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Inglés Intensivo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/buscador-cursos-de-ingles?course=ingles-general-orientado-a-negocios"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Inglés de Negocios
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/buscador-cursos-de-ingles?course=ingles-visa-de-trabajo"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Visa de Trabajo
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -213,6 +262,63 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                     info@matchmycourse.com
                   </a>
                 </div>
+              </div>
+
+              {/* Escuelas por Ciudad */}
+              <div>
+                <h3 className="font-semibold mt-4 text-[#535353] underline">
+                  Escuelas por Ciudad
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link
+                      href="/escuelas/dublin"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Dublin
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/escuelas/cork"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Cork
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/escuelas/galway"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Galway
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/escuelas/limerick"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Limerick
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/escuelas/bray"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Bray
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/escuelas/dun-laoghaire"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Dún Laoghaire
+                    </Link>
+                  </li>
+                </ul>
               </div>
 
               {/* Otros destinos */}

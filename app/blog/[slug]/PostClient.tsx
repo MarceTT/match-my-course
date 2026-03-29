@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePostBySlug } from "@/app/hooks/blog/useGetPostBySlug";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -170,12 +171,14 @@ export default function PostClient({ slug }: { slug: string }) {
           {/* Footer */}
           <footer className="mt-16 pt-8 border-t">
             <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
-              {/* Tags */}
+              {/* Tags - Now clickable for better internal linking */}
               <div className="flex flex-wrap justify-center gap-2 text-center">
                 {(post.tags as Tag[] | undefined)?.map((tag) => (
-                  <Badge key={tag._id} variant="outline">
-                    {tag.name}
-                  </Badge>
+                  <Link key={tag._id} href={`/blog/tags/${tag.slug}`}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                      {tag.name}
+                    </Badge>
+                  </Link>
                 ))}
               </div>
 
