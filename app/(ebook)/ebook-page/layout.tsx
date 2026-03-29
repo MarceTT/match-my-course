@@ -10,8 +10,8 @@ const ogImage = rewriteToCDN(
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://matchmycourse.com'),
-  title: 'Ebook Gratuito | Estudia y Trabaja en el Extranjero',
-  description: 'La guía más completa para estudiar y trabajar en el extranjero. Descubre costes, ciudades, trámites, visas y cómo encontrar trabajo paso a paso.',
+  title: 'Guía gratis | Estudiar inglés y trabajar en el extranjero',
+  description: 'Descarga gratis la guía para estudiar inglés y trabajar en Irlanda o Nueva Zelanda. Compara destinos, opciones de estudio y oportunidades laborales',
   keywords: ['estudiar y trabajar en el extranjero', 'ebook gratis', 'estudiar en el extranjero', 'trabajar extranjero', 'visa trabajo estudiante', 'guía estudiar extranjero'],
   authors: [{ name: 'MatchMyCourse', url: 'https://matchmycourse.com' }],
   robots: {
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     canonical: 'https://matchmycourse.com/ebook-estudiar-y-trabajar-extranjero'
   },
   openGraph: {
-    title: 'Ebook Gratuito | Estudia y Trabaja en el Extranjero',
-    description: 'La guía más completa para estudiar y trabajar en el extranjero. Descubre costes, ciudades, trámites, visas y cómo encontrar trabajo paso a paso.',
+    title: 'Guía gratis | Estudiar inglés y trabajar en el extranjero',
+    description: 'Descarga gratis la guía para estudiar inglés y trabajar en Irlanda o Nueva Zelanda. Compara destinos, opciones de estudio y oportunidades laborales',
     type: 'website',
     locale: 'es_ES',
     siteName: 'MatchMyCourse',
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ebook Gratuito | Estudia y Trabaja en el Extranjero',
-    description: 'La guía más completa para estudiar y trabajar en el extranjero. Descubre costes, ciudades, trámites, visas y cómo encontrar trabajo paso a paso.',
+    title: 'Guía gratis | Estudiar inglés y trabajar en el extranjero',
+    description: 'Descarga gratis la guía para estudiar inglés y trabajar en Irlanda o Nueva Zelanda. Compara destinos, opciones de estudio y oportunidades laborales',
     images: [ogImage]
   }
 }
@@ -62,8 +62,8 @@ export default function EbookLayout({ children }: { children: React.ReactNode })
   const structuredData = {
     "@context": "https://schema.org",
     "@type": ["Book", "EducationalOccupationalProgram"],
-    "name": "Ebook Gratuito - Estudia y Trabaja en el Extranjero",
-    "description": "La guía más completa para estudiar y trabajar en el extranjero. Descubre costes, ciudades, trámites, visas y cómo encontrar trabajo paso a paso.",
+    "name": "Guía gratis - Estudiar inglés y trabajar en el extranjero",
+    "description": "Descarga gratis la guía para estudiar inglés y trabajar en Irlanda o Nueva Zelanda. Compara destinos, opciones de estudio y oportunidades laborales",
     "provider": {
       "@type": "Organization",
       "name": "MatchMyCourse",

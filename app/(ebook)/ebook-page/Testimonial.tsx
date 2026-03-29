@@ -8,16 +8,17 @@ const Testimonial = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-black mb-2">
-            Conoce de cerca la experiencia de uno de
-          </h2>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-black mb-8">
-            nuestros estudiantes en Galway
+            Así es realmente estudiar y trabajar en el extranjero
           </h2>
-          <p className="text-lg md:text-lg lg:text-xl text-black mb-8 max-w-2xl mx-auto text-center md:text-center lg:text-center">
-            Conoce a Juan Jose Hidalgo, estudiante chileno que decidió tomar un
-            curso de inglés a través de nuestra plataforma
-          </p>
+          <div className="max-w-3xl mx-auto mb-8 space-y-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-black text-center leading-relaxed lg:whitespace-nowrap">
+              <strong>Juan José</strong>, estudiante chileno, decidió dar el paso y estudiar inglés en Galway.
+            </p>
+            <p className="text-base md:text-lg lg:text-xl text-gray-700 text-center leading-relaxed">
+              En su experiencia podrás ver cómo es realmente vivir, estudiar y trabajar en otro país, y lo que puedes esperar si tomas esta decisión.
+            </p>
+          </div>
 
           {/* Video Thumbnail */}
           <div className="max-w-2xl mx-auto mb-8">

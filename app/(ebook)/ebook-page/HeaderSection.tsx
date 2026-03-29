@@ -38,7 +38,7 @@ const HeaderSection = () => {
             {/* Left Content */}
             <div className="text-white flex flex-col justify-center mx-2 lg:mx-4">
               <h1 className="text-4xl text-center [text-shadow:0_8px_24px_rgba(88,28,135,0.45)] md:[text-shadow:0_8px_24px_rgba(88,28,135,0.45)] lg:text-start lg:text-5xl xl:text-6xl font-black leading-tight mb-6">
-                Estudia inglés y trabaja en el extranjero
+                Cómo estudiar inglés y trabajar en el extranjero: guía gratuita
               </h1>
               <p className="text-lg text-center lg:text-start lg:text-xl xl:text-2xl mb-8 opacity-90 font-semibold leading-relaxed">
                 Encuentra lo que debes saber antes de tomar una decisión de

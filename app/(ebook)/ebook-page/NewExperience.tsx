@@ -21,7 +21,7 @@ const NewExperience = () => {
         <div className="flex flex-col lg:hidden gap-6">
           {/* H2 primero en móvil y tablet */}
           <h2 className="text-4xl lg:text-6xl font-black text-gray-900 text-center">
-            Vive una experiencia en el extranjero
+            Empieza a planificar tu experiencia de estudio y trabajo en el extranjero
           </h2>
 
           {/* Imagen segundo en móvil y tablet */}
@@ -41,23 +41,19 @@ const NewExperience = () => {
           {/* Textos tercero en móvil y tablet */}
           <div className="text-center">
             <p className="text-lg text-gray-700 mb-6 lg:text-xl">
-              ¿Te imaginas salir de tu zona de confort, conocer personas de
-              distintas culturas y trabajar en otro país?
+              ¿Te imaginas vivir, estudiar y trabajar en otro país mientras mejoras tu inglés?
             </p>
             <p className="text-lg font-semibold text-gray-900 mb-6 lg:text-xl">
-              ¡Todo esto es posible!
+              Es una experiencia que puede cambiar tu vida, pero también es normal no saber por dónde empezar.
             </p>
             <p className="text-gray-700 mb-4 lg:text-xl">
-              Si estás pensando en vivir una experiencia en el extranjero y no
-              sabes por dónde empezar, esta guía gratuita tiene la respuesta a
-              esas preguntas que están rondando por tu cabeza.
+              Esta guía gratuita te ayudará a entender tus opciones y comparar destinos como Irlanda y Nueva Zelanda para tomar una mejor decisión.
             </p>
             <p className="text-gray-700 mb-4 lg:text-xl">
-              Nuestros growers que han vivido en varios destinos, junto con el
-              Content Team de GrowPro, han preparado esta guía para ti.
+              Fue creada a partir de la experiencia real de estudiantes internacionales y el equipo de MatchMyCourse.
             </p>
             <p className="text-lg font-semibold text-gray-900 lg:text-xl">
-              ¡Entérate de todo lo que tienen para contarte!
+              Descárgala y da el primer paso para vivir tu experiencia en el extranjero.
             </p>
           </div>
         </div>
@@ -65,26 +61,22 @@ const NewExperience = () => {
           {/* Texto */}
           <div className="order-1 lg:order-2 lg:col-span-6 text-center lg:text-left lg:mx-auto lg:mr-20">
             <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-6 text-center lg:text-left">
-              Vive una experiencia en el extranjero
+              Empieza a planificar tu experiencia de estudio y trabajo en el extranjero
             </h2>
             <p className="text-lg text-gray-700 mb-6 text-center lg:text-justify lg:text-xl">
-              ¿Te imaginas salir de tu zona de confort, conocer personas de
-              distintas culturas y trabajar en otro país?
+              ¿Te imaginas vivir, estudiar y trabajar en otro país mientras mejoras tu inglés?
             </p>
             <p className="text-lg font-semibold text-gray-900 mb-6 text-center lg:text-justify lg:text-xl">
-              ¡Todo esto es posible!
+              Es una experiencia que puede cambiar tu vida, pero también es normal no saber por dónde empezar.
             </p>
             <p className="text-gray-700 mb-4 text-center lg:text-justify lg:text-xl">
-              Si estás pensando en vivir una experiencia en el extranjero y no
-              sabes por dónde empezar, esta guía gratuita tiene la respuesta a
-              esas preguntas que están rondando por tu cabeza.
+              Esta guía gratuita te ayudará a entender tus opciones y comparar destinos como Irlanda y Nueva Zelanda para tomar una mejor decisión.
             </p>
             <p className="text-gray-700 mb-4 text-center lg:text-justify lg:text-xl">
-              Nuestros growers que han vivido en varios destinos, junto con el
-              Content Team de <strong>MatchMyCourse</strong>, han preparado esta guía para ti.
+              Fue creada a partir de la experiencia real de estudiantes internacionales y el equipo de <strong>MatchMyCourse</strong>.
             </p>
             <p className="text-lg font-semibold text-gray-900 mb-6 text-center lg:text-justify lg:text-xl">
-              ¡Entérate de todo lo que tienen para contarte!
+              Descárgala y da el primer paso para vivir tu experiencia en el extranjero.
             </p>
           </div>
 

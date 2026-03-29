@@ -127,8 +127,8 @@ const resetForm = form.reset;
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mx-2 sm:mx-4 lg:mx-8">
           {/* Left Content - Benefits */}
           <div className="lg:pr-4">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-center font-black text-gray-900 mb-8 sm:mb-10 lg:text-left leading-tight sm:whitespace-nowrap">
-              En esta guía encontrarás
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-center font-black text-gray-900 mb-8 sm:mb-10 lg:text-left leading-tight">
+              Lo que descubrirás en esta guía para estudiar y trabajar en el extranjero
             </h2>
             <div className="space-y-6 sm:space-y-8 text-left lg:text-left">
               <div className="flex items-start gap-3 sm:gap-5">
@@ -140,11 +140,11 @@ const resetForm = form.reset;
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
-                    Dos de los mejores destinos para vivir tu experiencia;
-                  </p>
+                  <h3 className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
+                    Descubre cuál de estos destinos se adapta mejor a tu experiencia internacional
+                  </h3>
                   <p className="text-gray-600 text-sm sm:text-base mt-1 lg:text-xl">
-                    Canadá, Irlanda y Nueva Zelanda
+                    Irlanda y Nueva Zelanda
                   </p>
                 </div>
               </div>
@@ -157,10 +157,9 @@ const resetForm = form.reset;
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
-                    Opciones de programas de estudio y visados disponibles en
-                    cada país.
-                  </p>
+                  <h3 className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
+                    Conoce las opciones de estudio y trabajo disponibles en cada país
+                  </h3>
                 </div>
               </div>
 
@@ -173,18 +172,16 @@ const resetForm = form.reset;
                   className="mt-1 w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0"
                 />
                 <div>
-                  <p className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
-                    Puestos de trabajo para estudiantes.
-                  </p>
+                  <h3 className="text-gray-800 font-bold text-base sm:text-lg leading-relaxed lg:text-2xl">
+                    Descubre cómo puedes trabajar mientras estudias y generar ingresos
+                  </h3>
                 </div>
               </div>
             </div>
 
             <div className="mt-8 sm:mt-10 p-4 sm:p-5 bg-gray-50 rounded-lg">
               <p className="text-gray-900 text-sm sm:text-base text-left leading-relaxed lg:text-xl">
-                Una vez llenes y envíes el formulario, recibirás un email con el
-                ebook adjunto para que puedas leerlo cuando quieras. ¡Asegúrate
-                de diligenciarlo correctamente!
+                Completa el formulario y recibe gratis la guía en tu correo en pocos minutos
               </p>
             </div>
           </div>
