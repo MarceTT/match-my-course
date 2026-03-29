@@ -18,6 +18,7 @@ import { transformCountryFormData } from "@/lib/helpers/countryHelper";
 import { ContactFormData } from "@/app/lib/types";
 import { CustomCountrySelect } from "@/app/components/common/CustomCountrySelect";
 import { BookingPannelSubmit } from "@/app/features/booking";
+import ContactFAQ from "./ContactFAQ";
 
 import { sendGTMEvent } from "@/app/lib/gtm";
 import confetti from "canvas-confetti";
@@ -81,6 +82,9 @@ export default function ContactForm() {
 
   return (
     <>
+      {/* FAQ Section for SEO - adds ~300 words + FAQ schema */}
+      <ContactFAQ />
+
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6 text-center">Contáctanos</h1>
         {submitted ? (
