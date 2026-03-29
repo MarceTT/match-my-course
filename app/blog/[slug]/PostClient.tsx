@@ -13,6 +13,7 @@ import DOMPurify from "dompurify";
 import { useRouter } from "next/navigation";
 import FullScreenLoader from "@/app/admin/components/FullScreenLoader";
 import { ShareButtons } from "@/app/components/common/social";
+import RelatedPosts from "./RelatedPosts";
 
 type Tag = { _id: string; name: string; slug: string };
 
@@ -196,6 +197,12 @@ export default function PostClient({ slug }: { slug: string }) {
               </div>
             </div>
           </footer>
+
+          {/* Related Posts Section */}
+          <RelatedPosts
+            currentSlug={slug}
+            categorySlug={(post.category as any)?.slug}
+          />
         </div>
       </div>
     </article>
