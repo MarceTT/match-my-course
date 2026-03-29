@@ -61,17 +61,17 @@ const geistMono = Geist_Mono({
 export default function EbookLayout({ children }: { children: React.ReactNode }) {
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": ["Book", "EducationalOccupationalProgram"],
+    "@type": "Book",
     "name": "Guía gratis - Estudiar inglés y trabajar en el extranjero",
     "description": "Descarga gratis la guía para estudiar inglés y trabajar en Irlanda o Nueva Zelanda. Compara destinos, opciones de estudio y oportunidades laborales",
-    "provider": {
+    "author": {
       "@type": "Organization",
       "name": "MatchMyCourse",
       "url": "https://matchmycourse.com"
     },
-    "educationalLevel": "Beginner",
-    "educationalCredentialAwarded": "Digital Guide",
-    "teaches": [
+    "bookFormat": "https://schema.org/EBook",
+    "numberOfPages": 25,
+    "about": [
       "Estudiar en el extranjero",
       "Trabajar en el extranjero",
       "Trámites de visa",
@@ -84,11 +84,10 @@ export default function EbookLayout({ children }: { children: React.ReactNode })
     },
     "isAccessibleForFree": true,
     "inLanguage": "es",
-    "license": "https://matchmycourse.com/terms",
     "publisher": {
       "@type": "Organization",
       "name": "MatchMyCourse",
-      "logo": "https://matchmycourse.com/logo.png"
+      "logo": "https://d2wv8pxed72bi5.cloudfront.net/logos/final-logo.png"
     }
   };
 

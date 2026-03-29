@@ -79,42 +79,8 @@ async function SchoolSeoHome({
   const canonicalPath = `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(school.slug || school.name.toLowerCase().replace(/\s+/g, '-'))}`;
   const canonicalUrl = `${ORIGIN}${canonicalPath}`;
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "EducationalOrganization",
-    "name": school.name,
-    "description": school.description?.detalleEscuela || `Escuela de inglés ${school.name} en ${school.city}`,
-    "url": canonicalUrl,
-    "image": school.logo ? rewriteToCDN(school.logo) : undefined,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": school.location?.address || school.description?.direccion,
-      "addressLocality": school.city,
-      "addressCountry": "IE"
-    },
-    "aggregateRating": rating > 0 ? {
-      "@type": "AggregateRating",
-      "ratingValue": rating.toFixed(1),
-      "bestRating": "5",
-      "worstRating": "1",
-      "reviewCount": school.reviewCount || 1
-    } : undefined,
-    "foundingDate": school.description?.añoFundacion ? school.description.añoFundacion.toString() : undefined,
-    "priceRange": school.minPrecio ? `€€` : undefined,
-    "offers": school.minPrecio ? {
-      "@type": "Offer",
-      "price": school.minPrecio,
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock"
-    } : undefined
-  };
-
-  // Remove undefined values
-  Object.keys(structuredData).forEach(key => {
-    if (structuredData[key as keyof typeof structuredData] === undefined) {
-      delete structuredData[key as keyof typeof structuredData];
-    }
-  });
+  // NOTE: EducationalOrganization JSON-LD is now rendered in page.tsx to avoid duplicates
+  // This reduces HTML size by ~30 lines per page, improving text-to-HTML ratio
 
   const getTransportIcon = (name: string) => {
     const norm = name.toLowerCase();
@@ -132,12 +98,6 @@ async function SchoolSeoHome({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Structured Data for Google */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-
       <Header />
 
       <SchoolBreadcrumb

@@ -60,34 +60,34 @@ const AboutUs = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "name": "MatchMyCourse",
-    "url": "https://matchmycourse.com",
-    "logo": "https://d2wv8pxed72bi5.cloudfront.net/logos/final-logo.png",
-    "description": "Marketplace para comparar y reservar cursos de inglés en el extranjero con escuelas certificadas",
-    "foundingDate": "2020",
-    "sameAs": [
-      "https://www.facebook.com/matchmycourse",
-      "https://www.instagram.com/matchmycourse",
-      "https://www.linkedin.com/company/matchmycourse"
-    ],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "contactType": "Customer Service",
-      "availableLanguage": ["Spanish", "English"]
-    },
-    "areaServed": "Worldwide",
-    "serviceType": "Educational Services",
-    "makesOffer": {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "Asesoría Gratuita para Cursos de Inglés",
-        "description": "Servicio gratuito de asesoría para encontrar el mejor curso de inglés en el extranjero"
+    "name": "Acerca de MatchMyCourse",
+    "url": "https://matchmycourse.com/quienes-somos",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "MatchMyCourse",
+      "url": "https://matchmycourse.com",
+      "logo": "https://d2wv8pxed72bi5.cloudfront.net/logos/final-logo.png",
+      "description": "Marketplace para comparar y reservar cursos de inglés en el extranjero con escuelas certificadas",
+      "foundingDate": "2020",
+      "sameAs": [
+        "https://www.facebook.com/matchmycourse",
+        "https://www.instagram.com/matchmycourse",
+        "https://www.linkedin.com/company/matchmycourse"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "availableLanguage": ["Spanish", "English"]
+      },
+      "areaServed": "Worldwide",
+      "makesOffer": {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Asesoría Gratuita para Cursos de Inglés",
+          "description": "Servicio gratuito de asesoría para encontrar el mejor curso de inglés en el extranjero"
+        }
       }
-    },
-    "hasCredential": {
-      "@type": "EducationalOccupationalCredential",
-      "credentialCategory": "Certified Educational Partner"
     }
   };
 

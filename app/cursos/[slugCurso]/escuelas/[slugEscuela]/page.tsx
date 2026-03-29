@@ -271,6 +271,9 @@ export default async function Page({ params, searchParams }: Props) {
   const startDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
   const endDate = new Date(today.getTime() + weeks * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
+  // Get course price from seoEntry if available
+  const coursePrice = (seoEntry as any)?.precio || (seoEntry as any)?.minPrecio;
+
   const courseSchema = {
     '@context': 'https://schema.org',
     '@type': 'Course',
@@ -280,18 +283,34 @@ export default async function Page({ params, searchParams }: Props) {
       (seoEntry as any)?.h1 ||
       `Mejora tu inglés con clases dinámicas, profesores nativos y opciones de visa estudio + trabajo en Irlanda.`,
     provider: {
-      '@type': 'Organization',
-      name: 'Match My Course',
-      url: `${origin}/`,
+      '@type': 'EducationalOrganization',
+      name: schoolName || 'Match My Course',
+      url: schoolName ? canonicalUrl : `${origin}/`,
     },
     inLanguage: 'en',
     url: canonicalUrl,
+    ...(coursePrice && {
+      offers: {
+        '@type': 'Offer',
+        price: String(coursePrice),
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        validFrom: startDate,
+        url: canonicalUrl,
+      },
+    }),
     hasCourseInstance: {
       '@type': 'CourseInstance',
       courseMode: 'OnSite',
+      courseWorkload: `PT${weeks * 20}H`,
       location: {
         '@type': 'Place',
-        name: `${city || 'Irlanda'}, Irlanda`,
+        name: schoolName || city || 'Irlanda',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: city || 'Dublin',
+          addressCountry: 'IE',
+        },
       },
       startDate: startDate,
       endDate: endDate,

@@ -18,8 +18,10 @@ const EnglishSchoolCoursesClient = () => {
     "url": "https://matchmycourse.com/english-school-courses",
     "offers": {
       "@type": "AggregateOffer",
-      "offerCount": "100+",
-      "category": "Cursos de Inglés en el Extranjero"
+      "offerCount": 100,
+      "lowPrice": "150",
+      "highPrice": "5000",
+      "priceCurrency": "EUR"
     },
     "serviceType": [
       "Inglés General",
