@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL || 'https://matchmycourse.com').replace(/\/$/, '');
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts?tag=${slug}&page=1&limit=1`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blog/post?tag=${slug}&page=1&limit=1`, {
       cache: "no-store",
     });
     const data = await res.json();
