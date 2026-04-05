@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import axiosInstance from "@/app/utils/apiClient";
 import Image from "next/image";
 import Link from "next/link";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
@@ -15,7 +14,7 @@ interface RelatedSchool {
   city: string;
   logo?: string;
   mainImage?: string;
-  qualities?: { ponderado?: number };
+  ponderado?: number;
   cursosEos?: Array<{
     slugCurso: string;
     slugEscuela: string;
@@ -37,10 +36,21 @@ export default function RelatedSchools({
   const { data, isLoading } = useQuery({
     queryKey: ["relatedSchools", city],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/schools`, {
-        params: { city, limit: 5 },
-      });
-      return data?.data?.schools || [];
+      // Use public /front/schools endpoint (no auth required)
+      const url = new URL(
+        "/api/front/schools",
+        process.env.NEXT_PUBLIC_BACKEND_URL
+      );
+      // Backend supports city filter with case-insensitive matching
+      url.searchParams.set("city", city);
+      url.searchParams.set("limit", "5"); // Only need 4 + maybe exclude current
+
+      const response = await fetch(url.toString());
+      if (!response.ok) {
+        throw new Error("Failed to fetch schools");
+      }
+      const json = await response.json();
+      return (json?.data?.schools || []) as RelatedSchool[];
     },
     staleTime: 1000 * 60 * 10, // 10 minutes
     enabled: !!city,
@@ -105,7 +115,7 @@ export default function RelatedSchools({
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {relatedSchools.map((school) => {
-            const rating = Number(school.qualities?.ponderado ?? 0);
+            const rating = Number(school.ponderado ?? 0);
             const schoolUrl = buildSchoolUrl(school);
 
             return (
