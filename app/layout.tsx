@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import Script from "next/script";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
 import GTMClient from "./ui/GTMClient";
+import FloatingWhatsAppButton from "./components/common/FloatingWhatsAppButton";
 
 // Open Graph image - use absolute URL without URL encoding for social media compatibility
 // Social networks require fully qualified URLs and may have caching issues with special characters
@@ -224,6 +225,7 @@ export default function RootLayout({
           </Suspense>
           <Toaster position="top-center" richColors closeButton />
         </ReactQueryProvider>
+        <FloatingWhatsAppButton />
 
         {/* Service Worker Registration with Navigation Preloading */}
         <Script id="sw-registration" strategy="lazyOnload">
