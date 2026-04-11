@@ -120,12 +120,6 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
       })
     : null;
 
-  // Don't render broken links - if no SEO data, skip this card
-  if (!fullUrl) {
-    console.warn(`[SchoolCard] Missing SEO data for school: ${school._id} - ${school.name}`);
-    return null;
-  }
-
   useEffect(() => {
     setSelectedOptionIndex(0);
     setImageLoaded(false);
@@ -162,6 +156,12 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
     prefetchSchool(`${school._id}`);
   }, [prefetchSchool, school._id]);
 
+  // Don't render broken links - if no SEO data, skip this card
+  // IMPORTANT: This early return MUST be AFTER all hooks to comply with React's Rules of Hooks
+  if (!fullUrl) {
+    console.warn(`[SchoolCard] Missing SEO data for school: ${school._id} - ${school.name}`);
+    return null;
+  }
 
   return (
     <Link
