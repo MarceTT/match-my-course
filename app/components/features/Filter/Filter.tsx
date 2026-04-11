@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { CircularWeekSlider } from "./CircularSlider";
 import dynamic from "next/dynamic";
-import { useTour } from "@reactour/tour"; // <--- NUEVO
+import { useTourSafe } from "@/app/hooks/useTourSafe";
 import { sendGTMEvent } from "@/app/lib/gtm";
 
 const FilterDrawer = dynamic(() => import("./FilterDrawer"), {
@@ -215,7 +215,7 @@ function FilterContent({
   const customCities = courseCitiesMap[selectedCourseName] || [];
 
   const offerRef = useRef<HTMLDivElement | null>(null);
-  const { setIsOpen, setSteps } = useTour(); // <--- REACTOUR API
+  const { setIsOpen, setSteps } = useTourSafe();
 
   useEffect(() => {
     if (!isVisaCourseSelected) return;
