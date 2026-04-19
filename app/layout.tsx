@@ -55,9 +55,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MatchMyCourse | Encuentra tu curso de inglés",
+    title: "MatchMyCourse | Cursos de inglés en Irlanda | Compara escuelas y precios",
     description:
-      "Reserva tu curso ideal de inglés. Compara escuelas en Irlanda con MatchMyCourse.",
+      "Compara cursos de inglés en Irlanda y elige entre más de 35 escuelas certificadas. Revisa precios oficiales, encuentra tu curso ideal y recibe asesoría gratuita.",
     images: [ogImage],
   },
 };

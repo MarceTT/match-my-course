@@ -40,15 +40,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://matchmycourse.com"
   ),
-  title: "MatchMyCourse | Encuentra tu curso de inglés",
+  title: "MatchMyCourse | Cursos de inglés en Irlanda | Compara escuelas y precios",
   description:
-    "Compara las escuelas de inglés, ve qué cursos de inglés en Irlanda son la mejor opción para ti. Reserva fácil y segura. Descubre las mejores escuelas con MatchMyCourse.",
+    "Compara cursos de inglés en Irlanda y elige entre más de 35 escuelas certificadas. Revisa precios oficiales, encuentra tu curso ideal y recibe asesoría gratuita.",
   alternates: {
     canonical: canonicalUrl,
   },
   openGraph: {
-    title: "MatchMyCourse | Encuentra tu curso de inglés",
-    description: "Compara escuelas, cursos y reserva fácil y segura.",
+    title: "MatchMyCourse | Cursos de inglés en Irlanda | Compara escuelas y precios",
+    description: "Compara cursos de inglés en Irlanda y elige entre más de 35 escuelas certificadas. Revisa precios oficiales, encuentra tu curso ideal y recibe asesoría gratuita.",
     url: canonicalUrl,
     siteName: "MatchMyCourse",
     images: [
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MatchMyCourse | Encuentra tu curso de inglés",
+    title: "MatchMyCourse | Cursos de inglés en Irlanda | Compara escuelas y precios",
     description:
-      "Reserva tu curso ideal de inglés. Compara escuelas en Irlanda con MatchMyCourse.",
+      "Compara cursos de inglés en Irlanda y elige entre más de 35 escuelas certificadas. Revisa precios oficiales, encuentra tu curso ideal y recibe asesoría gratuita.",
     images: [ogImage],
   },
 };
@@ -85,7 +85,7 @@ export default function Home() {
 
       {/* Partners - Escuelas asociadas con carousel animado */}
       <section className="bg-white pt-4 pb-2">
-        <p className="text-center text-base md:text-lg font-semibold text-gray-700 mb-4">
+        <p className="text-center text-xl md:text-2xl font-semibold text-gray-700 mb-4">
           Escuelas que han confiado en nuestro servicio
         </p>
         <Carousel />

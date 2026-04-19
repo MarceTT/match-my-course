@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 const benefits = [
-  "Compara cursos de inglés en más de 35 escuelas de Irlanda",
+  "Busca tu curso de inglés en Irlanda, el que quieras",
   "Elige la escuela que mejor se adapte a tu presupuesto y objetivos",
   "Accede a precios oficiales sin costos ocultos",
   "Reserva tu curso gratis con asesoría personalizada",
@@ -111,8 +111,7 @@ export default function VideoHeroSection({
           {/* Content Section */}
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-gray-900 leading-tight">
-              <span className="font-bold">Compara cursos de inglés en más de 35 escuelas en{" "}
-              <span className="text-[#283593]">Irlanda</span></span>
+              <span className="font-bold">Busca tu curso de inglés en Irlanda, el que quieras</span>
             </h2>
 
             <ul className="space-y-4">

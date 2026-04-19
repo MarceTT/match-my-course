@@ -60,14 +60,7 @@ export default function FeaturedSchoolsSection() {
               />
             </div>
 
-            <Link href="/escuelas">
-              <Button
-                size="lg"
-                className="bg-[#283593] hover:bg-[#1a237e] text-white font-semibold px-8 py-5 text-base rounded-lg transition-all"
-              >
-                Encuentra tu escuela
-              </Button>
-            </Link>
+
           </div>
         </div>
       </div>

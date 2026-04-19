@@ -148,10 +148,10 @@ export default function TestimonialsSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#2F343D] mb-6 leading-tight">
-            Experiencias reales de estudiantes que ya
+            Experiencias reales de nuestros estudiantes
             <br />
             <span className="text-2xl md:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-               estudiaron en Irlanda
+               en Irlanda
             </span>
           </h2>
         </div>
