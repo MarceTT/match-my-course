@@ -1,12 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useCreateInfluencer } from "../../hooks/useAffiliates";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -18,47 +34,54 @@ import { toast } from "sonner";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  instagram: string;
-  commissionType: "fixed" | "percentage";
-  commissionAmount: number;
-  password: string;
-}
+const influencerSchema = z.object({
+  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+  email: z.string().email("Email inválido"),
+  phone: z.string().optional(),
+  instagram: z.string().optional(),
+  commissionType: z.enum(["fixed", "percentage"]),
+  commissionAmount: z.coerce
+    .number()
+    .min(0, "El monto debe ser mayor o igual a 0")
+    .max(100, "El porcentaje no puede ser mayor a 100"),
+  password: z
+    .string()
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .optional()
+    .or(z.literal("")),
+});
+
+type InfluencerFormValues = z.infer<typeof influencerSchema>;
 
 export default function NewInfluencerPage() {
   const router = useRouter();
   const createInfluencer = useCreateInfluencer();
 
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    instagram: "",
-    commissionType: "fixed",
-    commissionAmount: 50,
-    password: "",
+  const form = useForm<InfluencerFormValues>({
+    resolver: zodResolver(influencerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      instagram: "",
+      commissionType: "fixed",
+      commissionAmount: 50,
+      password: "",
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const commissionType = form.watch("commissionType");
 
-    if (!formData.name.trim() || !formData.email.trim()) {
-      toast.error("Nombre y email son requeridos");
-      return;
-    }
-
+  const onSubmit = async (data: InfluencerFormValues) => {
     try {
       const result = await createInfluencer.mutateAsync({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || undefined,
-        instagram: formData.instagram || undefined,
-        commissionType: formData.commissionType,
-        commissionAmount: formData.commissionAmount,
-        password: formData.password || undefined,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || undefined,
+        instagram: data.instagram || undefined,
+        commissionType: data.commissionType,
+        commissionAmount: data.commissionAmount,
+        password: data.password || undefined,
       });
 
       toast.success("Influencer creado exitosamente");
@@ -78,149 +101,215 @@ export default function NewInfluencerPage() {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <Link
-        href="/admin/affiliates/influencers"
-        className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-4"
-      >
-        <ArrowLeft className="h-4 w-4" /> Volver a influencers
-      </Link>
+    <div className="p-6">
+      <div className="max-w-4xl mx-auto">
+        <Link
+          href="/admin/affiliates/influencers"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" /> Volver a influencers
+        </Link>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Nuevo Influencer</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Nombre *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  placeholder="Nombre completo"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                  placeholder="email@ejemplo.com"
-                />
-              </div>
-            </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl">Nuevo Influencer</CardTitle>
+            <CardDescription>
+              Crea una cuenta para un nuevo afiliado. Se generará automáticamente
+              un código único de referido.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                {/* Información Personal */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Información Personal</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nombre completo *</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="María García"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="phone">Teléfono</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  placeholder="+34 600 000 000"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="instagram">Instagram</Label>
-                <Input
-                  id="instagram"
-                  value={formData.instagram}
-                  onChange={(e) =>
-                    setFormData({ ...formData, instagram: e.target.value })
-                  }
-                  placeholder="@cuenta"
-                />
-              </div>
-            </div>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email *</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="maria@ejemplo.com"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Se usará para iniciar sesión en el portal de afiliados
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="commissionType">Tipo de Comisión</Label>
-                <Select
-                  value={formData.commissionType}
-                  onValueChange={(value: "fixed" | "percentage") =>
-                    setFormData({ ...formData, commissionType: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="fixed">Monto Fijo (€)</SelectItem>
-                    <SelectItem value="percentage">Porcentaje (%)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="commissionAmount">
-                  {formData.commissionType === "fixed"
-                    ? "Monto (€)"
-                    : "Porcentaje (%)"}
-                </Label>
-                <Input
-                  id="commissionAmount"
-                  type="number"
-                  min="0"
-                  max={formData.commissionType === "percentage" ? 100 : undefined}
-                  value={formData.commissionAmount}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      commissionAmount: Number(e.target.value),
-                    })
-                  }
-                />
-              </div>
-            </div>
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Teléfono</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="+34 600 000 000"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Contraseña (opcional)</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                placeholder="Dejar vacío para generar automáticamente"
-              />
-              <p className="text-xs text-gray-500">
-                Si no especificas una contraseña, se generará una temporal.
-              </p>
-            </div>
+                    <FormField
+                      control={form.control}
+                      name="instagram"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Instagram</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="@cuenta"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
 
-            <div className="flex justify-end gap-2 pt-4">
-              <Link href="/admin/affiliates/influencers">
-                <Button type="button" variant="outline">
-                  Cancelar
-                </Button>
-              </Link>
-              <Button type="submit" disabled={createInfluencer.isPending}>
-                {createInfluencer.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creando...
-                  </>
-                ) : (
-                  "Crear Influencer"
-                )}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                {/* Configuración de Comisión */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Configuración de Comisión</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="commissionType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tipo de Comisión</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar tipo" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="fixed">Monto Fijo (€)</SelectItem>
+                              <SelectItem value="percentage">Porcentaje (%)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Define cómo se calculará la comisión por cada conversión
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="commissionAmount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {commissionType === "fixed" ? "Monto por conversión (€)" : "Porcentaje (%)"}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              min="0"
+                              max={commissionType === "percentage" ? 100 : undefined}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            {commissionType === "fixed"
+                              ? "Cantidad fija en euros por cada estudiante que pague"
+                              : "Porcentaje del valor del curso que ganará el afiliado"}
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Credenciales de Acceso */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Credenciales de Acceso</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contraseña</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Dejar vacío para generar automáticamente"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Si no especificas una contraseña, se generará una temporal
+                            que deberás compartir con el influencer.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Botones */}
+                <div className="flex justify-end gap-4 pt-4 border-t">
+                  <Link href="/admin/affiliates/influencers">
+                    <Button type="button" variant="outline">
+                      Cancelar
+                    </Button>
+                  </Link>
+                  <Button type="submit" disabled={createInfluencer.isPending}>
+                    {createInfluencer.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creando...
+                      </>
+                    ) : (
+                      "Crear Influencer"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
