@@ -3,6 +3,7 @@ import "./globals.css";
 import { raleway } from "./ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "./providers";
+import { ReferralTrackingProvider } from "./providers/ReferralTrackingProvider";
 import { Suspense } from "react";
 import Script from "next/script";
 import { rewriteToCDN } from "./utils/rewriteToCDN";
@@ -220,9 +221,11 @@ export default function RootLayout({
        {/* Always use lazy GTM loading for better performance */}
        {GTM_ID && <GTMClient gtmId={GTM_ID} lazyOn="idle" />}
         <ReactQueryProvider>
-          <Suspense fallback={null}>
-            {children}
-          </Suspense>
+          <ReferralTrackingProvider>
+            <Suspense fallback={null}>
+              {children}
+            </Suspense>
+          </ReferralTrackingProvider>
           <Toaster position="top-center" richColors closeButton />
         </ReactQueryProvider>
         <FloatingWhatsAppButton />

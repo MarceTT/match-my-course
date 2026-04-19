@@ -12,7 +12,17 @@ export default async function AdminLayout({
   
   const user = session?.user as { role: string } | undefined;
 
-  if (!session || user?.role !== "admin") {
+  if (!session) {
+    redirect("/login");
+  }
+
+  // Redirect influencers to their specific dashboard
+  if (user?.role === "influencer") {
+    redirect("/admin/influencer");
+  }
+
+  // Only admin role can access the full admin
+  if (user?.role !== "admin") {
     redirect("/unauthorized");
   }
 

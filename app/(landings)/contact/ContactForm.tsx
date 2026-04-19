@@ -23,7 +23,8 @@ import ContactFAQ from "./ContactFAQ";
 import { sendGTMEvent } from "@/app/lib/gtm";
 import confetti from "canvas-confetti";
 import { Loader2 } from "lucide-react";
-import Link from 'next/link'
+import Link from 'next/link';
+import { createReferralLead, getReferralCode } from "@/app/hooks/useReferralTracking";
 
 export default function ContactForm() {
   const methods = useForm<ContactFormData>();
@@ -61,6 +62,18 @@ export default function ContactForm() {
           reason: transformedData.reason,
           page_path: window.location.pathname,
         });
+
+        // Track referral conversion if a referral code exists
+        const referralCode = getReferralCode();
+        if (referralCode) {
+          await createReferralLead({
+            prospectName: `${formData.firstName} ${formData.lastName}`,
+            prospectEmail: formData.email,
+            prospectPhone: formData.phone,
+            source: "contact_form",
+            courseInterest: formData.reason,
+          });
+        }
       } else {
         alert("Hubo un error al enviar el formulario");
       }

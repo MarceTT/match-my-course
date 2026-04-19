@@ -44,6 +44,7 @@ import professionalLevel from "../service/professionalLevel";
 import inicioCurso from "../service/inicioCurso";
 import { irishHolidays } from "@/lib/constants/holidays";
 import { FaSpinner } from "react-icons/fa";
+import { createReferralLead, getReferralCode } from "@/app/hooks/useReferralTracking";
 
 const LevelEnglishForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -108,6 +109,17 @@ const LevelEnglishForm = () => {
       if (response.data.success) {
         resetForm();
         toast.success("Formulario enviado correctamente");
+
+        // Track referral conversion if a referral code exists
+        const referralCode = getReferralCode();
+        if (referralCode) {
+          await createReferralLead({
+            prospectName: `${values.nombre} ${values.apellido}`,
+            prospectEmail: values.email,
+            source: "service_form",
+            courseInterest: values.paisEstudiar,
+          });
+        }
       } else {
         toast.error("Error al enviar el formulario. Por favor, intenta de nuevo.");
       }

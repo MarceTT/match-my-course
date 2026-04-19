@@ -30,6 +30,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { launchConfettiBurst } from "@/lib/confetti";
 import { sendGTMEvent } from "@/app/lib/gtm";
+import { createReferralLead, getReferralCode } from "@/app/hooks/useReferralTracking";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "El nombre es requerido" }),
@@ -101,6 +102,17 @@ const DialogMatch = ({ open, onOpenChange }: ReservationDialogProps) => {
           nationality: values.nationality,
           phone_code: values.country.code,
         });
+
+        // Track referral conversion if a referral code exists
+        const referralCode = getReferralCode();
+        if (referralCode) {
+          await createReferralLead({
+            prospectName: values.name,
+            prospectEmail: values.email,
+            prospectPhone: values.phone,
+            source: "consulting",
+          });
+        }
       } else {
         toast.error("Hubo un error al enviar el formulario");
       }

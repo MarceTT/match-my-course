@@ -9,6 +9,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Users,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -114,6 +115,25 @@ const data = {
         {
           title: "Ver Tags",
           url: "/admin/blog/tags",
+        },
+      ],
+    },
+    {
+      title: "Afiliados",
+      url: "#",
+      icon: Users,
+      items: [
+        {
+          title: "Dashboard",
+          url: "/admin/affiliates",
+        },
+        {
+          title: "Influencers",
+          url: "/admin/affiliates/influencers",
+        },
+        {
+          title: "Referidos",
+          url: "/admin/affiliates/referrals",
         },
       ],
     }

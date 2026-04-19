@@ -40,13 +40,27 @@ export async function middleware(req: NextRequest) {
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
-    if ((token as any).role !== 'admin') {
-      return new NextResponse('Forbidden', {
-        status: 403,
-        headers: { 'X-Robots-Tag': 'noindex, nofollow' },
-      });
+
+    const userRole = (token as { role?: string }).role;
+
+    // Influencers can only access /admin/influencer routes
+    if (userRole === 'influencer') {
+      if (!pathname.startsWith('/admin/influencer')) {
+        return NextResponse.redirect(new URL('/admin/influencer', req.url));
+      }
+      return NextResponse.next();
     }
-    return NextResponse.next();
+
+    // Admin can access everything
+    if (userRole === 'admin') {
+      return NextResponse.next();
+    }
+
+    // Other roles are forbidden
+    return new NextResponse('Forbidden', {
+      status: 403,
+      headers: { 'X-Robots-Tag': 'noindex, nofollow' },
+    });
   }
 
   // /cursos/.../escuelas/... – quitar query conocidas → 301 a canónica sin query
