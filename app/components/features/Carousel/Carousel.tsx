@@ -4,7 +4,11 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { m, LazyMotion, domAnimation, useAnimation, useInView } from 'framer-motion';
 
-const images = Array.from({ length: 26 }, (_, i) => `/schools/${i + 1}.png`);
+// Exclude ERIN College (5) and Griffith College (11)
+const excludedLogos = [5, 11];
+const images = Array.from({ length: 26 }, (_, i) => i + 1)
+  .filter((num) => !excludedLogos.includes(num))
+  .map((num) => `/schools/${num}.png`);
 
 const LOGO_WIDTH = 100; // Mitad del tamaño original
 
