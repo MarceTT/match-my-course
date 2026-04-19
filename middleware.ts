@@ -51,8 +51,8 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     }
 
-    // Admin can access everything
-    if (userRole === 'admin') {
+    // Admin and Superadmin can access everything
+    if (userRole === 'admin' || userRole === 'superadmin') {
       return NextResponse.next();
     }
 

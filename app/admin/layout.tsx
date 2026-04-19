@@ -21,8 +21,8 @@ export default async function AdminLayout({
     redirect("/admin/influencer");
   }
 
-  // Only admin role can access the full admin
-  if (user?.role !== "admin") {
+  // Only admin or superadmin roles can access the full admin
+  if (user?.role !== "admin" && user?.role !== "superadmin") {
     redirect("/unauthorized");
   }
 
