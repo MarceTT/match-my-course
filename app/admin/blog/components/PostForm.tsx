@@ -48,6 +48,7 @@ interface PostFormProps {
 
 export default function PostForm({ post, onSave }: PostFormProps) {
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [slugTouched, setSlugTouched] = useState(!!post?.slug);
   const [selectedTags, setSelectedTags] = useState<string[]>(
     Array.isArray(post?.tags) ? post.tags.map((tag: any) => tag._id || tag) : []
   );
@@ -88,10 +89,10 @@ export default function PostForm({ post, onSave }: PostFormProps) {
   const descripcion = form.watch("metaDescription") ?? "";
 
   useEffect(() => {
-    if (!post) {
+    if (!slugTouched && title) {
       form.setValue("slug", slugify(title));
     }
-  }, [title, post, form]);
+  }, [title, slugTouched, form]);
 
   const content = form.watch("content");
 
@@ -182,10 +183,20 @@ export default function PostForm({ post, onSave }: PostFormProps) {
                 name="slug"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Slug (generado automáticamente)</FormLabel>
+                    <FormLabel>Slug</FormLabel>
                     <FormControl>
-                      <Input {...field} readOnly />
+                      <Input
+                        placeholder="mi-post-url"
+                        {...field}
+                        onChange={(e) => {
+                          setSlugTouched(true);
+                          field.onChange(e);
+                        }}
+                      />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Se genera automáticamente desde el título, pero podés editarlo.
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}
