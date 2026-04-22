@@ -86,7 +86,7 @@ const Requisitos = () => {
 
         {/* CTA Button */}
         <div className="text-center">
-          <ScrollToTopButton className="inline-flex items-center gap-2 bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer">
+          <ScrollToTopButton className="inline-flex items-center gap-2 bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-4 rounded-full border-2 border-[#FFCB03] transition-all cursor-pointer">
             Más información
           </ScrollToTopButton>
         </div>

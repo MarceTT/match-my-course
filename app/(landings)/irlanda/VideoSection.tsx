@@ -34,9 +34,8 @@ export default function VideoSection() {
           <div className="text-center">
             <Button
               asChild
-              variant="outline"
               size="lg"
-              className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold text-lg px-8 py-4 rounded-lg transition-all"
+              className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-4 rounded-full border-2 border-[#FFCB03] transition-all"
             >
               <Link href="#requisitos">Más información</Link>
             </Button>
