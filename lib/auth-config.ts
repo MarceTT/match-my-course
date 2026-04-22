@@ -104,7 +104,7 @@ export const authConfig: NextAuthConfig = {
   } as any,
   secret: process.env.NEXTAUTH_SECRET,
   trustHost: true,
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
 };
 
 async function refreshAccessToken(token: any) {

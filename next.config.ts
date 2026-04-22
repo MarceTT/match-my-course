@@ -295,6 +295,10 @@ const nextConfig: NextConfig = {
             key: 'X-Frame-Options',
             value: 'SAMEORIGIN',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
         ],
       },
       // Etiquetado defensivo para evitar indexación de rutas privadas o utilitarias
