@@ -17,7 +17,7 @@ export default function DublinOffice() {
           <Button
             asChild
             size="lg"
-            className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-4 rounded-full border-2 border-[#FFCB03] transition-all"
+            className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all"
           >
             <Link href="#irlanda-form">Más información</Link>
           </Button>
