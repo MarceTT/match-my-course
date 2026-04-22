@@ -16,6 +16,11 @@ interface Testimonial {
   nationality?: string;
 }
 
+interface TestimonialsSectionProps {
+  title?: string;
+  highlightedText?: string;
+}
+
 const testimonials: Testimonial[] = [
   {
     id: 1,
@@ -73,7 +78,10 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({
+  title = "Experiencias reales de nuestros estudiantes",
+  highlightedText = "en Irlanda",
+}: TestimonialsSectionProps = {}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [itemsPerView, setItemsPerView] = useState(1);
@@ -148,10 +156,10 @@ export default function TestimonialsSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#2F343D] mb-6 leading-tight">
-            Experiencias reales de nuestros estudiantes
+            {title}
             <br />
             <span className="text-2xl md:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-               en Irlanda
+               {highlightedText}
             </span>
           </h2>
         </div>

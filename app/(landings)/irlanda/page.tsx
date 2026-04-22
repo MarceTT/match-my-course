@@ -1,8 +1,11 @@
 import React from 'react'
-import HeaderSection from './HeaderSection'
-import StepsToStudy from './StepsToStudy'
+import HeroIrlanda from './HeroIrlanda'
+import VideoSection from './VideoSection'
 import Requisitos from './Requisitos'
-import WhyIRL from './WhyIRL'
+import HowWeHelp from './HowWeHelp'
+import DublinOffice from './DublinOffice'
+import IrlandaForm from './IrlandaForm'
+import StepsToStudy from './StepsToStudy'
 import TestimonialsSection from '@/app/components/home/TestimonialsSection'
 import type { Metadata } from 'next'
 
@@ -17,20 +20,32 @@ export const metadata: Metadata = {
 const IrlandaPage = () => {
   return (
     <>
-      {/* Hero con gradiente y calendario de reserva */}
-      <HeaderSection />
+      {/* Hero con imagen de fondo y título principal */}
+      <HeroIrlanda />
+
+      {/* Video explicativo sobre la visa */}
+      <VideoSection />
 
       {/* Requisitos para estudiar (fondo blanco, 4 cards) */}
       <Requisitos />
 
-      {/* Invierte en tu futuro (imagen + beneficios) */}
-      <WhyIRL />
+      {/* Cómo te ayudamos (2 bloques alternados) */}
+      <HowWeHelp />
+
+      {/* Oficina en Dublín (fondo azul oscuro) */}
+      <DublinOffice />
+
+      {/* Formulario de contacto */}
+      <IrlandaForm />
 
       {/* 3 pasos para estudiar (círculos azules, línea punteada) */}
       <StepsToStudy />
 
       {/* Testimonios de estudiantes */}
-      <TestimonialsSection />
+      <TestimonialsSection 
+        title="Estudiantes que han elegido los servicios de"
+        highlightedText="MatchMyCourse"
+      />
     </>
   )
 }

@@ -31,14 +31,15 @@ const requisitos = [
 
 const Requisitos = () => {
   return (
-    <section className="w-full bg-white py-16 lg:py-20">
+    <section id="requisitos" className="w-full bg-white py-16 lg:py-20 scroll-mt-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#2F343D] mb-4 leading-tight">
-            Requisitos para estudiar inglés en{' '}
+            Requisitos para estudiar y trabajar en Irlanda
+            <br />
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Irlanda
+              MatchMyCourse
             </span>
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
@@ -86,7 +87,7 @@ const Requisitos = () => {
         {/* CTA Button */}
         <div className="text-center">
           <ScrollToTopButton className="inline-flex items-center gap-2 bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer">
-            Agenda una asesoría gratuita
+            Más información
           </ScrollToTopButton>
         </div>
       </div>

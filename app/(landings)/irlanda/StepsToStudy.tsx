@@ -3,18 +3,18 @@ import React from 'react'
 const steps = [
   {
     number: 1,
-    title: 'Agenda una reunión con nuestro equipo',
-    description: 'Conversaremos sobre tus metas, presupuesto y preferencias para encontrar la mejor opción para ti.',
+    title: 'Escríbenos por WhatsApp',
+    description: 'Contáctanos para comenzar con nuestro primer contacto y saber cómo podemos ayudarte.',
   },
   {
     number: 2,
-    title: 'Súmate a la experiencia',
-    description: 'Te ayudamos con todo el proceso: inscripción en la escuela, seguro médico y preparación pre-viaje.',
+    title: 'Reunión para conocerte',
+    description: 'Tendrás una reunión con nuestros especialistas para apoyarte en el inicio del proceso.',
   },
   {
     number: 3,
-    title: 'Inicia tus estudios en Irlanda',
-    description: '¡Llegó el momento! Comienza tu aventura de estudio y trabajo en Irlanda con todo nuestro apoyo.',
+    title: 'Preparación y destino',
+    description: 'Te preparamos desde la obtención del visado hasta el término del curso.',
   },
 ]
 
