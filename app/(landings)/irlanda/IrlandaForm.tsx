@@ -146,9 +146,9 @@ export default function IrlandaForm() {
     <section id="irlanda-form" className="py-16 lg:py-20 bg-white scroll-mt-16">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Left Side - Title and Description */}
-            <div className="lg:sticky lg:top-24">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+            {/* Left Side - Title and Description (2/5 = 40%) */}
+            <div className="lg:col-span-2 lg:sticky lg:top-24">
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#2F343D] mb-6 leading-tight">
                 ¿Te gustaría recibir más información sobre la visa de estudio de Irlanda?
               </h2>
@@ -170,8 +170,8 @@ export default function IrlandaForm() {
               </div>
             </div>
 
-            {/* Right Side - Form */}
-            <div className="bg-white p-6 lg:p-8 rounded-xl shadow-lg border border-gray-200">
+            {/* Right Side - Form (3/5 = 60%) */}
+            <div className="lg:col-span-3 bg-white p-6 lg:p-8 rounded-xl shadow-lg border border-gray-200">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                   {/* Name row */}
