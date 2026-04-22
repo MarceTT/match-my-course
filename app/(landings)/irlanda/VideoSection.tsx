@@ -22,7 +22,7 @@ export default function VideoSection() {
           {/* YouTube Video Embed */}
           <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg mb-8">
             <iframe
-              src="https://www.youtube.com/embed/xQhKWx_kQTM?rel=0"
+              src="https://www.youtube.com/embed/c0pqehnu4Ds?rel=0"
               title="¿Qué es la visa de estudio y trabajo de Irlanda?"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
