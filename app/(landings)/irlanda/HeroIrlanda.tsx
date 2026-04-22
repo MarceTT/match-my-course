@@ -21,8 +21,8 @@ export default function HeroIrlanda() {
           priority
           quality={85}
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/50" />
+        {/* Dark overlay for text readability - subtle */}
+        <div className="absolute inset-0 bg-black/30" />
       </div>
 
       {/* Content */}
