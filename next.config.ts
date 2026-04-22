@@ -3,6 +3,101 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === 'development';
 
+/**
+ * Content Security Policy Configuration
+ * 
+ * WHY unsafe-inline is needed (cannot remove without major refactor):
+ * - GTM/GA: dataLayer.push() calls in GTMClient.tsx require inline script execution
+ * - Critical CSS: dangerouslySetInnerHTML in layout.tsx for above-the-fold styles
+ * - JSON-LD: Schema.org structured data uses dangerouslySetInnerHTML
+ * - Service Worker: Registration script is inline in layout.tsx
+ * 
+ * Removing unsafe-inline would require:
+ * 1. Implementing nonce-based CSP (complex Next.js middleware)
+ * 2. Moving all inline scripts to external files
+ * 3. Using Next.js experimental CSP nonce support
+ * 
+ * WHY unsafe-eval is ONLY in development:
+ * - Next.js HMR/hot reload requires eval() for module replacement
+ * - Production builds are pre-compiled and don't need eval()
+ * 
+ * Security headers reference: https://securityheaders.com/
+ */
+const buildCSP = (): string => {
+  const directives: string[] = [
+    // Default fallback: only self
+    "default-src 'self'",
+    
+    // Scripts: self + inline (for GTM/JSON-LD) + eval ONLY in dev (for HMR)
+    // Google services, YouTube, Calendly, Cloudflare analytics
+    [
+      "script-src 'self' 'unsafe-inline'",
+      isDev ? "'unsafe-eval'" : "", // ONLY for Next.js HMR in development
+      "https://www.googletagmanager.com",
+      "https://www.google-analytics.com",
+      "https://ssl.google-analytics.com",
+      "https://www.youtube.com",
+      "https://www.youtube-nocookie.com",
+      "https://tagmanager.google.com",
+      "https://assets.calendly.com",
+      "https://static.cloudflareinsights.com",
+    ].filter(Boolean).join(' '),
+    
+    // Frames: YouTube embeds, Google forms, Vimeo, Calendly
+    "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://player.vimeo.com https://calendly.com https://assets.calendly.com",
+    
+    // Images: Allow data URIs (base64), blob (for image processing), and HTTPS sources
+    "img-src 'self' data: https: http: blob:",
+    
+    // Media (video/audio): only secure sources
+    "media-src 'self' https:",
+    
+    // Connections: API calls, analytics, development servers
+    [
+      "connect-src 'self'",
+      "http://localhost:8500", // Backend dev server
+      isDev ? "http://localhost:*" : "", // All localhost ports in dev
+      "https://www.google-analytics.com",
+      "https://analytics.google.com",
+      "https://www.googletagmanager.com",
+      "https://tagmanager.google.com",
+      "https://cloudflareinsights.com",
+      "https:", // Allow all HTTPS connections (for API flexibility)
+    ].filter(Boolean).join(' '),
+    
+    // Workers: Service Worker and blob URLs for dynamic workers
+    "worker-src 'self' blob:",
+    
+    // Child contexts (iframes created by scripts)
+    "child-src 'self'",
+    
+    // Styles: self + inline (for critical CSS) + Google Fonts
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    
+    // Fonts: Google Fonts + data URIs for embedded fonts
+    "font-src 'self' https://fonts.gstatic.com data:",
+    
+    // === SECURITY HARDENING DIRECTIVES ===
+    
+    // Object/embed: Disable Flash, Java, and other plugins
+    "object-src 'none'",
+    
+    // Base URI: Prevent base tag injection attacks
+    "base-uri 'self'",
+    
+    // Form submissions: Only allow forms to submit to same origin
+    "form-action 'self' https://calendly.com",
+    
+    // Frame ancestors: Prevent clickjacking (who can embed this site)
+    "frame-ancestors 'self'",
+    
+    // Upgrade HTTP to HTTPS automatically
+    "upgrade-insecure-requests",
+  ];
+
+  return directives.join('; ');
+};
+
 const nextConfig: NextConfig = {
   // Trailing slash behavior: false = URLs sin barra final (consistente con canonicals)
   trailingSlash: false,
@@ -266,30 +361,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              // Permitir scripts de Google Analytics, GTM, YouTube y Cloudflare
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://www.youtube.com https://www.youtube-nocookie.com https://tagmanager.google.com https://assets.calendly.com https://static.cloudflareinsights.com",
-              // Permitir frames/iframes de YouTube, Google y Vimeo
-              "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://player.vimeo.com https://calendly.com https://assets.calendly.com",
-              // Permitir imágenes de cualquier fuente
-              "img-src 'self' data: https: http: blob:",
-              // Permitir media de fuentes seguras
-              "media-src 'self' https:",
-              // Permitir conexiones según el entorno (incluyendo Service Workers y Cloudflare)
-              `connect-src 'self' http://localhost:8500 ${isDev ? 'http://localhost:* ' : ''}https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://tagmanager.google.com https://cloudflareinsights.com https:`,
-              // Permitir Service Workers hacer requests
-              `worker-src 'self' blob:`,
-              // CSP específico para Service Workers
-              `child-src 'self'`,
-              // Permitir estilos inline
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              // Permitir fuentes de Google Fonts
-              "font-src 'self' https://fonts.gstatic.com data:",
-              // Política base para otros recursos
-              "object-src 'none'",
-              "base-uri 'self'",
-            ].join('; '),
+            value: buildCSP(),
           },
           {
             key: 'X-Frame-Options',

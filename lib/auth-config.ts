@@ -19,6 +19,8 @@ export const authConfig: NextAuthConfig = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
+            // Include credentials so the browser receives and stores the httpOnly cookie
+            credentials: "include",
           }
         );
         const json = await res.json();
@@ -115,8 +117,11 @@ async function refreshAccessToken(token: any) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          // Keep header as fallback during migration, but httpOnly cookie is preferred
           "x-refresh-token": token.refreshToken,
         },
+        // Include credentials so the browser sends the httpOnly cookie
+        credentials: "include",
       }
     );
 
