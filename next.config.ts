@@ -163,7 +163,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/irlanda',
-        destination: '/estudiar-ingles-irlanda',
+        destination: '/visa-estudio-trabajo-irlanda',
+        permanent: true,
+      },
+      {
+        source: '/estudiar-ingles-irlanda',
+        destination: '/visa-estudio-trabajo-irlanda',
         permanent: true,
       },
       {
@@ -338,8 +343,8 @@ const nextConfig: NextConfig = {
         destination: '/nueva-zelanda',
       },
       {
-        // Canonical Spanish URL for New Zealand page -> serves the existing route
-        source: '/estudiar-ingles-irlanda',
+        // Canonical Spanish URL for Ireland page -> serves the existing route
+        source: '/visa-estudio-trabajo-irlanda',
         destination: '/irlanda',
       },
       {
