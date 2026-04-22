@@ -152,9 +152,11 @@ export default function IrlandaForm() {
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#2F343D] mb-6 leading-tight">
                 ¿Te gustaría recibir más información sobre la visa de estudio de Irlanda?
               </h2>
+              <p className="text-lg text-gray-600 mb-4 leading-relaxed">
+                <strong className="text-[#2F343D]">Completa el formulario</strong> y te aremos llegar la información que necesitas para conocer en profundidad el programa de estudio, requisitos, cursos de inglés y mucho más.
+              </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Completa el formulario y un miembro de nuestro equipo se pondrá en contacto contigo para brindarte una{" "}
-                <strong className="text-[#2F343D]">asesoría personalizada</strong> sobre cómo estudiar y trabajar en Irlanda.
+                También, podrás solicitar una <strong className="text-[#2F343D]">asesoría personalizada</strong> con nuestros profesionales expertos
               </p>
               <div className="hidden lg:block">
                 <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
