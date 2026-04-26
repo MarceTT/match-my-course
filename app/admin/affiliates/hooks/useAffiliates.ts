@@ -37,7 +37,7 @@ export function useInfluencers(params?: UseInfluencersParams) {
       if (params?.search) searchParams.set("search", params.search);
 
       const { data } = await axiosInstance.get(
-        `/api/affiliates/influencers?${searchParams.toString()}`
+        `/affiliates/influencers?${searchParams.toString()}`
       );
       return data;
     },
@@ -48,7 +48,7 @@ export function useInfluencer(id: string) {
   return useQuery<InfluencerResponse>({
     queryKey: ["affiliates", "influencers", id],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/api/affiliates/influencers/${id}`);
+      const { data } = await axiosInstance.get(`/affiliates/influencers/${id}`);
       return data;
     },
     enabled: !!id,
@@ -89,7 +89,7 @@ export function useUpdateInfluencer() {
   return useMutation<InfluencerResponse, Error, UpdateInfluencerParams>({
     mutationFn: async ({ id, data: updateData }) => {
       const { data } = await axiosInstance.put(
-        `/api/affiliates/influencers/${id}`,
+        `/affiliates/influencers/${id}`,
         updateData
       );
       return data;
@@ -108,7 +108,7 @@ export function useDeleteInfluencer() {
   const queryClient = useQueryClient();
   return useMutation<{ success: boolean }, Error, string>({
     mutationFn: async (id) => {
-      const { data } = await axiosInstance.delete(`/api/affiliates/influencers/${id}`);
+      const { data } = await axiosInstance.delete(`/affiliates/influencers/${id}`);
       return data;
     },
     onSuccess: () => {
@@ -137,7 +137,7 @@ export function useReferrals(params?: UseReferralsParams) {
       if (params?.limit) searchParams.set("limit", params.limit.toString());
 
       const { data } = await axiosInstance.get(
-        `/api/affiliates/referrals?${searchParams.toString()}`
+        `/affiliates/referrals?${searchParams.toString()}`
       );
       return data;
     },
@@ -148,7 +148,7 @@ export function useReferral(id: string) {
   return useQuery<{ success: boolean; data: import("../types").Referral }>({
     queryKey: ["affiliates", "referrals", id],
     queryFn: async () => {
-      const { data } = await axiosInstance.get(`/api/affiliates/referrals/${id}`);
+      const { data } = await axiosInstance.get(`/affiliates/referrals/${id}`);
       return data;
     },
     enabled: !!id,
@@ -166,7 +166,7 @@ export function useUpdateReferralStatus() {
   const queryClient = useQueryClient();
   return useMutation<{ success: boolean }, Error, UpdateReferralStatusParams>({
     mutationFn: async ({ id, status, note, bookingAmount }) => {
-      const { data } = await axiosInstance.put(`/api/affiliates/referrals/${id}/status`, {
+      const { data } = await axiosInstance.put(`/affiliates/referrals/${id}/status`, {
         status,
         note,
         bookingAmount,
@@ -184,7 +184,7 @@ export function useMarkCommissionPaid() {
   const queryClient = useQueryClient();
   return useMutation<{ success: boolean }, Error, string>({
     mutationFn: async (id) => {
-      const { data } = await axiosInstance.put(`/api/affiliates/referrals/${id}/pay`);
+      const { data } = await axiosInstance.put(`/affiliates/referrals/${id}/pay`);
       return data;
     },
     onSuccess: () => {
