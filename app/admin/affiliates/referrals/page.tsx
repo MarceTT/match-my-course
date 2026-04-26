@@ -192,7 +192,7 @@ export default function ReferralsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos los influencers</SelectItem>
-                {influencersData?.data?.map((inf) => (
+                {influencersData?.data?.influencers?.map((inf) => (
                   <SelectItem key={inf._id} value={inf._id}>
                     {inf.name}
                   </SelectItem>
