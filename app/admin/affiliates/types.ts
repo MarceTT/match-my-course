@@ -68,7 +68,9 @@ export interface ReferralsResponse {
 
 export interface InfluencersResponse {
   success: boolean;
-  data: Influencer[];
+  data: {
+    influencers: Influencer[];
+  };
 }
 
 export interface InfluencerResponse {

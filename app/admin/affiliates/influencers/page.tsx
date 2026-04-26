@@ -101,7 +101,7 @@ export default function InfluencersPage() {
         <CardContent>
           {isLoading ? (
             <TableSkeleton />
-          ) : data?.data?.length === 0 ? (
+          ) : data?.data?.influencers?.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <p className="mb-4">No hay influencers registrados</p>
               <Link href="/admin/affiliates/influencers/new">
@@ -127,7 +127,7 @@ export default function InfluencersPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {data?.data?.map((influencer) => (
+                  {data?.data?.influencers?.map((influencer) => (
                     <TableRow key={influencer._id}>
                       <TableCell>
                         <div>
