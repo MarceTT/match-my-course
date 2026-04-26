@@ -16,7 +16,7 @@ export function useDashboard() {
   return useQuery<DashboardResponse>({
     queryKey: ["affiliates", "dashboard"],
     queryFn: async () => {
-      const { data } = await axiosInstance.get("/api/affiliates/dashboard");
+      const { data } = await axiosInstance.get("/affiliates/dashboard");
       return data;
     },
   });
@@ -69,7 +69,7 @@ export function useCreateInfluencer() {
   const queryClient = useQueryClient();
   return useMutation<CreateInfluencerResponse, Error, CreateInfluencerData>({
     mutationFn: async (formData) => {
-      const { data } = await axiosInstance.post("/api/affiliates/influencers", formData);
+      const { data } = await axiosInstance.post("/affiliates/influencers", formData);
       return data;
     },
     onSuccess: () => {
