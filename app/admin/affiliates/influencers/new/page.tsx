@@ -36,6 +36,7 @@ import Link from "next/link";
 
 const influencerSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+  lastName: z.string().min(2, "El apellido debe tener al menos 2 caracteres"),
   email: z.string().email("Email inválido"),
   phone: z.string().optional(),
   instagram: z.string().optional(),
@@ -61,6 +62,7 @@ export default function NewInfluencerPage() {
     resolver: zodResolver(influencerSchema),
     defaultValues: {
       name: "",
+      lastName: "",
       email: "",
       phone: "",
       instagram: "",
@@ -76,6 +78,7 @@ export default function NewInfluencerPage() {
     try {
       const result = await createInfluencer.mutateAsync({
         name: data.name,
+        lastName: data.lastName,
         email: data.email,
         phone: data.phone || undefined,
         instagram: data.instagram || undefined,
@@ -130,10 +133,27 @@ export default function NewInfluencerPage() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nombre completo *</FormLabel>
+                          <FormLabel>Nombre *</FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="María García"
+                              placeholder="María"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Apellido *</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="García"
                               {...field}
                             />
                           </FormControl>

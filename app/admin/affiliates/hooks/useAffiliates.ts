@@ -57,6 +57,7 @@ export function useInfluencer(id: string) {
 
 interface CreateInfluencerData {
   name: string;
+  lastName: string;
   email: string;
   phone?: string;
   instagram?: string;
