@@ -68,7 +68,7 @@ export default function InfluencerDashboard() {
   const { data, isLoading, error } = useQuery<{ success: boolean; data: MyDashboardData }>({
     queryKey: ["my-dashboard"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/api/affiliates/my-dashboard");
+      const res = await axiosInstance.get("/affiliates/my-dashboard");
       return res.data;
     },
   });
