@@ -16,9 +16,10 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  // Redirect influencers to their specific dashboard
+  // Influencers bypass this layout - their own layout handles everything
+  // The middleware already restricts them to /admin/influencer routes only
   if (user?.role === "influencer") {
-    redirect("/admin/influencer");
+    return <>{children}</>;
   }
 
   // Only admin or superadmin roles can access the full admin
