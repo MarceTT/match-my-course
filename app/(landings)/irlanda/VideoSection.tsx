@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import ScrollToFormButton from "./ScrollToFormButton";
 
 export default function VideoSection() {
   return (
@@ -32,13 +31,9 @@ export default function VideoSection() {
 
           {/* CTA Button */}
           <div className="text-center">
-            <Button
-              asChild
-              size="lg"
-              className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all"
-            >
-              <Link href="#requisitos">Más información</Link>
-            </Button>
+            <ScrollToFormButton className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all">
+              Más información
+            </ScrollToFormButton>
           </div>
         </div>
       </div>

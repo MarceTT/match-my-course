@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import ScrollToTopButton from './ScrollToTopButton'
+import ScrollToFormButton from './ScrollToFormButton'
 
 const requisitos = [
   {
@@ -86,9 +86,9 @@ const Requisitos = () => {
 
         {/* CTA Button */}
         <div className="text-center">
-          <ScrollToTopButton className="inline-flex items-center gap-2 bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all cursor-pointer">
+          <ScrollToFormButton className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all">
             Más información
-          </ScrollToTopButton>
+          </ScrollToFormButton>
         </div>
       </div>
     </section>

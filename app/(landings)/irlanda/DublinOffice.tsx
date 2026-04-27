@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import ScrollToFormButton from "./ScrollToFormButton";
 
 export default function DublinOffice() {
   return (
@@ -14,13 +13,9 @@ export default function DublinOffice() {
           <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed">
             Matchmycourse es un portal con sede en Dublín. Contamos con muchos beneficios gratuitos que te permitirán vivir una mejor experiencia, desde pasajes hasta internet móvil para tus primeros días.
           </p>
-          <Button
-            asChild
-            size="lg"
-            className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all"
-          >
-            <Link href="#irlanda-form">Más información</Link>
-          </Button>
+          <ScrollToFormButton className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all">
+            Más información
+          </ScrollToFormButton>
         </div>
       </div>
     </section>

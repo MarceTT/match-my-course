@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
+import ScrollToFormButton from "./ScrollToFormButton";
 
 const schoolImage = rewriteToCDN(
   "https://match-my-course-final-bucket.s3.ap-southeast-2.amazonaws.com/Eleccio%CC%81n+personalizada+de+escuela+de+ingle%CC%81s+(1).jpg"
@@ -42,13 +41,9 @@ export default function HowWeHelp() {
                 Nuestro equipo conoce más de 35 escuelas y{" "}
                 <strong className="text-[#2F343D]">te ayudaremos a elegir la escuela que más te representa.</strong>
               </p>
-              <Button
-                asChild
-                size="lg"
-                className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all"
-              >
-                <Link href="#irlanda-form">Más información</Link>
-              </Button>
+              <ScrollToFormButton className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all">
+                Más información
+              </ScrollToFormButton>
             </div>
 
             {/* Image */}
@@ -90,13 +85,9 @@ export default function HowWeHelp() {
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                 Te ayudamos a aplicar a la visa de estudiante y a revisar y gestionar todos los documentos legales para que sea aprobada.
               </p>
-              <Button
-                asChild
-                size="lg"
-                className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all"
-              >
-                <Link href="#irlanda-form">Más información</Link>
-              </Button>
+              <ScrollToFormButton className="bg-[#FFCB03] hover:bg-[#e6b800] text-gray-900 font-semibold text-lg px-8 py-3 rounded-lg border-2 border-[#FFCB03] transition-all">
+                Más información
+              </ScrollToFormButton>
             </div>
           </div>
         </div>
