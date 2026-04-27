@@ -6,6 +6,7 @@ import {
   useInfluencer,
   useUpdateInfluencer,
   useReferrals,
+  useResetInfluencerPassword,
 } from "../../hooks/useAffiliates";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, Copy, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Copy, Check, Loader2, KeyRound } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -98,8 +106,12 @@ export default function EditInfluencerPage() {
   const { data: influencerData, isLoading } = useInfluencer(id);
   const { data: referralsData } = useReferrals({ influencerId: id, limit: 10 });
   const updateInfluencer = useUpdateInfluencer();
+  const resetPassword = useResetInfluencerPassword();
 
   const [copied, setCopied] = useState(false);
+  const [passwordCopied, setPasswordCopied] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
   const [formData, setFormData] = useState<FormData>({
     name: "",
     phone: "",
@@ -130,6 +142,27 @@ export default function EditInfluencerPage() {
       setCopied(true);
       toast.success("Link copiado");
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const copyPassword = () => {
+    if (newPassword) {
+      navigator.clipboard.writeText(newPassword);
+      setPasswordCopied(true);
+      toast.success("Contraseña copiada");
+      setTimeout(() => setPasswordCopied(false), 2000);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      const result = await resetPassword.mutateAsync(id);
+      setNewPassword(result.data.temporaryPassword);
+      setShowPasswordModal(true);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Error al resetear contraseña";
+      toast.error(errorMessage);
     }
   };
 
@@ -316,16 +349,36 @@ export default function EditInfluencerPage() {
                   </Select>
                 </div>
               </div>
-              <Button type="submit" disabled={updateInfluencer.isPending}>
-                {updateInfluencer.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Guardando...
-                  </>
-                ) : (
-                  "Guardar cambios"
-                )}
-              </Button>
+              <div className="flex gap-3">
+                <Button type="submit" disabled={updateInfluencer.isPending}>
+                  {updateInfluencer.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Guardando...
+                    </>
+                  ) : (
+                    "Guardar cambios"
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetPassword}
+                  disabled={resetPassword.isPending}
+                >
+                  {resetPassword.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Reseteando...
+                    </>
+                  ) : (
+                    <>
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      Resetear contraseña
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
           </CardContent>
         </Card>
@@ -361,6 +414,33 @@ export default function EditInfluencerPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Password Reset Modal */}
+      <Dialog open={showPasswordModal} onOpenChange={setShowPasswordModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nueva contraseña generada</DialogTitle>
+            <DialogDescription>
+              Copia esta contraseña y envíasela al influencer. No podrás verla de nuevo.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4">
+            <div className="flex items-center gap-2 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <code className="flex-1 text-lg font-mono font-bold">{newPassword}</code>
+              <Button variant="outline" size="sm" onClick={copyPassword}>
+                {passwordCopied ? (
+                  <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            <p className="mt-3 text-sm text-gray-500">
+              Email: <strong>{influencer?.email}</strong>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

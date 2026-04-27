@@ -119,6 +119,20 @@ export function useDeleteInfluencer() {
   });
 }
 
+interface ResetPasswordResponse {
+  success: boolean;
+  data: { temporaryPassword: string };
+}
+
+export function useResetInfluencerPassword() {
+  return useMutation<ResetPasswordResponse, Error, string>({
+    mutationFn: async (id) => {
+      const { data } = await axiosInstance.post(`/affiliates/influencers/${id}/reset-password`);
+      return data;
+    },
+  });
+}
+
 // Referrals
 interface UseReferralsParams {
   status?: string;
