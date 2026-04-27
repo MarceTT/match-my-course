@@ -192,26 +192,26 @@ export default function EditInfluencerPage() {
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-gray-500">Visitas</p>
-            <p className="text-2xl font-bold">{influencer.totalVisits}</p>
+            <p className="text-2xl font-bold">{influencer.totalVisits ?? 0}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-gray-500">Leads</p>
-            <p className="text-2xl font-bold">{influencer.totalLeads}</p>
+            <p className="text-2xl font-bold">{influencer.totalLeads ?? 0}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-gray-500">Conversiones</p>
-            <p className="text-2xl font-bold">{influencer.totalConversions}</p>
+            <p className="text-2xl font-bold">{influencer.totalConversions ?? 0}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-gray-500">Pendiente</p>
             <p className="text-2xl font-bold text-yellow-600">
-              €{influencer.pendingPayout.toFixed(2)}
+              €{(influencer.pendingPayout ?? 0).toFixed(2)}
             </p>
           </CardContent>
         </Card>
