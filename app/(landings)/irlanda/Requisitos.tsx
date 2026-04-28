@@ -6,8 +6,8 @@ const requisitos = [
   {
     icon: '/images/respaldo_economico.webp',
     title: 'Requisito económico',
-    subtitle: '€4.000',
-    description: 'Debes demostrar que tienes acceso a al menos €4.000 euros al momento de registrar tu visa de estudio y trabajo en Irlanda.',
+    subtitle: '€6.665',
+    description: 'Debes demostrar que tienes acceso a al menos €6.665 euros al momento de registrar tu visa de estudio y trabajo en Irlanda.',
   },
   {
     icon: '/images/mayor_18.webp',
