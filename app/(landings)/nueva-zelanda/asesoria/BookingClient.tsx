@@ -201,7 +201,7 @@ export default function BookingClient() {
     return partsToDateOnly(p);
   }, [selected]);
 
-  // Deshabilitar fines de semana/no laborables y feriados
+  // Deshabilitar fines de semana/no laborables, feriados, y días anteriores a mañana
   const disabledMatchers = useMemo(() => {
     const allowed = new Set(WORKDAYS);
     const all = [0,1,2,3,4,5,6];
@@ -210,7 +210,11 @@ export default function BookingClient() {
       const [y, m, da] = d.split("-").map(Number);
       return new Date(y, (m||1)-1, da||1);
     });
-    return [...holidayDates, { dayOfWeek: disabledDows as any }];
+    // Disable today and all past dates (only allow from tomorrow)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const beforeTomorrow = { before: new Date(today.getTime() + 24 * 60 * 60 * 1000) };
+    return [...holidayDates, { dayOfWeek: disabledDows as any }, beforeTomorrow];
   }, []);
 
   const loadBusy = useCallback(async (dateStr: string) => {
