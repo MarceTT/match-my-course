@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Mail, MessageCircle, Clock } from "lucide-react";
 
 const faqs = [
   {
@@ -62,17 +63,24 @@ export default function ContactFAQ() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
 
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
           Preguntas Frecuentes
         </h2>
+        <p className="text-center text-gray-500 mb-10">
+          Resolvemos las dudas más comunes antes de que empieces tu viaje.
+        </p>
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full space-y-3">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger className="text-left font-medium">
+            <AccordionItem
+              key={index}
+              value={`item-${index}`}
+              className="border-b-0 rounded-xl border border-gray-200 bg-white px-5 shadow-sm transition-all duration-200 hover:border-blue-300 hover:shadow-md data-[state=open]:border-blue-500 data-[state=open]:shadow-md"
+            >
+              <AccordionTrigger className="py-5 text-left text-base font-semibold text-gray-900 hover:no-underline transition-colors data-[state=open]:text-blue-600 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 [&[data-state=open]>svg]:text-blue-600">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-600">
+              <AccordionContent className="pb-5 text-[15px] leading-relaxed text-gray-600 data-[state=open]:animate-in data-[state=open]:fade-in-50">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>
@@ -81,7 +89,10 @@ export default function ContactFAQ() {
 
         {/* Additional contact info */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-          <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-200 hover:border-blue-300 hover:shadow-md hover:-translate-y-1">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100">
+              <Mail className="h-5 w-5" />
+            </div>
             <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
             <a
               href="mailto:info@matchmycourse.com"
@@ -90,7 +101,10 @@ export default function ContactFAQ() {
               info@matchmycourse.com
             </a>
           </div>
-          <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-200 hover:border-blue-300 hover:shadow-md hover:-translate-y-1">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-green-50 text-green-600 transition-colors group-hover:bg-green-100">
+              <MessageCircle className="h-5 w-5" />
+            </div>
             <h3 className="font-semibold text-gray-900 mb-2">WhatsApp</h3>
             <a
               href="https://wa.me/393925210018"
@@ -101,7 +115,10 @@ export default function ContactFAQ() {
               +39 392 521 0018
             </a>
           </div>
-          <div className="p-4 bg-white rounded-lg shadow-sm">
+          <div className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-200 hover:border-blue-300 hover:shadow-md hover:-translate-y-1">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-amber-50 text-amber-600 transition-colors group-hover:bg-amber-100">
+              <Clock className="h-5 w-5" />
+            </div>
             <h3 className="font-semibold text-gray-900 mb-2">Tiempo de respuesta</h3>
             <p className="text-gray-600">Máximo 48 horas hábiles</p>
           </div>
