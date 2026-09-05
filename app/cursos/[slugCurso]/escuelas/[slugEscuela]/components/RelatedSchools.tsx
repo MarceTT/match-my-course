@@ -6,6 +6,13 @@ import Link from "next/link";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Star, MapPin } from "lucide-react";
+import { cursoSlugToSubcategoria } from "@/lib/courseMap";
+import { buildCanonicalSeoSchoolPathFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
+
+interface RelatedSchoolSeoEntry {
+  url: string;
+  subcategoria: string;
+}
 
 interface RelatedSchool {
   _id: string;
@@ -15,11 +22,7 @@ interface RelatedSchool {
   logo?: string;
   mainImage?: string;
   ponderado?: number;
-  cursosEos?: Array<{
-    slugCurso: string;
-    slugEscuela: string;
-    subcategoria: string;
-  }>;
+  cursosEos?: RelatedSchoolSeoEntry[];
 }
 
 interface RelatedSchoolsProps {
@@ -86,25 +89,22 @@ export default function RelatedSchools({
     return null;
   }
 
-  // Build URL for each related school
-  const buildSchoolUrl = (school: RelatedSchool) => {
-    // Try to find matching SEO entry for current course
-    const seoEntry = school.cursosEos?.find((c) =>
-      c.slugCurso?.toLowerCase().includes(slugCurso.toLowerCase())
-    );
+  // Build the canonical school URL from the school's real SEO entries.
+  // Returns null when there is no valid SEO data so we can skip broken cards
+  // (same pattern as SchoolCard).
+  const buildSchoolUrl = (school: RelatedSchool): string | null => {
+    // Prefer the SEO entry that matches the current course type, otherwise
+    // fall back to the first available entry.
+    const targetSubcat = cursoSlugToSubcategoria[slugCurso];
+    const seoEntry =
+      school.cursosEos?.find((c) => c.subcategoria === targetSubcat) ??
+      school.cursosEos?.[0];
 
-    if (seoEntry) {
-      return `/cursos/${seoEntry.slugCurso}/escuelas/${seoEntry.slugEscuela}`;
-    }
+    if (!seoEntry) return null;
 
-    // Fallback to first available course
-    const firstEntry = school.cursosEos?.[0];
-    if (firstEntry) {
-      return `/cursos/${firstEntry.slugCurso}/escuelas/${firstEntry.slugEscuela}`;
-    }
-
-    // Last resort - escuelas page
-    return `/escuelas/${city.toLowerCase()}`;
+    const path = buildCanonicalSeoSchoolPathFromSeoEntry(seoEntry);
+    // Helper returns "#" when the subcategoria can't be mapped or the URL is malformed.
+    return path === "#" ? null : path;
   };
 
   return (
@@ -117,6 +117,9 @@ export default function RelatedSchools({
           {relatedSchools.map((school) => {
             const rating = Number(school.ponderado ?? 0);
             const schoolUrl = buildSchoolUrl(school);
+
+            // Skip schools without valid SEO data instead of rendering a broken link.
+            if (!schoolUrl) return null;
 
             return (
               <Link
@@ -163,10 +166,19 @@ export default function RelatedSchools({
           })}
         </div>
 
-        {/* Link to see all schools in the city */}
+        {/* Link to the course finder pre-filtered by the current course + city.
+            The buscador normalizes city ids by stripping diacritics, so we must
+            strip accents here too ("Dublín" -> "dublin") or the filter won't match. */}
         <div className="text-center mt-8">
           <Link
-            href={`/escuelas/${city.toLowerCase()}`}
+            href={`/buscador-cursos-de-ingles?course=${encodeURIComponent(
+              slugCurso
+            )}&cities=${encodeURIComponent(
+              city
+                .normalize("NFD")
+                .replace(/\p{Diacritic}/gu, "")
+                .toLowerCase()
+            )}`}
             className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Ver todas las escuelas en {city}
