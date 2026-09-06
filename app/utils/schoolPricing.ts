@@ -1,4 +1,4 @@
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 
 interface PriceResult {
     price: number;

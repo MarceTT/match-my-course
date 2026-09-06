@@ -53,7 +53,3 @@ export type School = {
     };
   };
 
-
-
-  // SchoolDetails now lives canonically in lib/types/school.ts.
-  export type { SchoolDetails } from "@/lib/types/school";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Grid, List, ArrowUp } from "lucide-react";
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 import { Switch } from "@/components/ui/switch";
 import { useInView } from "react-intersection-observer";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";

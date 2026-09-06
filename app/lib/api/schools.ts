@@ -1,5 +1,6 @@
 import axiosInstance from "@/app/utils/apiClient";
-import { School, SchoolDetails } from "@/app/types";
+import { School } from "@/app/types";
+import { SchoolDetails } from "@/lib/types";
 import axios from "axios";
 
 export const fetchSchools = async (): Promise<School[]> => {

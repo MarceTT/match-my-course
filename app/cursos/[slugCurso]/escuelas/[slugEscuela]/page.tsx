@@ -254,7 +254,7 @@ export default async function Page({ params, searchParams }: Props) {
   if (!schoolName || !city) {
     try {
       const schoolData = !seoEntry ? await fetchSchoolById(schoolId) : null;
-      const school = schoolData?.school || schoolData?.data?.school;
+      const school = schoolData?.school;
       schoolName = schoolName || school?.name;
       city = city || school?.city;
     } catch {

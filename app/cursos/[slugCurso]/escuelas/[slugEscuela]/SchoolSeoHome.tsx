@@ -79,7 +79,7 @@ async function SchoolSeoHome({
     'https://matchmycourse.com'
   ).replace(/\/$/, '');
 
-  const canonicalPath = `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(school.slug || school.name.toLowerCase().replace(/\s+/g, '-'))}`;
+  const canonicalPath = `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(school.name.toLowerCase().replace(/\s+/g, '-'))}`;
   const canonicalUrl = `${ORIGIN}${canonicalPath}`;
 
   // NOTE: EducationalOrganization JSON-LD is now rendered in page.tsx to avoid duplicates
@@ -160,7 +160,7 @@ async function SchoolSeoHome({
             <SchoolHeaderClient
               schoolName={school.name}
               schoolLogo={school.logo ? rewriteToCDN(school.logo) : undefined}
-              schoolUrlVideo={school.urlVideo}
+              schoolUrlVideo={school.urlVideo ?? undefined}
               summaryText={summaryText}
               rating={rating}
               yearsOld={yearsOld}
@@ -174,7 +174,7 @@ async function SchoolSeoHome({
               <SchoolSeoHomeClient
                 schoolId={schoolId}
                 schoolName={school.name}
-                schoolUrlVideo={school.urlVideo}
+                schoolUrlVideo={school.urlVideo ?? undefined}
                 slugCurso={slugCurso}
                 weeks={weeks}
                 schedule={schedule}
@@ -265,7 +265,7 @@ async function SchoolSeoHome({
             <SchoolSeoHomeClient
               schoolId={schoolId}
               schoolName={school.name}
-              schoolUrlVideo={school.urlVideo}
+              schoolUrlVideo={school.urlVideo ?? undefined}
               slugCurso={slugCurso}
               weeks={weeks}
               schedule={schedule}

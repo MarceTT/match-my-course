@@ -1,6 +1,10 @@
 "use server";
 
-import { SchoolDetailsResponse } from "@/app/lib/types";
+import {
+  CountryMetadata,
+  SchoolDetails,
+  SchoolDetailsResponse,
+} from "@/lib/types";
 
 export async function fetchSchoolsWithDetails() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/schools`, { cache: "no-store" });
@@ -8,7 +12,9 @@ export async function fetchSchoolsWithDetails() {
   return res.json();
   }
 
-  export const fetchSchoolById = async (id: string) => {
+  export const fetchSchoolById = async (
+    id: string
+  ): Promise<({ school: SchoolDetails } & CountryMetadata) | null> => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/front/school/${id}`, {
       next: { revalidate: 60 },
     });
