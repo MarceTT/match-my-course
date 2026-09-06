@@ -55,22 +55,5 @@ export type School = {
 
 
 
-  export interface SchoolDetails {
-    _id: string;
-    name: string;
-    city: string;
-    status: boolean;
-    mainImage?: string;
-    logo?: string;
-    galleryImages?: string[];
-    prices?: any[];
-    weekPrices?: any[];
-    weekRanges?: any[];
-    description?: {
-      añoFundacion?: number;
-    };
-    qualities?: {
-      ponderado?: number;
-    };
-    [key: string]: any;
-  }
+  // SchoolDetails now lives canonically in lib/types/school.ts.
+  export type { SchoolDetails } from "@/lib/types/school";
