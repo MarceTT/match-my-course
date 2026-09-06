@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { SchoolDetails } from "@/app/types";
+import { SchoolDetails } from "@/lib/types";
 import axiosInstance from "@/app/utils/apiClient";
 
 export function useSchoolById(schoolId: string) {

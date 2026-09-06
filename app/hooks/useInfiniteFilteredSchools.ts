@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 import filtersConfig from "@/app/utils/filterConfig";
 
 const normalize = (str: string): string =>

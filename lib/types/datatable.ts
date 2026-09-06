@@ -1,3 +1,8 @@
+// Non-school shared types migrated out of the former lib/types.ts file.
+// Moving these into the lib/types/ directory lets @/lib/types resolve to the
+// barrel (lib/types/index.ts) instead of being shadowed by a sibling file
+// under moduleResolution: "bundler". See change: unify-school-details-type (PR2).
+
 export interface SearchParams {
   [key: string]: string | string[] | undefined;
 }
@@ -25,21 +30,6 @@ export interface DataTableFilterOption<TData> {
   filterOperator?: string;
   isMulti?: boolean;
 }
-
-// Legacy (v1) school-domain declarations removed. Canonical types live in
-// lib/types/school.ts; re-exported here (type-only) for any residual importer.
-export type {
-  SchoolDetails,
-  Installations,
-  Qualities,
-  Nationalities,
-  SchoolAccommodation,
-  AccomodationDetail,
-  SchoolDescription,
-  SchoolPriceOption,
-  SchoolDetailsResponse,
-  SchoolDetailsSearchResponse,
-} from "@/lib/types/school";
 
 export interface Price {
   _id: string;
@@ -85,26 +75,6 @@ export type GalleryImage = {
   url: string;
   isNew?: boolean;
 };
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      name: string;
-      email: string;
-      accessToken: string;
-    };
-  }
-
-  interface User {
-    accessToken: string;
-    refreshToken?: string;
-  }
-
-  interface JWT {
-    accessToken: string;
-    refreshToken: string;
-  }
-}
 
 export type ContactFormData = {
   firstName: string;

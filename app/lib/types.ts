@@ -28,23 +28,6 @@ export interface DataTableFilterOption<TData> {
   isMulti?: boolean;
 }
 
-// School-domain types now live canonically in lib/types/school.ts.
-// Re-exported here (type-only) so existing consumers of this path keep resolving.
-export type {
-  SchoolDetails,
-  Installations,
-  Qualities,
-  Nationalities,
-  SchoolAccommodation,
-  AccomodationDetail,
-  SchoolDescription,
-  SchoolPriceOption,
-  CursoSeo,
-  CountryMetadata,
-  SchoolDetailsResponse,
-  SchoolDetailsSearchResponse,
-} from "@/lib/types/school";
-
 export interface BookingResponse {
   requiresAdvisor?: boolean;
   canBookInstantly?: boolean;

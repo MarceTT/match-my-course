@@ -19,7 +19,7 @@ import { usePrefetchSchoolDetails } from "@/app/hooks/usePrefetchSchoolDetails";
 import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { getResponsiveImageProps, rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
-import { SchoolDetails } from "@/app/lib/types";
+import { SchoolDetails } from "@/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { sendGTMEvent } from "@/app/lib/gtm";

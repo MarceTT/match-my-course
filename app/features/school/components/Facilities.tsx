@@ -1,7 +1,7 @@
 "use client";
 
 
-import { Installations } from "@/app/lib/types";
+import { Installations } from "@/lib/types";
 import Image from "next/image";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { motion } from "framer-motion";
