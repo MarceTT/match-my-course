@@ -26,107 +26,20 @@ export interface DataTableFilterOption<TData> {
   isMulti?: boolean;
 }
 
-export interface SchoolDetailsResponse {
-  message: string;
-  data: {
-    school: SchoolDetails;
-  };
-}
-
-export interface SchoolDetailsSearchResponse {
-  message: string;
-  data: {
-    schools: SchoolDetails[];
-  };
-}
-
-export interface SchoolDetails {
-  _id: string;
-  name: string;
-  city: string;
-  logo?: string;
-  mainImage?: string | null;
-  galleryImages: string[];
-  status: boolean;
-  installations?: Installations;
-  qualities?: Qualities;
-  nationalities?: Nationalities;
-  prices: SchoolPriceOption[];
-  description?: SchoolDescription;
-  accommodation?: SchoolAccommodation[];
-  accomodationDetail?: AccomodationDetail[];
-  lowestPrice?: number | null;
-  bestPrice?: number | null;
-  bestOffer?: number | null;
-  originalPrice?: number | null;
-  selectedPrice?: number | null;
-  hasOffer?: boolean;
-  priceSource?: string;
-}
-
-export interface Installations {
-  _id: string;
-  schoolId: string;
-  nombreEscuela: string;
-  ciudadEscuela: string;
-  biblioteca: boolean;
-  laboratorioInformatica: boolean;
-  areasAutoaprendizaje: boolean;
-  tv: string;
-  pizarraDigital: string;
-  calefaccion: string;
-  cafeteria: boolean;
-  restaurante: boolean;
-  cocinaEstudiantes: boolean;
-  salaJuegosRecreacion: boolean;
-  jardin: boolean;
-  terrazaAzotea: boolean;
-  salon: boolean;
-  zonaDeportiva: boolean;
-  microondas: boolean;
-  nevera: boolean;
-  maquinaExpendedora: boolean;
-  dispensadorAgua: boolean;
-  impresoraFotocopiadora: boolean;
-  freeWifi: boolean;
-  accesoSillasRuedas: boolean;
-  wcMinusvalidos: boolean;
-  elevators: boolean;
-  patrimoniales: boolean;
-  disenoImponente: boolean;
-  clasicosTradicionales: boolean;
-  modernosContemporaneos: boolean;
-  aulas: number;
-}
-
-export interface Qualities {
-  _id: string;
-  schoolId: string;
-  schoolName: string;
-  city: string;
-  trayectoria: number;
-  ponderado: number | string;
-  certifications: Record<string, boolean>;
-  accreditations: Record<string, string>;
-}
-
-export interface Nationalities {
-  _id: string;
-  schoolId: string;
-  nombreEscuelaAdm: string;
-  ciudadEscuela: string;
-  edadPromedio: number;
-  nacionalidades: Record<string, number>;
-  total: number;
-  nacionalidadesAnio: number;
-  continentes: {
-    europa: number;
-    asia: number;
-    latinoamerica: number;
-    africa: number;
-    otros: number;
-  };
-}
+// Legacy (v1) school-domain declarations removed. Canonical types live in
+// lib/types/school.ts; re-exported here (type-only) for any residual importer.
+export type {
+  SchoolDetails,
+  Installations,
+  Qualities,
+  Nationalities,
+  SchoolAccommodation,
+  AccomodationDetail,
+  SchoolDescription,
+  SchoolPriceOption,
+  SchoolDetailsResponse,
+  SchoolDetailsSearchResponse,
+} from "@/lib/types/school";
 
 export interface Price {
   _id: string;
@@ -154,62 +67,6 @@ export interface Price {
   examenes: Record<string, string>;
 }
 
-export interface SchoolAccommodation {
-  _id: string;
-  schoolId: string;
-  schoolName: string;
-  city: string;
-  hostFamily: boolean;
-  accommodation: boolean;
-  residenciaEstudiantes: boolean;
-  detalleHostFamily: string;
-  detalleAccommodation: string;
-  detalleResidencia: string;
-}
-
-export interface AccomodationDetail {
-  _id: string;
-  schoolId: string;
-  schoolName: string;
-  city: string;
-  alojamiento: string;
-  semanas: string;
-  detalle1: string;
-  detalle2: string;
-  detalle3: string;
-  habitacion: string;
-  detalleHabitacion: string;
-  bookingFee: string;
-  dietaSuplementaria: string;
-  detalleSuplemento: string;
-  suplementoNavidad: string;
-  voucherAlmuerzo: string;
-  valorSemanal: string;
-  disponible: string;
-  suplementoVerano: string;
-  suplementoInvierno: string;
-  fechasSuplemento: string;
-}
-
-export interface SchoolDescription {
-  _id: string;
-  schoolId: string;
-  nombreEscuela: string;
-  ciudadEscuela: string;
-  calificacion: number;
-  añoFundacion: number;
-  minutosAlCentro: number;
-  detalleEscuela: string;
-  tipoEscuela: string;
-  descripcion: string;
-  direccionEscuela: string;
-  tipoEdificio: string;
-  institucionVinculada: string;
-  cursosInglesSemanas: number;
-  cursoInglesEstudioTrabajo: number;
-  representacion: number;
-}
-
 export interface SchoolCardData {
   _id: string;
   name: string;
@@ -220,15 +77,6 @@ export interface SchoolCardData {
   age?: number;
   price?: number;
   image?: string;
-}
-
-export interface SchoolPriceOption {
-  horario: "AM" | "PM";
-  precio: number;
-  horarioEspecifico: string;
-  horasSemana: number;
-  horasDeClase: number;
-  oferta?: number;
 }
 
 export type GalleryImage = {
