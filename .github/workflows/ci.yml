@@ -30,8 +30,16 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      # next-env.d.ts is gitignored and declares the ambient module types for
+      # static asset imports (png/svg via next/image-types/global). It only
+      # exists after `next dev`/`next build` runs, so in clean CI it's absent
+      # and tsc reports TS2307 on image imports. The file is a fixed 2-line
+      # reference stub, so we regenerate it deterministically before typecheck.
+      - name: Generate next-env.d.ts
+        run: printf '/// <reference types="next" />\n/// <reference types="next/image-types/global" />\n' > next-env.d.ts
+
       # Blocking gate: fails the PR if any TypeScript error is introduced.
-      # tsc is currently clean on main, so this protects against type regressions
+      # tsc is clean on main, so this protects against type regressions
       # (e.g. the duplicate-type bug class we just eliminated).
       - name: Type check
         run: bun run typecheck
