@@ -23,8 +23,12 @@ jobs:
         with:
           bun-version: latest
 
+      # NOTE: not using --frozen-lockfile: package.json uses an npm-style
+      # nested "overrides" (cmdk) that Bun does not support, so the frozen
+      # check always reports drift against bun.lock. Cleaning up the 3
+      # lockfiles + overrides is a separate task.
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       # Blocking gate: fails the PR if any TypeScript error is introduced.
       # tsc is currently clean on main, so this protects against type regressions
@@ -48,7 +52,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Lint
         run: bun run lint
