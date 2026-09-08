@@ -7,6 +7,7 @@
     "build": "next build --no-lint",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "test:performance": "node scripts/performance-test.mjs",
     "test:performance:dev": "node scripts/performance-test.mjs --url=http://localhost:3000",
     "test:performance:prod": "node scripts/performance-test.mjs --url=https://matchmycourse.com",
