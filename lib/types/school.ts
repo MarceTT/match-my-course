@@ -137,21 +137,11 @@ export interface SchoolPriceOption {
   semanas?: number;
 }
 
-// TODO(unify-seo-entry): CursoSeo/SeoEntry unification is a separate change.
-export interface CursoSeo {
-  _id: string;
-  schoolId: string;
-  categoria: string;
-  subcategoria: string;
-  escuela: string;
-  ciudad: string;
-  url: string;
-  h1: string;
-  metaTitle: string;
-  metaDescription: string;
-  keywordPrincipal: string;
-  __v: number;
-}
+// Canonical CursoSeo lives in ./seo (unify-seo-entry). Imported for local use
+// (SchoolDetails.cursosEos below) and re-exported so consumers importing
+// `CursoSeo` from @/lib/types/school keep resolving without changes.
+import type { CursoSeo } from './seo';
+export type { CursoSeo };
 
 export interface CountryMetadata {
   country?: string;
