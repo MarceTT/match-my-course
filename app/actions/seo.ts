@@ -6,18 +6,11 @@ export async function fetchSeoSchoolById(id: string) {
   return res.data.data;
 }
 
-export type SeoEntry = {
-  schoolId: string;
-  categoria: string;
-  subcategoria: string;
-  escuela: string;
-  ciudad: string;
-  url: string;
-  h1: string;
-  metaTitle: string;
-  metaDescription: string;
-  keywordPrincipal: string;
-}
+// Canonical SeoEntry lives in @/lib/types/seo (unify-seo-entry). Imported for
+// local use (fetchAllSeoEntries return type) and re-exported so consumers
+// importing `SeoEntry` from @/app/actions/seo keep resolving without changes.
+import type { SeoEntry } from "@/lib/types/seo";
+export type { SeoEntry };
 
 // React cache() deduplicates calls within the same request
 // So generateMetadata, generateStaticParams, and Page all share one fetch
