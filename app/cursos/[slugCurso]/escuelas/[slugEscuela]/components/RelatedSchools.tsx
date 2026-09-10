@@ -8,11 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Star, MapPin } from "lucide-react";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { buildCanonicalSeoSchoolPathFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
-
-interface RelatedSchoolSeoEntry {
-  url: string;
-  subcategoria: string;
-}
+import type { CursoSeo } from "@/lib/types";
 
 interface RelatedSchool {
   _id: string;
@@ -22,7 +18,7 @@ interface RelatedSchool {
   logo?: string;
   mainImage?: string;
   ponderado?: number;
-  cursosEos?: RelatedSchoolSeoEntry[];
+  cursosEos?: CursoSeo[];
 }
 
 interface RelatedSchoolsProps {

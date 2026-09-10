@@ -10,6 +10,7 @@ import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { ArrowUp } from "lucide-react";
 import { useScrollTopButton } from "@/hooks/useScrollTopButton";
+import type { CursoSeo } from "@/lib/types";
 
 interface SchoolData {
   _id: string;
@@ -24,7 +25,7 @@ interface SchoolData {
   }>;
   lowestPrice?: number;
   courseTypes?: string[];
-  cursosEos?: any[];
+  cursosEos?: CursoSeo[];
   generalEnglishPrice?: number;
   specificSchedule?: any;
 }

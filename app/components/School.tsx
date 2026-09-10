@@ -10,6 +10,7 @@ import { buildReservationQuery } from "@/lib/reservation";
 import { Reservation } from "@/types";
 import { courseLabelToIdMap } from "@/lib/helpers/courseHelper";
 import { buildCanonicalSeoSchoolPathFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
+import type { CursoSeo } from "@/lib/types";
 
 type GeneralEnglishPrice = {
   precio: number;
@@ -28,7 +29,7 @@ interface SchoolCardProps {
   priority?: boolean;
   lowestPrice?: number;
   courseTypes?: string[];
-  seoCourses?: any;
+  seoCourses?: CursoSeo[];
   generalEnglishPrice?: GeneralEnglishPrice;
   specificSchedule?: string;
   offer?: number;
@@ -55,7 +56,7 @@ SchoolCardProps) => {
   const searchParams = useSearchParams();
 
   const seoEntry = seoCourses.find(
-    (c: any) => c.subcategoria === "Inglés General"
+    (c: CursoSeo) => c.subcategoria === "Inglés General"
   );
   // Enlaza directamente a la URL canónica (sin query params) para SEO interno
   const canonicalPath = seoEntry

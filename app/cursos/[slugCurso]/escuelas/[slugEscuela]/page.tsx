@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import type { SeoEntry, SeoEntryDocument } from '@/lib/types';
 import { fetchAllSeoEntries, fetchSeoSchoolById } from '@/app/actions/seo';
 import { fetchSchoolById } from '@/app/actions/school';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
@@ -23,14 +24,8 @@ export const revalidate = 900; // 15 minutos
 // Pre-generate static pages for top schools at build time
 export async function generateStaticParams() {
   try {
-    const result: any = await fetchAllSeoEntries();
-    let entries: Array<any> = [];
-
-    if (Array.isArray(result)) {
-      entries = result;
-    } else if (result && typeof result === 'object' && 'data' in result) {
-      entries = Array.isArray(result.data) ? result.data : [];
-    }
+    const result = await fetchAllSeoEntries();
+    const entries: SeoEntry[] = Array.isArray(result) ? result : [];
 
     // Generate params for all schools with all course types
     const params: Array<{ slugCurso: string; slugEscuela: string }> = [];
@@ -63,14 +58,10 @@ export async function generateMetadata(ctx: Props): Promise<Metadata> {
   if (!subcategoria) return { title: 'No encontrado', robots: { index: false, follow: false } };
 
   // Buscar schoolId desde slugs
-  let entries: Array<any> = [];
+  let entries: SeoEntry[] = [];
   try {
-    const result: any = await fetchAllSeoEntries();
-    if (Array.isArray(result)) {
-      entries = result;
-    } else if (result && typeof result === 'object' && 'data' in result) {
-      entries = Array.isArray(result.data) ? result.data : [];
-    }
+    const result = await fetchAllSeoEntries();
+    entries = Array.isArray(result) ? result : [];
   } catch (e) {
     return { title: 'Error', robots: { index: false, follow: false } };
   }
@@ -205,7 +196,7 @@ export default async function Page({ params, searchParams }: Props) {
   const canonicalPath = `/cursos/${encodeURIComponent(slugCurso)}/escuelas/${encodeURIComponent(slugEscuela)}`;
   const canonicalUrl = `${origin}${canonicalPath}`;
 
-  const seoEntry = seoCourses.find((c: any) => c.subcategoria === subcategoria);
+  const seoEntry = seoCourses.find((c) => c.subcategoria === subcategoria);
 
   // EducationalOrganization schema
   const orgSchema = seoEntry ? {
@@ -271,16 +262,13 @@ export default async function Page({ params, searchParams }: Props) {
   const startDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
   const endDate = new Date(today.getTime() + weeks * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-  // Get course price from seoEntry if available
-  const coursePrice = (seoEntry as any)?.precio || (seoEntry as any)?.minPrecio;
-
   const courseSchema = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: courseTitle,
     description:
-      (seoEntry as any)?.metaDescription ||
-      (seoEntry as any)?.h1 ||
+      seoEntry?.metaDescription ||
+      seoEntry?.h1 ||
       `Mejora tu inglés con clases dinámicas, profesores nativos y opciones de visa estudio + trabajo en Irlanda.`,
     provider: {
       '@type': 'EducationalOrganization',
@@ -289,16 +277,6 @@ export default async function Page({ params, searchParams }: Props) {
     },
     inLanguage: 'en',
     url: canonicalUrl,
-    ...(coursePrice && {
-      offers: {
-        '@type': 'Offer',
-        price: String(coursePrice),
-        priceCurrency: 'EUR',
-        availability: 'https://schema.org/InStock',
-        validFrom: startDate,
-        url: canonicalUrl,
-      },
-    }),
     hasCourseInstance: {
       '@type': 'CourseInstance',
       courseMode: 'OnSite',
@@ -319,7 +297,7 @@ export default async function Page({ params, searchParams }: Props) {
 
   // Texto breve para integrar visualmente debajo del H1 del hero
   const subcat = cursoSlugToSubcategoria[slugCurso] || 'Curso de inglés';
-  const cityName = (seoEntry as any)?.ciudad as string | undefined;
+  const cityName = seoEntry?.ciudad;
   const head = `${subcat}${schoolName ? ` en ${schoolName}` : ''}${cityName ? `, ${cityName}` : ''}.`;
   const subcatLine = (() => {
     switch (subcat) {

@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "@/app/utils/apiClient";
 import { useEffect } from "react";
+import type { CursoSeo } from "@/lib/types";
 
 const LIMIT = 8;
 
@@ -17,7 +18,7 @@ interface SchoolData {
   }>;
   lowestPrice?: number;
   courseTypes?: string[];
-  cursosEos?: any[];
+  cursosEos?: CursoSeo[];
   generalEnglishPrice?: number;
   specificSchedule?: any;
 }

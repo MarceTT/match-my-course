@@ -2,6 +2,7 @@ import School from "../components/School";
 import { rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import type { CursoSeo } from "@/lib/types";
 
 // Lazy load pagination component which loads after schools are visible
 const ClientSchoolPagination = dynamic(() => import("./ClientSchoolPagination"), {
@@ -21,7 +22,7 @@ interface SchoolData {
   }>;
   lowestPrice?: number;
   courseTypes?: string[];
-  cursosEos?: any[];
+  cursosEos?: CursoSeo[];
   generalEnglishPrice?: any; // Will be passed as-is to School component
   specificSchedule?: any;
 }
