@@ -16,7 +16,7 @@ const ContactButtonWhatsApp = ({ reservation, className }: ContactButtonWhatsApp
 //   console.log("reservation", reservation);
 
     const handleOpenWhatsApp = () => {
-        const phone = "+56931714541"; // Número destino
+        const phone = "+353831134401"; // Número destino
       
         const courseName = reservation?.course ?? "Programa de estudio y trabajo";
         const schedule = reservation?.specificSchedule ?? "Horario no definido";

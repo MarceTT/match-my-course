@@ -107,12 +107,12 @@ export default function ContactFAQ() {
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">WhatsApp</h3>
             <a
-              href="https://wa.me/393925210018"
+              href="https://wa.me/353831134401"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
             >
-              +39 392 521 0018
+              +353 83 113 4401
             </a>
           </div>
           <div className="group p-6 bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-200 hover:border-blue-300 hover:shadow-md hover:-translate-y-1">
