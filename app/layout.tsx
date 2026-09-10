@@ -162,7 +162,7 @@ export default function RootLayout({
             url: `${origin}/`,
             logo: `${origin}/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffinal-logo.c32fac39.png&w=512&q=75`,
             description: 'Te orientamos para estudiar inglés en el extranjero, ayudándote con visas, alojamiento y asesoría personalizada para que viajes sin estrés.',
-            telephone: ['+393925210018', '+56931714541'],
+            telephone: ['+353831134401'],
             sameAs: [
               'https://www.facebook.com/matchmycourse',
               'https://www.instagram.com/match.my.course/',

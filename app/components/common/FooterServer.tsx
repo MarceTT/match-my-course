@@ -354,8 +354,7 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                   Teléfonos
                 </h3>
                 <div className="space-y-1 text-sm">
-                  <p>+393925210018</p>
-                  <p>+56931714541</p>
+                  <p>+353831134401</p>
                 </div>
               </div>
             </div>

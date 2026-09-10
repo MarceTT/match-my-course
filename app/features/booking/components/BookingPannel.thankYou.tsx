@@ -74,7 +74,7 @@ export default function ThankYouPage({ onReset, confetti }: ThankYouPageProps) {
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+56 931714541</span>
+                <span>+353 831134401</span>
               </div>
             </div>
           </div>

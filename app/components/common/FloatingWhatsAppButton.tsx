@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 
-const WHATSAPP_PHONE = "56931714541";
+const WHATSAPP_PHONE = "353831134401";
 const WHATSAPP_MESSAGE = "Hola! Me interesa obtener más información sobre cursos de inglés en el extranjero.";
 
 export default function FloatingWhatsAppButton() {
