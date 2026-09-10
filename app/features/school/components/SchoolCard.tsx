@@ -20,6 +20,7 @@ import useMediaQuery from "@/app/hooks/useMediaQuery";
 import { getResponsiveImageProps, rewriteToCDN } from "@/app/utils/rewriteToCDN";
 import { useSearchParams } from "next/navigation";
 import { SchoolDetails } from "@/lib/types";
+import type { CursoSeo } from "@/lib/types";
 import { buildSeoSchoolUrlFromSeoEntry } from "@/lib/helpers/buildSeoSchoolUrl";
 import { cursoSlugToSubcategoria } from "@/lib/courseMap";
 import { sendGTMEvent } from "@/app/lib/gtm";
@@ -108,7 +109,7 @@ const SchoolCard = React.memo(function SchoolCard({ school, viewType }: SchoolCa
   const schedule = searchParams.get("horario") ?? "PM";
 
   const seoEntry = school.cursosEos?.find(
-    (c: any) => c.subcategoria === subcategoria
+    (c: CursoSeo) => c.subcategoria === subcategoria
   );
 
   const fullUrl = seoEntry

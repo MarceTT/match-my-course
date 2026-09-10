@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import type { SeoEntry } from '@/lib/types'
 import { subcategoriaToCursoSlug } from '@/lib/courseMap'
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl'
 
@@ -14,13 +15,6 @@ async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit & { 
   } finally {
     clearTimeout(id)
   }
-}
-
-type SeoEntry = {
-  schoolId: string
-  url: string
-  subcategoria: string
-  updatedAt?: string
 }
 
 type BlogListResp = {
