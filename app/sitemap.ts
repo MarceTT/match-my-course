@@ -58,6 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/mision-vision-matchmycourse`, lastModified: new Date() },
     { url: `${base}/quienes-somos`, lastModified: new Date() },
     { url: `${base}/cursos-ingles-extranjero`, lastModified: new Date() },
+    { url: `${base}/test-de-nivel-de-ingles`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/politica-de-privacidad`, lastModified: new Date('2025-01-01') },
     { url: `${base}/terminos-y-condiciones`, lastModified: new Date('2025-01-01') },
     { url: `${base}/blog`, lastModified: new Date() },

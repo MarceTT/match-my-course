@@ -12,6 +12,7 @@ import {
   TravelSupportSection,
   TestimonialsSection,
   ProcessStepsSection,
+  PlacementTestCTASection,
   FinalCTASection,
 } from "./components/home";
 import Carousel from "./components/features/Carousel/Carousel";
@@ -102,6 +103,9 @@ export default function Home() {
 
       {/* Por qué MatchMyCourse - Grid 2x3 */}
       <WhyMatchMyCourse />
+
+      {/* CTA Test de nivel de inglés */}
+      <PlacementTestCTASection />
 
       {/* Apoyo durante el viaje */}
       <TravelSupportSection />
