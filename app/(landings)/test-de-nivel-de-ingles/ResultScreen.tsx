@@ -2,6 +2,7 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 
+import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MAX_SCORE } from "./data/questions";
@@ -19,6 +20,15 @@ interface ResultScreenProps {
   onRestart: () => void;
 }
 
+/** Gradient theme per CEFR level — softer for beginners, richer for advanced. */
+const LEVEL_THEME: Record<string, { from: string; to: string; glow: string }> = {
+  A1: { from: "from-sky-400", to: "to-blue-500", glow: "shadow-sky-500/30" },
+  A2: { from: "from-teal-400", to: "to-emerald-500", glow: "shadow-teal-500/30" },
+  B1: { from: "from-emerald-400", to: "to-green-600", glow: "shadow-emerald-500/30" },
+  B2: { from: "from-indigo-400", to: "to-blue-600", glow: "shadow-indigo-500/30" },
+  C1: { from: "from-violet-500", to: "to-fuchsia-600", glow: "shadow-violet-500/40" },
+};
+
 export function ResultScreen({ score, result, lead, onRestart }: ResultScreenProps) {
   const whatsappContext = {
     name: lead.name,
@@ -27,6 +37,7 @@ export function ResultScreen({ score, result, lead, onRestart }: ResultScreenPro
   };
   const onlineUrl = buildOnlineWhatsAppUrl(whatsappContext);
   const abroadUrl = buildAbroadWhatsAppUrl(whatsappContext);
+  const theme = LEVEL_THEME[result.short] ?? LEVEL_THEME.B1;
 
   return (
     <Card className="p-6 text-center sm:p-10 lg:p-12">
@@ -38,8 +49,34 @@ export function ResultScreen({ score, result, lead, onRestart }: ResultScreenPro
         {result.level}
       </div>
 
-      <div className="mx-auto my-6 grid h-28 w-28 place-items-center rounded-full border-[12px] border-emerald-100 bg-emerald-50 text-3xl font-extrabold text-emerald-500">
-        {result.short}
+      <div className="relative mx-auto my-8 grid h-36 w-36 place-items-center">
+        {/* Soft outer halo */}
+        <div
+          className={cn(
+            "absolute inset-0 rounded-full bg-gradient-to-br opacity-20 blur-xl",
+            theme.from,
+            theme.to,
+          )}
+        />
+        {/* Outer ring (medal effect) */}
+        <div
+          className={cn(
+            "absolute inset-2 rounded-full bg-gradient-to-br opacity-25",
+            theme.from,
+            theme.to,
+          )}
+        />
+        {/* Main gradient badge */}
+        <div
+          className={cn(
+            "relative grid h-28 w-28 place-items-center rounded-full bg-gradient-to-br text-4xl font-extrabold tracking-tight text-white shadow-xl ring-4 ring-white",
+            theme.from,
+            theme.to,
+            theme.glow,
+          )}
+        >
+          {result.short}
+        </div>
       </div>
 
       <p className="mx-auto mb-2 max-w-2xl text-lg font-extrabold text-slate-900">
@@ -86,19 +123,33 @@ export function ResultScreen({ score, result, lead, onRestart }: ResultScreenPro
           href={onlineUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-4 text-center font-extrabold text-white shadow-lg transition-transform hover:-translate-y-0.5"
+          className="group flex items-center gap-3 rounded-2xl bg-gradient-to-br from-[#25D366] to-[#128C7E] p-4 text-left text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl"
         >
-          <FaWhatsapp className="h-5 w-5" />
-          Quiero registrarme en un curso de inglés online
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/20 transition-transform group-hover:scale-110">
+            <FaWhatsapp className="h-6 w-6" />
+          </span>
+          <span className="flex-1 text-sm font-bold leading-snug sm:text-[15px]">
+            Quiero registrarme en un curso de inglés online
+          </span>
+          <span aria-hidden className="shrink-0 opacity-60 transition-transform group-hover:translate-x-0.5">
+            →
+          </span>
         </a>
         <a
           href={abroadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-4 text-center font-extrabold text-white shadow-lg transition-transform hover:-translate-y-0.5"
+          className="group flex items-center gap-3 rounded-2xl bg-gradient-to-br from-[#25D366] to-[#128C7E] p-4 text-left text-white shadow-md ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-xl"
         >
-          <FaWhatsapp className="h-5 w-5" />
-          Me interesa estudiar inglés en el extranjero
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white/20 transition-transform group-hover:scale-110">
+            <FaWhatsapp className="h-6 w-6" />
+          </span>
+          <span className="flex-1 text-sm font-bold leading-snug sm:text-[15px]">
+            Me interesa estudiar inglés en el extranjero
+          </span>
+          <span aria-hidden className="shrink-0 opacity-60 transition-transform group-hover:translate-x-0.5">
+            →
+          </span>
         </a>
       </div>
 
