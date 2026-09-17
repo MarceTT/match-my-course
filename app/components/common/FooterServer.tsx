@@ -110,6 +110,14 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                   </li>
                   <li>
                     <Link
+                      href="/test-de-nivel-de-ingles"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Test de nivel de inglés
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       href="/blog"
                       className="hover:text-[#333] transition-colors"
                     >

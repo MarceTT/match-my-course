@@ -6,4 +6,5 @@ export { default as WhyMatchMyCourse } from "./WhyMatchMyCourse";
 export { default as TravelSupportSection } from "./TravelSupportSection";
 export { default as TestimonialsSection } from "./TestimonialsSection";
 export { default as ProcessStepsSection } from "./ProcessStepsSection";
+export { default as PlacementTestCTASection } from "./PlacementTestCTASection";
 export { default as FinalCTASection } from "./FinalCTASection";

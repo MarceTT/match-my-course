@@ -46,6 +46,10 @@ export const navItems: NavItem[] = [
     href: "/cursos-ingles-extranjero",
   },
   {
+    name: "Test de nivel",
+    href: "/test-de-nivel-de-ingles",
+  },
+  {
     name: "Nosotros",
     dropdown: [
       {
