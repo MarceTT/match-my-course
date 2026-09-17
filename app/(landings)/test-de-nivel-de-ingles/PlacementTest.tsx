@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { levels } from "./data/questions";
 import { calculateScore, getLevel, type Answers, type LevelResult } from "./lib/scoring";
+import { savePlacementTestResult } from "./lib/api";
 import type { LeadFormValues } from "./leadSchema";
 import { WelcomeScreen } from "./WelcomeScreen";
 import { QuizScreen } from "./QuizScreen";
@@ -70,6 +71,10 @@ export function PlacementTest() {
     setResultState({ score, result, lead });
     setScreen(SCREEN.RESULT);
     scrollToTop();
+
+    // Persist the result in the background. Non-blocking: the user already
+    // sees their result; a save failure never degrades the experience.
+    void savePlacementTestResult({ lead, score, level: result.short, answers });
   };
 
   const restartTest = () => {
