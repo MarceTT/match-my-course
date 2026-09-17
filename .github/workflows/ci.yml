@@ -44,6 +44,25 @@ jobs:
       - name: Type check
         run: bun run typecheck
 
+  test:
+    name: Unit tests (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      # Blocking gate: the unit tests (currently the placement-test scoring
+      # module) must pass. Unlike lint, tests are new and clean — no debt.
+      - name: Run unit tests
+        run: bun run test
+
   lint:
     name: Lint (informational)
     runs-on: ubuntu-latest
