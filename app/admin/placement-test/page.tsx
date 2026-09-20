@@ -4,18 +4,12 @@ import { useState } from "react";
 import {
   usePlacementResults,
   usePlacementResult,
+  useDeletePlacementResult,
 } from "./hooks/usePlacementResults";
-import { Button } from "@/components/ui/button";
+import { getColumns } from "./columns";
+import { PlacementDataTable } from "./data-table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +18,11 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Check, ChevronLeft, ChevronRight, Eye, X } from "lucide-react";
-import type { PlacementResultListItem } from "./types";
+import { Check, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { QUESTION_LOOKUP, NO_ANSWER } from "./lib/questionLookup";
 
-const PAGE_SIZE = 20;
+const RESULTS_LIMIT = 100;
 const MAX_SCORE = 75;
 
 function formatDate(value: string): string {
@@ -42,28 +37,19 @@ function formatDate(value: string): string {
 
 function TableSkeleton() {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          {[...Array(7)].map((_, i) => (
-            <TableHead key={i}>
-              <Skeleton className="h-4 w-20" />
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {[...Array(10)].map((_, rowIdx) => (
-          <TableRow key={rowIdx}>
-            {[...Array(7)].map((_, colIdx) => (
-              <TableCell key={colIdx}>
-                <Skeleton className="h-6 w-full" />
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="space-y-3">
+      <Skeleton className="h-10 w-full max-w-sm" />
+      <Skeleton className="h-64 w-full" />
+    </div>
+  );
+}
+
+function DetailField({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium">{value}</p>
+    </div>
   );
 }
 
@@ -79,7 +65,7 @@ function ResultDetailDialog({
 
   return (
     <Dialog open={!!selectedId} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-h-[85vh] max-w-3xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Detalle del resultado</DialogTitle>
           <DialogDescription>
@@ -95,42 +81,25 @@ function ResultDetailDialog({
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div>
-                <p className="text-xs text-gray-500">Nombre</p>
-                <p className="font-medium">{result.name}</p>
+            <div className="rounded-lg border bg-muted/40 p-4">
+              <div className="mb-4 flex flex-wrap items-center gap-3">
+                <Badge variant="secondary" className="text-sm">
+                  Nivel {result.level}
+                </Badge>
+                <span className="text-sm font-medium text-muted-foreground">
+                  Puntaje: {result.score}/{MAX_SCORE}
+                </span>
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <p className="font-medium">{result.email}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">País</p>
-                <p className="font-medium">{result.country}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Nacionalidad</p>
-                <p className="font-medium">{result.nationality}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Consentimiento</p>
-                <p className="font-medium">
-                  {result.contactOptIn ? "Sí" : "No"}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Nivel</p>
-                <Badge variant="secondary">{result.level}</Badge>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Puntaje</p>
-                <p className="font-medium">
-                  {result.score}/{MAX_SCORE}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Fecha</p>
-                <p className="font-medium">{formatDate(result.createdAt)}</p>
+              <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-3">
+                <DetailField label="Nombre" value={result.name} />
+                <DetailField label="Email" value={result.email} />
+                <DetailField label="Fecha" value={formatDate(result.createdAt)} />
+                <DetailField label="País" value={result.country} />
+                <DetailField label="Nacionalidad" value={result.nationality} />
+                <DetailField
+                  label="Consentimiento"
+                  value={result.contactOptIn ? "Sí" : "No"}
+                />
               </div>
             </div>
 
@@ -139,32 +108,67 @@ function ResultDetailDialog({
                 Respuestas ({result.answers.length})
               </h3>
               <div className="space-y-2">
-                {result.answers.map((answer, index) => (
-                  <div
-                    key={`${answer.questionId}-${index}`}
-                    className="flex items-center justify-between rounded-lg border p-3"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">
-                        {answer.questionId}
-                      </p>
-                      <p className="truncate text-sm text-gray-500">
-                        {answer.answer}
-                      </p>
+                {result.answers.map((answer, index) => {
+                  const info = QUESTION_LOOKUP[answer.questionId];
+                  const questionText =
+                    info?.questionText ?? `Pregunta ${answer.questionId}`;
+                  const isCorrect = !!answer.correct;
+                  const skipped =
+                    !answer.answer || answer.answer === NO_ANSWER;
+
+                  return (
+                    <div
+                      key={`${answer.questionId}-${index}`}
+                      className={cn(
+                        "rounded-lg border p-3",
+                        isCorrect
+                          ? "border-green-200 bg-green-50"
+                          : "border-red-200 bg-red-50"
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center gap-2">
+                            {info?.level ? (
+                              <Badge variant="outline" className="text-[10px]">
+                                {info.level}
+                              </Badge>
+                            ) : null}
+                            <p className="text-sm font-medium">
+                              {questionText}
+                            </p>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Respuesta:{" "}
+                            <span className="font-medium text-foreground">
+                              {skipped
+                                ? "No respondió / No sé"
+                                : answer.answer}
+                            </span>
+                          </p>
+                          {!isCorrect && info ? (
+                            <p className="text-sm text-green-700">
+                              Respuesta correcta: {info.correctAnswer}
+                            </p>
+                          ) : null}
+                        </div>
+                        {isCorrect ? (
+                          <span className="flex shrink-0 items-center gap-1 text-green-600">
+                            <Check className="h-4 w-4" />
+                            <span className="text-xs font-medium">Correcta</span>
+                          </span>
+                        ) : (
+                          <span className="flex shrink-0 items-center gap-1 text-red-600">
+                            <X className="h-4 w-4" />
+                            <span className="text-xs font-medium">
+                              Incorrecta
+                            </span>
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {answer.correct ? (
-                      <span className="flex items-center gap-1 text-green-600">
-                        <Check className="h-4 w-4" />
-                        <span className="text-xs font-medium">Correcta</span>
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-red-600">
-                        <X className="h-4 w-4" />
-                        <span className="text-xs font-medium">Incorrecta</span>
-                      </span>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -175,19 +179,25 @@ function ResultDetailDialog({
 }
 
 export default function PlacementTestPage() {
-  const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const { data, isLoading } = usePlacementResults({ page, limit: PAGE_SIZE });
+  const { data, isLoading } = usePlacementResults({ page: 1, limit: RESULTS_LIMIT });
+  const deleteMutation = useDeletePlacementResult();
 
-  const results = data?.data?.results;
+  const results = data?.data?.results ?? [];
   const pagination = data?.data?.pagination;
 
+  const columns = getColumns({
+    onView: setSelectedId,
+    onDelete: (id) => deleteMutation.mutate(id),
+    isDeleting: deleteMutation.isPending,
+  });
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div>
         <h1 className="text-2xl font-bold">Resultados del Test de Nivel</h1>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Leads que completaron el test de nivel de inglés
           {pagination ? ` (${pagination.total} en total)` : ""}
         </p>
@@ -200,86 +210,12 @@ export default function PlacementTestPage() {
         <CardContent>
           {isLoading ? (
             <TableSkeleton />
-          ) : results?.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+          ) : results.length === 0 ? (
+            <div className="py-12 text-center text-muted-foreground">
               <p>No hay resultados todavía</p>
             </div>
           ) : (
-            <>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>País</TableHead>
-                      <TableHead>Nacionalidad</TableHead>
-                      <TableHead>Nivel</TableHead>
-                      <TableHead className="text-right">Puntaje</TableHead>
-                      <TableHead>Fecha</TableHead>
-                      <TableHead>Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {results?.map((result: PlacementResultListItem) => (
-                      <TableRow key={result._id}>
-                        <TableCell className="font-medium">
-                          {result.name}
-                        </TableCell>
-                        <TableCell className="text-sm text-gray-500">
-                          {result.email}
-                        </TableCell>
-                        <TableCell>{result.country}</TableCell>
-                        <TableCell>{result.nationality}</TableCell>
-                        <TableCell>
-                          <Badge variant="secondary">{result.level}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right font-medium">
-                          {result.score}/{MAX_SCORE}
-                        </TableCell>
-                        <TableCell>{formatDate(result.createdAt)}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setSelectedId(result._id)}
-                          >
-                            <Eye className="h-4 w-4" /> Ver
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {pagination && pagination.pages > 1 && (
-                <div className="flex items-center justify-between mt-4">
-                  <p className="text-sm text-gray-500">
-                    Página {pagination.page} de {pagination.pages} (
-                    {pagination.total} resultados)
-                  </p>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={pagination.page <= 1}
-                      onClick={() => setPage((prev) => prev - 1)}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={pagination.page >= pagination.pages}
-                      onClick={() => setPage((prev) => prev + 1)}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </>
+            <PlacementDataTable columns={columns} data={results} />
           )}
         </CardContent>
       </Card>

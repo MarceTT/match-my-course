@@ -43,3 +43,8 @@ export interface PlacementResultResponse {
     result: PlacementResultDetail;
   };
 }
+
+export interface DeletePlacementResultResponse {
+  success: boolean;
+  message: string;
+}

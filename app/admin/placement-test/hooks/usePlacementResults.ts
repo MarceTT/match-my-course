@@ -1,10 +1,12 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import axiosInstance from "@/app/utils/apiClient";
 import type {
   PlacementResultsResponse,
   PlacementResultResponse,
+  DeletePlacementResultResponse,
 } from "../types";
 
 interface UsePlacementResultsParams {
@@ -38,5 +40,24 @@ export function usePlacementResult(id: string | null) {
       return data;
     },
     enabled: !!id,
+  });
+}
+
+export function useDeletePlacementResult() {
+  const queryClient = useQueryClient();
+  return useMutation<DeletePlacementResultResponse, Error, string>({
+    mutationFn: async (id) => {
+      const { data } = await axiosInstance.delete(
+        `/placement-test/results/${id}`
+      );
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["placement-test", "results"] });
+      toast.success("Resultado eliminado con éxito");
+    },
+    onError: () => {
+      toast.error("Error al eliminar el resultado");
+    },
   });
 }
