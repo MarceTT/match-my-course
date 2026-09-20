@@ -5,6 +5,7 @@ import {
   BookOpen,
   Bot,
   Frame,
+  GraduationCap,
   Map,
   PieChart,
   Settings2,
@@ -134,6 +135,17 @@ const data = {
         {
           title: "Referidos",
           url: "/admin/affiliates/referrals",
+        },
+      ],
+    },
+    {
+      title: "Test de nivel",
+      url: "#",
+      icon: GraduationCap,
+      items: [
+        {
+          title: "Resultados",
+          url: "/admin/placement-test",
         },
       ],
     }
