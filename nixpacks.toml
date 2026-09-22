@@ -1,8 +1,8 @@
 # Force Railway/Nixpacks to build with Bun (matching dev + CI + the backend).
-# Without this, Nixpacks auto-detects the package manager and picks `npm ci`
-# from package-lock.json, which broke the build when a dep was added via bun
-# (lockfiles out of sync). Using bun here makes package-lock.json irrelevant
-# to the build and keeps a single source of truth (bun.lock / bun.lockb).
+# Bun is the single source of truth for dependencies (bun.lock / bun.lockb).
+# The old package-lock.json was removed: Nixpacks used to auto-detect it and
+# run `npm ci`, which broke the build when a dep was added via bun (lockfiles
+# out of sync). Pinning bun here keeps install/build/start consistent.
 [phases.setup]
 nixPkgs = ["nodejs_20", "bun"]
 
