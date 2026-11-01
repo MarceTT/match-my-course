@@ -410,11 +410,17 @@ export async function uploadExcelInstallation(formData: FormData, selectedColumn
 
 export async function fetchUploadedFiles(tipo: string) {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/historial?tipo=${tipo}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -437,11 +443,17 @@ export async function fetchUploadedFiles(tipo: string) {
 
 export async function fetchFileDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/details/`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -464,11 +476,17 @@ export async function fetchFileDetails() {
 
 export async function fetchCalidadDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/quality-detail/`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -491,11 +509,17 @@ export async function fetchCalidadDetails() {
 
 export async function fetchFileAccommodationDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/accomodation-detail`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -520,11 +544,17 @@ export async function fetchFileAccommodationDetails() {
 
 export async function fetchDescriptionDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/school-description`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -547,11 +577,17 @@ export async function fetchDescriptionDetails() {
 
 export async function fetchInstallation () {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/installation-detail`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -574,11 +610,17 @@ export async function fetchInstallation () {
 
 export async function fetchNationality () {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/nationalities`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -603,11 +645,17 @@ export async function fetchNationality () {
 
 export async function fetchPriceDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/price-detail`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -632,11 +680,17 @@ export async function fetchPriceDetails() {
 
 export async function fetchWeekRangeDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/get-week-range`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
@@ -661,11 +715,17 @@ export async function fetchWeekRangeDetails() {
 
 export async function fetchWeekPriceDetails() {
   try {
+    const token = await refreshAccessToken();
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/uploads/get-week-price`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       credentials: "include",
     });
 
