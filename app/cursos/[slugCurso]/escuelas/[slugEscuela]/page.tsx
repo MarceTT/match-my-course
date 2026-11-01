@@ -6,6 +6,11 @@ import { fetchSchoolById } from '@/app/actions/school';
 import { extractSlugEscuelaFromSeoUrl } from '@/lib/helpers/buildSeoSchoolUrl';
 import { cursoSlugToSubcategoria, subcategoriaToCursoSlug } from '@/lib/courseMap';
 import { rewriteToCDN } from '@/app/utils/rewriteToCDN';
+import {
+  assertSsgParams,
+  handleSsgFailure,
+  withSsgRetries,
+} from '@/lib/build/ssgData';
 import SchoolSeoHome from './SchoolSeoHome';
 
 type Params = { slugCurso: string; slugEscuela: string };
@@ -21,10 +26,16 @@ const ORIGIN = (
 // ISR para performance
 export const revalidate = 900; // 15 minutos
 
+// These pages are the site's main indexable surface, so a build that cannot
+// reach the SEO data must FAIL rather than ship without them (lib/build/ssgData).
+const SSG_LABEL = 'school pages (cursos/[slugCurso]/escuelas/[slugEscuela])';
+
 // Pre-generate static pages for top schools at build time
 export async function generateStaticParams() {
   try {
-    const result = await fetchAllSeoEntries();
+    // Retry first: a deploy should survive the API restarting mid-build, but it
+    // must still fail if the API is genuinely unreachable.
+    const result = await withSsgRetries(() => fetchAllSeoEntries());
     const entries: SeoEntry[] = Array.isArray(result) ? result : [];
 
     // Generate params for all schools with all course types
@@ -43,11 +54,11 @@ export async function generateStaticParams() {
 
     console.log(`[generateStaticParams] Generated ${params.length} school pages for pre-rendering`);
 
-    // Generate ALL pages for better SEO and indexation
-    return params;
+    // Generate ALL pages for better SEO and indexation. An empty list here means
+    // the SEO source returned nothing: during a build that aborts the deploy.
+    return assertSsgParams(SSG_LABEL, params);
   } catch (error) {
-    console.error('[generateStaticParams] Error:', error);
-    return [];
+    return handleSsgFailure<Params>(SSG_LABEL, error);
   }
 }
 
