@@ -63,6 +63,36 @@ jobs:
       - name: Run unit tests
         run: bun run test
 
+  build:
+    name: Build (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      # Blocking gate: `next build` is the only check that exercises bundling,
+      # server/client boundaries and route compilation. Typecheck and tests both
+      # pass on code that fails to build, which is how a green PR produced a
+      # failed Railway deploy on 2026-11-01.
+      #
+      # ALLOW_EMPTY_SSG: CI has no backend to reach, so `generateStaticParams`
+      # resolves nothing here. This job answers "does the app compile?", NOT
+      # "is the SEO data present?" — without the opt-out the build would abort
+      # (see lib/build/ssgData.ts), and making CI depend on the live API being
+      # up would be both flaky and the wrong thing to assert on a pull request.
+      # The strict behaviour is what protects the real Railway build.
+      - name: Build
+        env:
+          ALLOW_EMPTY_SSG: "true"
+        run: bun run build
+
   lint:
     name: Lint (informational)
     runs-on: ubuntu-latest
