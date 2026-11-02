@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import SchoolGalleryDialog, { type GalleryPhoto } from "./SchoolGalleryDialog";
+
 /**
  * Programme-pack page for a destination (Inglaterra, Escocia, Canadá).
  *
@@ -51,6 +53,12 @@ export interface DestinationPack {
   };
   contactHref: string;
   contactLabel: string;
+  /** Optional photo gallery, shown as a button inside the expanded detail. */
+  gallery?: {
+    eyebrow: string;
+    triggerLabel: string;
+    photos: GalleryPhoto[];
+  };
 }
 
 export interface DestinationPacksProps {
@@ -227,6 +235,14 @@ export default function DestinationPacks({
                       </ul>
                       <p className="mt-3 text-[13px] text-[#59657b]">{pack.breakdown.note}</p>
                     </div>
+
+                    {pack.gallery && (
+                      <SchoolGalleryDialog
+                        eyebrow={pack.gallery.eyebrow}
+                        triggerLabel={pack.gallery.triggerLabel}
+                        photos={pack.gallery.photos}
+                      />
+                    )}
 
                     <a
                       href={pack.contactHref}
