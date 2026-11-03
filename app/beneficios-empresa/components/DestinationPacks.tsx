@@ -36,9 +36,13 @@ export interface DestinationPack {
   /** Small eyebrow, e.g. "LONDRES · INGLÉS GENERAL". */
   kicker: string;
   title: string;
-  /** School badge logo under /public. */
-  logo: string;
-  logoAlt: string;
+  /**
+   * School badge logo under /public. Optional: some schools ship no logo on
+   * the source site (Mount Maunganui, for one), and the heading simply renders
+   * without it rather than showing a placeholder.
+   */
+  logo?: string;
+  logoAlt?: string;
   hours: string;
   prices: PackPrice[];
   /** Note under the price row. */
@@ -152,13 +156,15 @@ export default function DestinationPacks({
                       {pack.title}
                     </h3>
                   </div>
-                  <Image
-                    src={pack.logo}
-                    alt={pack.logoAlt}
-                    width={340}
-                    height={116}
-                    className="h-auto max-h-[58px] w-[34%] max-w-[170px] flex-shrink-0 rounded-xl bg-white object-contain p-0.5 max-[530px]:max-w-[100px]"
-                  />
+                  {pack.logo && (
+                    <Image
+                      src={pack.logo}
+                      alt={pack.logoAlt ?? ""}
+                      width={340}
+                      height={116}
+                      className="h-auto max-h-[58px] w-[34%] max-w-[170px] flex-shrink-0 rounded-xl bg-white object-contain p-0.5 max-[530px]:max-w-[100px]"
+                    />
+                  )}
                 </div>
 
                 <p className="my-[17px] mb-3.5 text-[clamp(17px,1.65vw,19px)] font-extrabold tracking-[-.02em] text-[#1e2b47]">
