@@ -159,7 +159,7 @@ export default function InglesGolfNaasPage() {
         original navbar is a plain flex row.
       */}
       <header className="mx-auto flex max-w-[1240px] relative items-center justify-between !bg-transparent px-[25px] py-[21px] !shadow-none max-[700px]:p-[17px]">
-        <Link href="/beneficios">
+        <Link href="/beneficios-empresa">
           <Image
             src={Logo}
             alt="MatchMyCourse"
@@ -167,7 +167,7 @@ export default function InglesGolfNaasPage() {
             className="h-auto w-[197px] max-[700px]:w-[155px]"
           />
         </Link>
-        <Link href="/beneficios" className="text-sm font-bold text-[#59677c] no-underline">
+        <Link href="/beneficios-empresa" className="text-sm font-bold text-[#59677c] no-underline">
           ← Volver a programas
         </Link>
       </header>
@@ -301,7 +301,7 @@ export default function InglesGolfNaasPage() {
 
       <footer className="bg-[#eef2f8] p-[30px] text-center text-[13px] text-[#617084]">
         © 2026 MatchMyCourse ·{" "}
-        <Link href="/beneficios">Volver al inicio</Link>
+        <Link href="/beneficios-empresa">Volver al inicio</Link>
       </footer>
     </div>
   );

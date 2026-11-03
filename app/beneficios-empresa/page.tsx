@@ -31,7 +31,7 @@ export const viewport: Viewport = {
 
 const DESTINATIONS = [
   {
-    href: "/irlanda/",
+    href: "/beneficios-empresa/irlanda/",
     label: "Irlanda",
     image: "/beneficios/irlanda-fallback.webp",
     alt: "Paisaje en Irlanda",
@@ -39,7 +39,7 @@ const DESTINATIONS = [
     height: 1200,
   },
   {
-    href: "/nueva-zelanda/",
+    href: "/beneficios-empresa/nueva-zelanda/",
     label: "Nueva Zelanda",
     image: "/beneficios/nueva-zelanda-fallback.webp",
     alt: "Lago y montañas de Nueva Zelanda",
@@ -47,7 +47,7 @@ const DESTINATIONS = [
     height: 1200,
   },
   {
-    href: "/canada/",
+    href: "/beneficios-empresa/canada/",
     label: "Canadá",
     image: "/beneficios/canada-fallback.webp",
     alt: "Toronto, Canadá",
@@ -55,7 +55,7 @@ const DESTINATIONS = [
     height: 1200,
   },
   {
-    href: "/inglaterra/",
+    href: "/beneficios-empresa/inglaterra/",
     label: "Inglaterra",
     image: "/beneficios/england-scenery.webp",
     alt: "Vista de Londres con el Big Ben",
@@ -63,7 +63,7 @@ const DESTINATIONS = [
     height: 1350,
   },
   {
-    href: "/escocia/",
+    href: "/beneficios-empresa/escocia/",
     label: "Escocia",
     image: "/beneficios/scotland-scenery.webp",
     alt: "Castillo de Edimburgo, Escocia",
@@ -74,7 +74,7 @@ const DESTINATIONS = [
 
 const GOLF_PROGRAMMES = [
   {
-    href: "/ingles-golf-naas/",
+    href: "/beneficios-empresa/ingles-golf-naas/",
     image: "/beneficios/golf-hero.webp",
     alt: "Campo de golf en Naas, Irlanda",
     location: "NAAS · IRLANDA",
@@ -82,7 +82,7 @@ const GOLF_PROGRAMMES = [
     audience: "Programa para adultos y jóvenes",
   },
   {
-    href: "/ingles-golf-cork/",
+    href: "/beneficios-empresa/ingles-golf-cork/",
     image: "/beneficios/cec-golf-placeholder.webp",
     alt: "Campo de golf para programa en Cork",
     location: "CORK · IRLANDA",

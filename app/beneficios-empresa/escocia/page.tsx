@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 
-import BeneficiosShell from "@/app/beneficios/components/BeneficiosShell";
+import BeneficiosShell from "@/app/beneficios-empresa/components/BeneficiosShell";
 import DestinationPacks, {
   type DestinationPack,
-} from "@/app/beneficios/components/DestinationPacks";
+} from "@/app/beneficios-empresa/components/DestinationPacks";
 
 export const metadata: Metadata = {
   title: "Cursos de inglés en Escocia | MatchMyCourse",

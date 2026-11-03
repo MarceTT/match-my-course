@@ -78,7 +78,7 @@ export default function BeneficiosShell({ children }: { children: React.ReactNod
         on them. These resets undo that rule for this page only.
       */}
       <header className="relative z-[2] flex h-[112px] items-center justify-center !bg-transparent !shadow-none max-[620px]:h-[89px]">
-        <Link href="/beneficios" aria-label="MatchMyCourse, ir a inicio">
+        <Link href="/beneficios-empresa" aria-label="MatchMyCourse, ir a inicio">
           <Image
             src={Logo}
             alt="MatchMyCourse"

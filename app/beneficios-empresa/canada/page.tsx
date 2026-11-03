@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
 
-import BeneficiosShell from "@/app/beneficios/components/BeneficiosShell";
+import BeneficiosShell from "@/app/beneficios-empresa/components/BeneficiosShell";
 import DestinationPacks, {
   type DestinationPack,
-} from "@/app/beneficios/components/DestinationPacks";
-import type { GalleryPhoto } from "@/app/beneficios/components/SchoolGalleryDialog";
+} from "@/app/beneficios-empresa/components/DestinationPacks";
+import type { GalleryPhoto } from "@/app/beneficios-empresa/components/SchoolGalleryDialog";
 
 export const metadata: Metadata = {
   title: "Cursos de inglés en Canadá | MatchMyCourse",

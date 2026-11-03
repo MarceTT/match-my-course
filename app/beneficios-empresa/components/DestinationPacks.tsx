@@ -90,7 +90,7 @@ export default function DestinationPacks({
   return (
     <main className="relative z-[1] mx-auto max-w-[1240px] px-7 pb-[90px] max-[520px]:px-[17px] max-[520px]:pb-[55px]">
       <Link
-        href="/beneficios"
+        href="/beneficios-empresa"
         className="mb-[26px] mt-0.5 inline-block text-[13px] font-bold text-[#4863f5]"
       >
         ← Volver a los destinos
