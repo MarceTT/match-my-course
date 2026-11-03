@@ -152,7 +152,13 @@ export default function InglesGolfNaasPage() {
     <div
       className={`${dmSans.className} min-h-screen bg-[#fafcfe] leading-[1.6] text-[#151e34] antialiased`}
     >
-      <header className="mx-auto flex max-w-[1240px] items-center justify-between px-[25px] py-[21px] max-[700px]:p-[17px]">
+      {/*
+        Resets for the root layout's critical-CSS `header{...}` element rule
+        (white background, shadow, sticky, z-index 50), which would otherwise
+        paint a white sticky bar over this page's #fafcfe background. The
+        original navbar is a plain flex row.
+      */}
+      <header className="mx-auto flex max-w-[1240px] relative items-center justify-between !bg-transparent px-[25px] py-[21px] !shadow-none max-[700px]:p-[17px]">
         <Link href="/beneficios">
           <Image
             src={Logo}
