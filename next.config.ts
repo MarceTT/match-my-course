@@ -155,6 +155,34 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // The corporate-benefits microsite moved under /beneficios-empresa, matching
+      // the source site it was ported from. These keep the previously published
+      // URLs alive instead of 404ing anything already linked or indexed.
+      {
+        source: '/beneficios',
+        destination: '/beneficios-empresa',
+        permanent: true,
+      },
+      {
+        source: '/canada',
+        destination: '/beneficios-empresa/canada',
+        permanent: true,
+      },
+      {
+        source: '/inglaterra',
+        destination: '/beneficios-empresa/inglaterra',
+        permanent: true,
+      },
+      {
+        source: '/escocia',
+        destination: '/beneficios-empresa/escocia',
+        permanent: true,
+      },
+      {
+        source: '/ingles-golf-naas',
+        destination: '/beneficios-empresa/ingles-golf-naas',
+        permanent: true,
+      },
       // Legacy URL redirects
       {
         source: '/nueva-zelanda',

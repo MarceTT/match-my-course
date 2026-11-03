@@ -53,7 +53,7 @@ export const navItems: NavItem[] = [
       {
         // The internal page, not the standalone Netlify site it was ported from.
         name: "Convenios",
-        href: "/beneficios",
+        href: "/beneficios-empresa",
       },
       {
         name: "Test de nivel",
