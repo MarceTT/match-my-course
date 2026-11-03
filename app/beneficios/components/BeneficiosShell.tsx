@@ -69,7 +69,15 @@ export default function BeneficiosShell({ children }: { children: React.ReactNod
         style={{ borderRadius: "50% 60% 34% 65%", transform: "rotate(22deg)" }}
       />
 
-      <header className="relative z-[2] flex h-[112px] items-center justify-center max-[620px]:h-[89px]">
+      {/*
+        The root layout ships a critical-CSS rule on the ELEMENT selector:
+          header{background-color:#fff;box-shadow:...;position:sticky;top:0;z-index:50}
+        It targets every <header> on the site, including this one, which painted
+        a white sticky bar with a shadow line over the decorative shapes. The
+        original has no such bar: the blobs reach the top edge and the logo sits
+        on them. These resets undo that rule for this page only.
+      */}
+      <header className="relative z-[2] flex h-[112px] items-center justify-center !bg-transparent !shadow-none max-[620px]:h-[89px]">
         <Link href="/beneficios" aria-label="MatchMyCourse, ir a inicio">
           <Image
             src={Logo}
