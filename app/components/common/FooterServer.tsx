@@ -258,6 +258,14 @@ const FooterServer = ({ avoidOverlap = false, showWhatsApp = true }: FooterServe
                       Trabaja con nosotros
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      href="/beneficios"
+                      className="hover:text-[#333] transition-colors"
+                    >
+                      Convenios
+                    </Link>
+                  </li>
                 </ul>
                 <div>
                   <h3 className="font-semibold mt-4 text-[#535353] underline">
