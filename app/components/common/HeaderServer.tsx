@@ -25,10 +25,6 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   {
-    name: "Cómo funciona",
-    href: "/como-funciona-matchmycourse",
-  },
-  {
     name: "Paises",
     dropdown: [
       {
@@ -46,8 +42,24 @@ export const navItems: NavItem[] = [
     href: "/cursos-ingles-extranjero",
   },
   {
-    name: "Test de nivel",
-    href: "/test-de-nivel-de-ingles",
+    // "Cómo funciona" and "Test de nivel" were top-level entries; they are
+    // grouped here rather than duplicated, so the menu does not repeat items.
+    name: "Servicios",
+    dropdown: [
+      {
+        name: "Cómo funciona",
+        href: "/como-funciona-matchmycourse",
+      },
+      {
+        // The internal page, not the standalone Netlify site it was ported from.
+        name: "Convenios",
+        href: "/beneficios",
+      },
+      {
+        name: "Test de nivel",
+        href: "/test-de-nivel-de-ingles",
+      },
+    ],
   },
   {
     name: "Nosotros",
