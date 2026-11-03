@@ -24,6 +24,8 @@ export interface GolfDay {
 
 export interface GolfList {
   title: string;
+  /** Optional paragraph between the heading and the bullets. */
+  intro?: string;
   items: string[];
 }
 
@@ -145,6 +147,7 @@ export default function GolfProgramTabs({ programs }: { programs: GolfProgram[] 
             {program.lists.map((list) => (
               <div key={list.title}>
                 <h3 className="my-[25px] mb-4 text-[23px] font-bold">{list.title}</h3>
+                {list.intro && <p className="mb-3 text-[#59677c]">{list.intro}</p>}
                 <ul className="list-disc pl-[19px] leading-[1.9] text-[#485a72]">
                   {list.items.map((item) => (
                     <li key={item} className="mb-[7px]">
