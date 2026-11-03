@@ -188,12 +188,15 @@ export default function NuevaZelandaPage() {
         intro="Aprovecha tu tiempo en Nueva Zelanda para estudiar inglés con packs flexibles en Auckland, Tauranga y Rotorua, combinando aprendizaje, naturaleza y una gran experiencia internacional."
         packsLabel="Programas y precios en Nueva Zelanda"
         packs={PACKS}
+        // Replaces the source page's internal working copy — which named
+        // Irlanda on the Nueva Zelanda page — with the customer-facing closing
+        // the team already wrote for Inglaterra and Escocia. See canada/page.tsx.
         advice={{
-          overline: "SIGUIENTE PASO",
-          title: "Formato listo para seguir cargando escuelas",
-          body: "La estructura ya quedó preparada para sumar más escuelas dentro de Irlanda manteniendo el mismo estándar visual, comercial y ordenado.",
-          href: "mailto:info@matchmycourse.com?subject=Quiero%20continuar%20cargando%20programas",
-          label: "Continuar con otra escuela →",
+          overline: "AUCKLAND, TAURANGA Y ROTORUA",
+          title: "Una propuesta clara y simple para tus vacaciones",
+          body: "Este pack ya resume curso, alojamiento y costos principales para que puedas comparar fácilmente tu experiencia de estudio en Nueva Zelanda.",
+          href: "mailto:info@matchmycourse.com?subject=Quiero%20estudiar%20ingles%20en%20Nueva%20Zelanda",
+          label: "Solicitar información →",
         }}
       />
     </BeneficiosShell>

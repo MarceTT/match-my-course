@@ -127,12 +127,17 @@ export default function CanadaPage() {
         intro="Aprovecha tus vacaciones o una pausa en tu calendario para mejorar tu inglés en Canadá con programas cortos en Toronto y Vancouver, ideales para estudiar y conocer dos grandes ciudades."
         packsLabel="Programas y precios en Canadá"
         packs={[TORONTO_PACK, VANCOUVER_PACK]}
+        // The source page closes with internal working copy ("Formato listo para
+        // seguir cargando escuelas", with a mailto addressed to the team, and
+        // naming Irlanda on the Canadá page). Replaced with the customer-facing
+        // pattern the team already wrote for Inglaterra and Escocia, so no copy
+        // is invented here. Worth fixing at the source too.
         advice={{
-          overline: "SIGUIENTE PASO",
-          title: "Formato listo para seguir cargando escuelas",
-          body: "La estructura ya quedó preparada para sumar más escuelas dentro de Irlanda manteniendo el mismo estándar visual, comercial y ordenado.",
-          href: "mailto:info@matchmycourse.com?subject=Quiero%20continuar%20cargando%20programas",
-          label: "Continuar con otra escuela →",
+          overline: "TORONTO Y VANCOUVER",
+          title: "Una propuesta clara y simple para tus vacaciones",
+          body: "Este pack ya resume curso, alojamiento y costos principales para que puedas comparar fácilmente tu experiencia de estudio en Canadá.",
+          href: "mailto:info@matchmycourse.com?subject=Quiero%20estudiar%20ingles%20en%20Canada",
+          label: "Solicitar información →",
         }}
       />
     </BeneficiosShell>

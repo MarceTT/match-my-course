@@ -281,12 +281,15 @@ export default function IrlandaPage() {
         intro="Aprovecha tus vacaciones en Irlanda para mejorar tu inglés con packs cortos, flexibles y pensados para quienes quieren estudiar y, al mismo tiempo, disfrutar ciudades como Cork, Dublín, Limerick y Galway."
         packsLabel="Programas y precios en Irlanda"
         packs={PACKS}
+        // Replaces the source page's internal working copy with the
+        // customer-facing closing the team already wrote for Inglaterra and
+        // Escocia. See the note in canada/page.tsx.
         advice={{
-          overline: "SIGUIENTE PASO",
-          title: "Formato listo para seguir cargando escuelas",
-          body: "La estructura ya quedó preparada para sumar más escuelas dentro de Irlanda manteniendo el mismo estándar visual, comercial y ordenado.",
-          href: "mailto:info@matchmycourse.com?subject=Quiero%20continuar%20cargando%20programas",
-          label: "Continuar con otra escuela →",
+          overline: "CORK, DUBLÍN, LIMERICK Y GALWAY",
+          title: "Todo el valor del pack, más claro",
+          body: "El detalle está preparado para que puedas revisar rápidamente el precio total del pack y entender qué incluye tu experiencia en Irlanda.",
+          href: "mailto:info@matchmycourse.com?subject=Quiero%20estudiar%20ingles%20en%20Irlanda",
+          label: "Solicitar información →",
         }}
       />
     </BeneficiosShell>
