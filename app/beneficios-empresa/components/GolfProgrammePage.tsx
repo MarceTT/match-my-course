@@ -45,11 +45,19 @@ export interface GolfProgrammePageProps {
   introTitle: string;
   introText: string;
   programs: GolfProgram[];
-  gallery: {
+  /** Optional: Sandford Park School ships no gallery on the source site. */
+  gallery?: {
     kicker: string;
     title: string;
     photos: GolfGalleryPhoto[];
     note: string;
+  };
+  /** Optional campus/accommodation panel, used by the junior school page. */
+  campus?: {
+    kicker: string;
+    title: string;
+    body: string;
+    items: string[];
   };
   closing: {
     title: string;
@@ -81,6 +89,7 @@ export default function GolfProgrammePage({
   introText,
   programs,
   gallery,
+  campus,
   closing,
   disclaimer,
 }: GolfProgrammePageProps) {
@@ -166,26 +175,45 @@ export default function GolfProgrammePage({
           <GolfProgramTabs programs={programs} />
         </section>
 
-        <section className="mx-auto max-w-[1160px] px-7 pb-[85px] pt-[55px]">
-          <span className={KICKER}>{gallery.kicker}</span>
-          <h2 className={SECTION_TITLE}>{gallery.title}</h2>
-          <div className="grid grid-cols-[1.3fr_1fr_1fr] grid-rows-[200px_200px] gap-[13px] max-[700px]:grid-cols-2 max-[700px]:grid-rows-[170px_170px]">
-            {gallery.photos.map((photo, index) => (
-              <Image
-                key={photo.src}
-                src={photo.src}
-                alt={photo.alt}
-                width={900}
-                height={600}
-                loading="lazy"
-                className={`h-full w-full rounded-2xl object-cover ${
-                  index === 0 ? "row-span-2 max-[700px]:row-auto" : ""
-                }`}
-              />
-            ))}
-          </div>
-          <p className="text-[13px] text-[#69798e]">{gallery.note}</p>
-        </section>
+        {campus && (
+          <section className="mx-auto max-w-[1160px] px-7 pt-[55px]">
+            <div className="rounded-[22px] border border-[#dde4ee] bg-white p-[34px] max-[700px]:p-[22px]">
+              <span className={KICKER}>{campus.kicker}</span>
+              <h2 className={SECTION_TITLE}>{campus.title}</h2>
+              <p className="text-[17px] text-[#59677c]">{campus.body}</p>
+              <ul className="mt-4 list-disc pl-[19px] leading-[1.9] text-[#485a72]">
+                {campus.items.map((item) => (
+                  <li key={item} className="mb-[7px]">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {gallery && (
+          <section className="mx-auto max-w-[1160px] px-7 pb-[85px] pt-[55px]">
+            <span className={KICKER}>{gallery.kicker}</span>
+            <h2 className={SECTION_TITLE}>{gallery.title}</h2>
+            <div className="grid grid-cols-[1.3fr_1fr_1fr] grid-rows-[200px_200px] gap-[13px] max-[700px]:grid-cols-2 max-[700px]:grid-rows-[170px_170px]">
+              {gallery.photos.map((photo, index) => (
+                <Image
+                  key={photo.src}
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={900}
+                  height={600}
+                  loading="lazy"
+                  className={`h-full w-full rounded-2xl object-cover ${
+                    index === 0 ? "row-span-2 max-[700px]:row-auto" : ""
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-[13px] text-[#69798e]">{gallery.note}</p>
+          </section>
+        )}
 
         <section className="mx-auto mb-[30px] flex max-w-[1160px] items-center justify-between gap-5 rounded-[22px] bg-[#eff3ff] p-[42px] max-[700px]:mx-[17px] max-[700px]:mb-[26px] max-[700px]:flex-col max-[700px]:p-[25px]">
           <div>
