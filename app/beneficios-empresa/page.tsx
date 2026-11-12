@@ -72,22 +72,97 @@ const DESTINATIONS = [
   },
 ] as const;
 
-const GOLF_PROGRAMMES = [
+/**
+ * Sport programmes. The source replaced the old "menores de 18" section with
+ * this one: four cards instead of two, each now carrying the school badge and
+ * the sports partner badge, and titled by the venue rather than generically.
+ */
+const SPORT_PROGRAMMES = [
   {
     href: "/beneficios-empresa/ingles-golf-naas/",
-    image: "/beneficios/golf-hero.webp",
+    image: "/beneficios/golf/golf-hero.webp",
     alt: "Campo de golf en Naas, Irlanda",
     location: "NAAS · IRLANDA",
+    title: "English + Golf en Craddockstown Golf Club",
     school: "Avanti Language Institute",
     audience: "Programa para adultos y jóvenes",
+    badges: [
+      {
+        src: "/beneficios/sport/avanti-golf-school-logo.png",
+        alt: "Avanti Language Institute",
+      },
+      {
+        src: "/beneficios/sport/sports-craddockstown.png",
+        alt: "Craddockstown Golf Club",
+      },
+    ],
   },
   {
     href: "/beneficios-empresa/ingles-golf-cork/",
-    image: "/beneficios/cec-golf-placeholder.webp",
-    alt: "Campo de golf para programa en Cork",
+    image: "/beneficios/sport/cec-golf-card-new.webp",
+    alt: "Campo de golf del programa en Cork",
     location: "CORK · IRLANDA",
+    title: "English + Golf con Fota Island Golf Academy",
     school: "Cork English College",
     audience: "Programa para jóvenes",
+    badges: [
+      {
+        src: "/beneficios/sport/cec-golf-school-logo.png",
+        alt: "Cork English College",
+      },
+      { src: "/beneficios/sport/sports-fota.png", alt: "Fota Island Resort" },
+    ],
+  },
+  {
+    href: "/beneficios-empresa/ingles-futbol-valencia/",
+    image: "/beneficios/sport/sports-football-background.webp",
+    alt: "Programa de inglés y fútbol",
+    location: "CORK · IRLANDA",
+    title: "Inglés + Fútbol con Valencia CF",
+    school: "Cork English College",
+    audience: "Inglés y experiencia futbolística",
+    badges: [
+      {
+        src: "/beneficios/sport/cec-golf-school-logo.png",
+        alt: "Cork English College",
+      },
+      { src: "/beneficios/sport/sports-valencia.png", alt: "Valencia CF" },
+    ],
+  },
+  {
+    href: "/beneficios-empresa/ingles-rugby-munster/",
+    image: "/beneficios/sport/sports-rugby-background.webp",
+    alt: "Programa de inglés y rugby",
+    location: "CORK · IRLANDA",
+    title: "Inglés + Rugby con Munster Rugby",
+    school: "Cork English College",
+    audience: "Inglés y experiencia de rugby",
+    badges: [
+      {
+        src: "/beneficios/sport/cec-golf-school-logo.png",
+        alt: "Cork English College",
+      },
+      { src: "/beneficios/sport/sports-munster.png", alt: "Munster Rugby" },
+    ],
+  },
+] as const;
+
+/** Junior school programmes — a new section on the source site. */
+const JUNIOR_SCHOOLS = [
+  {
+    href: "/beneficios-empresa/sandford-park-school/",
+    image: "/beneficios/sport/sandford-card.webp",
+    alt: "Sandford Park School en Dublín",
+    location: "DUBLÍN · IRLANDA",
+    title: "Sandford Park School",
+    school: "Emerald Cultural Institute",
+    audience: "Programa para jóvenes",
+    badges: [
+      {
+        src: "/beneficios/sport/emerald-logo.png",
+        alt: "Emerald Cultural Institute",
+      },
+    ],
   },
 ] as const;
 
@@ -111,6 +186,65 @@ const IE_REQUIREMENTS = [
 
 const REQUIREMENT_LIST_CLASS =
   "m-0 grid list-disc gap-2.5 pl-5 text-[16px] leading-[1.6] text-[#2f3850] marker:text-[#4863f5]";
+
+interface ProgrammeCardData {
+  href: string;
+  image: string;
+  alt: string;
+  location: string;
+  title: string;
+  school: string;
+  audience: string;
+  badges: readonly { src: string; alt: string }[];
+}
+
+/**
+ * Card used by both the sport and the junior-school sections. They render the
+ * same shape on the source site, so they share one component here.
+ */
+function ProgrammeCard({ programme }: { programme: ProgrammeCardData }) {
+  return (
+    <Link
+      href={programme.href}
+      className="overflow-hidden rounded-[20px] border border-[#dbe4f5] bg-white no-underline shadow-[0_12px_28px_#213b7113] transition-transform duration-200 hover:-translate-y-1"
+    >
+      <Image
+        src={programme.image}
+        alt={programme.alt}
+        width={1200}
+        height={800}
+        loading="lazy"
+        className="block h-[250px] w-full object-cover"
+      />
+      <div className="p-[25px]">
+        <small className="font-extrabold tracking-[1px] text-[#4964f5]">
+          {programme.location}
+        </small>
+        <h3 className="my-[9px] text-[28px] font-bold leading-[1.15] text-[#182037]">
+          {programme.title}
+        </h3>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <b className="text-[17px] text-[#273b66]">{programme.school}</b>
+          <div className="flex flex-wrap items-center gap-3">
+            {programme.badges.map((badge) => (
+              <Image
+                key={badge.src}
+                src={badge.src}
+                alt={badge.alt}
+                width={200}
+                height={120}
+                loading="lazy"
+                className="h-[46px] w-auto max-w-[110px] object-contain"
+              />
+            ))}
+          </div>
+        </div>
+        <p className="text-[#66738b]">{programme.audience}</p>
+        <span className="font-extrabold text-[#4563e6]">Conocer el programa →</span>
+      </div>
+    </Link>
+  );
+}
 
 export default function BeneficiosPage() {
   return (
@@ -269,48 +403,42 @@ export default function BeneficiosPage() {
           </div>
         </section>
 
-        <section aria-labelledby="golf-title" className="px-6 py-20">
+        <section aria-labelledby="sport-title" className="px-6 py-20">
           <div className="mx-auto max-w-[1150px]">
             <h2
-              id="golf-title"
+              id="sport-title"
               className="text-[clamp(30px,3vw,42px)] font-bold tracking-[-1px] text-[#182037]"
             >
-              Programas de inglés para menores de 18 años
+              Programas de inglés más experiencia deportiva
             </h2>
             <p className="mb-7 max-w-[780px] text-[18px] text-[#59657b]">
-              Una oportunidad para combinar el aprendizaje del inglés con actividades
-              deportivas y nuevas experiencias en Irlanda. Descubre programas que integran
-              clases de idioma y golf.
+              Combina el aprendizaje del inglés con experiencias deportivas en el
+              extranjero. Descubre nuestros programas de golf, fútbol y rugby.
             </p>
             <div className="grid grid-cols-2 gap-[22px] max-[700px]:grid-cols-1">
-              {GOLF_PROGRAMMES.map((programme) => (
-                <Link
-                  key={programme.href}
-                  href={programme.href}
-                  className="overflow-hidden rounded-[20px] border border-[#dbe4f5] bg-white no-underline shadow-[0_12px_28px_#213b7113] transition-transform duration-200 hover:-translate-y-1"
-                >
-                  <Image
-                    src={programme.image}
-                    alt={programme.alt}
-                    width={1200}
-                    height={800}
-                    loading="lazy"
-                    className="block h-[250px] w-full object-cover"
-                  />
-                  <div className="p-[25px]">
-                    <small className="font-extrabold tracking-[1px] text-[#4964f5]">
-                      {programme.location}
-                    </small>
-                    <h3 className="my-[9px] text-[28px] font-bold text-[#182037]">
-                      Inglés + Golf
-                    </h3>
-                    <b className="text-[17px] text-[#273b66]">{programme.school}</b>
-                    <p className="text-[#66738b]">{programme.audience}</p>
-                    <span className="font-extrabold text-[#4563e6]">
-                      Conocer el programa →
-                    </span>
-                  </div>
-                </Link>
+              {SPORT_PROGRAMMES.map((programme) => (
+                <ProgrammeCard key={programme.href} programme={programme} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="junior-title" className="px-6 pb-20">
+          <div className="mx-auto max-w-[1150px]">
+            <h2
+              id="junior-title"
+              className="text-[clamp(30px,3vw,42px)] font-bold tracking-[-1px] text-[#182037]"
+            >
+              Programas de Inglés Junior Inglaterra e Irlanda
+            </h2>
+            <p className="mb-7 max-w-[780px] text-[18px] text-[#59657b]">
+              Descubre programas pensados para jóvenes que combinan clases de inglés,
+              actividades, convivencia internacional y desarrollo personal. Comenzamos con
+              una opción en Irlanda y seguiremos sumando destinos.
+            </p>
+            <div className="grid grid-cols-2 gap-[22px] max-[700px]:grid-cols-1">
+              {JUNIOR_SCHOOLS.map((programme) => (
+                <ProgrammeCard key={programme.href} programme={programme} />
               ))}
             </div>
           </div>
