@@ -1,14 +1,14 @@
-/* MATCHMYCOURSE | Fondo de portada inspirado en la composicion de Irlanda.
-   Unicamente superficies, gradientes y elementos decorativos; sin cambios en contenido o layout. */
-:root {
+.mmc-microsite /* MATCHMYCOURSE | Fondo de portada inspirado en la composicion de Irlanda.
+   Unicamente superficies, .mmc-microsite gradientes y elementos decorativos; sin cambios en contenido o layout. */
+:root{
   --ireland-wash: #f5f8ff;
   --ireland-mist: #eaf1ff;
   --ireland-pearl: #fcfdff;
   --ireland-cream: #fff4cc;
   --ireland-aqua: #dff7f5;
 }
-html { background-color:#fff; }
-body {
+.mmc-microsite{ background-color:#fff; }
+.mmc-microsite{
   background:#fff;
   background-image:
     radial-gradient(ellipse 37% 11% at -10% 10%,rgba(228,237,255,.57),transparent 94%),
@@ -17,79 +17,79 @@ body {
   background-repeat:no-repeat;
   overflow-x:clip;
 }
-/* Hero: mismas manchas organicas sutiles y paleta que Irlanda. */
-body > main .hero {
+.mmc-microsite /* Hero: mismas manchas organicas sutiles y paleta que Irlanda. */
+body > main .hero{
   background:
     radial-gradient(ellipse 44% 88% at -8% 60%,rgba(231,239,255,.65),transparent 84%),
     radial-gradient(ellipse 35% 62% at 102% 24%,rgba(223,247,245,.35),transparent 85%),
     linear-gradient(180deg,#fff 0%,#fafcff 72%,#f5f8ff 100%);
 }
-body > main .hero .blob.one {background:rgba(224,235,255,.63);opacity:.72;filter:blur(3px);}
-body > main .hero .blob.two {background:rgba(223,247,245,.45);opacity:.70;filter:blur(2px);}
-body > main .hero .blob.yellow {background:rgba(255,244,204,.67);opacity:.72;}
-/* Destinos + instituciones: continuidad con el hero y con la primera zona blanca. */
-body > main .choose.destinations {
+.mmc-microsite > main .hero .blob.one{background:rgba(224,235,255,.63);opacity:.72;filter:blur(3px);}
+.mmc-microsite > main .hero .blob.two{background:rgba(223,247,245,.45);opacity:.70;filter:blur(2px);}
+.mmc-microsite > main .hero .blob.yellow{background:rgba(255,244,204,.67);opacity:.72;}
+.mmc-microsite /* Destinos + instituciones: continuidad con el hero y con la primera zona blanca. */
+body > main .choose.destinations{
   background:
     radial-gradient(ellipse 40% 65% at 99% 63%,rgba(222,234,255,.46),transparent 85%),
     radial-gradient(ellipse 34% 58% at -5% 34%,rgba(255,244,204,.23),transparent 85%),
     linear-gradient(180deg,#f5f8ff 0%,#f6f9ff 43%,#fcfdff 100%);
 }
-body > main .choose::before {
+.mmc-microsite > main .choose::before{
   background:radial-gradient(ellipse,rgba(218,232,255,.65) 0%,rgba(235,242,255,.33) 63%,transparent 84%);
   border-radius:59% 41% 61% 39% / 54% 46% 54% 46%;
 }
-body > main .choose::after {border-color:rgba(227,235,253,.25);}
-body > main .destinations::after {
+.mmc-microsite > main .choose::after{border-color:rgba(227,235,253,.25);}
+.mmc-microsite > main .destinations::after{
   background:radial-gradient(ellipse,rgba(214,229,255,.46),rgba(237,244,255,.15) 66%,transparent 80%);
   border-radius:42% 58% 51% 49% / 62% 42% 58% 38%;
 }
-body > main .partners-marquee-section {
+.mmc-microsite > main .partners-marquee-section{
   background:linear-gradient(180deg,#fcfdff 0%,#fff 53%,#f5f8ff 100%);
 }
-body > main .partners-marquee::before {background:linear-gradient(90deg,#fff,rgba(255,255,255,0));}
-body > main .partners-marquee::after {background:linear-gradient(270deg,#fff,rgba(255,255,255,0));}
-/* Beneficios: grandes curvas claras sin cajas adicionales. */
-body > main .why-mmc-section {
+.mmc-microsite > main .partners-marquee::before{background:linear-gradient(90deg,#fff,rgba(255,255,255,0));}
+.mmc-microsite > main .partners-marquee::after{background:linear-gradient(270deg,#fff,rgba(255,255,255,0));}
+.mmc-microsite /* Beneficios: grandes curvas claras sin cajas adicionales. */
+body > main .why-mmc-section{
   background:
     radial-gradient(ellipse 48% 67% at 96% 36%,rgba(218,229,255,.43),transparent 90%),
     linear-gradient(180deg,#f5f8ff 0%,#edf3ff 49%,#f9fbff 100%);
 }
-body > main .why-mmc-section::before {
+.mmc-microsite > main .why-mmc-section::before{
   inset:-1px -4%;
   border-radius:0;
   background:
     radial-gradient(ellipse 42% 69% at -7% 30%,rgba(223,247,245,.50),transparent 83%),
     radial-gradient(ellipse 37% 65% at 104% 82%,rgba(255,244,204,.30),transparent 89%);
 }
-body > main .why-mmc-section::after {
+.mmc-microsite > main .why-mmc-section::after{
   inset:auto 0 -2px;
   width:100%;height:115px;
   background:linear-gradient(0deg,#f9fbff,transparent);
 }
-/* Conoce MatchMyCourse: fondo claro con las mismas curvas, fotografias sin alterar. */
-body > main .about-mmc-section {
+.mmc-microsite /* Conoce MatchMyCourse: fondo claro con las mismas curvas, .mmc-microsite fotografias sin alterar. */
+body > main .about-mmc-section{
   background:
     radial-gradient(ellipse 48% 70% at 106% 57%,rgba(222,234,255,.48),transparent 88%),
     radial-gradient(ellipse 32% 54% at -4% 83%,rgba(223,247,245,.33),transparent 88%),
     linear-gradient(180deg,#f9fbff 0%,#fff 50%,#f8faff 100%);
 }
-body > main .about-mmc-section::before {
+.mmc-microsite > main .about-mmc-section::before{
   background:radial-gradient(ellipse at 50% 50%,rgba(223,232,255,.29),rgba(234,241,255,.08) 65%,transparent 85%);
 }
-/* Tres pasos: mantiene la base blanca de Irlanda, integrando un acento crema. */
-body > main .how-mmc-section {
+.mmc-microsite /* Tres pasos: mantiene la base blanca de Irlanda, .mmc-microsite integrando un acento crema. */
+body > main .how-mmc-section{
   background:
     radial-gradient(ellipse 35% 65% at -7% 53%,rgba(255,244,204,.28),transparent 88%),
     radial-gradient(ellipse 40% 65% at 103% 62%,rgba(223,247,245,.30),transparent 88%),
     linear-gradient(180deg,#f8faff,#f3f7ff 55%,#f5f8ff);
 }
-/* Empresas y colegios conserva contraste y texto blanco, con un inicio y final difuminados. */
-body > main .institutional-mmc {
+.mmc-microsite /* Empresas y colegios conserva contraste y texto blanco, .mmc-microsite con un inicio y final difuminados. */
+body > main .institutional-mmc{
   background:transparent;
   position:relative;
   isolation:isolate;
 }
-body > main .institutional-mmc::before {
+.mmc-microsite > main .institutional-mmc::before{
   content:"";position:absolute;inset:0;z-index:-1;
   width:auto;height:auto;left:0;right:0;top:0;bottom:0;
   border-radius:0;transform:none;
@@ -100,14 +100,14 @@ body > main .institutional-mmc::before {
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 9%,#000 88%,transparent 100%);
   mask-image:linear-gradient(to bottom,transparent 0%,#000 9%,#000 88%,transparent 100%);
 }
-body > main .institutional-mmc::after {
+.mmc-microsite > main .institutional-mmc::after{
   background:radial-gradient(ellipse at center,rgba(179,200,255,.11),transparent 77%);
 }
-body > .site-footer {
+.mmc-microsite > .site-footer{
   background:linear-gradient(180deg,#f5f8ff 0%,#f2f6ff 48%,#f1f6ff 100%);
   border-top-color:transparent;
 }
-@media(max-width:700px){
+.mmc-microsite @media(max-width:700px){
   body {background-image:linear-gradient(180deg,#fff 0%,#f8faff 60%,#f5f8ff 100%);}
   body > main .hero .blob.one,body > main .hero .blob.two{opacity:.46;}
   body > main .hero .blob.yellow{opacity:.48;}

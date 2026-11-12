@@ -1,19 +1,19 @@
-/* Página de inicio: beneficios de MatchMyCourse. No afecta a otras páginas. */
+.mmc-microsite /* Página de inicio: beneficios de MatchMyCourse. No afecta a otras páginas. */
 .why-mmc-section{position:relative;isolation:isolate;padding:99px 0 103px;overflow:hidden;background:transparent}
-.why-mmc-section::before{content:"";position:absolute;z-index:-2;pointer-events:none;inset:22px -3% 0;background:radial-gradient(ellipse 490px 330px at 0% 22%,rgba(137,164,255,.24),transparent 85%),radial-gradient(ellipse 430px 350px at 101% 62%,rgba(144,167,252,.27),transparent 85%),linear-gradient(145deg,#eaf1ff 0%,#f2f5ff 51%,#eaf1ff 100%);border-radius:52% 48% 0 0 / 67px 55px 0 0}
-.why-mmc-section::after{content:"";position:absolute;z-index:-1;pointer-events:none;inset:auto -7% -1px;height:56px;background:linear-gradient(0deg,#fff 0%,rgba(255,255,255,0) 100%)}
-.why-mmc-inner{position:relative;z-index:1}
-.why-mmc-heading{text-align:center;margin:0 auto 45px}
-.why-mmc-heading .eyebrow{display:block;font-family:'DM Sans',sans-serif;color:#4863f5;font-size:.75rem;line-height:1.5;letter-spacing:.16em;font-weight:800;text-transform:uppercase}
-.why-mmc-heading h2{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:clamp(28px,3vw,36px);font-weight:800;letter-spacing:-.045em;line-height:1.23;color:#15315b;max-width:850px;margin:15px auto 18px}
-.why-mmc-heading h2 .accent{color:#4863f5}
-.why-mmc-heading p{font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.73;color:#526680;max-width:750px;margin:0 auto}
-.why-mmc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:stretch}
-.why-mmc-card{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:28px 25px 30px;background:#fff;border:1px solid rgba(204,216,239,.8);border-radius:19px;box-shadow:0 10px 30px rgba(27,55,107,.065);transition:transform .25s ease,box-shadow .25s ease}
-.why-mmc-card:hover{transform:translateY(-4px);box-shadow:0 17px 36px rgba(27,55,107,.115)}
-.why-mmc-icon{width:51px;height:51px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#edf2ff;color:#4863f5;margin-bottom:21px}
-.why-mmc-card h3{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:17px;font-weight:800;line-height:1.38;letter-spacing:-.028em;color:#15315b;margin:0 0 12px}
-.why-mmc-card p{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;color:#526680;margin:0}
-@media(max-width:1000px){.why-mmc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.why-mmc-card{padding:27px}.why-mmc-section{padding:85px 0 87px}}
-@media(max-width:600px){.why-mmc-section{padding:74px 0 80px}.why-mmc-section::before{inset:12px -6% 0;border-radius:50% 50% 0 0 / 36px 35px 0 0}.why-mmc-heading{margin-bottom:32px}.why-mmc-heading h2{font-size:clamp(27px,7vw,34px)}.why-mmc-heading p{font-size:15px}.why-mmc-grid{grid-template-columns:minmax(0,1fr);gap:16px}.why-mmc-card{padding:24px}.why-mmc-icon{margin-bottom:16px}}
-@media(prefers-reduced-motion:reduce){.why-mmc-card{transition:none}.why-mmc-card:hover{transform:none}}
+.mmc-microsite .why-mmc-section::before{content:"";position:absolute;z-index:-2;pointer-events:none;inset:22px -3% 0;background:radial-gradient(ellipse 490px 330px at 0% 22%,rgba(137,164,255,.24),transparent 85%),radial-gradient(ellipse 430px 350px at 101% 62%,rgba(144,167,252,.27),transparent 85%),linear-gradient(145deg,#eaf1ff 0%,#f2f5ff 51%,#eaf1ff 100%);border-radius:52% 48% 0 0 / 67px 55px 0 0}
+.mmc-microsite .why-mmc-section::after{content:"";position:absolute;z-index:-1;pointer-events:none;inset:auto -7% -1px;height:56px;background:linear-gradient(0deg,#fff 0%,rgba(255,255,255,0) 100%)}
+.mmc-microsite .why-mmc-inner{position:relative;z-index:1}
+.mmc-microsite .why-mmc-heading{text-align:center;margin:0 auto 45px}
+.mmc-microsite .why-mmc-heading .eyebrow{display:block;font-family:'DM Sans',sans-serif;color:#4863f5;font-size:.75rem;line-height:1.5;letter-spacing:.16em;font-weight:800;text-transform:uppercase}
+.mmc-microsite .why-mmc-heading h2{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:clamp(28px,3vw,36px);font-weight:800;letter-spacing:-.045em;line-height:1.23;color:#15315b;max-width:850px;margin:15px auto 18px}
+.mmc-microsite .why-mmc-heading h2 .accent{color:#4863f5}
+.mmc-microsite .why-mmc-heading p{font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.73;color:#526680;max-width:750px;margin:0 auto}
+.mmc-microsite .why-mmc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:stretch}
+.mmc-microsite .why-mmc-card{min-width:0;display:flex;flex-direction:column;align-items:flex-start;padding:28px 25px 30px;background:#fff;border:1px solid rgba(204,216,239,.8);border-radius:19px;box-shadow:0 10px 30px rgba(27,55,107,.065);transition:transform .25s ease,box-shadow .25s ease}
+.mmc-microsite .why-mmc-card:hover{transform:translateY(-4px);box-shadow:0 17px 36px rgba(27,55,107,.115)}
+.mmc-microsite .why-mmc-icon{width:51px;height:51px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#edf2ff;color:#4863f5;margin-bottom:21px}
+.mmc-microsite .why-mmc-card h3{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-size:17px;font-weight:800;line-height:1.38;letter-spacing:-.028em;color:#15315b;margin:0 0 12px}
+.mmc-microsite .why-mmc-card p{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;color:#526680;margin:0}
+.mmc-microsite @media(max-width:1000px){.why-mmc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.why-mmc-card{padding:27px}.why-mmc-section{padding:85px 0 87px}}
+.mmc-microsite @media(max-width:600px){.why-mmc-section{padding:74px 0 80px}.why-mmc-section::before{inset:12px -6% 0;border-radius:50% 50% 0 0 / 36px 35px 0 0}.why-mmc-heading{margin-bottom:32px}.why-mmc-heading h2{font-size:clamp(27px,7vw,34px)}.why-mmc-heading p{font-size:15px}.why-mmc-grid{grid-template-columns:minmax(0,1fr);gap:16px}.why-mmc-card{padding:24px}.why-mmc-icon{margin-bottom:16px}}
+.mmc-microsite @media(prefers-reduced-motion:reduce){.why-mmc-card{transition:none}.why-mmc-card:hover{transform:none}}

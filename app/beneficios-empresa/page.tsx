@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import AboutLightbox from "./components/AboutLightbox";
-import ContactSection from "./components/ContactSection";
+import MicrositeDialogs from "./components/MicrositeDialogs";
 
 /**
  * /beneficios-empresa — the redesigned microsite landing.
@@ -11,11 +10,15 @@ import ContactSection from "./components/ContactSection";
  * re-expressed in Tailwind: an earlier attempt approximated the layout from the
  * HTML structure alone and did not match the design — the spacing, the
  * gradients and the partners animation all live in those stylesheets.
- *
- * Two deliberate departures, both because the original depends on Netlify:
- *   - the contact <dialog> and its hidden Netlify form are replaced by
- *     <ContactSection />, which posts to our own backend email endpoint;
+ * * Two deliberate departures, both because the original depends on Netlify:
+ *   - the contact <dialog> and its hidden Netlify form are replaced by the one
+ *     in <MicrositeDialogs />, which posts to our own backend endpoint. The
+ *     triggers are the source's own buttons, untouched;
  *   - the Netlify widget script is dropped.
+ *
+ * The source's own floating WhatsApp button is dropped as well: the root
+ * layout already mounts <FloatingWhatsAppButton /> site-wide with the same
+ * number, and the two overlapped in the corner.
  */
 
 export const metadata: Metadata = {
@@ -174,11 +177,7 @@ export default function BeneficiosEmpresaPage() {
 </div>
 </div>
 <div className="container footer-bottom">© 2026 MatchMyCourse · Todos los derechos reservados.</div>
-</footer><a aria-label="Contactar a MatchMyCourse por WhatsApp" className="whatsapp-float" href="https://api.whatsapp.com/send/?phone=353831134401&text=Hola%21+Me+interesa+obtener+m%C3%A1s+informaci%C3%B3n+sobre+cursos+de+ingl%C3%A9s+en+el+extranjero.&type=phone_number&app_absent=0" rel="noopener noreferrer" target="_blank" title="Escríbenos por WhatsApp">
-<svg aria-hidden="true" fill="currentColor" viewBox="0 0 32 32"><path d="M16 .8A15.2 15.2 0 0 0 2.94 23.7L.8 31.2l7.7-2.02A15.2 15.2 0 1 0 16 .8Zm0 27.6a12.35 12.35 0 0 1-6.3-1.7l-.46-.27-4.57 1.2 1.23-4.46-.3-.48A12.35 12.35 0 1 1 16 28.4Zm6.78-9.3c-.37-.19-2.18-1.08-2.52-1.2-.34-.13-.59-.19-.84.18-.25.38-.96 1.2-1.18 1.45-.22.25-.43.28-.8.1-.37-.19-1.56-.58-2.97-1.84-1.1-.98-1.84-2.18-2.05-2.55-.22-.37-.02-.57.16-.76.17-.16.37-.43.56-.65.18-.22.25-.37.37-.62.13-.25.06-.47-.03-.66-.1-.19-.84-2.03-1.16-2.78-.3-.73-.61-.63-.84-.64h-.71c-.25 0-.65.09-.99.46s-1.3 1.27-1.3 3.09 1.33 3.58 1.52 2.47 5.48 4.76 6.74c.94.4 1.67.65 2.24.83.94.3 1.8.26 2.47.16.75-.11 2.18-.89 2.49-1.75.31-.87.31-1.61.22-1.75-.1-.15-.34-.24-.72-.43Z" /></svg>
-</a>
-      <AboutLightbox />
-      <ContactSection />
+</footer><MicrositeDialogs />
     </>
   );
 }
