@@ -1,0 +1,23 @@
+/* Aislado: franja de logotipos de la portada. Visible aun sin JS. */
+.partners-marquee-section {padding:0 0 78px;background:#fff;overflow:hidden}
+.partners-marquee-intro {text-align:center;margin-bottom:34px}
+.partners-marquee-intro .eyebrow {display:block;color:#4863f5;font-size:.75rem;font-weight:800;letter-spacing:.16em}
+.partners-marquee-intro h2 {font-family:'Plus Jakarta Sans','DM Sans',sans-serif;color:#15315b;font-size:clamp(28px,3vw,36px);font-weight:800;line-height:1.18;letter-spacing:-.045em;margin:14px auto 0;max-width:900px}
+.partners-marquee {position:relative;display:block;width:min(1160px,calc(100% - 48px));min-height:76px;margin:0 auto;overflow-x:auto;overflow-y:hidden;outline-offset:4px;scrollbar-width:none}
+.partners-marquee::-webkit-scrollbar {display:none}
+.partners-marquee:focus-visible {outline:2px solid #4863f5}
+/* El degradado no enmascara las imágenes: no puede dejarlas invisibles. */
+.partners-marquee::before,.partners-marquee::after {content:"";position:absolute;z-index:2;top:0;bottom:0;width:34px;pointer-events:none}
+.partners-marquee::before {left:0;background:linear-gradient(90deg,#fff,rgba(255,255,255,0))}
+.partners-marquee::after {right:0;background:linear-gradient(270deg,#fff,rgba(255,255,255,0))}
+.partners-marquee-track {display:flex;width:max-content;min-height:76px;align-items:center;transform:translateX(0);/* Sin animación hasta que JS confirme medidas */}
+.partners-marquee.is-running {overflow:hidden}
+.partners-marquee.is-running .partners-marquee-track {animation:partners-scroll var(--marquee-duration,45s) linear infinite;will-change:transform}
+.partners-marquee-group {display:flex;align-items:center;gap:52px;padding-right:52px;flex:0 0 auto;width:max-content}
+.partners-marquee-item {display:flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:0}
+.partners-marquee-item img {display:block;width:auto;height:auto;max-width:150px;max-height:54px;object-fit:contain;filter:grayscale(100%);opacity:.8;transition:filter .25s ease,opacity .25s ease}
+.partners-marquee-item:hover img {filter:grayscale(0%);opacity:1}
+.partners-marquee:hover .partners-marquee-track,.partners-marquee:focus-within .partners-marquee-track {animation-play-state:paused}
+@keyframes partners-scroll {from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:760px) {.partners-marquee-section{padding-bottom:54px}.partners-marquee-intro{margin-bottom:25px}.partners-marquee{width:calc(100% - 28px);min-height:65px}.partners-marquee-track{min-height:65px}.partners-marquee-group{gap:38px;padding-right:38px}.partners-marquee-item img{max-width:125px;max-height:43px}}
+@media(prefers-reduced-motion:reduce) {.partners-marquee{overflow-x:auto!important;scrollbar-width:thin}.partners-marquee::-webkit-scrollbar{display:block}.partners-marquee-track{animation:none!important;transform:none!important;will-change:auto}.partners-marquee-item img{transition:none}}

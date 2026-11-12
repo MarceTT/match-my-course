@@ -1,16 +1,22 @@
-import { Raleway } from "next/font/google";
 import localFont from "next/font/local";
 
 // Primary font - optimized for performance
 // Reduced to only 2 weights (removed 600 for better performance)
-export const raleway = Raleway({
-  subsets: ["latin"],
-  weight: ["400", "700"], // Only essential weights (normal and bold)
-  display: "optional", // Changed from 'swap' to 'optional' for better LCP
+// SELF-HOSTED, not `next/font/google`. The Google loader downloads at BUILD
+// time, so every production build depended on Google Fonts answering. That
+// dependency took down a Railway deploy (see #100) and then blocked local
+// builds twice in a row with the same crash:
+//   TypeError: Cannot read properties of null (reading '1')
+//   at @next/font/dist/google/loader.js:122  // /\.(woff|woff2|...)$/.exec(url)[1]
+// Raleway is a variable font, so one file covers 400-700.
+export const raleway = localFont({
+  src: "./fonts/Raleway-Variable.woff2",
+  weight: "100 900",
+  style: "normal",
+  display: "optional", // kept from the previous config for LCP
   preload: true,
-  variable: '--font-raleway',
+  variable: "--font-raleway",
   fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "arial", "sans-serif"],
-  adjustFontFallback: true // Better font metric matching
 });
 
 // Scoped to the ported /beneficios microsite, a faithful clone of a design
