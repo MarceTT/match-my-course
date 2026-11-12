@@ -1,0 +1,106 @@
+/* MatchMyCourse · sistema de fondos continuo · SOLO portada.
+   Capas decorativas sin alterar estructura, contenido ni interacciones. */
+:root {
+  --mmc-canvas: #fbfcff;
+  --mmc-ice: #eaf1ff;
+  --mmc-aqua: #dff7f5;
+  --mmc-cream: #fff4cc;
+}
+/* Base atmosférica compartida de arriba abajo: ninguna forma tapa el contenido. */
+body {
+  background-color: var(--mmc-canvas);
+  background-image:
+    radial-gradient(ellipse 38% 14% at 92% 12%, rgba(223,247,245,.48),transparent 96%),
+    radial-gradient(ellipse 27% 11% at 1% 23%, rgba(234,241,255,.62),transparent 98%),
+    radial-gradient(ellipse 35% 12% at 97% 43%, rgba(255,244,204,.30),transparent 98%),
+    radial-gradient(ellipse 42% 16% at -3% 61%, rgba(223,247,245,.32),transparent 97%),
+    linear-gradient(180deg,#fff 0%,#f8faff 36%,#fcfdff 62%,#f3f7ff 100%);
+  background-repeat:no-repeat;
+}
+/* El hero y destinos comparten una transición blanca-azul apenas perceptible. */
+.hero {
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(250,252,255,.78) 86%,rgba(246,249,255,.52));
+}
+.hero .blob.one {background:radial-gradient(ellipse at 37% 43%,rgba(205,222,255,.52),rgba(234,241,255,.16) 70%,transparent 100%);}
+.hero .blob.two {background:radial-gradient(ellipse at 50% 50%,rgba(223,247,245,.43),rgba(237,244,255,.23) 72%,transparent 100%);}
+.hero .blob.yellow {background:radial-gradient(ellipse at 42% 47%,rgba(255,244,204,.78),rgba(255,244,204,.06) 80%,transparent 100%);}
+.choose.destinations {
+  background:
+    radial-gradient(ellipse 38% 25% at 96% 28%,rgba(223,247,245,.28),transparent 98%),
+    linear-gradient(180deg,rgba(246,249,255,.54),rgba(237,244,255,.73) 47%,rgba(252,253,255,.92));
+}
+.choose::before {background:radial-gradient(ellipse,rgba(211,225,255,.40),transparent 77%);}
+.choose::after {border-color:rgba(225,234,255,.23);}
+.destinations::after {background:radial-gradient(ellipse,rgba(219,233,255,.33),transparent 76%);}
+/* Franja de instituciones: el blanco se funde gradualmente con el azul siguiente. */
+.partners-marquee-section {
+  background:linear-gradient(180deg,rgba(252,253,255,.94),rgba(250,252,255,.95) 63%,rgba(238,245,255,.88));
+}
+/* Las máscaras laterales conservan la misma luz del fondo sin ocultar el carrusel. */
+.partners-marquee::before {background:linear-gradient(90deg,#fbfcff,rgba(251,252,255,0));}
+.partners-marquee::after {background:linear-gradient(270deg,#fbfcff,rgba(251,252,255,0));}
+/* Beneficios: la superficie azul difuminada entra y sale con los mismos tonos. */
+.why-mmc-section {background:linear-gradient(180deg,rgba(238,245,255,.88),rgba(239,245,255,.88) 54%,rgba(249,251,255,.89));}
+.why-mmc-section::before {
+  inset:0 -3%;border-radius:0;
+  background:
+    radial-gradient(ellipse 42% 55% at 0% 40%,rgba(197,218,255,.29),transparent 95%),
+    radial-gradient(ellipse 35% 55% at 100% 66%,rgba(223,247,245,.49),transparent 95%);
+}
+.why-mmc-section::after {
+  inset:auto -3% -1px;height:100px;
+  background:linear-gradient(0deg,rgba(249,251,255,.95),transparent);
+}
+/* El mosaico sigue siendo protagonista; las curvas se continúan bajo él. */
+.about-mmc-section {
+  background:
+    radial-gradient(ellipse 35% 50% at 100% 54%,rgba(223,247,245,.32),transparent 98%),
+    linear-gradient(180deg,rgba(249,251,255,.94),rgba(255,255,255,.93) 47%,rgba(246,249,255,.93));
+}
+.about-mmc-section::before {
+  background:radial-gradient(ellipse at center,rgba(214,227,255,.20),rgba(234,241,255,.09) 62%,transparent 85%);
+}
+/* Tres pasos: continuidad sin modificar botones ni tarjetas. */
+.how-mmc-section {
+  background:
+    radial-gradient(ellipse 41% 51% at 0% 60%,rgba(255,244,204,.23),transparent 96%),
+    radial-gradient(ellipse 42% 52% at 100% 45%,rgba(223,247,245,.28),transparent 96%),
+    linear-gradient(180deg,rgba(246,249,255,.94),rgba(242,247,255,.98));
+}
+/* Bloque institucional: revelado gradual del azul, sin borde horizontal duro.
+   Se mantienen intactas las dos tarjetas y todos los elementos interactivos. */
+.institutional-mmc {
+  background:transparent;
+}
+.institutional-mmc::before {
+  content:"";position:absolute;inset:0;z-index:-1;
+  width:auto;height:auto;top:0;left:0;right:0;bottom:0;
+  border-radius:0;transform:none;
+  background:
+    radial-gradient(ellipse 55% 65% at 95% 20%,rgba(72,99,245,.20),transparent 94%),
+    radial-gradient(ellipse 47% 72% at 0% 85%,rgba(73,132,166,.14),transparent 94%),
+    linear-gradient(125deg,#102747,#15315b 57%,#203f70);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 11%,#000 87%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 11%,#000 87%,transparent 100%);
+}
+.institutional-mmc::after {
+  width:min(75vw,900px);height:390px;top:9%;right:-24%;bottom:auto;left:auto;
+  background:radial-gradient(ellipse at center,rgba(175,202,255,.10),transparent 73%);
+  border-radius:50%;transform:none;
+}
+/* Suaviza el pasaje hacia el footer sin cambiar su contenido ni dimensiones. */
+.site-footer {
+  border-top-color:transparent;
+  background:linear-gradient(180deg,rgba(239,245,255,.96),#f5f8ff 42%,#f1f6ff 100%);
+}
+@media(max-width:700px) {
+  /* Acentos más discretos para que el fondo no compita con el texto. */
+  body {background-image:linear-gradient(180deg,#fff,#f8faff 35%,#f5f8ff 75%,#f3f7ff);}
+  .hero .blob.one,.hero .blob.two {opacity:.56;}
+  .hero .blob.yellow {opacity:.48;}
+  .about-mmc-section::before {opacity:.62;}
+  .institutional-mmc::before {
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%);
+  }
+}
