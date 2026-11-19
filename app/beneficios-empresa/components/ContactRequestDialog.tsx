@@ -228,7 +228,7 @@ export default function ContactRequestDialog({
                 </label>
 
                 <label className={`${LABEL_CLASS} sm:col-span-2`}>
-                  Empresa a la que perteneces
+                  Empresa o establecimiento educacional
                   <input
                     {...register("empresa")}
                     autoComplete="organization"

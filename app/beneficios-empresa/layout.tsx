@@ -21,6 +21,9 @@ import "./styles/como-funciona-matchmycourse.css";
 import "./styles/empresas-colegios.css";
 import "./styles/portada-fondo-unificado.css";
 import "./styles/portada-fondo-estilo-irlanda.css";
+// Last, so it wins: corrections against the root layout's critical CSS. Kept
+// out of the ported sheets, which the port script rewrites wholesale.
+import "./styles/microsite-overrides.css";
 
 export const metadata: Metadata = {
   title: "Beneficios para estudiar inglés en el extranjero | MatchMyCourse",
