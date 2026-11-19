@@ -1,0 +1,44 @@
+/* Overrides for the root layout's critical CSS.
+ *
+ * NOT part of the ported source. `scripts/microsite/portMicrosite.py` rewrites
+ * every other sheet in this directory, so corrections have to live here or the
+ * next re-port erases them.
+ *
+ * The root layout inlines critical CSS that styles bare ELEMENT selectors, so
+ * it reaches any page rendering its own <header> and <section> — including this
+ * microsite, whose markup is not built for it:
+ *
+ *   header  { background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.1);
+ *             position:sticky; top:0; z-index:50 }
+ *   section { position:relative; display:flex; align-items:center;
+ *             justify-content:center; min-height:500px;
+ *             background-color:#f9fafb }
+ *
+ * The source stylesheet declares neither a background nor a shadow on
+ * .site-header, so the layout's rule won on those properties and drew a white
+ * bar with a shadow around the logo. The `section` rule is worse: it forces
+ * every section to be a 500px-tall centred flex container on a grey background,
+ * which fights each section's own layout.
+ *
+ * Scoped to the wrapper, so nothing here escapes the segment.
+ */
+
+.mmc-microsite header.site-header {
+  background-color: transparent;
+  box-shadow: none;
+  position: relative;
+  top: auto;
+  z-index: 2;
+}
+
+.mmc-microsite section {
+  display: block;
+  align-items: initial;
+  justify-content: initial;
+  min-height: 0;
+  background-color: transparent;
+}
+
+/* Sections whose own sheet sets a background keep it; this only neutralises the
+ * inherited grey. Backgrounds declared by the source sheets still apply, since
+ * `.mmc-microsite .partners-marquee-section` outranks `.mmc-microsite section`. */
