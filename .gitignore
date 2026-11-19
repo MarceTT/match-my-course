@@ -53,3 +53,6 @@ PERFORMANCE-TESTING.md
 
 # agent teams lite
 .atl/
+# Python bytecode from scripts/
+__pycache__/
+*.pyc

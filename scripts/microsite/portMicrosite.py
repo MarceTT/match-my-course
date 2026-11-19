@@ -48,6 +48,19 @@ def _scope_selector(sel):
 def scope_css(css):
     res, i, n = [], 0, len(css)
     while i < n:
+        # Skip leading whitespace before probing for an at-rule. Without this,
+        # any at-rule preceded by a newline was not recognised and fell through
+        # to the ordinary-rule path, which prefixed it:
+        #     .mmc-microsite @keyframes partners-scroll { ... }
+        #     .mmc-microsite @media (max-width: 760px) { ... }
+        # Both are invalid, so browsers dropped them: the marquee had no
+        # keyframes to run and every media query in the microsite was dead.
+        ws = re.match(r"\s*", css[i:]).group(0)
+        if ws:
+            res.append(ws)
+            i += len(ws)
+            if i >= n:
+                break
         at = re.compile(r"@[\w-]+").match(css, i)
         if at:
             name = at.group(0).lower()
