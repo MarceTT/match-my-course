@@ -93,13 +93,13 @@ body{
   border-top-color:transparent;
   background:linear-gradient(180deg,rgba(239,245,255,.96),#f5f8ff 42%,#f1f6ff 100%);
 }
-.mmc-microsite @media(max-width:700px){
-  /* Acentos más discretos para que el fondo no compita con el texto. */
-  body {background-image:linear-gradient(180deg,#fff,#f8faff 35%,#f5f8ff 75%,#f3f7ff);}
-  .hero .blob.one,.hero .blob.two {opacity:.56;}
-  .hero .blob.yellow {opacity:.48;}
-  .about-mmc-section::before {opacity:.62;}
-  .institutional-mmc::before {
+@media(max-width:700px) {
+  .mmc-microsite /* Acentos más discretos para que el fondo no compita con el texto. */
+  body{background-image:linear-gradient(180deg,#fff,#f8faff 35%,#f5f8ff 75%,#f3f7ff);}
+  .mmc-microsite .hero .blob.one, .mmc-microsite .hero .blob.two{opacity:.56;}
+  .mmc-microsite .hero .blob.yellow{opacity:.48;}
+  .mmc-microsite .about-mmc-section::before{opacity:.62;}
+  .mmc-microsite .institutional-mmc::before{
     -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%);
     mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 93%,transparent 100%);
   }

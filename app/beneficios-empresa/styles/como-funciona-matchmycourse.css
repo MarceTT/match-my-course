@@ -19,6 +19,6 @@
 .mmc-microsite .how-mmc-button:focus-visible{outline:3px solid #15315b;outline-offset:4px}
 .mmc-microsite .how-mmc-button svg{width:17px;height:17px}
 .mmc-microsite #elige{scroll-margin-top:110px}
-.mmc-microsite @media(max-width:900px){.how-mmc-section{padding:76px 0 84px}.how-mmc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.how-mmc-card{min-height:235px;padding:26px 24px}}
-.mmc-microsite @media(max-width:620px){.how-mmc-section{padding:66px 0 75px}.how-mmc-head{margin-bottom:32px!important}.how-mmc-grid{grid-template-columns:1fr;gap:16px}.how-mmc-card{min-height:0;padding:25px 24px}.how-mmc-top{margin-bottom:18px}.how-mmc-action{margin-top:32px}.how-mmc-button{min-height:51px}#elige{scroll-margin-top:65px}}
-.mmc-microsite @media(prefers-reduced-motion:reduce){.how-mmc-card,.how-mmc-button{transition:none}.how-mmc-card:hover,.how-mmc-button:hover{transform:none}}
+@media(max-width:900px){.mmc-microsite .how-mmc-section{padding:76px 0 84px}.mmc-microsite .how-mmc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.mmc-microsite .how-mmc-card{min-height:235px;padding:26px 24px}}
+@media(max-width:620px){.mmc-microsite .how-mmc-section{padding:66px 0 75px}.mmc-microsite .how-mmc-head{margin-bottom:32px!important}.mmc-microsite .how-mmc-grid{grid-template-columns:1fr;gap:16px}.mmc-microsite .how-mmc-card{min-height:0;padding:25px 24px}.mmc-microsite .how-mmc-top{margin-bottom:18px}.mmc-microsite .how-mmc-action{margin-top:32px}.mmc-microsite .how-mmc-button{min-height:51px}.mmc-microsite #elige{scroll-margin-top:65px}}
+@media(prefers-reduced-motion:reduce){.mmc-microsite .how-mmc-card, .mmc-microsite .how-mmc-button{transition:none}.mmc-microsite .how-mmc-card:hover, .mmc-microsite .how-mmc-button:hover{transform:none}}
