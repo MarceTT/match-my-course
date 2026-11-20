@@ -1,0 +1,81 @@
+.mmc-microsite /* CSS original de las promociones, .mmc-microsite con namespace para Inglaterra. */
+.escocia-b-page .england-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-card{background:white;border:1px solid #e7ebf7;border-radius:23px;overflow:hidden;box-shadow:0 8px 26px #1a2c5015;transition:transform .23s ease,box-shadow .23s ease}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-card:hover{transform:translateY(-3px);box-shadow:0 13px 32px #1a2c5020}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-card[hidden]{display:none!important}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-cover{width:100%;height:205px;object-fit:cover;display:block}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-content{padding:22px 23px 16px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-heading>div{min-width:0}
+.mmc-microsite .escocia-b-page .england-ces-offers .kicker{font-size:11px;letter-spacing:.10em;font-weight:800;color:#526cf5;margin:0 0 7px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-heading h3{font-size:clamp(22px,2.3vw,28px);line-height:1.1;letter-spacing:-.05em;color:#171b2c;margin:0 0 7px;font-weight:800}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-institution{color:#65718b;font-size:14px;font-weight:600;margin:0}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo{max-width:118px;width:26%;max-height:70px;object-fit:contain;flex-shrink:0}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-hours{margin:17px 0 13px;color:#4d5c76;font-size:14px;font-weight:700}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:linear-gradient(110deg,#eaf9ef,#def8e7);border-radius:17px;padding:15px 3px;gap:0}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices>div{text-align:center;padding:2px 4px;min-width:0}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices>div+div{border-left:1px solid #bce5ca}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices strong{color:#108b45;font-size:clamp(21px,2.5vw,29px);letter-spacing:-.055em;display:block;white-space:nowrap}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices span{color:#60756c;font-size:12px;white-space:nowrap}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details{margin-top:16px;border-top:1px solid #e6eaf4}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:16px 0 8px;font-size:16px;font-weight:800;color:#23314f}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details summary::-webkit-details-marker{display:none}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details summary::before{content:"›";color:#4863f5;font-size:27px;font-weight:500;margin-right:11px}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details summary .chevron{margin-left:auto;font-size:24px;color:#4863f5;transition:transform .2s}
+.mmc-microsite .escocia-b-page .england-ces-offers .program-details[open] .chevron{transform:rotate(180deg)}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-body{padding:20px 0 8px}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid>div{background:#f4f6fc;border-radius:14px;padding:15px}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid small{display:block;font-size:12px;color:#73809a;margin-bottom:7px;font-weight:700}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid strong{font-size:15px;color:#20283b;line-height:1.45;display:block}
+.mmc-microsite .escocia-b-page .england-ces-offers .contact-action{display:block;text-align:center;background:#4863f5;color:white!important;border-radius:12px;padding:15px 16px;font-size:15px;font-weight:800}
+@media (max-width:900px){.mmc-microsite .escocia-b-page .england-ces-offers .compact-grid{grid-template-columns:1fr}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-cover{height:240px}}
+@media (max-width:530px){.mmc-microsite .escocia-b-page .england-ces-offers .compact-cover{height:170px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-content{padding:18px 16px 12px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo{max-width:100px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices strong{font-size:21px}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid{grid-template-columns:1fr}}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-photo{position:relative;isolation:isolate;overflow:hidden}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-photo:after{content:"";position:absolute;inset:42% 0 0;background:linear-gradient(transparent,rgba(9,20,39,.69));pointer-events:none;z-index:1}
+.mmc-microsite .escocia-b-page .england-ces-offers .photo-school{position:absolute;bottom:17px;left:19px;z-index:2;font-size:clamp(16px,1.7vw,21px);font-weight:800;letter-spacing:-.025em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices span{font-size:clamp(14px,1.4vw,16px);font-weight:800;color:#496458}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-hours{font-size:clamp(17px,1.65vw,19px);font-weight:800;color:#1e2b47;letter-spacing:-.02em;margin:17px 0 14px}
+@media (max-width:530px){.mmc-microsite .escocia-b-page .england-ces-offers .photo-school{font-size:17px;bottom:13px;left:16px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices span{font-size:14px}}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo-badge{max-width:170px;width:34%;max-height:58px;background:#fff;border-radius:12px;padding:2px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.single{grid-template-columns:1fr;justify-items:center;padding:18px 16px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.single>div{border-left:0!important}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.single strong{font-size:clamp(28px,3vw,34px)}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.single span{font-size:15px}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo.ul-logo{width:36%;max-width:166px;max-height:76px;object-fit:contain}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo.cec-logo{width:34%;max-width:170px;max-height:74px;object-fit:contain}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-logo.gci-logo{max-width:174px;width:35%;max-height:74px;object-fit:contain}
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices strong{font-size:clamp(20px,2.2vw,29px)}
+.mmc-microsite .escocia-b-page .england-ces-offers .price-exclusion-note{font-size:13px;line-height:1.5;color:#536078;margin:9px 1px 15px!important;}
+@media (max-width:520px){.mmc-microsite .escocia-b-page .england-ces-offers .price-exclusion-note{font-size:12.5px}}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-breakdown{margin:18px 0;padding:18px 20px;background:#f6f8ff;border-radius:14px;color:#253047;font-size:15px;line-height:1.65}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-breakdown>strong{font-size:18px}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-breakdown p{margin:7px 0 12px}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-breakdown ul{margin:0;padding-left:20px}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-breakdown li{padding:3px 0}
+.mmc-microsite .escocia-b-page .england-ces-offers .pack-total-note{font-size:13px;color:#59657b}
+.mmc-microsite .escocia-b-page .england-ces-offers .price-exclusion-note{font-size:13px;line-height:1.5}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid small{font-size:13px}
+.mmc-microsite .escocia-b-page .england-ces-offers .details-grid strong{font-size:15px;line-height:1.55}
+.mmc-microsite .escocia-b-page .england-ces-offers .currency-caption{ margin: 5px 0 15px; font-size: 0.88rem; line-height: 1.45; color: #59657b; }
+.mmc-microsite .escocia-b-page .england-ces-offers .currency-caption em{ font-style: italic; }
+.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.canada-three-prices{ grid-template-columns: repeat(3,minmax(0,1fr)); }
+@media (max-width:500px){.mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .escocia-b-page .england-ces-offers .compact-prices.canada-three-prices{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.mmc-microsite /* El componente reutiliza los estilos exactos de canada.css, .mmc-microsite aislados de otras páginas. */
+.escocia-b-page #adultos .england-ces-offers{width:100%;max-width:100%;font-family:'DM Sans',sans-serif;color:#203554;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-card{min-width:0;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-cover{max-width:none;object-fit:cover;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-photo img{width:100%;height:205px;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-heading h3{font-family:'DM Sans',sans-serif;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-content p{max-width:none;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-prices strong{font-weight:800;}
+.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-prices span{display:block;}
+@media(max-width:760px){.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-grid{grid-template-columns:minmax(0,1fr);}.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-photo img{height:240px;}}
+@media(max-width:530px){.mmc-microsite .escocia-b-page #adultos .england-ces-offers .compact-photo img{height:170px;}}

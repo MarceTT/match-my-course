@@ -22,9 +22,44 @@ RENAME = {"class":"className","for":"htmlFor","srcset":"srcSet","tabindex":"tabI
  "fill-rule":"fillRule","clip-rule":"clipRule","stroke-miterlimit":"strokeMiterlimit",
  "xlink:href":"xlinkHref","stroke-dasharray":"strokeDasharray","clip-path":"clipPath",
  "viewbox":"viewBox","preserveaspectratio":"preserveAspectRatio","stop-color":"stopColor",
- "stop-opacity":"stopOpacity","gradientunits":"gradientUnits","colspan":"colSpan","rowspan":"rowSpan"}
+ "stop-opacity":"stopOpacity","gradientunits":"gradientUnits","colspan":"colSpan","rowspan":"rowSpan",
+ # SVG attribute names are camelCase in JSX; HTML parsing lowercases them.
+ "clippathunits":"clipPathUnits","gradienttransform":"gradientTransform",
+ "patternunits":"patternUnits","patterncontentunits":"patternContentUnits",
+ "patterntransform":"patternTransform","maskunits":"maskUnits",
+ "maskcontentunits":"maskContentUnits","markerwidth":"markerWidth",
+ "markerheight":"markerHeight","markerunits":"markerUnits","refx":"refX","refy":"refY",
+ "spreadmethod":"spreadMethod","startoffset":"startOffset","textlength":"textLength",
+ "lengthadjust":"lengthAdjust","filterunits":"filterUnits","primitiveunits":"primitiveUnits",
+ "baseprofile":"baseProfile","attributename":"attributeName","repeatcount":"repeatCount",
+ "stddeviation":"stdDeviation","shape-rendering":"shapeRendering",
+ "text-anchor":"textAnchor","dominant-baseline":"dominantBaseline",
+ "font-family":"fontFamily","font-size":"fontSize","font-weight":"fontWeight",
+ "letter-spacing":"letterSpacing","fill-opacity":"fillOpacity",
+ "stroke-opacity":"strokeOpacity","stroke-dashoffset":"strokeDashoffset",
+ "vector-effect":"vectorEffect","paint-order":"paintOrder","mix-blend-mode":"mixBlendMode",
+ "color-interpolation-filters":"colorInterpolationFilters","enable-background":"enableBackground",
+ "xmlns:xlink":"xmlnsXlink","xml:space":"xmlSpace","crossorigin":"crossOrigin",
+ "datetime":"dateTime","autocomplete":"autoComplete","maxlength":"maxLength",
+ "minlength":"minLength","spellcheck":"spellCheck","enterkeyhint":"enterKeyHint",
+ "inputmode":"inputMode","accesskey":"accessKey","contenteditable":"contentEditable",
+ "usemap":"useMap","novalidate":"noValidate","formaction":"formAction",
+ "referrerpolicy":"referrerPolicy","allowfullscreen":"allowFullScreen"}
 NUMERIC = {"tabIndex","colSpan","rowSpan"}
-BOOL = {"hidden","autoplay","muted","loop","playsinline","novalidate","required","defer","async","disabled","checked","open"}
+BOOL = {"hidden","autoplay","muted","loop","playsinline","novalidate","required","defer","async","disabled","checked","open","inert","selected","readonly","multiple","controls","reversed","autofocus"}
+# HTML parsing lowercases tag names, but SVG element names are case-sensitive in
+# JSX: <clippath> is not a known element and fails the build.
+SVG_ELEMENTS = {
+    "clippath": "clipPath", "lineargradient": "linearGradient",
+    "radialgradient": "radialGradient", "textpath": "textPath",
+    "foreignobject": "foreignObject", "fegaussianblur": "feGaussianBlur",
+    "fedropshadow": "feDropShadow", "feoffset": "feOffset",
+    "feblend": "feBlend", "fecolormatrix": "feColorMatrix",
+    "fecomposite": "feComposite", "feflood": "feFlood",
+    "femerge": "feMerge", "femergenode": "feMergeNode",
+    "femorphology": "feMorphology", "feturbulence": "feTurbulence",
+    "animatetransform": "animateTransform", "animatemotion": "animateMotion",
+}
 
 
 def _scope_selector(sel):
@@ -126,7 +161,9 @@ class _Converter(HTMLParser):
         parts = []
         for k, v in attrs:
             name = RENAME.get(k.lower(), k)
-            if v is None:
+            if v is None or (name in BOOL and v == ""):
+                # `hidden=""` is true in HTML but an empty string in JSX, which
+                # type-checks as a string where a boolean is expected.
                 parts.append(f"{name}={{true}}")
             elif k.lower() == "style":
                 parts.append(f"style={_style_to_jsx(v)}")
@@ -138,14 +175,16 @@ class _Converter(HTMLParser):
         return f'<{tag}{attr}{" />" if closed else ">"}'
 
     def handle_starttag(self, tag, attrs):
-        self.out.append(self._tag(tag, attrs, tag in VOID or tag in SVG_SELF))
+        self.out.append(
+            self._tag(SVG_ELEMENTS.get(tag, tag), attrs, tag in VOID or tag in SVG_SELF)
+        )
 
     def handle_startendtag(self, tag, attrs):
-        self.out.append(self._tag(tag, attrs, True))
+        self.out.append(self._tag(SVG_ELEMENTS.get(tag, tag), attrs, True))
 
     def handle_endtag(self, tag):
         if tag not in VOID and tag not in SVG_SELF:
-            self.out.append(f"</{tag}>")
+            self.out.append(f"</{SVG_ELEMENTS.get(tag, tag)}>")
 
     def handle_data(self, data):
         self.out.append(data.replace("{", '{"{"}').replace("}", '{"}"}'))
@@ -155,6 +194,30 @@ class _Converter(HTMLParser):
 
     def handle_charref(self, name):
         self.out.append(f"&#{name};")
+
+
+def absolutise_assets(html_text, page_path):
+    """Rewrite document-relative asset URLs as absolute ones.
+
+    The source serves each page at a directory URL with a trailing slash, so
+    `media/x.webp` resolves under that directory. Next serves the same page
+    without the trailing slash, where the identical reference would resolve one
+    level up and 404. `page_path` is the page's directory, e.g.
+    "/beneficios-empresa/nueva-zelanda".
+    """
+    base = page_path.rstrip("/")
+
+    def fix(match):
+        attr, quote, url = match.group(1), match.group(2), match.group(3)
+        if url.startswith(("/", "http://", "https://", "data:", "#", "mailto:", "tel:")):
+            return match.group(0)
+        return f"{attr}={quote}{base}/{url}{quote}"
+
+    return re.sub(
+        r"(src|href|poster)=([\"'])([^\"']+\.(?:webp|jpg|jpeg|png|avif|svg|mp4|webm))\2",
+        fix,
+        html_text,
+    )
 
 
 def html_to_jsx(html_text, drop_selectors=()):
