@@ -1,0 +1,36 @@
+.mmc-microsite /* Carrusel de experiencias de Escocia: componente visual de Rotorua, .mmc-microsite aislado a esta sección. */
+.nz-experiences-section.rela-activities{margin:60px auto 64px;padding:0 22px;min-width:0}
+.mmc-microsite .nz-experiences-section.rela-activities .nz-experiences-heading{max-width:900px;text-align:center;margin:0 auto 30px}
+.mmc-microsite .nz-experiences-section.rela-activities .nz-experiences-heading h2{font-size:clamp(28px,3.25vw,43px);line-height:1.2;color:#15315b}
+.mmc-microsite .nz-experiences-section.rela-activities .nz-experiences-heading p{max-width:830px;margin:0 auto;color:#526680}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel{max-width:1050px;margin:0 auto;min-width:0;outline-offset:4px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-window{position:relative;overflow:hidden;border-radius:23px;background:#eaf1ff;box-shadow:0 14px 42px rgba(21,49,91,.11);touch-action:pan-y}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-track{display:flex;width:100%;transform:translate3d(0,0,0);transition:transform 600ms cubic-bezier(.3,.05,.22,1);will-change:transform}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-slide{position:relative;flex:0 0 100%;width:100%;height:clamp(275px,42vw,475px);min-width:0;overflow:hidden;margin:0;background:#dfe8ff}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-slide img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-slide::after{content:"";position:absolute;inset:48% 0 0;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(8,19,39,.78) 100%)}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-caption{position:absolute;z-index:1;bottom:28px;left:35px;right:90px;color:#fff;font-family:'Plus Jakarta Sans','DM Sans',sans-serif;font-weight:800;letter-spacing:-.025em;font-size:clamp(20px,2.4vw,31px);line-height:1.22;text-shadow:0 2px 8px rgba(0,0,0,.18)}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:1px solid rgba(218,229,249,.92);background:rgba(255,255,255,.95);box-shadow:0 5px 18px rgba(13,33,67,.18);color:#15315b;cursor:pointer;transition:background .2s ease,box-shadow .2s ease}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-arrow:hover{background:#fff;box-shadow:0 7px 22px rgba(13,33,67,.27)}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-arrow svg{width:22px;height:22px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-prev{left:17px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-next{right:17px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dots{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;margin-top:20px;min-height:19px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dot{width:9px;height:9px;display:block;border-radius:99px;padding:0;border:0;background:#ced8ed;cursor:pointer;transition:background .2s ease,width .25s ease}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dot[aria-current="true"]{width:24px;background:#4863f5}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-arrow:focus-visible, .mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dot:focus-visible{outline:3px solid #4863f5;outline-offset:3px}
+@media(max-width:710px){
+.mmc-microsite .nz-experiences-section.rela-activities{margin:35px auto 44px;padding:0 18px}
+.mmc-microsite .nz-experiences-section.rela-activities .nz-experiences-heading{margin-bottom:23px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-window{border-radius:17px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-slide{height:clamp(255px,68vw,365px)}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-arrow{width:39px;height:39px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-prev{left:9px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-next{right:9px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-caption{font-size:21px;left:19px;bottom:19px;right:65px}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dots{gap:7px}
+}
+@media(prefers-reduced-motion:reduce){
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-track{transition:none!important}
+.mmc-microsite .nz-experiences-section.rela-activities .rela-carousel-dot{transition:none!important}
+}
