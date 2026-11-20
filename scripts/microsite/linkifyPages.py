@@ -25,6 +25,8 @@ import sys
 
 ANCHOR_OPEN = re.compile(r"<a\b([^>]*)>")
 HREF = re.compile(r'href="([^"]*)"')
+LINK_OPEN = re.compile(r"<Link\b([^>]*)>")
+PREFETCH_OFF = re.compile(r"\s*prefetch=\{false\}")
 
 
 def app_routes(app_dir="app"):
@@ -84,11 +86,42 @@ def linkify(source, known_routes):
     return "".join(out), unknown
 
 
+def refresh_prefetch(source, known_routes):
+    """Re-evaluate `prefetch={false}` against the routes that exist now.
+
+    Links are marked unprefetchable while their page belongs to a later slice.
+    Once that page lands the marker has to go, or the link stays needlessly
+    slow forever. Running this after every slice keeps it self-correcting.
+    """
+    restored = []
+
+    def fix(match):
+        attrs = match.group(1)
+        href = HREF.search(attrs)
+        if not href:
+            return match.group(0)
+        target = href.group(1).split("#")[0]
+        has_marker = bool(PREFETCH_OFF.search(attrs))
+        exists = target in known_routes
+        if has_marker and exists:
+            restored.append(target)
+            return f"<Link{PREFETCH_OFF.sub('', attrs)}>"
+        if not has_marker and not exists:
+            return f"<Link{attrs.rstrip()} prefetch={{false}}>"
+        return match.group(0)
+
+    return LINK_OPEN.sub(fix, source), restored
+
+
 def process(page_file, known_routes):
-    source = open(page_file, encoding="utf-8").read()
+    original = open(page_file, encoding="utf-8").read()
+    source, restored = refresh_prefetch(original, known_routes)
     converted, unknown = linkify(source, known_routes)
-    if converted == source:
-        return 0, unknown
+    if restored:
+        print(f"  {os.path.basename(os.path.dirname(page_file))}: prefetch restored for "
+              f"{len(restored)} route(s) now built")
+    if converted == original:
+        return converted.count("<Link"), unknown
     if 'from "next/link"' not in converted:
         converted = converted.replace(
             'import type { Metadata, Viewport } from "next";',
