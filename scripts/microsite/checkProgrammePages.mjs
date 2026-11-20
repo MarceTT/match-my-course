@@ -19,6 +19,11 @@ const PAGES = [
   "irlanda/junior/cork-english-college/ingles-rugby",
   "irlanda/junior/emerald-cultural-institute/sandford-park-school",
   "irlanda/junior/emerald-cultural-institute/alexandra-college",
+  "escocia/junior/centre-of-english-studies/ingles-actividades-edimburgo",
+  "inglaterra/centre-of-english-studies/ingles-actividades-londres",
+  "inglaterra/junior/emerald-cultural-institute/anglia-ruskin-university/medicina",
+  "inglaterra/junior/emerald-cultural-institute/rose-bruford-college",
+  "inglaterra/junior/emerald-cultural-institute/st-georges-ascot",
 ];
 
 const browser = await chromium.launch();
