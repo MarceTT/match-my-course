@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 
 import CurrencySelector from "../components/CurrencySelector";
 import MicrositeDialogs from "../components/MicrositeDialogs";
@@ -37,7 +38,7 @@ export const viewport: Viewport = {
 export default function NuevaZelandaPage() {
   return (
     <div className="principal-b-page">
-      <header className="site-header container"><a aria-label="MatchMyCourse, volver a la portada de Beneficios" className="brand" href="/beneficios-empresa/"><img alt="MatchMyCourse" height="58" src="/beneficios-empresa/assets/logo.png" width="216" /></a></header><main id="inicio">
+      <header className="site-header container"><Link aria-label="MatchMyCourse, volver a la portada de Beneficios" className="brand" href="/beneficios-empresa"><img alt="MatchMyCourse" height="58" src="/beneficios-empresa/assets/logo.png" width="216" /></Link></header><main id="inicio">
 <section className="hero"><div aria-hidden="true" className="blob one"></div><div aria-hidden="true" className="blob two"></div><div aria-hidden="true" className="blob three"></div><div aria-hidden="true" className="blob yellow"></div><div className="container hero-inner"><span className="eyebrow">NUEVA ZELANDA · PROGRAMAS INTERNACIONALES</span>
 <h1><span className="hero-title-line">Cursos de inglés en Nueva Zelanda</span><span className="hero-title-line hero-title-line-two accent">Descubre tu próxima experiencia</span></h1>
 <p>Compara distintas formas de estudiar inglés en Nueva Zelanda. Descubre packs de corta duración en Auckland, Rotorua y Tauranga, alternativas de estudio y trabajo y experiencias de inglés con actividades para jóvenes. Elige la ciudad y el programa que mejor se adapten a tus objetivos.</p></div></section>
@@ -161,7 +162,7 @@ export default function NuevaZelandaPage() {
 </div>
 </div>
 </div>
-</section><section className="section principal-b-auto-section junior" id="jovenes"><div className="container"><div className="principal-b-auto-layout"><div className="section-head"><span className="eyebrow">PROGRAMAS PARA JÓVENES</span><h2 id="campamentos-experiencias">Inglés y actividades para jóvenes</h2><p>Dale a tu hijo la oportunidad de vivir una experiencia educativa internacional en Nueva Zelanda. Descubre programas que pueden combinar aprendizaje del inglés, actividades culturales, excursiones y convivencia con jóvenes de distintas nacionalidades, en entornos organizados para favorecer su confianza, autonomía y desarrollo personal.</p></div><div className="programmes principal-b-auto-cards principal-b-junior-cards"><a aria-label="Ver programa Inglés y actividades en Rotorua de RELA" className="programme-card" href="/beneficios-empresa/nueva-zelanda/junior/rela/ingles-actividades/"><div className="programme-photo"><img alt="Imagen de Rotorua, Nueva Zelanda; fotografía ilustrativa del destino" loading="lazy" src="/beneficios-empresa/nueva-zelanda/media/rotorua-programa-actualizado.webp" /><span aria-hidden="true" className="programme-go">↗</span></div><div className="programme-copy"><span className="programme-place">ROTORUA · NUEVA ZELANDA</span><h3>Inglés + actividades en Rotorua</h3><p>Programa para jóvenes</p></div></a></div></div></div></section>
+</section><section className="section principal-b-auto-section junior" id="jovenes"><div className="container"><div className="principal-b-auto-layout"><div className="section-head"><span className="eyebrow">PROGRAMAS PARA JÓVENES</span><h2 id="campamentos-experiencias">Inglés y actividades para jóvenes</h2><p>Dale a tu hijo la oportunidad de vivir una experiencia educativa internacional en Nueva Zelanda. Descubre programas que pueden combinar aprendizaje del inglés, actividades culturales, excursiones y convivencia con jóvenes de distintas nacionalidades, en entornos organizados para favorecer su confianza, autonomía y desarrollo personal.</p></div><div className="programmes principal-b-auto-cards principal-b-junior-cards"><Link aria-label="Ver programa Inglés y actividades en Rotorua de RELA" className="programme-card" href="/beneficios-empresa/nueva-zelanda/junior/rela/ingles-actividades" prefetch={false}><div className="programme-photo"><img alt="Imagen de Rotorua, Nueva Zelanda; fotografía ilustrativa del destino" loading="lazy" src="/beneficios-empresa/nueva-zelanda/media/rotorua-programa-actualizado.webp" /><span aria-hidden="true" className="programme-go">↗</span></div><div className="programme-copy"><span className="programme-place">ROTORUA · NUEVA ZELANDA</span><h3>Inglés + actividades en Rotorua</h3><p>Programa para jóvenes</p></div></Link></div></div></div></section>
 </main><footer className="site-footer" id="contacto">
 <div className="container footer-grid">
 <div className="footer-brand">

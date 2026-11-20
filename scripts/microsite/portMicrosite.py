@@ -152,16 +152,49 @@ def _style_to_jsx(value):
     return "{{" + ", ".join(out) + "}}"
 
 
+def _internal_href(url):
+    """Return the normalised route for an in-app link, or None.
+
+    Only same-origin paths qualify. Anchors, external URLs, mail and phone
+    links stay as plain <a>. The trailing slash is dropped because the app runs
+    with `trailingSlash: false`, where a link ending in "/" costs a redirect on
+    every navigation.
+    """
+    if not url or not url.startswith("/") or url.startswith("//"):
+        return None
+    path, _, rest = url.partition("#")
+    if not path:
+        return None
+    if len(path) > 1 and path.endswith("/"):
+        path = path.rstrip("/") or "/"
+    return path + ("#" + rest if rest else "")
+
+
 class _Converter(HTMLParser):
-    def __init__(self):
+    """Converts published markup to JSX.
+
+    In-app anchors become <Link> so navigation stays client-side; the source is
+    a separate static site, where every link is a full page load.
+    """
+
+    def __init__(self, known_routes=None):
         super().__init__(convert_charrefs=False)
         self.out = []
+        self.anchors = []  # per open <a>: True when emitted as <Link>
+        self.uses_link = False
+        # Routes that exist in the app. Links to anything else keep working but
+        # opt out of prefetch: the source links to pages from later slices, and
+        # prefetching them would fire 404s on every viewport entry.
+        self.known_routes = known_routes
+        self.unknown_targets = set()
 
     def _tag(self, tag, attrs, closed):
         parts = []
         for k, v in attrs:
             name = RENAME.get(k.lower(), k)
-            if v is None or (name in BOOL and v == ""):
+            if isinstance(v, str) and v.startswith("{") and v.endswith("}"):
+                parts.append(f"{name}={v}")  # pre-formed JSX expression
+            elif v is None or (name in BOOL and v == ""):
                 # `hidden=""` is true in HTML but an empty string in JSX, which
                 # type-checks as a string where a boolean is expected.
                 parts.append(f"{name}={{true}}")
@@ -175,6 +208,23 @@ class _Converter(HTMLParser):
         return f'<{tag}{attr}{" />" if closed else ">"}'
 
     def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            href = next((v for k, v in attrs if k.lower() == "href"), None)
+            route = _internal_href(href)
+            if route is not None:
+                rewritten = [
+                    (k, route if k.lower() == "href" else v) for k, v in attrs
+                ]
+                if self.known_routes is not None:
+                    target = route.split("#")[0]
+                    if target not in self.known_routes:
+                        self.unknown_targets.add(target)
+                        rewritten.append(("prefetch", "{false}"))
+                self.anchors.append(True)
+                self.uses_link = True
+                self.out.append(self._tag("Link", rewritten, False))
+                return
+            self.anchors.append(False)
         self.out.append(
             self._tag(SVG_ELEMENTS.get(tag, tag), attrs, tag in VOID or tag in SVG_SELF)
         )
@@ -183,6 +233,10 @@ class _Converter(HTMLParser):
         self.out.append(self._tag(SVG_ELEMENTS.get(tag, tag), attrs, True))
 
     def handle_endtag(self, tag):
+        if tag == "a":
+            as_link = self.anchors.pop() if self.anchors else False
+            self.out.append("</Link>" if as_link else "</a>")
+            return
         if tag not in VOID and tag not in SVG_SELF:
             self.out.append(f"</{SVG_ELEMENTS.get(tag, tag)}>")
 
@@ -220,12 +274,12 @@ def absolutise_assets(html_text, page_path):
     )
 
 
-def html_to_jsx(html_text, drop_selectors=()):
+def html_to_jsx(html_text, drop_selectors=(), known_routes=None):
     body = re.search(r"<body[^>]*>(.*)</body>", html_text, re.S).group(1)
     body = re.sub(r"<script.*?</script>", "", body, flags=re.S)
     body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
     for pattern in drop_selectors:
         body = re.sub(pattern, "", body, flags=re.S)
-    parser = _Converter()
+    parser = _Converter(known_routes)
     parser.feed(body)
-    return "".join(parser.out).strip()
+    return "".join(parser.out).strip(), parser.uses_link, sorted(parser.unknown_targets)
