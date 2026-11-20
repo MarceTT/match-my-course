@@ -1,0 +1,117 @@
+
+.mmc-microsite /* Plantilla unificada de programas junior - solo estas tres páginas */
+.program-card{overflow:hidden; padding:26px!important; border-radius:24px!important; background:#fff!important}
+.mmc-microsite .program-card-top{display:grid!important;grid-template-columns:minmax(230px,35%) minmax(0,1fr)!important;gap:24px!important;align-items:stretch!important}
+.mmc-microsite .program-card-photo{height:250px!important;min-height:0!important;max-height:250px!important;border-radius:20px!important;overflow:hidden!important}
+.mmc-microsite .program-card-photo img{height:100%!important;width:100%!important;object-fit:cover!important}
+.mmc-microsite .program-card-content{min-width:0!important;width:auto!important;padding:0!important}
+.mmc-microsite .program-headline{display:grid!important;grid-template-columns:minmax(0,1fr) 190px!important;align-items:center!important;gap:20px!important}
+.mmc-microsite .program-headline h2{font-size:clamp(25px,2.6vw,36px)!important;line-height:1.14!important;margin:8px 0 12px!important;overflow-wrap:anywhere}
+.mmc-microsite .program-headline p{line-height:1.55!important;font-size:15px!important;margin:0!important}
+.mmc-microsite .price-tag{background:linear-gradient(135deg,#fff0bc,#ffe09a)!important;border-radius:19px!important;padding:22px 12px!important;text-align:center!important;min-width:0!important;box-shadow:none!important}
+.mmc-microsite .price-tag strong{font-size:clamp(29px,3vw,39px)!important;white-space:nowrap;color:#071f4b!important}
+.mmc-microsite .price-tag small, .mmc-microsite .price-tag span{color:#12345f!important}
+.mmc-microsite .programme-dates{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;background:#eaf2ff!important;border-radius:15px!important;padding:16px 12px!important;margin-top:16px!important;gap:8px!important}
+.mmc-microsite .programme-dates span{font-size:14px!important;color:#18325c!important}
+.mmc-microsite .jr-fact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-top:22px}
+.mmc-microsite .jr-fact{display:flex;gap:12px;padding:17px 13px;background:#FFFFFF;border:1px solid #e1e8f0;border-radius:17px;min-height:135px;align-items:flex-start;min-width:0}
+.mmc-microsite .jr-fact-1{background:#FFFFFF}
+.mmc-microsite .jr-fact-icon, .mmc-microsite .jr-detail-icon{display:flex;align-items:center;justify-content:center;flex:none;color:#145595;background:#fff2c8;width:43px;height:43px;border-radius:12px}
+.mmc-microsite .jr-ico{width:27px;height:27px}
+.mmc-microsite .jr-fact-text{min-width:0;display:flex;flex-direction:column;gap:5px}
+.mmc-microsite .jr-fact-label{font-size:13px;font-weight:800;color:#21385d}
+.mmc-microsite .jr-fact strong{font-size:18px;line-height:1.25;color:#08214f;overflow-wrap:anywhere}
+.mmc-microsite .jr-fact span{font-size:12.5px;line-height:1.4;color:#516480}
+.mmc-microsite .jr-accordion{margin-top:22px;border:1px solid #dce5f2;border-radius:15px;overflow:hidden;background:#fafcff}
+.mmc-microsite .jr-accordion summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 20px;font-weight:800;color:#102b54;cursor:pointer;font-size:16px;list-style:none}
+.mmc-microsite .jr-accordion summary::-webkit-details-marker{display:none}
+.mmc-microsite .jr-chevron{font-size:25px;color:#4561e5;transition:transform .2s}
+.mmc-microsite .jr-accordion[open] .jr-chevron{transform:rotate(180deg)}
+.mmc-microsite .jr-accordion-inner{padding:0 19px 20px}
+.mmc-microsite .jr-detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.mmc-microsite .jr-detail{background:#FFFFFF;border:1px solid #e1e8f0;border-radius:15px;padding:16px;min-height:158px}
+.mmc-microsite .jr-detail-icon{width:40px;height:40px;background:#edf5ff;margin-bottom:10px}
+.mmc-microsite .jr-detail:nth-child(2) .jr-detail-icon{color:#16845e;background:#e7f8ef}
+.mmc-microsite .jr-detail:nth-child(4) .jr-detail-icon{color:#c85061;background:#fff0f2}
+.mmc-microsite .jr-detail h3{font-size:16px;margin:0 0 8px!important;color:#0f2c54}
+.mmc-microsite .jr-detail p{font-size:13px;line-height:1.55;margin:0;color:#4c5d78}
+.mmc-microsite .jr-contact{text-align:center;margin-top:22px}
+.mmc-microsite .jr-contact-btn{border:0;background:#092a5e;color:white;padding:14px 26px;border-radius:10px;font-weight:800;font:inherit;cursor:pointer}
+.mmc-microsite .jr-contact-btn:hover{background:#164581}
+.mmc-microsite .jr-max{text-align:center;color:#6b7790;font-size:12px;margin:14px 0 0}
+@media(max-width:1000px){.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .program-headline{grid-template-columns:minmax(0,1fr) 170px!important}}
+@media(max-width:710px){.mmc-microsite .program-card{padding:16px!important}.mmc-microsite .program-card-top{grid-template-columns:1fr!important;gap:15px!important}.mmc-microsite .program-card-photo{height:220px!important;max-height:220px!important}.mmc-microsite .program-headline{grid-template-columns:minmax(0,1fr)!important}.mmc-microsite .price-tag{width:100%;padding:14px!important}.mmc-microsite .programme-dates{grid-template-columns:1fr!important;padding:12px!important}.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mmc-microsite .jr-fact{flex-direction:column;padding:13px;min-height:165px}.mmc-microsite .jr-fact strong{font-size:16px}.mmc-microsite .jr-detail{padding:12px}.mmc-microsite .jr-accordion-inner{padding:0 11px 15px}}
+@media(max-width:390px){.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:1fr}.mmc-microsite .jr-fact{min-height:unset;flex-direction:row}}
+.mmc-microsite /* Formulario modal */
+.contact-dialog{width:min(94vw,560px);max-height:min(92vh,850px);overflow-y:auto;border:0;border-radius:22px;background:#fff;color:#171c2d;box-shadow:0 24px 90px #111b3570;padding:30px 32px 32px}
+.mmc-microsite .contact-dialog::backdrop{background:rgba(17,27,51,.62);backdrop-filter:blur(3px)}
+.mmc-microsite .contact-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+.mmc-microsite .contact-eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:#4863f5;margin:0 0 8px}
+.mmc-microsite .contact-head h2{font-size:clamp(24px,3vw,30px);letter-spacing:-.04em;line-height:1.15;margin:0}
+.mmc-microsite .contact-close{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:0;border-radius:50%;background:#f0f3fa;color:#4d5670;cursor:pointer;font-size:26px;flex-shrink:0}
+.mmc-microsite #contact-description{font-size:15px;line-height:1.55;color:#57617a;margin:16px 0 23px}
+.mmc-microsite .contact-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mmc-microsite .contact-fields label{display:block;font-size:13px;line-height:1.5;font-weight:700;color:#30394f}
+.mmc-microsite .contact-fields label.full{grid-column:1/-1}
+.mmc-microsite .contact-fields input{display:block;width:100%;min-width:0;margin-top:6px;padding:12px 13px;font:inherit;font-size:15px;border:1px solid #cdd5e7;border-radius:10px;background:#fff;color:#171c2d;outline-offset:2px}
+.mmc-microsite .contact-fields input:focus{border-color:#4863f5;outline:2px solid #dce4ff}
+.mmc-microsite .contact-privacy{font-size:12px;line-height:1.55;color:#6e778a;margin:19px 0 10px}
+.mmc-microsite .contact-feedback{font-size:13px;color:#b42318;margin:0 0 8px;min-height:0}
+.mmc-microsite .contact-send{border:0;border-radius:12px;background:#4863f5;color:white;font:inherit;font-weight:800;min-height:49px;padding:12px 22px;width:100%;cursor:pointer}
+.mmc-microsite .contact-send:disabled{opacity:.65;cursor:wait}
+.mmc-microsite .contact-success{text-align:center;padding:18px 0 0}
+.mmc-microsite .contact-success h3{font-size:25px;margin:0 0 10px}
+.mmc-microsite .contact-success p{line-height:1.6;color:#57617a;margin:0 0 24px}
+@media(max-width:550px){.mmc-microsite .contact-dialog{padding:24px 18px}.mmc-microsite .contact-fields{grid-template-columns:1fr;gap:12px}.mmc-microsite .contact-fields label{grid-column:1/-1}}
+.mmc-microsite .contact-dialog [hidden]{display:none!important}
+
+
+.mmc-microsite /* CES Edinburgh: lightweight adaptations to the exact Sandford Park fiche system. */
+body.ces-edinburgh{background:linear-gradient(180deg,#f6f9ff 0%,#fff 47%,#f8faff 100%)}
+.mmc-microsite .ces-edinburgh .hero{min-height:490px;background:linear-gradient(rgba(9,33,71,.58),rgba(9,33,71,.58)),url('/beneficios-empresa/escocia/ces-edinburgh-junior-cover.webp') center/cover no-repeat}
+.mmc-microsite .ces-edinburgh .hero-overlay{background:linear-gradient(90deg,rgba(8,27,58,.26) 0%,rgba(8,27,58,.12) 44%,rgba(8,27,58,.06) 100%)}
+.mmc-microsite .ces-edinburgh .hero:before{content:'';position:absolute;right:-9%;top:-45%;width:min(580px,75vw);aspect-ratio:1;border-radius:54% 46% 36% 64%;background:rgba(198,222,255,.16);transform:rotate(20deg);pointer-events:none}
+.mmc-microsite .ces-edinburgh .hero:after{content:'';position:absolute;right:11%;bottom:-170px;width:300px;height:300px;border-radius:53% 47% 58% 42%;background:rgba(165,228,230,.11);pointer-events:none}
+.mmc-microsite .ces-edinburgh .hero-copy{z-index:1;max-width:900px}
+.mmc-microsite .ces-edinburgh .hero h1{font-size:clamp(38px,5vw,61px);line-height:1.13}
+.mmc-microsite .ces-edinburgh .hero p{max-width:730px}
+.mmc-microsite .ces-edinburgh .intro{padding-top:64px;padding-bottom:24px}
+.mmc-microsite .ces-edinburgh .intro>div{max-width:920px}
+.mmc-microsite .ces-edinburgh .program-list{padding-bottom:65px}
+.mmc-microsite .ces-edinburgh .program-card{margin:0}
+.mmc-microsite .ces-edinburgh .program-card-photo{background:#e8eef8;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.mmc-microsite .ces-edinburgh .program-card-photo:before{content:none}
+.mmc-microsite .ces-edinburgh .programme-graphic{display:none}
+.mmc-microsite .ces-edinburgh .program-card-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.mmc-microsite .ces-edinburgh .program-headline{grid-template-columns:minmax(0,1fr) 190px!important}
+.mmc-microsite .ces-edinburgh .program-card-content{justify-content:center}
+.mmc-microsite .ces-edinburgh .program-card-content>.kicker{margin-bottom:10px}
+.mmc-microsite .ces-edinburgh .jr-fact{min-height:104px!important;align-items:center!important}
+.mmc-microsite .ces-edinburgh .jr-fact-icon, .mmc-microsite .ces-edinburgh .jr-detail-icon{height:42px!important;width:42px!important;min-height:42px;min-width:42px;flex:none}
+.mmc-microsite .ces-edinburgh svg.jr-ico{width:22px!important;height:22px!important;min-width:22px;min-height:22px;max-width:22px;max-height:22px;display:block}
+.mmc-microsite .ces-edinburgh .jr-fact-icon{background:#fff2ca}
+.mmc-microsite .ces-edinburgh .jr-detail{min-height:0!important;padding:14px!important}
+.mmc-microsite .ces-edinburgh .jr-detail-icon{background:#eaf3ff}
+.mmc-microsite .ces-edinburgh .jr-detail:nth-child(2) .jr-detail-icon{background:#e7f8ef;color:#16845e}
+.mmc-microsite .ces-edinburgh .jr-detail:nth-child(4) .jr-detail-icon{background:#fff0f2;color:#c85061}
+.mmc-microsite .ces-edinburgh .jr-fact-text{gap:1px}
+.mmc-microsite .ces-edinburgh .jr-fact-label{font-size:13px}
+.mmc-microsite .ces-edinburgh .jr-accordion-inner{padding-bottom:18px}
+.mmc-microsite .ces-edinburgh .jr-accordion{margin-top:17px}
+.mmc-microsite .ces-edinburgh .jr-contact{margin-top:18px}
+.mmc-microsite .ces-edinburgh .ces-note{font-size:13px;color:#63728d;line-height:1.55;margin:16px 1px 0}
+.mmc-microsite .ces-edinburgh .closing{margin-bottom:40px}
+.mmc-microsite .ces-edinburgh .closing .jr-contact-btn{white-space:nowrap}
+@media(max-width:710px){.mmc-microsite .ces-edinburgh .hero{min-height:440px}.mmc-microsite .ces-edinburgh .hero-copy{padding:65px 25px}.mmc-microsite .ces-edinburgh .program-card-top{grid-template-columns:1fr!important}.mmc-microsite .ces-edinburgh .program-card-photo{height:190px!important;max-height:190px!important}.mmc-microsite .ces-edinburgh .jr-fact{min-height:98px!important;flex-direction:row!important}.mmc-microsite .ces-edinburgh .jr-fact-grid, .mmc-microsite .ces-edinburgh .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .ces-edinburgh .jr-fact-icon{height:38px!important;width:38px!important;min-height:38px;min-width:38px}.mmc-microsite .ces-edinburgh .closing .jr-contact-btn{white-space:normal}}
+@media(max-width:470px){.mmc-microsite .ces-edinburgh .jr-fact-grid, .mmc-microsite .ces-edinburgh .jr-detail-grid{grid-template-columns:1fr}.mmc-microsite .ces-edinburgh .jr-detail{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:10px}.mmc-microsite .ces-edinburgh .jr-detail-icon{margin:0}.mmc-microsite .ces-edinburgh .intro{padding-top:45px}.mmc-microsite .ces-edinburgh .hero h1{font-size:35px}}
+
+.mmc-microsite /* CES Edinburgh 2027: identical structural price, .mmc-microsite four facts and four detail cards. */
+.ces-edinburgh .ces-group-label{display:inline-flex;align-items:center;align-self:flex-start;margin:0 0 12px;padding:5px 11px;border:1px solid #dbe5f4;border-radius:999px;background:#eff4ff;color:#244878;font-size:12px;font-weight:800;line-height:1.3}
+.mmc-microsite .ces-edinburgh .program-headline{grid-template-columns:minmax(0,1fr) 190px!important;align-items:start!important}
+.mmc-microsite .ces-edinburgh .price-tag{align-self:start!important}
+.mmc-microsite .ces-edinburgh .ces-conditions-note{max-width:920px;margin:12px auto 0;text-align:center;color:#61718b;font-size:12px;line-height:1.55}
+.mmc-microsite .ces-edinburgh .jr-fact{align-items:flex-start!important;min-height:135px!important}
+.mmc-microsite .ces-edinburgh .jr-fact-text{gap:5px}
+.mmc-microsite .ces-edinburgh .jr-detail{min-height:158px!important}
+.mmc-microsite .ces-edinburgh .programme-dates.compact{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+@media(max-width:710px){.mmc-microsite .ces-edinburgh .program-headline{grid-template-columns:minmax(0,1fr)!important}.mmc-microsite .ces-edinburgh .jr-fact{min-height:0!important}.mmc-microsite .ces-edinburgh .jr-detail{min-height:0!important}.mmc-microsite .ces-edinburgh .programme-dates.compact{grid-template-columns:1fr!important}}
