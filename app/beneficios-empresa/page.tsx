@@ -4,6 +4,17 @@ import Link from "next/link";
 import MicrositeDialogs from "./components/MicrositeDialogs";
 import PartnersMarquee from "./components/PartnersMarquee";
 
+// This landing's own stylesheets. They live here rather than in the segment
+// layout, where they would also style every page beneath it.
+import "./styles/style.css";
+import "./styles/partners-marquee.css";
+import "./styles/why-matchmycourse.css";
+import "./styles/conoce-matchmycourse.css";
+import "./styles/como-funciona-matchmycourse.css";
+import "./styles/empresas-colegios.css";
+import "./styles/portada-fondo-unificado.css";
+import "./styles/portada-fondo-estilo-irlanda.css";
+
 /**
  * /beneficios-empresa — the microsite landing.
  *
