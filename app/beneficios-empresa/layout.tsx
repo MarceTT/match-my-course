@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 
 import { dmSans } from "@/app/ui/fonts";
 
-// The microsite ships its own stylesheets. They are imported here so they load
-// only for this route segment, and so the pages can reproduce the source markup
-// class-for-class instead of being re-approximated in Tailwind.
+// Only the shared reset belongs here. Styles imported by a layout apply to
+// EVERY route under it, so the landing's stylesheets used to reach all 21
+// microsite pages and override their own: `style.css` sets
+// `.hero h1 { color:#182445 }`, which turned the white hero headings on the
+// programme pages dark. In the source each page loads only its own sheets, so
+// each page imports its own here too.
 //
 // Every selector in them is scoped under `.mmc-microsite` (see the wrapper
 // below). Without that scope the two sets of styles collide on generic class
@@ -13,14 +16,6 @@ import { dmSans } from "@/app/ui/fonts";
 // and flattened every page margin. Eight files outside this segment use
 // Tailwind's container, so disabling it was not an option — scoping fixes the
 // collision in both directions and keeps these sheets from leaking out.
-import "./styles/style.css";
-import "./styles/partners-marquee.css";
-import "./styles/why-matchmycourse.css";
-import "./styles/conoce-matchmycourse.css";
-import "./styles/como-funciona-matchmycourse.css";
-import "./styles/empresas-colegios.css";
-import "./styles/portada-fondo-unificado.css";
-import "./styles/portada-fondo-estilo-irlanda.css";
 // Last, so it wins: corrections against the root layout's critical CSS. Kept
 // out of the ported sheets, which the port script rewrites wholesale.
 import "./styles/microsite-overrides.css";

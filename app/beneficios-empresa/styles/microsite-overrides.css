@@ -42,3 +42,23 @@
 /* Sections whose own sheet sets a background keep it; this only neutralises the
  * inherited grey. Backgrounds declared by the source sheets still apply, since
  * `.mmc-microsite .partners-marquee-section` outranks `.mmc-microsite section`. */
+
+/* Tailwind Preflight, which the source does not have, resets two things the
+ * microsite relies on. Both were found by comparing resolved styles against the
+ * published pages, not by reading CSS.
+ *
+ * 1. `h1..h6 { font-weight: inherit }` — the source leaves headings at the
+ *    browser's bold. Every programme page rendered its hero heading at 400
+ *    where the source shows 700. Kept at element specificity (0,1,1) so the
+ *    source's own rules, such as `.mmc-microsite .hero h1 { font-weight: 800 }`,
+ *    still win. */
+.mmc-microsite :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: bold;
+}
+
+/* 2. Tailwind's `.container` also sets responsive `max-width` values, which the
+ *    source's `.container` never does — it is width-only. Scoping fixed the
+ *    width collision but left the max-width capping layouts at 1536px. */
+.mmc-microsite .container {
+  max-width: none;
+}
