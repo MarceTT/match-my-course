@@ -35,6 +35,10 @@ const PAGES = [
   "inglaterra/junior/emerald-cultural-institute/rose-bruford-college",
   "inglaterra/junior/emerald-cultural-institute/anglia-ruskin-university/medicina",
   "escocia/junior/centre-of-english-studies/ingles-actividades-edimburgo",
+  "canada/familia/centre-of-english-studies/ingles-padre-hijo",
+  "canada/junior/centre-of-english-studies/ingles-actividades",
+  "canada/junior/centre-of-english-studies/ingles-liderazgo",
+  "nueva-zelanda/junior/rela/ingles-actividades",
 ];
 
 /** Runs in the page: resolved styles for elements that carry the design. */
