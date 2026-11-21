@@ -1,5 +1,5 @@
-.mmc-microsite /* Selector de moneda y encabezado fijo — MatchMyCourse */
-html{scroll-padding-top:95px}
+
+.mmc-microsite{scroll-padding-top:95px}
 .mmc-microsite .site-header.container{position:sticky!important;top:0;z-index:9000!important;background:#fff!important;isolation:isolate;box-shadow:0 2px 13px rgba(16,42,80,.08)}
 .mmc-microsite .site-header.container:before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100vw;background:#fff;box-shadow:0 2px 13px rgba(16,42,80,.08)}
 .mmc-microsite .site-header.container .brand{position:relative;z-index:1}

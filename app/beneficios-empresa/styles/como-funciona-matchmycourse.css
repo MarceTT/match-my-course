@@ -1,5 +1,5 @@
-.mmc-microsite /* Sección independiente: Tu próxima experiencia en 3 pasos */
-.how-mmc-section{position:relative;background:linear-gradient(180deg,#fff 0%,#f5f8ff 100%);padding:92px 0 100px;isolation:isolate}
+
+.mmc-microsite .how-mmc-section{position:relative;background:linear-gradient(180deg,#fff 0%,#f5f8ff 100%);padding:92px 0 100px;isolation:isolate}
 .mmc-microsite .how-mmc-section .how-mmc-head{text-align:center;max-width:860px;margin:0 auto 46px}
 .mmc-microsite .how-mmc-section .how-mmc-head .eyebrow{display:block;font-family:'DM Sans',sans-serif;color:#4863f5;font-size:12px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-bottom:15px}
 .mmc-microsite .how-mmc-section .how-mmc-head h2{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;color:#15315b;font-size:clamp(28px,3.1vw,39px);font-weight:800;letter-spacing:-.044em;line-height:1.2;margin:0}

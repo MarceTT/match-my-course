@@ -1,5 +1,5 @@
-.mmc-microsite /* CSS original de las promociones, .mmc-microsite con namespace para Inglaterra. */
-.inglaterra-b-page .england-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+
+.mmc-microsite .inglaterra-b-page .england-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
 .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-card{background:white;border:1px solid #e7ebf7;border-radius:23px;overflow:hidden;box-shadow:0 8px 26px #1a2c5015;transition:transform .23s ease,box-shadow .23s ease}
 .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-card:hover{transform:translateY(-3px);box-shadow:0 13px 32px #1a2c5020}
 .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-card[hidden]{display:none!important}
@@ -67,8 +67,8 @@
 .mmc-microsite .inglaterra-b-page .england-ces-offers .currency-caption em{ font-style: italic; }
 .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-prices.canada-three-prices{ grid-template-columns: repeat(3,minmax(0,1fr)); }
 @media (max-width:500px){.mmc-microsite .inglaterra-b-page .england-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .inglaterra-b-page .england-ces-offers .compact-prices.canada-three-prices{grid-template-columns:repeat(3,minmax(0,1fr));}}
-.mmc-microsite /* El componente reutiliza los estilos exactos de canada.css, .mmc-microsite aislados de otras páginas. */
-.inglaterra-b-page #adultos .england-ces-offers{width:100%;max-width:100%;font-family:'DM Sans',sans-serif;color:#203554;}
+
+.mmc-microsite .inglaterra-b-page #adultos .england-ces-offers{width:100%;max-width:100%;font-family:'DM Sans',sans-serif;color:#203554;}
 .mmc-microsite .inglaterra-b-page #adultos .england-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;}
 .mmc-microsite .inglaterra-b-page #adultos .england-ces-offers .compact-card{min-width:0;}
 .mmc-microsite .inglaterra-b-page #adultos .england-ces-offers .compact-cover{max-width:none;object-fit:cover;}

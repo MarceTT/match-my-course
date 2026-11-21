@@ -1,0 +1,8 @@
+/* Styles the source ships in a <style> block in the page <head>.
+ *
+ * Extracted into a file because porting reads the <body> only. Scoped like
+ * every other microsite sheet. Re-extract with
+ * `scripts/microsite/extractInlineStyles.py`.
+ */
+
+.mmc-microsite #jovenes .auckland-junior-photo{min-height:190px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at 85% 25%,#dff7f5 0%,transparent 49%),radial-gradient(ellipse at 10% 85%,#fff4cc 0%,transparent 45%),linear-gradient(130deg,#dfeaff,#f4f7ff)}.mmc-microsite #jovenes .auckland-junior-photo:before{content:"";width:210px;height:145px;position:absolute;left:-35px;bottom:-65px;border-radius:55% 45% 60% 40%;background:rgba(72,99,245,.12)}.mmc-microsite #jovenes .auckland-photo-city{position:relative;z-index:1;color:#15315b;font-family:"Plus Jakarta Sans",sans-serif;font-size:clamp(22px,2.8vw,29px);font-weight:800;letter-spacing:-.03em;text-align:center}.mmc-microsite #jovenes .auckland-photo-city small{display:block;font-size:11px;letter-spacing:.15em;color:#4863f5;margin-top:5px}.mmc-microsite #jovenes .auckland-junior-photo .programme-go{z-index:2}

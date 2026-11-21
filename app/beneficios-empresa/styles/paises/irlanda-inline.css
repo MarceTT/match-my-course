@@ -1,0 +1,13 @@
+/* Styles the source ships in a <style> block in the page <head>.
+ *
+ * Extracted into a file because porting reads the <body> only. Scoped like
+ * every other microsite sheet. Re-extract with
+ * `scripts/microsite/extractInlineStyles.py`.
+ */
+
+
+.mmc-microsite .irlanda-seo-work-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:20px;align-items:center}
+.mmc-microsite .irlanda-seo-work-links a{display:inline-flex;align-items:center;color:#2450ba;text-decoration:underline;text-underline-offset:3px;font-size:14px;font-weight:700;line-height:1.4}
+.mmc-microsite .irlanda-seo-work-links a:hover{color:#15315b}
+.mmc-microsite .irlanda-seo-work-links a:focus-visible{outline:2px solid #4863f5;outline-offset:4px}
+@media(max-width:650px){.mmc-microsite .irlanda-seo-work-links{display:flex;flex-direction:column;align-items:flex-start;gap:10px}}

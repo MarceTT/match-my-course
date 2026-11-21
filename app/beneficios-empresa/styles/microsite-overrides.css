@@ -23,13 +23,23 @@
  * Scoped to the wrapper, so nothing here escapes the segment.
  */
 
-.mmc-microsite header.site-header {
+/* Every header in the segment, not just the landing's `.site-header`: the
+ * programme pages use `header.navbar`, which kept the layout's white bar and
+ * drop shadow and showed as a boxed strip above the hero. */
+.mmc-microsite header {
   background-color: transparent;
   box-shadow: none;
-  position: relative;
+  /* `static`, the browser default, not `relative`: this only has to undo the
+   * layout's `position: sticky`. The landing's own sheet sets
+   * `.site-header { position: relative; z-index: 2 }` and still wins, so the
+   * headers that need stacking keep it and the rest match the source. */
+  position: static;
   top: auto;
-  z-index: 2;
+  z-index: auto;
 }
+
+/* Headers whose own sheet paints them keep it — the landing's bar is white by
+ * design — because `.mmc-microsite .site-header` outranks `.mmc-microsite header`. */
 
 .mmc-microsite section {
   display: block;
@@ -56,9 +66,17 @@
   font-weight: bold;
 }
 
-/* 2. Tailwind's `.container` also sets responsive `max-width` values, which the
- *    source's `.container` never does — it is width-only. Scoping fixed the
- *    width collision but left the max-width capping layouts at 1536px. */
+/* 2. Tailwind's `.container` also sets responsive `max-width` values and side
+ *    padding, which the source's `.container` never does — it is width-only.
+ *    Scoping fixed the width collision but left both of these in place.
+ *
+ *    The padding was the expensive one: it shrank the usable width by 48px on
+ *    every page, and the offerings grid sizes its columns from that width. At
+ *    1160px it fits four cards, at 1112px only three — so the fourth card
+ *    wrapped onto a row of its own. Same cause behind every other width that
+ *    came up 24-48px short against the source. */
 .mmc-microsite .container {
   max-width: none;
+  padding-left: 0;
+  padding-right: 0;
 }

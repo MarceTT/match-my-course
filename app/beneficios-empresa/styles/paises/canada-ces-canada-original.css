@@ -1,5 +1,5 @@
-.mmc-microsite /* CSS original de las promociones, .mmc-microsite con namespace para Canadá. */
-.canada-b-page .canada-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+
+.mmc-microsite .canada-b-page .canada-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
 .mmc-microsite .canada-b-page .canada-ces-offers .compact-card{background:white;border:1px solid #e7ebf7;border-radius:23px;overflow:hidden;box-shadow:0 8px 26px #1a2c5015;transition:transform .23s ease,box-shadow .23s ease}
 .mmc-microsite .canada-b-page .canada-ces-offers .compact-card:hover{transform:translateY(-3px);box-shadow:0 13px 32px #1a2c5020}
 .mmc-microsite .canada-b-page .canada-ces-offers .compact-card[hidden]{display:none!important}
@@ -67,8 +67,8 @@
 .mmc-microsite .canada-b-page .canada-ces-offers .currency-caption em{ font-style: italic; }
 .mmc-microsite .canada-b-page .canada-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .canada-b-page .canada-ces-offers .compact-prices.canada-three-prices{ grid-template-columns: repeat(3,minmax(0,1fr)); }
 @media (max-width:500px){.mmc-microsite .canada-b-page .canada-ces-offers .compact-prices.nz-three-prices, .mmc-microsite .canada-b-page .canada-ces-offers .compact-prices.canada-three-prices{grid-template-columns:repeat(3,minmax(0,1fr));}}
-.mmc-microsite /* El componente reutiliza los estilos exactos de canada.css, .mmc-microsite aislados de otras páginas. */
-.canada-b-page #adultos .canada-ces-offers{width:100%;max-width:100%;font-family:'DM Sans',sans-serif;color:#203554;}
+
+.mmc-microsite .canada-b-page #adultos .canada-ces-offers{width:100%;max-width:100%;font-family:'DM Sans',sans-serif;color:#203554;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-card{min-width:0;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-cover{max-width:none;object-fit:cover;}
@@ -80,8 +80,8 @@
 @media(max-width:760px){.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-grid{grid-template-columns:minmax(0,1fr);}.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-photo img{height:240px;}}
 @media(max-width:530px){.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-photo img{height:170px;}}
 
-.mmc-microsite /* Galería original de CES Canadá */
-.canada-b-page .media-dialog{width:min(1020px,calc(100% - 32px));max-height:92vh;border:0;border-radius:24px;box-shadow:0 35px 110px #0a163e66;padding:20px;background:#fff;color:#16203b}
+
+.mmc-microsite .canada-b-page .media-dialog{width:min(1020px,calc(100% - 32px));max-height:92vh;border:0;border-radius:24px;box-shadow:0 35px 110px #0a163e66;padding:20px;background:#fff;color:#16203b}
 .mmc-microsite .canada-b-page .media-dialog::backdrop{background:rgba(11,19,45,.75);backdrop-filter:blur(5px)}
 .mmc-microsite .canada-b-page .modal-top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:15px}
 .mmc-microsite .canada-b-page .modal-top h2{font-size:clamp(20px,3vw,28px);margin:4px 0}
@@ -105,8 +105,8 @@
 .mmc-microsite .canada-b-page .video-placeholder strong{font-size:18px;color:#9c353d}
 .mmc-microsite .canada-b-page .video-placeholder span{max-width:520px;line-height:1.6;font-size:14px;color:#6c6d7b}
 
-.mmc-microsite /* Canadá B: sólo estas dos ofertas; igual anchura y altura visual. */
-.canada-b-page #adultos .canada-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;width:100%;}
+
+.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;width:100%;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-card{height:100%;display:flex;flex-direction:column;min-width:0;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-content{flex:1;display:flex;flex-direction:column;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .program-details{margin-top:auto;}
@@ -118,8 +118,8 @@
 @media(max-width:650px){.mmc-microsite .canada-b-page #elige .principal-b-categories{grid-template-columns:minmax(0,1fr);gap:18px;}}
 @media(max-width:530px){.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-photo img{height:170px}}
 
-.mmc-microsite /* Packs de Canadá: la ficha abierta crece de manera independiente de la ficha vecina. */
-.canada-b-page #adultos .canada-ces-offers .compact-grid{align-items:start;}
+
+.mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-grid{align-items:start;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-grid > .compact-card{height:auto!important;align-self:start;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .compact-content{flex:0 1 auto;}
 .mmc-microsite .canada-b-page #adultos .canada-ces-offers .program-details{margin-top:0;}

@@ -47,13 +47,33 @@ const probe = () => {
     for (const prop of props) out[prop] = style[prop];
     return out;
   };
+
+  // Every grid and flex row with real content, keyed by class. Column counts
+  // and widths are where layout breaks show: a container 48px narrower than
+  // the source silently drops a four-card row to three.
+  const layouts = {};
+  for (const el of document.querySelectorAll("*")) {
+    const style = getComputedStyle(el);
+    if (style.display !== "grid" && style.display !== "flex") continue;
+    if (el.children.length < 3) continue;
+    const key = (el.className || "").toString().split(" ").slice(0, 2).join(".");
+    if (!key || layouts[key]) continue;
+    layouts[key] = {
+      columns: style.gridTemplateColumns,
+      width: Math.round(el.getBoundingClientRect().width),
+      children: el.children.length,
+    };
+  }
+
   return {
     h1: read("h1", ["color", "fontSize", "fontWeight", "textAlign"]),
     hero: read(".hero", ["minHeight", "backgroundColor", "color", "padding"]),
     heroCopy: read(".hero-copy", ["color", "maxWidth"]),
     firstSection: read("section", ["backgroundColor", "display", "minHeight"]),
-    container: read(".container", ["width", "maxWidth", "marginLeft"]),
+    container: read(".container", ["width", "maxWidth", "paddingLeft", "marginLeft"]),
+    header: read("header", ["backgroundColor", "boxShadow", "position", "width"]),
     h2: read("h2", ["color", "fontSize"]),
+    layouts,
   };
 };
 
@@ -80,6 +100,7 @@ for (const slug of PAGES) {
 
   const diffs = [];
   for (const key of Object.keys(theirs)) {
+    if (key === "layouts") continue;
     const mine = ours[key];
     const source = theirs[key];
     if (!source) continue;
@@ -91,6 +112,28 @@ for (const slug of PAGES) {
       if (mine[prop] !== source[prop]) {
         diffs.push(`${key}.${prop}: ours=${mine[prop]} source=${source[prop]}`);
       }
+    }
+  }
+
+  // The source's Netlify contact form is replaced by our own dialog, so its
+  // internals are absent by design and are not a difference to report.
+  const REPLACED = /^(contact-fields|contact-top|form-feedback)/;
+
+  for (const [key, source] of Object.entries(theirs.layouts)) {
+    if (REPLACED.test(key)) continue;
+    const mine = ours.layouts[key];
+    if (!mine) {
+      diffs.push(`layout ${key}: missing on our page`);
+      continue;
+    }
+    if (mine.columns !== source.columns) {
+      const count = (value) => (value === "none" ? "none" : value.split(" ").length);
+      diffs.push(
+        `layout ${key}: ours ${count(mine.columns)} column(s) / ${mine.width}px, ` +
+          `source ${count(source.columns)} / ${source.width}px`
+      );
+    } else if (mine.width !== source.width) {
+      diffs.push(`layout ${key}: ours ${mine.width}px, source ${source.width}px`);
     }
   }
 

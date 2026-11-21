@@ -4,6 +4,7 @@ import Link from "next/link";
 import MicrositeDialogs from "@/app/beneficios-empresa/components/MicrositeDialogs";
 
 import "@/app/beneficios-empresa/styles/programas/inglaterra_junior_emerald-cultural-institute_anglia-ruskin-university_medicina_style.css";
+import "@/app/beneficios-empresa/styles/programas/inglaterra_junior_emerald-cultural-institute_anglia-ruskin-university_medicina_inline.css";
 
 /**
  * /beneficios-empresa/inglaterra/junior/emerald-cultural-institute/anglia-ruskin-university/medicina — ported from the published source, class for class, against its own

@@ -1,0 +1,22 @@
+/* Styles the source ships in a <style> block in the page <head>.
+ *
+ * Extracted into a file because porting reads the <body> only. Scoped like
+ * every other microsite sheet. Re-extract with
+ * `scripts/microsite/extractInlineStyles.py`.
+ */
+
+
+.mmc-microsite #jovenes .principal-b-junior-cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:22px!important}
+.mmc-microsite #jovenes .canada-junior-link{display:flex!important;min-width:0;max-width:none!important;text-decoration:none;color:inherit}
+.mmc-microsite #jovenes .canada-junior-cover{display:grid;place-items:center;min-height:195px;background:linear-gradient(145deg,#eaf1ff,#dff7f5 78%,#f4f7ff);position:relative}
+.mmc-microsite #jovenes .canada-junior-cover:before{content:'';position:absolute;width:55%;aspect-ratio:1;border-radius:45% 55% 70% 30%;background:rgba(72,99,245,.13);transform:rotate(25deg)}
+.mmc-microsite #jovenes .canada-junior-cover-label{position:relative;z-index:1;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:#15315b;font-size:clamp(16px,1.6vw,21px);padding:24px;text-align:center}
+.mmc-microsite #jovenes .programme-go{font-size:18px;color:#15315b}
+@media(max-width:900px){.mmc-microsite #jovenes .principal-b-junior-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:600px){.mmc-microsite #jovenes .principal-b-junior-cards{grid-template-columns:1fr!important}}
+
+
+.mmc-microsite #jovenes .canada-junior-cover-ingles-actividades{background:#eaf1ff url('/beneficios-empresa/canada/junior/media/portada-ingles-actividades.webp') center/cover no-repeat}
+.mmc-microsite #jovenes .canada-junior-cover-ingles-liderazgo{background:#eaf1ff url('/beneficios-empresa/canada/junior/media/portada-liderazgo.webp') center/cover no-repeat}
+.mmc-microsite #jovenes .canada-junior-cover-ingles-padre-hijo{background:#eaf1ff url('/beneficios-empresa/canada/junior/media/portada-padre-hijo.webp') center/cover no-repeat}
+.mmc-microsite #jovenes .canada-junior-cover::before, .mmc-microsite #jovenes .canada-junior-cover-label{display:none}
