@@ -180,7 +180,38 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/ingles-golf-naas',
-        destination: '/beneficios-empresa/ingles-golf-naas',
+        destination: '/beneficios-empresa/irlanda/avanti-language-institute/ingles-golf',
+        permanent: true,
+      },
+      // The five programme pages first published as flat URLs now live in the
+      // source site's nested hierarchy. Same programmes, same content — only the
+      // path changed, so these are permanent and carry any existing links and
+      // search ranking across. The flat page files are removed: a route and a
+      // redirect cannot share a path, and the route would win.
+      {
+        source: '/beneficios-empresa/ingles-golf-naas',
+        destination: '/beneficios-empresa/irlanda/avanti-language-institute/ingles-golf',
+        permanent: true,
+      },
+      {
+        source: '/beneficios-empresa/ingles-golf-cork',
+        destination: '/beneficios-empresa/irlanda/junior/cork-english-college/ingles-golf',
+        permanent: true,
+      },
+      {
+        source: '/beneficios-empresa/ingles-futbol-valencia',
+        destination: '/beneficios-empresa/irlanda/junior/cork-english-college/ingles-futbol',
+        permanent: true,
+      },
+      {
+        source: '/beneficios-empresa/ingles-rugby-munster',
+        destination: '/beneficios-empresa/irlanda/junior/cork-english-college/ingles-rugby',
+        permanent: true,
+      },
+      {
+        source: '/beneficios-empresa/sandford-park-school',
+        destination:
+          '/beneficios-empresa/irlanda/junior/emerald-cultural-institute/sandford-park-school',
         permanent: true,
       },
       // Legacy URL redirects
