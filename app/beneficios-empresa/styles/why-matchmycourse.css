@@ -1,5 +1,5 @@
-.mmc-microsite /* Página de inicio: beneficios de MatchMyCourse. No afecta a otras páginas. */
-.why-mmc-section{position:relative;isolation:isolate;padding:99px 0 103px;overflow:hidden;background:transparent}
+
+.mmc-microsite .why-mmc-section{position:relative;isolation:isolate;padding:99px 0 103px;overflow:hidden;background:transparent}
 .mmc-microsite .why-mmc-section::before{content:"";position:absolute;z-index:-2;pointer-events:none;inset:22px -3% 0;background:radial-gradient(ellipse 490px 330px at 0% 22%,rgba(137,164,255,.24),transparent 85%),radial-gradient(ellipse 430px 350px at 101% 62%,rgba(144,167,252,.27),transparent 85%),linear-gradient(145deg,#eaf1ff 0%,#f2f5ff 51%,#eaf1ff 100%);border-radius:52% 48% 0 0 / 67px 55px 0 0}
 .mmc-microsite .why-mmc-section::after{content:"";position:absolute;z-index:-1;pointer-events:none;inset:auto -7% -1px;height:56px;background:linear-gradient(0deg,#fff 0%,rgba(255,255,255,0) 100%)}
 .mmc-microsite .why-mmc-inner{position:relative;z-index:1}

@@ -1,6 +1,6 @@
 
-.mmc-microsite /* Plantilla unificada de programas junior - solo estas tres páginas */
-.program-card{overflow:hidden; padding:26px!important; border-radius:24px!important; background:#fff!important}
+
+.mmc-microsite .program-card{overflow:hidden; padding:26px!important; border-radius:24px!important; background:#fff!important}
 .mmc-microsite .program-card-top{display:grid!important;grid-template-columns:minmax(230px,35%) minmax(0,1fr)!important;gap:24px!important;align-items:stretch!important}
 .mmc-microsite .program-card-photo{height:250px!important;min-height:0!important;max-height:250px!important;border-radius:20px!important;overflow:hidden!important}
 .mmc-microsite .program-card-photo img{height:100%!important;width:100%!important;object-fit:cover!important}
@@ -42,8 +42,8 @@
 @media(max-width:1000px){.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .program-headline{grid-template-columns:minmax(0,1fr) 170px!important}}
 @media(max-width:710px){.mmc-microsite .program-card{padding:16px!important}.mmc-microsite .program-card-top{grid-template-columns:1fr!important;gap:15px!important}.mmc-microsite .program-card-photo{height:220px!important;max-height:220px!important}.mmc-microsite .program-headline{grid-template-columns:minmax(0,1fr)!important}.mmc-microsite .price-tag{width:100%;padding:14px!important}.mmc-microsite .programme-dates{grid-template-columns:1fr!important;padding:12px!important}.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mmc-microsite .jr-fact{flex-direction:column;padding:13px;min-height:165px}.mmc-microsite .jr-fact strong{font-size:16px}.mmc-microsite .jr-detail{padding:12px}.mmc-microsite .jr-accordion-inner{padding:0 11px 15px}}
 @media(max-width:390px){.mmc-microsite .jr-fact-grid, .mmc-microsite .jr-detail-grid{grid-template-columns:1fr}.mmc-microsite .jr-fact{min-height:unset;flex-direction:row}}
-.mmc-microsite /* Formulario modal */
-.contact-dialog{width:min(94vw,560px);max-height:min(92vh,850px);overflow-y:auto;border:0;border-radius:22px;background:#fff;color:#171c2d;box-shadow:0 24px 90px #111b3570;padding:30px 32px 32px}
+
+.mmc-microsite .contact-dialog{width:min(94vw,560px);max-height:min(92vh,850px);overflow-y:auto;border:0;border-radius:22px;background:#fff;color:#171c2d;box-shadow:0 24px 90px #111b3570;padding:30px 32px 32px}
 .mmc-microsite .contact-dialog::backdrop{background:rgba(17,27,51,.62);backdrop-filter:blur(3px)}
 .mmc-microsite .contact-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
 .mmc-microsite .contact-eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:#4863f5;margin:0 0 8px}
@@ -66,8 +66,8 @@
 .mmc-microsite .contact-dialog [hidden]{display:none!important}
 
 
-.mmc-microsite /* CES Edinburgh: lightweight adaptations to the exact Sandford Park fiche system. */
-body.ces-edinburgh{background:linear-gradient(180deg,#f6f9ff 0%,#fff 47%,#f8faff 100%)}
+
+.mmc-microsite .ces-edinburgh{background:linear-gradient(180deg,#f6f9ff 0%,#fff 47%,#f8faff 100%)}
 .mmc-microsite .ces-edinburgh .hero{min-height:490px;background:linear-gradient(rgba(9,33,71,.58),rgba(9,33,71,.58)),url('/beneficios-empresa/escocia/ces-edinburgh-junior-cover.webp') center/cover no-repeat}
 .mmc-microsite .ces-edinburgh .hero-overlay{background:linear-gradient(90deg,rgba(8,27,58,.26) 0%,rgba(8,27,58,.12) 44%,rgba(8,27,58,.06) 100%)}
 .mmc-microsite .ces-edinburgh .hero:before{content:'';position:absolute;right:-9%;top:-45%;width:min(580px,75vw);aspect-ratio:1;border-radius:54% 46% 36% 64%;background:rgba(198,222,255,.16);transform:rotate(20deg);pointer-events:none}
@@ -105,8 +105,8 @@ body.ces-edinburgh{background:linear-gradient(180deg,#f6f9ff 0%,#fff 47%,#f8faff
 @media(max-width:710px){.mmc-microsite .ces-edinburgh .hero{min-height:440px}.mmc-microsite .ces-edinburgh .hero-copy{padding:65px 25px}.mmc-microsite .ces-edinburgh .program-card-top{grid-template-columns:1fr!important}.mmc-microsite .ces-edinburgh .program-card-photo{height:190px!important;max-height:190px!important}.mmc-microsite .ces-edinburgh .jr-fact{min-height:98px!important;flex-direction:row!important}.mmc-microsite .ces-edinburgh .jr-fact-grid, .mmc-microsite .ces-edinburgh .jr-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .ces-edinburgh .jr-fact-icon{height:38px!important;width:38px!important;min-height:38px;min-width:38px}.mmc-microsite .ces-edinburgh .closing .jr-contact-btn{white-space:normal}}
 @media(max-width:470px){.mmc-microsite .ces-edinburgh .jr-fact-grid, .mmc-microsite .ces-edinburgh .jr-detail-grid{grid-template-columns:1fr}.mmc-microsite .ces-edinburgh .jr-detail{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:10px}.mmc-microsite .ces-edinburgh .jr-detail-icon{margin:0}.mmc-microsite .ces-edinburgh .intro{padding-top:45px}.mmc-microsite .ces-edinburgh .hero h1{font-size:35px}}
 
-.mmc-microsite /* CES Edinburgh 2027: identical structural price, .mmc-microsite four facts and four detail cards. */
-.ces-edinburgh .ces-group-label{display:inline-flex;align-items:center;align-self:flex-start;margin:0 0 12px;padding:5px 11px;border:1px solid #dbe5f4;border-radius:999px;background:#eff4ff;color:#244878;font-size:12px;font-weight:800;line-height:1.3}
+
+.mmc-microsite .ces-edinburgh .ces-group-label{display:inline-flex;align-items:center;align-self:flex-start;margin:0 0 12px;padding:5px 11px;border:1px solid #dbe5f4;border-radius:999px;background:#eff4ff;color:#244878;font-size:12px;font-weight:800;line-height:1.3}
 .mmc-microsite .ces-edinburgh .program-headline{grid-template-columns:minmax(0,1fr) 190px!important;align-items:start!important}
 .mmc-microsite .ces-edinburgh .price-tag{align-self:start!important}
 .mmc-microsite .ces-edinburgh .ces-conditions-note{max-width:920px;margin:12px auto 0;text-align:center;color:#61718b;font-size:12px;line-height:1.55}

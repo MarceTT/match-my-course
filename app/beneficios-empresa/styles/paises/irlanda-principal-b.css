@@ -25,9 +25,8 @@
 
 @media(max-width:650px){.mmc-microsite .blob.one{width:165px;height:167px;left:-113px;top:30px}.mmc-microsite .blob.two{width:175px;height:185px;right:-123px;top:60px}.mmc-microsite .hero-inner{max-width:100%}.mmc-microsite .hero .eyebrow{font-size:15px;letter-spacing:.07em;line-height:1.4}.mmc-microsite .blob.yellow{width:74px;height:72px;top:250px;right:-31px;opacity:.55}.mmc-microsite .choose .section-head h2{font-size:clamp(27px,7.6vw,36px)}}
 
-.mmc-microsite /* Fondo editorial del prototipo: formas orgánicas y ruta de viaje.
-   Solo se aplican a la portada; no cambian tarjetas, .mmc-microsite controles ni páginas interiores. */
-.choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
+
+.mmc-microsite .choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
 .mmc-microsite .choose>.container, .mmc-microsite .destinations>.container, .mmc-microsite .long-term>.container, .mmc-microsite .junior>.container, .mmc-microsite .experience>.container{position:relative;z-index:1}
 .mmc-microsite .choose::before{content:"";position:absolute;left:-142px;bottom:1%;width:255px;height:245px;border-radius:61% 39% 49% 51%/42% 58% 42% 58%;background:#EDF3FF;pointer-events:none;z-index:0}
 .mmc-microsite .choose::after{content:"";position:absolute;right:-128px;bottom:-85px;width:250px;height:250px;border-radius:50%;border:38px solid #F3F5FF;pointer-events:none;z-index:0}
@@ -41,12 +40,12 @@
 @media(max-width:650px){.mmc-microsite .flight-motif{width:122px;height:95px;right:-34px;top:7px;opacity:.33}.mmc-microsite .choose::before{width:148px;height:145px;left:-113px;bottom:15%}.mmc-microsite .choose::after{width:160px;height:160px;border-width:23px;right:-135px;bottom:7%}.mmc-microsite .destinations::after{width:175px;height:190px;right:-145px}.mmc-microsite .long-term::before{width:185px;height:175px;left:-153px}.mmc-microsite .junior::before{width:135px;height:135px;border-width:18px;left:-109px}.mmc-microsite .experience::after{width:175px;height:185px;right:-143px}}
 @media(prefers-reduced-motion:reduce){.mmc-microsite .flight-motif svg{animation:none}}
 
-.mmc-microsite /* Etiquetas de las cuatro secciones principales (solo portada) */
-.destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
+
+.mmc-microsite .destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
 @media(max-width:650px){.mmc-microsite .hero h1{max-width:100%}.mmc-microsite .audience-grid{align-items:stretch}.mmc-microsite .audience-photo{height:220px}.mmc-microsite .audience-tag{font-size:11px}}
 
-.mmc-microsite /* Pie de página corporativo y acceso flotante a WhatsApp */
-.site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
+
+.mmc-microsite .site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
 .mmc-microsite .footer-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:clamp(40px,7vw,130px);align-items:start;padding-bottom:48px}
 .mmc-microsite .footer-logo{display:inline-flex;align-items:center;width:215px;max-width:100%}.mmc-microsite .footer-logo img{width:100%;height:auto}
 .mmc-microsite .footer-mission{margin:22px 0 24px;max-width:610px;font-size:15px;line-height:1.85;color:#526680}
@@ -72,8 +71,8 @@
 @media(prefers-reduced-motion:reduce){.mmc-microsite .whatsapp-float, .mmc-microsite .footer-social a{transition:none}}
 
 
-.mmc-microsite /* PRINCIPAL B: category navigation and Ireland hero, .mmc-microsite isolated from the official homepage. */
-.principal-b-page .hero h1 .hero-title-line-two{white-space:normal;color:#4863F5}
+
+.mmc-microsite .principal-b-page .hero h1 .hero-title-line-two{white-space:normal;color:#4863F5}
 .mmc-microsite .principal-b-page .hero h1 .accent{color:#4863F5}
 .mmc-microsite .principal-b-page .hero h1 .hero-title-line{overflow-wrap:normal}
 .mmc-microsite .principal-b-page .choose{padding-bottom:83px}
@@ -94,8 +93,8 @@
 @media(max-width:1000px){.mmc-microsite .principal-b-page .principal-b-categories{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .principal-b-page .principal-b-category-tag, .mmc-microsite .principal-b-page .principal-b-category-body h3{min-height:0}}
 @media(max-width:650px){.mmc-microsite .principal-b-page .hero h1{font-size:clamp(34px,7.5vw,46px);line-height:1.13}.mmc-microsite .principal-b-page .principal-b-categories{grid-template-columns:1fr;max-width:450px;margin:0 auto;gap:18px}.mmc-microsite .principal-b-page .principal-b-category-photo{aspect-ratio:1.55}.mmc-microsite .principal-b-page .principal-b-category-body{padding:19px 20px 22px}.mmc-microsite .principal-b-page .principal-b-category-body h3{font-size:18px}.mmc-microsite .principal-b-page .choose .section-head h2{font-size:clamp(1.8rem,7.5vw,2.45rem)}.mmc-microsite .principal-b-page .choose .section-head p{font-size:1rem}}
 
-.mmc-microsite /* PRINCIPAL B — Secciones Irlanda (únicamente esta portada experimental). */
-.principal-b-page .principal-b-cities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+
+.mmc-microsite .principal-b-page .principal-b-cities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .mmc-microsite .principal-b-page .principal-b-city-card{min-height:117px;display:flex;align-items:center;justify-content:center;padding:24px 16px;background:linear-gradient(145deg,#fff,#f5f8ff);border:1px solid #dde7f6;border-radius:19px;box-shadow:0 8px 22px rgba(28,46,88,.055);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
 .mmc-microsite .principal-b-page .principal-b-city-card span{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;color:#15315B;font-size:clamp(20px,2.2vw,25px);font-weight:800;letter-spacing:-.035em;line-height:1.2;text-align:center}
 .mmc-microsite .principal-b-page .principal-b-city-card:hover{transform:translateY(-3px);border-color:#c3d2fb;box-shadow:0 13px 29px rgba(28,46,88,.09)}
@@ -104,13 +103,13 @@
 @media(max-width:480px){.mmc-microsite .principal-b-page .principal-b-cities{gap:12px}.mmc-microsite .principal-b-page .principal-b-city-card{min-height:90px;padding:15px 9px;border-radius:15px}.mmc-microsite .principal-b-page .principal-b-city-card span{font-size:19px}}
 @media(prefers-reduced-motion:reduce){.mmc-microsite .principal-b-page .principal-b-city-card{transition:none}}
 
-.mmc-microsite /* PRINCIPAL B: automatic programme layout, .mmc-microsite driven exclusively by visible cards. */
-.principal-b-page .principal-b-auto-section .principal-b-auto-layout{min-width:0}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section .principal-b-auto-layout{min-width:0}
 .mmc-microsite .principal-b-page .principal-b-auto-section .section-head{max-width:1020px;margin-bottom:35px}
 .mmc-microsite .principal-b-page .principal-b-auto-section .section-head p{max-width:1020px}
 .mmc-microsite .principal-b-page .principal-b-auto-section .principal-b-auto-cards{min-width:0}
-.mmc-microsite /* One or two visible offerings: description left, .mmc-microsite offerings right. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-layout{
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-layout{
  display:grid;grid-template-columns:minmax(0,48fr) minmax(0,52fr);align-items:center;
  column-gap:clamp(18px,2vw,28px)
 }
@@ -129,9 +128,8 @@
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-cards .programme-photo{
  aspect-ratio:1.32
 }
-.mmc-microsite /* One-offering card uses the same visual component as the school cards;
-   it remains a button so contact.js opens exactly the original enquiry dialog. */
-.principal-b-page .principal-b-work-card{
+
+.mmc-microsite .principal-b-page .principal-b-work-card{
  appearance:none;-webkit-appearance:none;box-sizing:border-box;
  width:100%;padding:0;min-width:0;font:inherit;color:inherit;text-align:left;
  cursor:pointer
@@ -139,14 +137,14 @@
 .mmc-microsite .principal-b-page .principal-b-work-card:focus-visible{outline:3px solid #4863F5;outline-offset:3px}
 .mmc-microsite .principal-b-page .principal-b-work-card .programme-photo{width:100%}
 .mmc-microsite .principal-b-page .principal-b-work-card .programme-copy{width:100%}
-.mmc-microsite /* Three or more: standard full-width cards, .mmc-microsite reading width widened. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-auto-layout{display:block}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-auto-layout{display:block}
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .section-head{max-width:1020px}
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .programmes{
  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:19px
 }
-.mmc-microsite /* Study-and-work retains its original image, .mmc-microsite compact card details, .mmc-microsite and contact action. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-work-programme{max-width:none;justify-self:stretch}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-work-programme{max-width:none;justify-self:stretch}
 @media(max-width:1030px){
  .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-count="2"] .principal-b-auto-layout{
   display:block
@@ -178,20 +176,18 @@
  }
  .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .programmes{grid-template-columns:minmax(0,1fr)}
 }
-.mmc-microsite /* Make HTML hidden attribute reliable even on cards with explicit display:flex. */
-.principal-b-page .principal-b-auto-cards > [hidden]{display:none!important}
 
-.mmc-microsite /* PRINCIPAL B · Estudio y trabajo: fondo orgánico de ancho completo.
-   La composición y el recorte son exclusivos de esta sección; no tocan
-   la portada original ni la regla automática de las otras secciones. */
-.principal-b-page .principal-b-work-feature{
+.mmc-microsite .principal-b-page .principal-b-auto-cards > [hidden]{display:none!important}
+
+
+.mmc-microsite .principal-b-page .principal-b-work-feature{
   position:relative;isolation:isolate;overflow:hidden;
   background:transparent;
   padding-top:clamp(74px,8vw,112px);
   padding-bottom:clamp(76px,8vw,114px);
 }
-.mmc-microsite /* Capa decorativa full-bleed: no depende del ancho de .container. */
-.principal-b-page .principal-b-work-feature .principal-b-work-backdrop{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-backdrop{
   position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(ellipse 62% 62% at 90% 48%,rgba(223,232,255,.92) 0%,rgba(232,238,255,.52) 58%,transparent 100%),
@@ -215,8 +211,8 @@
 .mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-clip-defs{
   position:absolute;width:0;height:0;overflow:hidden;
 }
-.mmc-microsite /* Mantiene el contenedor estándar, .mmc-microsite sin recuadro, .mmc-microsite borde ni sombra. */
-.principal-b-page .principal-b-work-feature .principal-b-work-feature-panel, .mmc-microsite .principal-b-page .principal-b-auto-section.principal-b-work-feature[data-programme-layout="compact"] .principal-b-work-feature-panel{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-panel, .mmc-microsite .principal-b-page .principal-b-auto-section.principal-b-work-feature[data-programme-layout="compact"] .principal-b-work-feature-panel{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:clamp(30px,3vw,40px);align-items:center;
   width:100%;margin:0;padding:0;
@@ -233,8 +229,8 @@
   position:relative;display:block;min-width:0;max-width:none;width:100%;
   height:420px;max-height:420px;align-self:center;justify-self:stretch;
 }
-.mmc-microsite /* La imagen mantiene el mismo archivo original y no tiene tarjeta ni CTA visible. */
-.principal-b-page .principal-b-work-feature .principal-b-work-feature-action{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-action{
   display:block;appearance:none;-webkit-appearance:none;
   width:100%;height:420px;min-height:0;max-height:420px;
   margin:0;padding:0;border:0;
@@ -253,8 +249,7 @@
 }
 .mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-image img{
   display:block;width:100%;height:100%;min-height:0;max-height:420px;
-  /* Imagen vertical: ampliar el encuadre interno (sin tocar el recorte SVG)
-     para ubicar el rostro de la estudiante en la zona visible. */
+  
   width:145%;max-width:none;
   object-fit:cover;object-position:0% 42%;
   transition:transform .35s ease;
@@ -295,9 +290,8 @@
   .mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-image img{transition:none}
 }
 
-.mmc-microsite /* Irlanda: las tres fichas junior aparecen debajo de la introducción, .mmc-microsite en la misma cuadrícula de tarjetas que la sección junior de Canadá.
-   Reglas deliberadamente limitadas a #jovenes para no afectar otras secciones. */
-.principal-b-page #jovenes .principal-b-auto-layout{display:block;}
+
+.mmc-microsite .principal-b-page #jovenes .principal-b-auto-layout{display:block;}
 .mmc-microsite .principal-b-page #jovenes .section-head{max-width:1020px;margin-bottom:28px;}
 .mmc-microsite .principal-b-page #jovenes .principal-b-auto-cards.principal-b-junior-cards{
  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:none;width:100%;

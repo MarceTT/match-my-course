@@ -12,6 +12,7 @@ import "../styles/paises/irlanda-principal-b.css";
 import "../styles/paises/irlanda-irlanda-ofertas-originales.css";
 import "../styles/paises/irlanda-experiencias.css";
 import "../styles/paises/currency-selector.css";
+import "../styles/paises/irlanda-inline.css";
 
 /**
  * /beneficios-empresa/irlanda — ported from the published source, class for
