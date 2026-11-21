@@ -154,7 +154,15 @@ def scope_css(css):
 
 
 def _style_to_jsx(value):
+    """Convert an inline style attribute to a JSX style object.
+
+    Custom properties are kept (dropping them changed layouts) but React's
+    CSSProperties type does not allow them, so a style containing any is cast.
+    The cast is emitted inline, and `html_to_jsx` reports when one was needed so
+    the page can import the type.
+    """
     out = []
+    has_custom = False
     for decl in value.split(";"):
         if ":" not in decl:
             continue
@@ -163,6 +171,7 @@ def _style_to_jsx(value):
         if not k:
             continue
         if k.startswith("--"):
+            has_custom = True
             # Custom properties, kept verbatim and quoted as keys. Dropping
             # them silently changed layouts: the schedule grids are sized with
             # `repeat(var(--days, 5), ...)`, so losing `--days: 7` rendered a
@@ -171,7 +180,8 @@ def _style_to_jsx(value):
             continue
         k = re.sub(r"-([a-z])", lambda m: m.group(1).upper(), k)
         out.append(f"{k}: '{v}'")
-    return "{{" + ", ".join(out) + "}}"
+    body = "{" + ", ".join(out) + "}"
+    return ("{" + body + " as CSSProperties}") if has_custom else ("{" + body + "}")
 
 
 def _internal_href(url):
@@ -209,6 +219,7 @@ class _Converter(HTMLParser):
         # prefetching them would fire 404s on every viewport entry.
         self.known_routes = known_routes
         self.unknown_targets = set()
+        self.uses_css_properties = False
 
     def _tag(self, tag, attrs, closed):
         parts = []
@@ -221,7 +232,10 @@ class _Converter(HTMLParser):
                 # type-checks as a string where a boolean is expected.
                 parts.append(f"{name}={{true}}")
             elif k.lower() == "style":
-                parts.append(f"style={_style_to_jsx(v)}")
+                rendered = _style_to_jsx(v)
+                if "as CSSProperties" in rendered:
+                    self.uses_css_properties = True
+                parts.append(f"style={rendered}")
             elif name in NUMERIC and v.strip().lstrip("-").isdigit():
                 parts.append(f"{name}={{{v.strip()}}}")
             else:
@@ -304,4 +318,9 @@ def html_to_jsx(html_text, drop_selectors=(), known_routes=None):
         body = re.sub(pattern, "", body, flags=re.S)
     parser = _Converter(known_routes)
     parser.feed(body)
-    return "".join(parser.out).strip(), parser.uses_link, sorted(parser.unknown_targets)
+    return (
+        "".join(parser.out).strip(),
+        parser.uses_link,
+        sorted(parser.unknown_targets),
+        parser.uses_css_properties,
+    )
