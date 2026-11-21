@@ -11,6 +11,7 @@ import { CanadaSchoolMedia } from "../data/schoolMedia";
 import "../styles/paises/canada-canada-b.css";
 import "../styles/paises/canada-ces-canada-original.css";
 import "../styles/paises/currency-selector.css";
+import "../styles/paises/canada-inline.css";
 
 /**
  * /beneficios-empresa/canada — ported from the published source, class for

@@ -1,0 +1,11 @@
+/* Styles the source ships in a <style> block in the page <head>.
+ *
+ * Extracted into a file because porting reads the <body> only, so these were
+ * dropped entirely — taking the page's own grids with them. On this page that
+ * left `.jr-fact-grid` as a plain block instead of a four-column grid.
+ *
+ * Scoped like every other microsite sheet. Re-extract with
+ * `scripts/microsite/extractInlineStyles.py`.
+ */
+
+.mmc-microsite .club-pair{display:flex;align-items:center;justify-content:center;gap:16px}.mmc-microsite .club-pair img{max-width:48%;height:140px;object-fit:contain}.mmc-microsite .program-title{text-transform:none}.mmc-microsite .season-notice{background:#fff5e6;border:1px solid #f3d6a6;border-radius:14px;padding:14px 20px;margin:18px auto 38px;font-size:15px;color:#674923}@media(max-width:700px){.mmc-microsite .club-pair img{height:105px}}

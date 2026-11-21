@@ -80,7 +80,22 @@ def _scope_selector(sel):
     return ", ".join(out)
 
 
+COMMENT = re.compile(r"/\*.*?\*/", re.S)
+
+
 def scope_css(css):
+    # Strip comments first. They are not part of any selector, but the parser
+    # below reads everything before a `{` as one, so a comment sitting above a
+    # rule became part of it:
+    #
+    #     /* Exclusivo a #jovenes; no altera #adultos ni otras páginas. */
+    #     .inglaterra-b-page #jovenes .principal-b-junior-cards { ... }
+    #
+    # The comment text was split on its commas and prefixed, producing an
+    # invalid selector that browsers drop along with the whole rule. That is how
+    # a four-column card grid silently became three, and 25 rules across the
+    # sheets were lost the same way.
+    css = COMMENT.sub("", css)
     res, i, n = [], 0, len(css)
     while i < n:
         # Skip leading whitespace before probing for an at-rule. Without this,
@@ -145,7 +160,14 @@ def _style_to_jsx(value):
             continue
         k, v = decl.split(":", 1)
         k, v = k.strip(), v.strip().replace("\\", "\\\\").replace("'", "\\'")
-        if not k or k.startswith("--"):
+        if not k:
+            continue
+        if k.startswith("--"):
+            # Custom properties, kept verbatim and quoted as keys. Dropping
+            # them silently changed layouts: the schedule grids are sized with
+            # `repeat(var(--days, 5), ...)`, so losing `--days: 7` rendered a
+            # seven-day week as five columns.
+            out.append(f"'{k}': '{v}'")
             continue
         k = re.sub(r"-([a-z])", lambda m: m.group(1).upper(), k)
         out.append(f"{k}: '{v}'")

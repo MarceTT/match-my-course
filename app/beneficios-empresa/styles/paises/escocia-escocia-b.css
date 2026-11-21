@@ -25,9 +25,8 @@
 
 @media(max-width:650px){.mmc-microsite .blob.one{width:165px;height:167px;left:-113px;top:30px}.mmc-microsite .blob.two{width:175px;height:185px;right:-123px;top:60px}.mmc-microsite .hero-inner{max-width:100%}.mmc-microsite .hero .eyebrow{font-size:15px;letter-spacing:.07em;line-height:1.4}.mmc-microsite .blob.yellow{width:74px;height:72px;top:250px;right:-31px;opacity:.55}.mmc-microsite .choose .section-head h2{font-size:clamp(27px,7.6vw,36px)}}
 
-.mmc-microsite /* Fondo editorial del prototipo: formas orgánicas y ruta de viaje.
-   Solo se aplican a la portada; no cambian tarjetas, .mmc-microsite controles ni páginas interiores. */
-.choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
+
+.mmc-microsite .choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
 .mmc-microsite .choose>.container, .mmc-microsite .destinations>.container, .mmc-microsite .long-term>.container, .mmc-microsite .junior>.container, .mmc-microsite .experience>.container{position:relative;z-index:1}
 .mmc-microsite .choose::before{content:"";position:absolute;left:-142px;bottom:1%;width:255px;height:245px;border-radius:61% 39% 49% 51%/42% 58% 42% 58%;background:#EDF3FF;pointer-events:none;z-index:0}
 .mmc-microsite .choose::after{content:"";position:absolute;right:-128px;bottom:-85px;width:250px;height:250px;border-radius:50%;border:38px solid #F3F5FF;pointer-events:none;z-index:0}
@@ -41,12 +40,12 @@
 @media(max-width:650px){.mmc-microsite .flight-motif{width:122px;height:95px;right:-34px;top:7px;opacity:.33}.mmc-microsite .choose::before{width:148px;height:145px;left:-113px;bottom:15%}.mmc-microsite .choose::after{width:160px;height:160px;border-width:23px;right:-135px;bottom:7%}.mmc-microsite .destinations::after{width:175px;height:190px;right:-145px}.mmc-microsite .long-term::before{width:185px;height:175px;left:-153px}.mmc-microsite .junior::before{width:135px;height:135px;border-width:18px;left:-109px}.mmc-microsite .experience::after{width:175px;height:185px;right:-143px}}
 @media(prefers-reduced-motion:reduce){.mmc-microsite .flight-motif svg{animation:none}}
 
-.mmc-microsite /* Etiquetas de las cuatro secciones principales (solo portada) */
-.destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
+
+.mmc-microsite .destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
 @media(max-width:650px){.mmc-microsite .hero h1{max-width:100%}.mmc-microsite .audience-grid{align-items:stretch}.mmc-microsite .audience-photo{height:220px}.mmc-microsite .audience-tag{font-size:11px}}
 
-.mmc-microsite /* Pie de página corporativo y acceso flotante a WhatsApp */
-.site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
+
+.mmc-microsite .site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
 .mmc-microsite .footer-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:clamp(40px,7vw,130px);align-items:start;padding-bottom:48px}
 .mmc-microsite .footer-logo{display:inline-flex;align-items:center;width:215px;max-width:100%}.mmc-microsite .footer-logo img{width:100%;height:auto}
 .mmc-microsite .footer-mission{margin:22px 0 24px;max-width:610px;font-size:15px;line-height:1.85;color:#526680}
@@ -72,8 +71,8 @@
 @media(prefers-reduced-motion:reduce){.mmc-microsite .whatsapp-float, .mmc-microsite .footer-social a{transition:none}}
 
 
-.mmc-microsite /* PRINCIPAL B: category navigation and Ireland hero, .mmc-microsite isolated from the official homepage. */
-.principal-b-page .hero h1 .hero-title-line-two{white-space:normal;color:#4863F5}
+
+.mmc-microsite .principal-b-page .hero h1 .hero-title-line-two{white-space:normal;color:#4863F5}
 .mmc-microsite .principal-b-page .hero h1 .accent{color:#4863F5}
 .mmc-microsite .principal-b-page .hero h1 .hero-title-line{overflow-wrap:normal}
 .mmc-microsite .principal-b-page .choose{padding-bottom:83px}
@@ -94,9 +93,9 @@
 @media(max-width:1000px){.mmc-microsite .principal-b-page .principal-b-categories{grid-template-columns:repeat(2,minmax(0,1fr))}.mmc-microsite .principal-b-page .principal-b-category-tag, .mmc-microsite .principal-b-page .principal-b-category-body h3{min-height:0}}
 @media(max-width:650px){.mmc-microsite .principal-b-page .hero h1{font-size:clamp(34px,7.5vw,46px);line-height:1.13}.mmc-microsite .principal-b-page .principal-b-categories{grid-template-columns:1fr;max-width:450px;margin:0 auto;gap:18px}.mmc-microsite .principal-b-page .principal-b-category-photo{aspect-ratio:1.55}.mmc-microsite .principal-b-page .principal-b-category-body{padding:19px 20px 22px}.mmc-microsite .principal-b-page .principal-b-category-body h3{font-size:18px}.mmc-microsite .principal-b-page .choose .section-head h2{font-size:clamp(1.8rem,7.5vw,2.45rem)}.mmc-microsite .principal-b-page .choose .section-head p{font-size:1rem}}
 
-.mmc-microsite /* PRINCIPAL B — Secciones Irlanda (únicamente esta portada experimental). */
-/* Nueva Zelanda B: las tarjetas de ciudades reutilizan el componente fotográfico original de destinos. */
-.principal-b-page .principal-b-cities{
+
+
+.mmc-microsite .principal-b-page .principal-b-cities{
  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;
  width:100%;max-width:920px;margin:0 auto;
 }
@@ -144,13 +143,13 @@
  .mmc-microsite .principal-b-page .principal-b-cities .principal-b-city-card.destination-card, .mmc-microsite .principal-b-page .principal-b-cities .principal-b-city-card.destination-card > img{transition:none}
 }
 
-.mmc-microsite /* PRINCIPAL B: automatic programme layout, .mmc-microsite driven exclusively by visible cards. */
-.principal-b-page .principal-b-auto-section .principal-b-auto-layout{min-width:0}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section .principal-b-auto-layout{min-width:0}
 .mmc-microsite .principal-b-page .principal-b-auto-section .section-head{max-width:1020px;margin-bottom:35px}
 .mmc-microsite .principal-b-page .principal-b-auto-section .section-head p{max-width:1020px}
 .mmc-microsite .principal-b-page .principal-b-auto-section .principal-b-auto-cards{min-width:0}
-.mmc-microsite /* One or two visible offerings: description left, .mmc-microsite offerings right. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-layout{
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-layout{
  display:grid;grid-template-columns:minmax(0,48fr) minmax(0,52fr);align-items:center;
  column-gap:clamp(18px,2vw,28px)
 }
@@ -169,9 +168,8 @@
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="compact"] .principal-b-auto-cards .programme-photo{
  aspect-ratio:1.32
 }
-.mmc-microsite /* One-offering card uses the same visual component as the school cards;
-   it remains a button so contact.js opens exactly the original enquiry dialog. */
-.principal-b-page .principal-b-work-card{
+
+.mmc-microsite .principal-b-page .principal-b-work-card{
  appearance:none;-webkit-appearance:none;box-sizing:border-box;
  width:100%;padding:0;min-width:0;font:inherit;color:inherit;text-align:left;
  cursor:pointer
@@ -179,14 +177,14 @@
 .mmc-microsite .principal-b-page .principal-b-work-card:focus-visible{outline:3px solid #4863F5;outline-offset:3px}
 .mmc-microsite .principal-b-page .principal-b-work-card .programme-photo{width:100%}
 .mmc-microsite .principal-b-page .principal-b-work-card .programme-copy{width:100%}
-.mmc-microsite /* Three or more: standard full-width cards, .mmc-microsite reading width widened. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-auto-layout{display:block}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-auto-layout{display:block}
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .section-head{max-width:1020px}
 .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .programmes{
  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:19px
 }
-.mmc-microsite /* Study-and-work retains its original image, .mmc-microsite compact card details, .mmc-microsite and contact action. */
-.principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-work-programme{max-width:none;justify-self:stretch}
+
+.mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .principal-b-work-programme{max-width:none;justify-self:stretch}
 @media(max-width:1030px){
  .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-count="2"] .principal-b-auto-layout{
   display:block
@@ -218,23 +216,20 @@
  }
  .mmc-microsite .principal-b-page .principal-b-auto-section[data-programme-layout="expanded"] .programmes{grid-template-columns:minmax(0,1fr)}
 }
-.mmc-microsite /* Make HTML hidden attribute reliable even on cards with explicit display:flex. */
-.principal-b-page .principal-b-auto-cards > [hidden]{display:none!important}
 
-.mmc-microsite /* PRINCIPAL B · Estudio y trabajo: fondo orgánico de ancho completo.
-   La composición y el recorte son exclusivos de esta sección; no tocan
-   la portada original ni la regla automática de las otras secciones. */
-.principal-b-page .principal-b-work-feature{
+.mmc-microsite .principal-b-page .principal-b-auto-cards > [hidden]{display:none!important}
+
+
+.mmc-microsite .principal-b-page .principal-b-work-feature{
   position:relative;isolation:isolate;overflow:visible;
   background:transparent;
   padding-top:clamp(74px,8vw,112px);
   padding-bottom:clamp(76px,8vw,114px);
 }
-.mmc-microsite /* Capa decorativa full-bleed: no depende del ancho de .container. */
-.principal-b-page .principal-b-work-feature .principal-b-work-backdrop{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-backdrop{
   position:absolute;top:-160px;right:0;bottom:-30px;left:0;z-index:0;pointer-events:none;
-  /* El degradado nace encima del límite de la sección y se desvanece suavemente.
-     Solo se modifica la decoración: el texto y la fotografía siguen en su lugar. */
+  
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.13) 18%,rgba(0,0,0,.55) 35%,#000 52%,#000 91%,transparent 100%);
   mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.13) 18%,rgba(0,0,0,.55) 35%,#000 52%,#000 91%,transparent 100%);
   background:
@@ -259,8 +254,8 @@
 .mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-clip-defs{
   position:absolute;width:0;height:0;overflow:hidden;
 }
-.mmc-microsite /* Mantiene el contenedor estándar, .mmc-microsite sin recuadro, .mmc-microsite borde ni sombra. */
-.principal-b-page .principal-b-work-feature .principal-b-work-feature-panel, .mmc-microsite .principal-b-page .principal-b-auto-section.principal-b-work-feature[data-programme-layout="compact"] .principal-b-work-feature-panel{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-panel, .mmc-microsite .principal-b-page .principal-b-auto-section.principal-b-work-feature[data-programme-layout="compact"] .principal-b-work-feature-panel{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:clamp(30px,3vw,40px);align-items:center;
   width:100%;margin:0;padding:0;
@@ -277,8 +272,8 @@
   position:relative;display:block;min-width:0;max-width:none;width:100%;
   height:420px;max-height:420px;align-self:center;justify-self:stretch;
 }
-.mmc-microsite /* La imagen mantiene el mismo archivo original y no tiene tarjeta ni CTA visible. */
-.principal-b-page .principal-b-work-feature .principal-b-work-feature-action{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-action{
   display:block;appearance:none;-webkit-appearance:none;
   width:100%;height:420px;min-height:0;max-height:420px;
   margin:0;padding:0;border:0;
@@ -297,8 +292,7 @@
 }
 .mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-image img{
   display:block;width:100%;height:100%;min-height:0;max-height:420px;
-  /* Imagen vertical: ampliar el encuadre interno (sin tocar el recorte SVG)
-     para ubicar el rostro de la estudiante en la zona visible. */
+  
   width:145%;max-width:none;
   object-fit:cover;object-position:0% 42%;
   transition:transform .35s ease;
@@ -340,23 +334,21 @@
 }
 
 
-.mmc-microsite /* NUEVA ZELANDA B · estilos exclusivos de esta nueva página.
-   Principal B y la portada original no se modifican. */
+
 @media (min-width:1001px){
- .principal-b-page .principal-b-categories{
+ .mmc-microsite .principal-b-page .principal-b-categories{
   grid-template-columns:repeat(3,minmax(0,285px));justify-content:center;
  }
 }
-.mmc-microsite /* No hay contenidos deportivos ni espacios reservados para una cuarta categoría. */
-.principal-b-page .nzb-coming-soon{
+
+.mmc-microsite .principal-b-page .nzb-coming-soon{
  font-family:'DM Sans',sans-serif;font-size:1rem;line-height:1.75;
  color:#526680;margin:0;padding:18px 22px;
  background:#f5f8ff;border:1px solid #e5eaf5;border-left:3px solid #4863F5;
  border-radius:12px;max-width:760px;
 }
-.mmc-microsite /* Fotografía de Auckland, .mmc-microsite horizontal: no heredar el zoom/desplazamiento
-   especial aplicado a la fotografía vertical de la estudiante en Irlanda. */
-.principal-b-page .principal-b-work-feature .principal-b-work-feature-image img{
+
+.mmc-microsite .principal-b-page .principal-b-work-feature .principal-b-work-feature-image img{
  width:100%;max-width:100%;height:100%;object-fit:cover;object-position:58% 50%;
 }
 @media(max-width:760px){
@@ -365,32 +357,30 @@
  }
 }
 
-.mmc-microsite /* RELA junior offer: one compact card within the existing conditional programme grid. */
-.principal-b-page .nzb-rela-age{font-size:12.5px!important;margin-top:11px!important;color:#526680}.mmc-microsite .principal-b-page #jovenes .principal-b-auto-cards > .programme-card{max-width:330px;align-self:start;width:100%}
+
+.mmc-microsite .principal-b-page .nzb-rela-age{font-size:12.5px!important;margin-top:11px!important;color:#526680}.mmc-microsite .principal-b-page #jovenes .principal-b-auto-cards > .programme-card{max-width:330px;align-self:start;width:100%}
 @media(max-width:700px){.mmc-microsite .principal-b-page #jovenes .principal-b-auto-cards > .programme-card{max-width:440px}}
 
-.mmc-microsite /* Nueva Zelanda B: campamentos con una sola oferta.
-   Aprovecha el ancho del contenedor sin modificar el componente de tarjeta
-   ni la regla automática del resto de las secciones. */
+
 @media (min-width:701px){
- .principal-b-page #jovenes[data-programme-layout="compact"] .principal-b-auto-layout{
+ .mmc-microsite .principal-b-page #jovenes[data-programme-layout="compact"] .principal-b-auto-layout{
   display:grid;
   grid-template-columns:minmax(0,52fr) minmax(0,48fr);
   column-gap:clamp(22px,2.8vw,38px);
   align-items:center;
  }
- .principal-b-page #jovenes[data-programme-layout="compact"] .section-head{
+ .mmc-microsite .principal-b-page #jovenes[data-programme-layout="compact"] .section-head{
   width:100%;max-width:none;margin:0;min-width:0;text-align:left;
  }
- .principal-b-page #jovenes[data-programme-layout="compact"] .section-head p{max-width:none}
- .principal-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards{
+ .mmc-microsite .principal-b-page #jovenes[data-programme-layout="compact"] .section-head p{max-width:none}
+ .mmc-microsite .principal-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards{
   display:grid;grid-template-columns:minmax(0,1fr);
   width:100%;max-width:none;justify-self:stretch;justify-content:stretch;
  }
- .principal-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards > .programme-card{
+ .mmc-microsite .principal-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards > .programme-card{
   max-width:none;width:100%;min-width:0;
  }
- .principal-b-page #jovenes .programme-photo img{
+ .mmc-microsite .principal-b-page #jovenes .programme-photo img{
   display:block;width:100%;height:100%;object-fit:cover;object-position:center 52%;
  }
 }
@@ -403,9 +393,8 @@
  }
 }
 
-.mmc-microsite /* Inglaterra · categorías: dos tarjetas de ancho completo dentro del contenedor.
-   Ajuste exclusivo de #elige: sin afectar Irlanda, .mmc-microsite Nueva Zelanda ni las ofertas. */
-.escocia-b-page #elige .principal-b-categories{
+
+.mmc-microsite .escocia-b-page #elige .principal-b-categories{
   display:grid;
   width:100%;
   max-width:none;
@@ -439,9 +428,8 @@
  }
 }
 
-.mmc-microsite /* Inglaterra: tres tarjetas juveniles originales en cuadrícula responsive.
-   Exclusivo a #jovenes; no altera #adultos ni otras páginas. */
-.escocia-b-page #jovenes .principal-b-auto-cards.principal-b-junior-cards{
+
+.mmc-microsite .escocia-b-page #jovenes .principal-b-auto-cards.principal-b-junior-cards{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:24px;
@@ -476,8 +464,8 @@
   }
 }
 
-.mmc-microsite /* Escocia B: una sola categoría, .mmc-microsite sin elementos vacíos ni estiramiento de la fotografía. */
-.escocia-b-page #elige .principal-b-categories{
+
+.mmc-microsite .escocia-b-page #elige .principal-b-categories{
  display:grid; grid-template-columns:minmax(0,min(100%,560px));
  gap:24px; justify-content:start; max-width:none; width:100%;
 }
@@ -485,30 +473,28 @@
 .mmc-microsite .escocia-b-page #elige .principal-b-category-photo img{width:100%;height:100%;object-fit:cover;}
 @media(max-width:650px){.mmc-microsite .escocia-b-page #elige .principal-b-categories{grid-template-columns:minmax(0,1fr);}}
 
-.mmc-microsite /* Tarjeta CES Edinburgh Junior: mismas proporciones que otras tarjetas junior, .mmc-microsite sin fotografía provisional. */
-.escocia-b-page #jovenes .ces-junior-art, .mmc-microsite .principal-b-page #jovenes .ces-junior-art{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 84% 18%,#ecf5ff 0%,transparent 32%),linear-gradient(130deg,#dceafb 0%,#dfefed 100%);overflow:hidden;isolation:isolate}
+
+.mmc-microsite .escocia-b-page #jovenes .ces-junior-art, .mmc-microsite .principal-b-page #jovenes .ces-junior-art{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 84% 18%,#ecf5ff 0%,transparent 32%),linear-gradient(130deg,#dceafb 0%,#dfefed 100%);overflow:hidden;isolation:isolate}
 .mmc-microsite .escocia-b-page #jovenes .ces-junior-art:before, .mmc-microsite .principal-b-page #jovenes .ces-junior-art:before{content:'';position:absolute;right:-22%;bottom:-54%;width:96%;aspect-ratio:1;border-radius:55% 45% 65% 35%;background:rgba(82,114,206,.11);transform:rotate(-22deg)}
 .mmc-microsite .escocia-b-page #jovenes .ces-junior-graphic, .mmc-microsite .principal-b-page #jovenes .ces-junior-graphic{position:relative;z-index:1;text-align:center;color:#15315b;padding:20px 12px}
 .mmc-microsite .escocia-b-page #jovenes .ces-junior-graphic span, .mmc-microsite .principal-b-page #jovenes .ces-junior-graphic span{display:block;font-weight:800;letter-spacing:.12em;font-size:10px;color:#4863f5;margin-bottom:10px}
 .mmc-microsite .escocia-b-page #jovenes .ces-junior-graphic strong, .mmc-microsite .principal-b-page #jovenes .ces-junior-graphic strong{display:block;font-size:clamp(16px,2vw,23px);line-height:1.22;max-width:210px}
 
-.mmc-microsite /* Escocia · CES Edinburgh: la única tarjeta junior ocupa el ancho completo
-   de la columna derecha, .mmc-microsite sin las 3 columnas reservadas para otros países. */
-@media (min-width: 761px){
-  .escocia-b-page #jovenes .principal-b-auto-layout {
+
+@media (min-width: 761px) {
+  .mmc-microsite .escocia-b-page #jovenes .principal-b-auto-layout{
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: clamp(26px, 4vw, 56px);
     align-items: center;
   }
-  .escocia-b-page #jovenes .section-head {
+  .mmc-microsite .escocia-b-page #jovenes .section-head{
     width: 100%;
     max-width: none;
     min-width: 0;
     margin: 0;
   }
-  .escocia-b-page #jovenes .principal-b-auto-cards.principal-b-junior-cards,
-  .escocia-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards.principal-b-junior-cards {
+  .mmc-microsite .escocia-b-page #jovenes .principal-b-auto-cards.principal-b-junior-cards, .mmc-microsite .escocia-b-page #jovenes[data-programme-count="1"] .principal-b-auto-cards.principal-b-junior-cards{
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     width: 100%;
@@ -517,7 +503,7 @@
     justify-self: stretch;
     align-items: stretch;
   }
-  .escocia-b-page #jovenes .principal-b-junior-cards > .programme-card {
+  .mmc-microsite .escocia-b-page #jovenes .principal-b-junior-cards > .programme-card{
     max-width: none;
     width: 100%;
     min-width: 0;
@@ -538,10 +524,9 @@
   }
 }
 
-.mmc-microsite /* Escocia: dos categorías de navegación siguiendo la distribución de Inglaterra.
-   Mantener los estilos existentes de tarjetas, .mmc-microsite imágenes, .mmc-microsite tipografía y hover. */
-@media (min-width:651px){
-  .escocia-b-page #elige .principal-b-categories {
+
+@media (min-width:651px) {
+  .mmc-microsite .escocia-b-page #elige .principal-b-categories{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:24px;
@@ -551,7 +536,7 @@
     align-items:stretch;
     justify-content:stretch;
   }
-  .escocia-b-page #elige .principal-b-category-card {width:100%;min-width:0;height:100%;}
+  .mmc-microsite .escocia-b-page #elige .principal-b-category-card{width:100%;min-width:0;height:100%;}
 }
 @media (max-width:650px) {
   .mmc-microsite .escocia-b-page #elige .principal-b-categories{

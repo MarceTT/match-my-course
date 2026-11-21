@@ -25,9 +25,8 @@
 
 @media(max-width:650px){.mmc-microsite .blob.one{width:165px;height:167px;left:-113px;top:30px}.mmc-microsite .blob.two{width:175px;height:185px;right:-123px;top:60px}.mmc-microsite .hero-inner{max-width:100%}.mmc-microsite .hero .eyebrow{font-size:15px;letter-spacing:.07em;line-height:1.4}.mmc-microsite .blob.yellow{width:74px;height:72px;top:250px;right:-31px;opacity:.55}.mmc-microsite .choose .section-head h2{font-size:clamp(27px,7.6vw,36px)}}
 
-.mmc-microsite /* Fondo editorial del prototipo: formas orgánicas y ruta de viaje.
-   Solo se aplican a la portada; no cambian tarjetas, .mmc-microsite controles ni páginas interiores. */
-.choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
+
+.mmc-microsite .choose, .mmc-microsite .destinations, .mmc-microsite .long-term, .mmc-microsite .junior, .mmc-microsite .experience{position:relative;isolation:isolate;overflow:hidden}
 .mmc-microsite .choose>.container, .mmc-microsite .destinations>.container, .mmc-microsite .long-term>.container, .mmc-microsite .junior>.container, .mmc-microsite .experience>.container{position:relative;z-index:1}
 .mmc-microsite .choose::before{content:"";position:absolute;left:-142px;bottom:1%;width:255px;height:245px;border-radius:61% 39% 49% 51%/42% 58% 42% 58%;background:#EDF3FF;pointer-events:none;z-index:0}
 .mmc-microsite .choose::after{content:"";position:absolute;right:-128px;bottom:-85px;width:250px;height:250px;border-radius:50%;border:38px solid #F3F5FF;pointer-events:none;z-index:0}
@@ -41,12 +40,12 @@
 @media(max-width:650px){.mmc-microsite .flight-motif{width:122px;height:95px;right:-34px;top:7px;opacity:.33}.mmc-microsite .choose::before{width:148px;height:145px;left:-113px;bottom:15%}.mmc-microsite .choose::after{width:160px;height:160px;border-width:23px;right:-135px;bottom:7%}.mmc-microsite .destinations::after{width:175px;height:190px;right:-145px}.mmc-microsite .long-term::before{width:185px;height:175px;left:-153px}.mmc-microsite .junior::before{width:135px;height:135px;border-width:18px;left:-109px}.mmc-microsite .experience::after{width:175px;height:185px;right:-143px}}
 @media(prefers-reduced-motion:reduce){.mmc-microsite .flight-motif svg{animation:none}}
 
-.mmc-microsite /* Etiquetas de las cuatro secciones principales (solo portada) */
-.destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
+
+.mmc-microsite .destinations .section-head>.eyebrow, .mmc-microsite .long-term .section-head>.eyebrow, .mmc-microsite .junior .section-head>.eyebrow, .mmc-microsite .experience .section-head>.eyebrow{font-size:13.5px;font-weight:800;letter-spacing:.11em}
 @media(max-width:650px){.mmc-microsite .hero h1{max-width:100%}.mmc-microsite .audience-grid{align-items:stretch}.mmc-microsite .audience-photo{height:220px}.mmc-microsite .audience-tag{font-size:11px}}
 
-.mmc-microsite /* Pie de página corporativo y acceso flotante a WhatsApp */
-.site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
+
+.mmc-microsite .site-footer{padding:65px 0 0;background:linear-gradient(180deg,#f8fbff 0%,#f1f6ff 100%);border-top:1px solid #e3eaf6;color:#526680;font-size:15px}
 .mmc-microsite .footer-grid{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:clamp(40px,7vw,130px);align-items:start;padding-bottom:48px}
 .mmc-microsite .footer-logo{display:inline-flex;align-items:center;width:215px;max-width:100%}.mmc-microsite .footer-logo img{width:100%;height:auto}
 .mmc-microsite .footer-mission{margin:22px 0 24px;max-width:610px;font-size:15px;line-height:1.85;color:#526680}

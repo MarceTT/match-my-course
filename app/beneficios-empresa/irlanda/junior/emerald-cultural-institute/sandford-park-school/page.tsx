@@ -4,6 +4,7 @@ import Link from "next/link";
 import MicrositeDialogs from "@/app/beneficios-empresa/components/MicrositeDialogs";
 
 import "@/app/beneficios-empresa/styles/programas/irlanda_junior_emerald-cultural-institute_sandford-park-school.css";
+import "@/app/beneficios-empresa/styles/programas/irlanda_junior_emerald-cultural-institute_sandford-park-school_inline.css";
 
 /**
  * /beneficios-empresa/irlanda/junior/emerald-cultural-institute/sandford-park-school — ported from the published source, class for class, against its own

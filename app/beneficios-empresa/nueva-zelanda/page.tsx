@@ -11,6 +11,7 @@ import { NuevaZelandaSchoolMedia } from "../data/schoolMedia";
 import "../styles/paises/nueva-zelanda-nueva-zelanda-b.css";
 import "../styles/paises/nueva-zelanda-promociones-originales.css";
 import "../styles/paises/currency-selector.css";
+import "../styles/paises/nueva-zelanda-inline.css";
 
 /**
  * /beneficios-empresa/nueva-zelanda — ported from the published source, class for

@@ -1,16 +1,16 @@
-.mmc-microsite /* Aislado: franja de logotipos de la portada. Visible aun sin JS. */
-.partners-marquee-section{padding:0 0 78px;background:#fff;overflow:hidden}
+
+.mmc-microsite .partners-marquee-section{padding:0 0 78px;background:#fff;overflow:hidden}
 .mmc-microsite .partners-marquee-intro{text-align:center;margin-bottom:34px}
 .mmc-microsite .partners-marquee-intro .eyebrow{display:block;color:#4863f5;font-size:.75rem;font-weight:800;letter-spacing:.16em}
 .mmc-microsite .partners-marquee-intro h2{font-family:'Plus Jakarta Sans','DM Sans',sans-serif;color:#15315b;font-size:clamp(28px,3vw,36px);font-weight:800;line-height:1.18;letter-spacing:-.045em;margin:14px auto 0;max-width:900px}
 .mmc-microsite .partners-marquee{position:relative;display:block;width:min(1160px,calc(100% - 48px));min-height:76px;margin:0 auto;overflow-x:auto;overflow-y:hidden;outline-offset:4px;scrollbar-width:none}
 .mmc-microsite .partners-marquee::-webkit-scrollbar{display:none}
 .mmc-microsite .partners-marquee:focus-visible{outline:2px solid #4863f5}
-.mmc-microsite /* El degradado no enmascara las imágenes: no puede dejarlas invisibles. */
-.partners-marquee::before, .mmc-microsite .partners-marquee::after{content:"";position:absolute;z-index:2;top:0;bottom:0;width:34px;pointer-events:none}
+
+.mmc-microsite .partners-marquee::before, .mmc-microsite .partners-marquee::after{content:"";position:absolute;z-index:2;top:0;bottom:0;width:34px;pointer-events:none}
 .mmc-microsite .partners-marquee::before{left:0;background:linear-gradient(90deg,#fff,rgba(255,255,255,0))}
 .mmc-microsite .partners-marquee::after{right:0;background:linear-gradient(270deg,#fff,rgba(255,255,255,0))}
-.mmc-microsite .partners-marquee-track{display:flex;width:max-content;min-height:76px;align-items:center;transform:translateX(0);/* Sin animación hasta que JS confirme medidas */}
+.mmc-microsite .partners-marquee-track{display:flex;width:max-content;min-height:76px;align-items:center;transform:translateX(0);}
 .mmc-microsite .partners-marquee.is-running{overflow:hidden}
 .mmc-microsite .partners-marquee.is-running .partners-marquee-track{animation:partners-scroll var(--marquee-duration,45s) linear infinite;will-change:transform}
 .mmc-microsite .partners-marquee-group{display:flex;align-items:center;gap:52px;padding-right:52px;flex:0 0 auto;width:max-content}

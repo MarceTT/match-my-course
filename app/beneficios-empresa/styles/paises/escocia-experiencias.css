@@ -1,5 +1,5 @@
-.mmc-microsite /* Galería de experiencias en Escocia; mismo diseño que Nueva Zelanda. */
-.nz-experiences-section{position:relative;max-width:1180px;margin:60px auto 64px;padding:0 22px;box-sizing:border-box}
+
+.mmc-microsite .nz-experiences-section{position:relative;max-width:1180px;margin:60px auto 64px;padding:0 22px;box-sizing:border-box}
 .mmc-microsite .nz-experiences-inner{width:100%}
 .mmc-microsite .nz-experiences-heading{max-width:820px;margin:0 0 28px}
 .mmc-microsite .nz-experiences-eyebrow{display:block;color:#4863f5;font-size:12px;font-weight:800;letter-spacing:.12em;margin-bottom:12px}

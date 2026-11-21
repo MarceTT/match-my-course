@@ -1,5 +1,5 @@
-.mmc-microsite /* Ireland original compact promotion component; local to Principal B five offers. */
-.principal-b-page .principal-b-irish-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+
+.mmc-microsite .principal-b-page .principal-b-irish-offers .compact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
 .mmc-microsite .principal-b-page .principal-b-irish-offers .compact-card{background:white;border:1px solid #e7ebf7;border-radius:23px;overflow:hidden;box-shadow:0 8px 26px #1a2c5015;transition:transform .23s ease,box-shadow .23s ease}
 .mmc-microsite .principal-b-page .principal-b-irish-offers .compact-card:hover{transform:translateY(-3px);box-shadow:0 13px 32px #1a2c5020}
 .mmc-microsite .principal-b-page .principal-b-irish-offers .compact-card[hidden]{display:none!important}
@@ -109,8 +109,8 @@
 .mmc-microsite .principal-b-page .principal-b-irish-offers .price-exclusion-note{font-size:13px;line-height:1.5}
 .mmc-microsite .principal-b-page .principal-b-irish-offers .details-grid small{font-size:13px}
 .mmc-microsite .principal-b-page .principal-b-irish-offers .details-grid strong{font-size:15px;line-height:1.55}
-.mmc-microsite /* Principal B: five copied cards in 2 + 2 + 1 layout, .mmc-microsite first column aligned. */
-.principal-b-page #adultos .principal-b-irish-offers{width:100%;max-width:100%;min-width:0}
+
+.mmc-microsite .principal-b-page #adultos .principal-b-irish-offers{width:100%;max-width:100%;min-width:0}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-card{display:flex;flex-direction:column;min-width:0}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-content{display:flex;flex-direction:column;flex:1}
@@ -119,8 +119,8 @@
  .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-grid{grid-template-columns:minmax(0,1fr);gap:18px}
 }
 
-.mmc-microsite /* Packs de Irlanda: al desplegar una ficha, .mmc-microsite las otras tarjetas conservan su altura natural. */
-.principal-b-page #adultos .principal-b-irish-offers .compact-grid{align-items:start;}
+
+.mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-grid{align-items:start;}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-grid > .compact-card{height:auto!important;align-self:start;}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .compact-content{flex:0 1 auto;}
 .mmc-microsite .principal-b-page #adultos .principal-b-irish-offers .program-details{margin-top:0;}

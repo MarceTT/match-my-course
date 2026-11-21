@@ -1,5 +1,5 @@
-.mmc-microsite /* MatchMyCourse — bloque institucional: estilos encapsulados */
-.institutional-mmc{position:relative;isolation:isolate;overflow:hidden;width:100%;padding:116px 0 112px;background:linear-gradient(135deg,#102747 0%,#15315B 55%,#203F7A 100%);color:#fff}
+
+.mmc-microsite .institutional-mmc{position:relative;isolation:isolate;overflow:hidden;width:100%;padding:116px 0 112px;background:linear-gradient(135deg,#102747 0%,#15315B 55%,#203F7A 100%);color:#fff}
 .mmc-microsite .institutional-mmc::before, .mmc-microsite .institutional-mmc::after{content:"";position:absolute;pointer-events:none;z-index:-1}
 .mmc-microsite .institutional-mmc::before{width:min(78vw,1000px);height:650px;top:-470px;left:-160px;border-radius:45% 55% 60% 40%;background:radial-gradient(ellipse at center,rgba(129,158,255,.27),rgba(72,99,245,.07) 62%,transparent 73%);transform:rotate(-12deg)}
 .mmc-microsite .institutional-mmc::after{width:min(88vw,1000px);height:780px;right:-280px;bottom:-560px;border-radius:58% 42% 40% 60%;background:radial-gradient(ellipse at 45% 40%,rgba(122,155,255,.23),rgba(72,99,245,.10) 52%,transparent 75%);transform:rotate(-13deg)}

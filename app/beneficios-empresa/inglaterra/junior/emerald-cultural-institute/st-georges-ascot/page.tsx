@@ -4,6 +4,7 @@ import Link from "next/link";
 import MicrositeDialogs from "@/app/beneficios-empresa/components/MicrositeDialogs";
 
 import "@/app/beneficios-empresa/styles/programas/inglaterra_junior_emerald-cultural-institute_st-georges-ascot_style.css";
+import "@/app/beneficios-empresa/styles/programas/inglaterra_junior_emerald-cultural-institute_st-georges-ascot_inline.css";
 
 /**
  * /beneficios-empresa/inglaterra/junior/emerald-cultural-institute/st-georges-ascot — ported from the published source, class for class, against its own
